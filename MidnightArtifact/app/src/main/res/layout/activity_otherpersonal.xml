@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.base.baselibs.widget.pullzoom.PullZoomScrollVIew
+        xmlns:pullzoom="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/otherpersonal_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        pullzoom:headview="@layout/part_otherpersonal_head_view"
+        pullzoom:zoomview="@layout/part_otherpersonal_head_bg"
+        pullzoom:contentview="@layout/part_otherpersonal_head_content">
+
+    </com.base.baselibs.widget.pullzoom.PullZoomScrollVIew>
+
+    <ImageView
+        android:id="@+id/otherpersonal_chat_iv"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="@dimen/dimen_dp_50"
+        android:layout_height="@dimen/dimen_dp_50"
+        android:layout_marginBottom="@dimen/dimen_dp_15"
+        android:src="@mipmap/other_chat_ic" />
+
+</RelativeLayout>
