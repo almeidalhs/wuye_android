@@ -33,6 +33,7 @@ import com.atman.wysq.ui.mall.order.ConfirmationOrderActivity;
 import com.atman.wysq.ui.yunxinfriend.P2PChatActivity;
 import com.atman.wysq.ui.yunxinfriend.SelectGiftActivity;
 import com.atman.wysq.utils.ScreenObserver;
+import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.base.BaseAppCompatActivity;
 import com.base.baselibs.net.YunXinAuthOutEvent;
 import com.base.baselibs.util.LogUtils;
@@ -409,6 +410,10 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     }
 
     public void toPhone(Context context, String phoneNumber) {
+        if (UiHelper.isTabletDevice(this)) {
+            showToast("您的设备不支持拨号");
+            return;
+        }
         if (!phoneNumber.startsWith("tel:")) {
             phoneNumber = "tel:" + phoneNumber;
         }
