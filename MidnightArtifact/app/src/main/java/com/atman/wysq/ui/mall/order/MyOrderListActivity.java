@@ -63,8 +63,8 @@ public class MyOrderListActivity extends MyBaseActivity implements AdapterInterf
         super.initWidget(v);
 
         setBarTitleTx("我的订单");
-
         initListView();
+
     }
 
     @Override
