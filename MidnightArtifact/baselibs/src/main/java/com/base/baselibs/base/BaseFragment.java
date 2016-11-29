@@ -156,11 +156,11 @@ public class BaseFragment extends Fragment implements IInit,PullToRefreshBase.On
 
     @Override
     public void onStringResponse(String data, Response response, int id) {
-
+        cancelLoading();
     }
 
     @Override
     public void onObjectResponse(Object data, Response response, int id) {
-
+        cancelLoading();
     }
 }

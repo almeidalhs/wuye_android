@@ -301,6 +301,7 @@ public class BaseAppCompatActivity extends SwipeBackActivity
 
     @Override
     public void onError(Call call, Exception e, int code, int id) {
+        cancelLoading();
         LogUtils.e("返回码："+code+"，id:"+id);
         if (id==65) {
             return;
@@ -315,6 +316,6 @@ public class BaseAppCompatActivity extends SwipeBackActivity
 
     @Override
     public void onObjectResponse(Object data, Response response, int id) {
-
+        cancelLoading();
     }
 }

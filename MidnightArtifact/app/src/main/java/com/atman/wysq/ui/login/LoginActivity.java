@@ -138,7 +138,6 @@ public class LoginActivity extends MyBaseActivity implements EditCheckBack {
 
     @Override
     public void onStringResponse(String data, Response response, int id) {
-        super.onStringResponse(data, response, id);
         if (id == Common.NET_LOGIN_ID) {
             mLoginResultModel = mGson.fromJson(data, LoginResultModel.class);
             OkHttpUtils.get().url(Common.Url_Get_ChatToken)
@@ -146,6 +145,7 @@ public class LoginActivity extends MyBaseActivity implements EditCheckBack {
                     .tag(Common.NET_GET_CHATTOKEN).id(Common.NET_GET_CHATTOKEN).build()
                     .execute(new MyStringCallback(mContext, this, true));
         } else if (id == Common.NET_GET_USERINDEX) {
+            super.onStringResponse(data, response, id);
             GetMyUserIndexModel mGetMyUserIndexModel = mGson.fromJson(data, GetMyUserIndexModel.class);
             if (mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getStatus()==3) {
                 showToast("因您违规操作，账号已被禁用");
@@ -157,7 +157,6 @@ public class LoginActivity extends MyBaseActivity implements EditCheckBack {
             setResult(RESULT_OK,mIntent);
             finish();
         } else if (id == Common.NET_GET_CHATTOKEN) {
-            showLoading();
             GetChatTokenModel mGetChatTokenModel = mGson.fromJson(data, GetChatTokenModel.class);
             PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_YUNXIN_TOKEN, mGetChatTokenModel.getBody());
             final String account = mLoginResultModel.getBody()+"";
@@ -168,13 +167,13 @@ public class LoginActivity extends MyBaseActivity implements EditCheckBack {
             loginRequest.setCallback(new RequestCallback<LoginInfo>() {
                 @Override
                 public void onSuccess(LoginInfo param) {
-                    cancelLoading();
 
                     PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_PW,MD5Util.getMD5(passWord));
                     PreferenceUtil.savePreference(mContext,PreferenceUtil.PARM_USERID,mLoginResultModel.getBody()+"");
                     MyBaseApplication.getApplication().setLock(false);
                     if (PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_GESTURE_PW).isEmpty()
                             && PreferenceUtil.getBoolPreferences(LoginActivity.this, PreferenceUtil.PARM_ISOPEN_GESTURE)) {
+                        cancelLoading();
                         startActivityForResult(new Intent(mContext, CreateGestrureLockActivity.class), Common.toLoginCreateGesrure);
                     } else {
                         OkHttpUtils.get().url(Common.Url_Get_UserIndex)

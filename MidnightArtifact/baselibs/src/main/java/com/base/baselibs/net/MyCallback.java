@@ -41,7 +41,6 @@ public class MyCallback extends Callback {
     @Override
     public void onAfter(int id) {
         super.onAfter(id);
-        ((BaseAppCompatActivity)mContext).cancelLoading();
         CallBack.onAfter(id);
     }
 

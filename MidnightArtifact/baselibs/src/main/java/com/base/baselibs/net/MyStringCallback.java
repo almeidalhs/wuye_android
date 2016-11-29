@@ -61,9 +61,6 @@ public class MyStringCallback extends StringCallback {
 
     @Override
     public void onError(Call call, Exception e, int code, int id) {
-        if (mContext!=null && isShowLoading) {
-            ((BaseAppCompatActivity)mContext).cancelLoading();
-        }
         LogUtils.e("e:"+e.toString()+",id:"+id);
         if (e.toString().contains("Canceled") || e.toString().contains("Socket closed")) {
             return;
@@ -79,9 +76,6 @@ public class MyStringCallback extends StringCallback {
 
     @Override
     public void onResponse(String data, Response response, int id) {
-        if (mContext!=null && isShowLoading) {
-            ((BaseAppCompatActivity)mContext).cancelLoading();
-        }
         Headers s = response.headers();
         List<String> list = s.values("Set-Cookie");
         for (int i=0;i<list.size();i++) {
