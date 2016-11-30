@@ -40,6 +40,11 @@ public class DiscoverFragment extends MyBaseFragment {
     public void initWidget(View... v) {
         super.initWidget(v);
         fragmentBarTitleIv.setImageResource(R.mipmap.top_discover_ic);
+
+        initTop3D();
+    }
+
+    private void initTop3D() {
     }
 
     @Override

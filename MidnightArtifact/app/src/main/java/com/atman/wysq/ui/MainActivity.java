@@ -232,12 +232,12 @@ public class MainActivity extends MyBaseActivity {
                         fg = adapter.getItem(1);
                         break;
                     case R.id.tab_mall:
-                        viewpager.setCurrentItem(2, false);
-                        fg = adapter.getItem(2);
-                        break;
-                    case R.id.tab_discover:
                         viewpager.setCurrentItem(3, false);
                         fg = adapter.getItem(3);
+                        break;
+                    case R.id.tab_discover:
+                        viewpager.setCurrentItem(2, false);
+                        fg = adapter.getItem(2);
                         break;
                     case R.id.tab_personal:
                         viewpager.setCurrentItem(4, false);
@@ -262,8 +262,8 @@ public class MainActivity extends MyBaseActivity {
         adapter = new MyFragmentAdapter(getSupportFragmentManager());
         adapter.addFragment(new MessageFragment(), MESSAGE_TAG);
         adapter.addFragment(new CommunityFragment(), COMMUNITY_TAG);
-        adapter.addFragment(new MallFragment(), MALL_TAG);
         adapter.addFragment(new DiscoverFragment(), DISCOVER_TAG);
+        adapter.addFragment(new MallFragment(), MALL_TAG);
         adapter.addFragment(new PersonalFragment(), PERSONAL_TAG);
         viewpager.setOffscreenPageLimit(4);
         viewpager.setAdapter(adapter);
