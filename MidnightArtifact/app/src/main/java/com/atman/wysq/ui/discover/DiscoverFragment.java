@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.atman.wysq.R;
+import com.atman.wysq.adapter.ViewGroupExampleAdapter;
 import com.atman.wysq.ui.base.MyBaseFragment;
 
+import at.technikum.mti.fancycoverflow.FancyCoverFlow;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -23,6 +25,8 @@ public class DiscoverFragment extends MyBaseFragment {
 
     @Bind(R.id.fragment_bar_title_iv)
     ImageView fragmentBarTitleIv;
+    @Bind(R.id.fancyCoverFlow)
+    FancyCoverFlow fancyCoverFlow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +49,10 @@ public class DiscoverFragment extends MyBaseFragment {
     }
 
     private void initTop3D() {
+        fancyCoverFlow.setFadingEdgeLength(0);
+        ViewGroupExampleAdapter adapter = new ViewGroupExampleAdapter(getActivity());
+        fancyCoverFlow.setAdapter(new ViewGroupExampleAdapter(getActivity()));
+        fancyCoverFlow.setSelection(adapter.getCount()/2);
     }
 
     @Override
