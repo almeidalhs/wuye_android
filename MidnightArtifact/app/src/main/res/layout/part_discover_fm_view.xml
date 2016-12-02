@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/discover_fm_rl"
+    android:layout_width="match_parent"
+    android:layout_height="86dp"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@mipmap/discover_fm_image" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dimen_dp_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/discover_fm_micro_image"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/dimen_sp_14"
+            android:text="20:00 - 24:00"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text1"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dimen_sp_29"
+        android:textColor="#333333"
+        android:text="午夜FM"/>
+
+    <TextView
+        android:id="@+id/text2"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:layout_below="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_dp_f5"
+        android:textSize="@dimen/dimen_sp_15"
+        android:textColor="#49406F"
+        android:text="LATE NIGHT RADIO"/>
+
+    <TextView
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dimen_sp_12"
+        android:textColor="#49406F"
+        android:text="我不是怕夜的黑,\n而是怕孤独与寂寞"/>
+
+</RelativeLayout>

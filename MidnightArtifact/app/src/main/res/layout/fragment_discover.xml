@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/discover_top"
-        android:layout_marginTop="@dimen/dimen_dp_f5">
+        android:layout_marginTop="@dimen/dimen_dp_f5"
+        android:background="@color/color_white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:background="@color/all_bg"
+                    android:background="@color/color_white"
                     android:paddingBottom="@dimen/dimen_dp_5"
                     android:paddingLeft="@dimen/dimen_dp_10"
                     android:paddingRight="@dimen/dimen_dp_10"
@@ -45,8 +46,9 @@
             <LinearLayout
                 android:id="@+id/fancyCoverFlow_ll"
                 android:layout_width="match_parent"
-                android:layout_marginTop="-5dp"
-                android:layout_height="140dp">
+                android:layout_height="140dp"
+                android:layout_marginBottom="@dimen/dimen_dp_10"
+                android:layout_marginTop="-5dp">
 
                 <at.technikum.mti.fancycoverflow.FancyCoverFlow
                     android:id="@+id/fancyCoverFlow"
@@ -54,13 +56,17 @@
                     android:layout_height="140dp"
                     android:spacing="-40dp"
                     fcf:maxRotation="45"
+                    fcf:scaleDownGravity="0.0"
                     fcf:unselectedAlpha="1.0"
                     fcf:unselectedSaturation="2.0"
-                    fcf:unselectedScale="0.4"
-                    fcf:scaleDownGravity="0.0" />
+                    fcf:unselectedScale="0.4" />
             </LinearLayout>
 
+            <include
+                layout="@layout/part_discover_fm_view" />
+
             <RelativeLayout
+                android:layout_marginTop="@dimen/dimen_dp_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -76,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:background="@color/all_bg"
+                    android:background="@color/color_white"
                     android:paddingBottom="@dimen/dimen_dp_5"
                     android:paddingLeft="@dimen/dimen_dp_10"
                     android:paddingRight="@dimen/dimen_dp_10"
@@ -84,6 +90,45 @@
                     android:text="排行榜"
                     android:textColor="@color/color_black" />
             </RelativeLayout>
+
+            <include layout="@layout/part_discover_charmestandgold_view" />
+
+            <TextView
+                android:id="@+id/discover_more_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_dp_10"
+                android:layout_marginLeft="@dimen/dimen_dp_20"
+                android:layout_marginRight="@dimen/dimen_dp_20"
+                android:background="@drawable/gray_more_bg"
+                android:gravity="center"
+                android:paddingBottom="@dimen/dimen_dp_5"
+                android:paddingTop="@dimen/dimen_dp_5"
+                android:text="点击查看更多"
+                android:textColor="@color/color_white" />
+
+            <include
+                layout="@layout/part_discover_find_view" />
+
+            <LinearLayout
+                android:id="@+id/findFlow_ll"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:background="#F0A7A0"
+                android:layout_marginBottom="@dimen/dimen_dp_10"
+                android:layout_marginTop="@dimen/dimen_dp_10">
+
+                <at.technikum.mti.fancycoverflow.FancyCoverFlow
+                    android:id="@+id/findFlow"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:spacing="@dimen/dimen_dp_10"
+                    fcf:maxRotation="0"
+                    fcf:scaleDownGravity="0.0"
+                    fcf:unselectedAlpha="1.0"
+                    fcf:unselectedSaturation="2.0"
+                    fcf:unselectedScale="0.4" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

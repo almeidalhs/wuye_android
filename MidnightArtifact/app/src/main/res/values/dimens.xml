@@ -51,6 +51,8 @@
     <dimen name="dimen_sp_16">16sp</dimen>
     <dimen name="dimen_sp_17">17sp</dimen>
     <dimen name="dimen_sp_18">18sp</dimen>
+    <dimen name="dimen_sp_29">29sp</dimen>
     <dimen name="dimen_sp_30">30sp</dimen>
+    <dimen name="dimen_sp_33">33sp</dimen>
     <dimen name="dimen_sp_35">35sp</dimen>
 </resources>

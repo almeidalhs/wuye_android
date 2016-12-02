@@ -167,6 +167,10 @@ public class Common {
     public static String Url_Get_GiftDetailedList = hostUrl + "rest/gift/userList/";
     //获取推荐魔友
     public static String Url_Get_RecommendFriends = hostUrl + "rest/user/recommenduser";
+    //获取魅力排行
+    public static String Url_Get_Char_Ranking = hostUrl + "rest/user/charmest/";
+    //获取财富排行
+    public static String Url_Get_Gold_Ranking = hostUrl + "rest/user/goldcoinest/";
     /**************************http访问路径*****************************/
 
 
@@ -308,6 +312,10 @@ public class Common {
     public static int NET_GET_GIFTDETAILEDLIST = 67;
     //获取推荐魔友
     public static int NET_GET_RECOMMENDFRIENDS= 68;
+    //获取魅力排行
+    public static int NET_GET_CHAR_RANKING_ID= 69;
+    //获取财富排行
+    public static int NET_GET_GOLD_RANKING_ID= 70;
     /**************************http访问回应识别码*****************************/
 
 

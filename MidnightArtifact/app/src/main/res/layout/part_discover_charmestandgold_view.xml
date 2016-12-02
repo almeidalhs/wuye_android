@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dimen_dp_10"
+    android:paddingRight="@dimen/dimen_dp_10">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_dp_5"
+            android:text="魅力排行"
+            android:textColor="@color/color_2B2B2B"
+            android:textSize="@dimen/dimen_sp_14" />
+
+        <LinearLayout
+            android:id="@+id/item_charmest_one_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_dp_10">
+
+            <RelativeLayout
+                android:layout_width="@dimen/dimen_dp_35"
+                android:layout_height="@dimen/dimen_dp_35"
+                android:layout_centerInParent="true">
+
+                <com.base.baselibs.widget.CustomImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_charmest_one_head_iv"
+                    android:layout_width="@dimen/dimen_dp_35"
+                    android:layout_height="@dimen/dimen_dp_35"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/ic_launcher"
+                    img:circle="false"
+                    img:radius="@dimen/dimen_dp_5" />
+
+                <ImageView
+                    android:id="@+id/item_charmest_one_gender_iv"
+                    android:layout_width="@dimen/dimen_dp_15"
+                    android:layout_height="@dimen/dimen_dp_15"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/personal_man_ic" />
+
+                <ImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_charmest_one_verify_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_dp_12"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/personal_identification"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/item_charmest_one_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:layout_marginRight="@dimen/dimen_dp_10"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="name"
+                android:textColor="@color/color_2B2B2B"
+                android:textSize="@dimen/dimen_sp_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/black_ranking_bg"
+                android:paddingBottom="@dimen/dimen_dp_2"
+                android:paddingLeft="@dimen/dimen_dp_5"
+                android:paddingRight="@dimen/dimen_dp_5"
+                android:paddingTop="@dimen/dimen_dp_2"
+                android:singleLine="true"
+                android:text="NO.1"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/dimen_sp_10" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_charmest_two_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_dp_10">
+
+            <RelativeLayout
+                android:layout_width="@dimen/dimen_dp_35"
+                android:layout_height="@dimen/dimen_dp_35"
+                android:layout_centerInParent="true">
+
+                <com.base.baselibs.widget.CustomImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_charmest_two_head_iv"
+                    android:layout_width="@dimen/dimen_dp_35"
+                    android:layout_height="@dimen/dimen_dp_35"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/ic_launcher"
+                    img:circle="false"
+                    img:radius="@dimen/dimen_dp_5" />
+
+                <ImageView
+                    android:id="@+id/item_charmest_two_gender_iv"
+                    android:layout_width="@dimen/dimen_dp_15"
+                    android:layout_height="@dimen/dimen_dp_15"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/personal_man_ic" />
+
+                <ImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_charmest_two_verify_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_dp_12"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/personal_identification"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/item_charmest_two_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:layout_marginRight="@dimen/dimen_dp_10"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="name"
+                android:textColor="@color/color_2B2B2B"
+                android:textSize="@dimen/dimen_sp_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/black_ranking_bg"
+                android:paddingBottom="@dimen/dimen_dp_2"
+                android:paddingLeft="@dimen/dimen_dp_5"
+                android:paddingRight="@dimen/dimen_dp_5"
+                android:paddingTop="@dimen/dimen_dp_2"
+                android:singleLine="true"
+                android:text="NO.2"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/dimen_sp_10" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_charmest_three_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_dp_10">
+
+            <RelativeLayout
+                android:layout_width="@dimen/dimen_dp_35"
+                android:layout_height="@dimen/dimen_dp_35"
+                android:layout_centerInParent="true">
+
+                <com.base.baselibs.widget.CustomImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_charmest_three_head_iv"
+                    android:layout_width="@dimen/dimen_dp_35"
+                    android:layout_height="@dimen/dimen_dp_35"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/ic_launcher"
+                    img:circle="false"
+                    img:radius="@dimen/dimen_dp_5" />
+
+                <ImageView
+                    android:id="@+id/item_charmest_three_gender_iv"
+                    android:layout_width="@dimen/dimen_dp_15"
+                    android:layout_height="@dimen/dimen_dp_15"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/personal_man_ic" />
+
+                <ImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_charmest_three_verify_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_dp_12"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/personal_identification"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/item_charmest_three_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:layout_marginRight="@dimen/dimen_dp_10"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="name"
+                android:textColor="@color/color_2B2B2B"
+                android:textSize="@dimen/dimen_sp_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/black_ranking_bg"
+                android:paddingBottom="@dimen/dimen_dp_2"
+                android:paddingLeft="@dimen/dimen_dp_5"
+                android:paddingRight="@dimen/dimen_dp_5"
+                android:paddingTop="@dimen/dimen_dp_2"
+                android:singleLine="true"
+                android:text="NO.3"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/dimen_sp_10" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_dp_5"
+            android:text="财富排行"
+            android:textColor="@color/color_2B2B2B"
+            android:textSize="@dimen/dimen_sp_14" />
+
+        <LinearLayout
+            android:id="@+id/item_gold_one_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_dp_10">
+
+            <RelativeLayout
+                android:layout_width="@dimen/dimen_dp_35"
+                android:layout_height="@dimen/dimen_dp_35"
+                android:layout_centerInParent="true">
+
+                <com.base.baselibs.widget.CustomImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_gold_one_head_iv"
+                    android:layout_width="@dimen/dimen_dp_35"
+                    android:layout_height="@dimen/dimen_dp_35"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/ic_launcher"
+                    img:circle="false"
+                    img:radius="@dimen/dimen_dp_5" />
+
+                <ImageView
+                    android:id="@+id/item_gold_one_gender_iv"
+                    android:layout_width="@dimen/dimen_dp_15"
+                    android:layout_height="@dimen/dimen_dp_15"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/personal_man_ic" />
+
+                <ImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_gold_one_verify_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_dp_12"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/personal_identification"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/item_gold_one_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:layout_marginRight="@dimen/dimen_dp_10"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="name"
+                android:textColor="@color/color_2B2B2B"
+                android:textSize="@dimen/dimen_sp_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/black_ranking_bg"
+                android:paddingBottom="@dimen/dimen_dp_2"
+                android:paddingLeft="@dimen/dimen_dp_5"
+                android:paddingRight="@dimen/dimen_dp_5"
+                android:paddingTop="@dimen/dimen_dp_2"
+                android:singleLine="true"
+                android:text="NO.1"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/dimen_sp_10" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_gold_two_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_dp_10">
+
+            <RelativeLayout
+                android:layout_width="@dimen/dimen_dp_35"
+                android:layout_height="@dimen/dimen_dp_35"
+                android:layout_centerInParent="true">
+
+                <com.base.baselibs.widget.CustomImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_gold_two_head_iv"
+                    android:layout_width="@dimen/dimen_dp_35"
+                    android:layout_height="@dimen/dimen_dp_35"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/ic_launcher"
+                    img:circle="false"
+                    img:radius="@dimen/dimen_dp_5" />
+
+                <ImageView
+                    android:id="@+id/item_gold_two_gender_iv"
+                    android:layout_width="@dimen/dimen_dp_15"
+                    android:layout_height="@dimen/dimen_dp_15"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/personal_man_ic" />
+
+                <ImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_gold_two_verify_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_dp_12"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/personal_identification"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/item_gold_two_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:layout_marginRight="@dimen/dimen_dp_10"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="name"
+                android:textColor="@color/color_2B2B2B"
+                android:textSize="@dimen/dimen_sp_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/black_ranking_bg"
+                android:paddingBottom="@dimen/dimen_dp_2"
+                android:paddingLeft="@dimen/dimen_dp_5"
+                android:paddingRight="@dimen/dimen_dp_5"
+                android:paddingTop="@dimen/dimen_dp_2"
+                android:singleLine="true"
+                android:text="NO.2"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/dimen_sp_10" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_gold_three_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_dp_10">
+
+            <RelativeLayout
+                android:layout_width="@dimen/dimen_dp_35"
+                android:layout_height="@dimen/dimen_dp_35"
+                android:layout_centerInParent="true">
+
+                <com.base.baselibs.widget.CustomImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_gold_three_head_iv"
+                    android:layout_width="@dimen/dimen_dp_35"
+                    android:layout_height="@dimen/dimen_dp_35"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/ic_launcher"
+                    img:circle="false"
+                    img:radius="@dimen/dimen_dp_5" />
+
+                <ImageView
+                    android:id="@+id/item_gold_three_gender_iv"
+                    android:layout_width="@dimen/dimen_dp_15"
+                    android:layout_height="@dimen/dimen_dp_15"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/personal_man_ic" />
+
+                <ImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/item_gold_three_verify_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_dp_12"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/personal_identification"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/item_gold_three_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:layout_marginRight="@dimen/dimen_dp_10"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="name"
+                android:textColor="@color/color_2B2B2B"
+                android:textSize="@dimen/dimen_sp_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/black_ranking_bg"
+                android:paddingBottom="@dimen/dimen_dp_2"
+                android:paddingLeft="@dimen/dimen_dp_5"
+                android:paddingRight="@dimen/dimen_dp_5"
+                android:paddingTop="@dimen/dimen_dp_2"
+                android:singleLine="true"
+                android:text="NO.3"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/dimen_sp_10" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
