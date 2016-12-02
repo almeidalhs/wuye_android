@@ -165,6 +165,8 @@ public class Common {
     public static String Url_Get_MyGiftList = hostUrl + "rest/gift/userList";
     //获取礼物清单
     public static String Url_Get_GiftDetailedList = hostUrl + "rest/gift/userList/";
+    //获取推荐魔友
+    public static String Url_Get_RecommendFriends = hostUrl + "rest/user/recommenduser";
     /**************************http访问路径*****************************/
 
 
@@ -304,6 +306,8 @@ public class Common {
     public static int NET_GET_MYGIFTLIST = 66;
     //获取礼物清单
     public static int NET_GET_GIFTDETAILEDLIST = 67;
+    //获取推荐魔友
+    public static int NET_GET_RECOMMENDFRIENDS= 68;
     /**************************http访问回应识别码*****************************/
 
 

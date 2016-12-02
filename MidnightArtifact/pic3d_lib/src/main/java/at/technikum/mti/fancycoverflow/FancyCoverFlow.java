@@ -19,10 +19,9 @@ package at.technikum.mti.fancycoverflow;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.*;
+import android.graphics.Camera;
+import android.graphics.Matrix;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,19 +32,10 @@ import android.widget.SpinnerAdapter;
 public class FancyCoverFlow extends Gallery {
 
     public static final int ACTION_DISTANCE_AUTO = Integer.MAX_VALUE;
-
-    public static final float SCALEDOWN_GRAVITY_TOP = 0.0f;
-
     public static final float SCALEDOWN_GRAVITY_CENTER = 0.5f;
-
-    public static final float SCALEDOWN_GRAVITY_BOTTOM = 1.0f;
-
     private float reflectionRatio = 0.4f;
-
     private int reflectionGap = 20;
-
     private boolean reflectionEnabled = false;
-
     /**
      * TODO: Doc
      */
@@ -81,10 +71,6 @@ public class FancyCoverFlow extends Gallery {
      */
     private float unselectedSaturation;
 
-    // =============================================================================
-    // Constructors
-    // =============================================================================
-
     public FancyCoverFlow(Context context) {
         super(context);
         this.initialize();
@@ -104,9 +90,6 @@ public class FancyCoverFlow extends Gallery {
 
     private void initialize() {
         this.transformationCamera = new Camera();
-//        this.transformationCamera.translate(-120, 0, 0);
-//        this.transformationCamera.translate(240, 0, 0);
-//        this.setSpacing(0);
     }
 
     private void applyXmlAttributes(AttributeSet attrs) {
@@ -119,10 +102,6 @@ public class FancyCoverFlow extends Gallery {
         this.unselectedSaturation = a.getFloat(R.styleable.FancyCoverFlow_unselectedSaturation, 0.0f);
         this.unselectedScale = a.getFloat(R.styleable.FancyCoverFlow_unselectedScale, 0.75f);
     }
-
-    // =============================================================================
-    // Getter / Setter
-    // =============================================================================
 
     public float getReflectionRatio() {
         return reflectionRatio;
@@ -405,6 +384,45 @@ public class FancyCoverFlow extends Gallery {
             super(source);
         }
     }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                break;
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
+//
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        float fisrtX = 0;
+//        float fisrtY = 0;
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                fisrtX = event.getX();
+//                fisrtY = event.getY();
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                final float touchDistancesX = Math.abs(event.getX()-fisrtX);
+//                final float touchDistancesY = Math.abs(event.getY()-fisrtY);
+//                if (touchDistancesX > 10 || touchDistancesY > 10) {
+//                } else {
+//                }
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                break;
+//            case MotionEvent.ACTION_CANCEL:
+//                break;
+//        }
+//        return super.onTouchEvent(event);
+//    }
 
 //    private boolean isScrollingLeft(MotionEvent e1, MotionEvent e2) {
 //        return e2.getX() > e1.getX();

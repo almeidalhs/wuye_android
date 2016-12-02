@@ -30,7 +30,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:button="@null"
-                android:checked="true"
                 android:drawableTop="@drawable/tab_message_selector"
                 android:gravity="center"
                 android:text="@string/tab_message"
@@ -55,6 +54,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:button="@null"
+                android:checked="true"
                 android:drawableTop="@drawable/tab_discover_selector"
                 android:gravity="center"
                 android:text="@string/tab_discover"
@@ -89,16 +89,16 @@
 
         <TextView
             android:id="@+id/tab_session_unread_tx"
-            android:minWidth="@dimen/dimen_dp_19"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dimen_dp_19"
-            android:layout_marginTop="@dimen/dimen_dp_5"
             android:layout_below="@+id/view_line"
+            android:layout_marginTop="@dimen/dimen_dp_5"
+            android:background="@mipmap/dote_pressed"
             android:gravity="center"
+            android:minWidth="@dimen/dimen_dp_19"
             android:text="00="
-            android:textSize="@dimen/dimen_sp_10"
             android:textColor="@color/color_white"
-            android:background="@mipmap/dote_pressed"/>
+            android:textSize="@dimen/dimen_sp_10" />
 
         <View
             android:id="@+id/view_line"

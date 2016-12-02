@@ -52,13 +52,38 @@
                     android:id="@+id/fancyCoverFlow"
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
-                    android:spacing="-50dp"
+                    android:spacing="-40dp"
                     fcf:maxRotation="45"
                     fcf:unselectedAlpha="1.0"
                     fcf:unselectedSaturation="2.0"
                     fcf:unselectedScale="0.4"
                     fcf:scaleDownGravity="0.0" />
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_dp_2"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dimen_dp_10"
+                    android:layout_marginRight="@dimen/dimen_dp_10"
+                    android:background="@color/color_black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/all_bg"
+                    android:paddingBottom="@dimen/dimen_dp_5"
+                    android:paddingLeft="@dimen/dimen_dp_10"
+                    android:paddingRight="@dimen/dimen_dp_10"
+                    android:paddingTop="@dimen/dimen_dp_5"
+                    android:text="排行榜"
+                    android:textColor="@color/color_black" />
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

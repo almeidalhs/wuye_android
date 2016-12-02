@@ -224,24 +224,19 @@ public class MainActivity extends MyBaseActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.tab_message:
-                        viewpager.setCurrentItem(0, false);
-                        fg = adapter.getItem(0);
+                        selectItemView(0);
                         break;
                     case R.id.tab_community:
-                        viewpager.setCurrentItem(1, false);
-                        fg = adapter.getItem(1);
+                        selectItemView(1);
                         break;
                     case R.id.tab_mall:
-                        viewpager.setCurrentItem(3, false);
-                        fg = adapter.getItem(3);
+                        selectItemView(3);
                         break;
                     case R.id.tab_discover:
-                        viewpager.setCurrentItem(2, false);
-                        fg = adapter.getItem(2);
+                        selectItemView(2);
                         break;
                     case R.id.tab_personal:
-                        viewpager.setCurrentItem(4, false);
-                        fg = adapter.getItem(4);
+                        selectItemView(4);
                         break;
                 }
             }
@@ -257,6 +252,11 @@ public class MainActivity extends MyBaseActivity {
         }
     }
 
+    private void selectItemView(int i) {
+        viewpager.setCurrentItem(i, false);
+        fg = adapter.getItem(i);
+    }
+
     private void initViewpager() {
         viewpager.setPagingEnabled(false);//是否支持手势滑动
         adapter = new MyFragmentAdapter(getSupportFragmentManager());
@@ -265,9 +265,8 @@ public class MainActivity extends MyBaseActivity {
         adapter.addFragment(new DiscoverFragment(), DISCOVER_TAG);
         adapter.addFragment(new MallFragment(), MALL_TAG);
         adapter.addFragment(new PersonalFragment(), PERSONAL_TAG);
-        viewpager.setOffscreenPageLimit(4);
+        viewpager.setOffscreenPageLimit(5);
         viewpager.setAdapter(adapter);
-        fg = adapter.getItem(0);
         viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -285,6 +284,7 @@ public class MainActivity extends MyBaseActivity {
 
             }
         });
+        selectItemView(2);
     }
 
     @Override
