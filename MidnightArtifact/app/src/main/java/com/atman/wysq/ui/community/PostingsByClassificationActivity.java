@@ -4,27 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.adapter.PostingListAdapter;
-import com.atman.wysq.model.response.GetBolgListModel;
+import com.atman.wysq.adapter.BaseFragmentAdapter;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.NoSwipeViewPager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -57,7 +46,7 @@ public class PostingsByClassificationActivity extends MyBaseActivity {
     private int id;
     private int[] typeId = {3, 0, 2}; //0：热门 2:精品 3:最新
     private final String[] TAG = {"new", "hot", "highly"};
-    private Adapter adapter;
+    private BaseFragmentAdapter adapter;
     private Fragment fg;
 
     @Override
@@ -97,12 +86,12 @@ public class PostingsByClassificationActivity extends MyBaseActivity {
             }
         });
         initViewpager();
-        initBottomBar();
+        initTopBar();
     }
 
     private void initViewpager() {
         postingsViewpager.setPagingEnabled(true);//是否支持手势滑动
-        adapter = new Adapter(getSupportFragmentManager());
+        adapter = new BaseFragmentAdapter(getSupportFragmentManager());
 
         for (int i=0;i<3;i++) {
             PostingsByClassificationFragment oneFragment = new PostingsByClassificationFragment();
@@ -198,7 +187,7 @@ public class PostingsByClassificationActivity extends MyBaseActivity {
         }
     }
 
-    private void initBottomBar() {
+    private void initTopBar() {
         postingsTopTabRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -240,34 +229,5 @@ public class PostingsByClassificationActivity extends MyBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    static class Adapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
-
-        public Adapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
-        }
     }
 }

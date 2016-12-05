@@ -1,5 +1,6 @@
 package com.atman.wysq.ui.discover;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -347,6 +348,7 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
             case R.id.item_gold_three_ll:
                 break;
             case R.id.discover_more_tv:
+                startActivity(new Intent(getActivity(), AllRankingListActivity.class));
                 break;
             case R.id.discover_fm_rl:
                 break;

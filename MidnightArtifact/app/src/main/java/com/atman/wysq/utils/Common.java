@@ -311,13 +311,15 @@ public class Common {
     //获取礼物清单
     public static int NET_GET_GIFTDETAILEDLIST = 67;
     //获取推荐魔友
-    public static int NET_GET_RECOMMENDFRIENDS= 68;
+    public static int NET_GET_RECOMMENDFRIENDS = 68;
     //获取魅力排行
-    public static int NET_GET_CHAR_RANKING_ID= 69;
+    public static int NET_GET_CHAR_RANKING_ID = 69;
     //获取财富排行
-    public static int NET_GET_GOLD_RANKING_ID= 70;
+    public static int NET_GET_GOLD_RANKING_ID = 70;
     //喜欢的人
-    public static int NET_GET_FINDLIKE_ID= 71;
+    public static int NET_GET_FINDLIKE_ID = 71;
+    //排行榜
+    public static int NET_GET_RANKING_ID = 72;
     /**************************http访问回应识别码*****************************/
 
 

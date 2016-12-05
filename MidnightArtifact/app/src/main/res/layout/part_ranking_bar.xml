@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_dp_48"
+    android:background="@mipmap/top_wave">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/part_ranking_left_rl"
+            android:clickable="true"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dimen_dp_5"
+            android:paddingTop="@dimen/dimen_dp_5">
+
+            <TextView
+                android:id="@+id/part_ranking_left_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:singleLine="true"
+                android:text="魅力榜"
+                android:textColor="@color/color_feb44a"
+                android:textSize="@dimen/dimen_sp_18" />
+
+            <ImageView
+                android:id="@+id/part_ranking_left_iv"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_dp_2"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:layout_marginRight="@dimen/dimen_dp_10"
+                android:background="@color/color_feb44a" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/part_ranking_right_rl"
+            android:clickable="true"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/part_ranking_left_rl"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dimen_dp_5"
+            android:paddingTop="@dimen/dimen_dp_5">
+
+            <TextView
+                android:id="@+id/part_ranking_right_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:singleLine="true"
+                android:text="财富榜"
+                android:textColor="@color/color_787878"
+                android:textSize="@dimen/dimen_sp_18" />
+
+            <ImageView
+                android:id="@+id/part_ranking_right_iv"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_dp_2"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:layout_marginRight="@dimen/dimen_dp_10"
+                android:visibility="invisible"
+                android:background="@color/color_feb44a" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bar_back_ll"
+        android:layout_width="@dimen/dimen_dp_48"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/bar_back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:scaleType="centerInside"
+            android:src="@mipmap/main_bar_back" />
+    </LinearLayout>
+
+</RelativeLayout>

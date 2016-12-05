@@ -152,6 +152,7 @@ public class BaseFragment extends Fragment implements IInit,PullToRefreshBase.On
         if (id!=10) {
             showToast(e.toString().replace("java.io.IOException: ",""));
         }
+        cancelLoading();
     }
 
     @Override
