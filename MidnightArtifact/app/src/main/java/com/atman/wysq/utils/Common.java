@@ -316,6 +316,8 @@ public class Common {
     public static int NET_GET_CHAR_RANKING_ID= 69;
     //获取财富排行
     public static int NET_GET_GOLD_RANKING_ID= 70;
+    //喜欢的人
+    public static int NET_GET_FINDLIKE_ID= 71;
     /**************************http访问回应识别码*****************************/
 
 

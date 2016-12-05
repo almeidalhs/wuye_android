@@ -122,7 +122,7 @@
                     android:id="@+id/findFlow"
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
-                    android:spacing="@dimen/dimen_dp_10"
+                    android:spacing="@dimen/dimen_dp_5"
                     fcf:maxRotation="0"
                     fcf:scaleDownGravity="0.0"
                     fcf:unselectedAlpha="1.0"

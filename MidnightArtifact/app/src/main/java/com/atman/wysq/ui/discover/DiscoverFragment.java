@@ -4,13 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.adapter.ViewGroupExampleAdapter;
+import com.atman.wysq.adapter.FindLikeAdapter;
+import com.atman.wysq.adapter.FindTopAdapter;
+import com.atman.wysq.iimp.SpAdapterInterface;
 import com.atman.wysq.model.response.CharmestRankingModel;
 import com.atman.wysq.model.response.GoldRankingModel;
 import com.atman.wysq.model.response.RecommendUserModel;
@@ -19,7 +20,6 @@ import com.atman.wysq.ui.base.MyBaseFragment;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.CustomImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
@@ -40,7 +40,7 @@ import okhttp3.Response;
  * 邮箱 bltang@atman.com
  * 电话 18578909061
  */
-public class DiscoverFragment extends MyBaseFragment {
+public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterface {
 
     @Bind(R.id.fragment_bar_title_iv)
     ImageView fragmentBarTitleIv;
@@ -111,7 +111,9 @@ public class DiscoverFragment extends MyBaseFragment {
 
     private boolean isError = true;
     private RecommendUserModel mRecommendUserModel;
-    private ViewGroupExampleAdapter adapter;
+    private RecommendUserModel mFindLikeModel;
+    private FindTopAdapter topAdapter;
+    private FindLikeAdapter likeAdapter;
 
     private CharmestRankingModel mCharmestRankingModel;
     private GoldRankingModel mGoldRankingModel;
@@ -190,26 +192,22 @@ public class DiscoverFragment extends MyBaseFragment {
         itemGoldLl.add(itemGoldThreeLl);
     }
 
+    private void initLike() {
+        likeAdapter = new FindLikeAdapter(getActivity(), mFindLikeModel, 2, this);
+        findFlow.setAdapter(likeAdapter);
+        findFlow.setScend(true);
+        if (mFindLikeModel != null && mFindLikeModel.getBody().size()>1) {
+            int num = Math.min(1, mFindLikeModel.getBody().size());
+            findFlow.setSelection(num);
+        }
+    }
+
     private void initTop3D() {
         fancyCoverFlow.setFadingEdgeLength(0);
-        adapter = new ViewGroupExampleAdapter(getActivity(), mRecommendUserModel);
-        fancyCoverFlow.setAdapter(adapter);
-        fancyCoverFlow.setSelection(adapter.getCount() / 2);
-        fancyCoverFlow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LogUtils.e("fancyCoverFlow.getSelectedItemPosition():" + fancyCoverFlow.getSelectedItemPosition());
-                LogUtils.e("position:" + position);
-                if ((fancyCoverFlow.getSelectedItemPosition() + 1) == position) {
-                    startActivity(OtherPersonalActivity.buildIntent(getActivity()
-                            , adapter.getItem(fancyCoverFlow.getSelectedItemPosition()
-                                    % mRecommendUserModel.getBody().size()).getUser_id()));
-                }
-            }
-        });
-
-        findFlow.setAdapter(adapter);
-        findFlow.setSelection(adapter.getCount() / 2);
+        topAdapter = new FindTopAdapter(getActivity(), mRecommendUserModel, 1, this);
+        fancyCoverFlow.setAdapter(topAdapter);
+        fancyCoverFlow.setSelection(mRecommendUserModel.getBody().size() / 2
+                + mRecommendUserModel.getBody().size()*10000 - 1);
     }
 
     @Override
@@ -246,6 +244,10 @@ public class DiscoverFragment extends MyBaseFragment {
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .tag(Common.NET_GET_RECOMMENDFRIENDS).id(Common.NET_GET_RECOMMENDFRIENDS).build()
                         .execute(new MyStringCallback(getActivity(), this, true));
+                OkHttpUtils.get().url(Common.Url_Get_RecommendFriends+"/2")
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .tag(Common.NET_GET_FINDLIKE_ID).id(Common.NET_GET_FINDLIKE_ID).build()
+                        .execute(new MyStringCallback(getActivity(), this, true));
             }
         }
     }
@@ -256,6 +258,9 @@ public class DiscoverFragment extends MyBaseFragment {
         if (id == Common.NET_GET_RECOMMENDFRIENDS) {
             mRecommendUserModel = mGson.fromJson(data, RecommendUserModel.class);
             initTop3D();
+        } else if (id == Common.NET_GET_FINDLIKE_ID) {
+            mFindLikeModel = mGson.fromJson(data, RecommendUserModel.class);
+            initLike();
         } else if (id == Common.NET_GET_CHAR_RANKING_ID) {
             mCharmestRankingModel = mGson.fromJson(data, CharmestRankingModel.class);
 
@@ -313,6 +318,7 @@ public class DiscoverFragment extends MyBaseFragment {
     public void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_RECOMMENDFRIENDS);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_FINDLIKE_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_CHAR_RANKING_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_GOLD_RANKING_ID);
     }
@@ -345,6 +351,25 @@ public class DiscoverFragment extends MyBaseFragment {
             case R.id.discover_fm_rl:
                 break;
             case R.id.discover_find_rl:
+                break;
+        }
+    }
+
+    @Override
+    public void onItemClick(View view, int position, int from) {
+        switch (from) {
+            case 1:
+                if (fancyCoverFlow.getSelectedItemPosition() == position) {
+                    startActivity(OtherPersonalActivity.buildIntent(getActivity()
+                            , topAdapter.getItem(fancyCoverFlow.getSelectedItemPosition()
+                                    % mRecommendUserModel.getBody().size()).getUser_id()));
+                } else {
+                    fancyCoverFlow.setSelection(position, true);
+                }
+                break;
+            case 2:
+                startActivity(OtherPersonalActivity.buildIntent(getActivity()
+                        , likeAdapter.getItem(position).getUser_id()));
                 break;
         }
     }

@@ -89,7 +89,7 @@ public class MyStringCallback extends StringCallback {
         String PARM_USER_KEY = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USER_KEY);
         String PARM_USER_TOKEN = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_USER_TOKEN);
 //        Log.e(">>>","PARM_USER_KEY:"+PARM_USER_KEY+",PARM_USER_TOKEN:"+PARM_USER_TOKEN);
-        Log.e(">>>","data:"+data);
+        Log.e(">>>","<<"+id+">>data:"+data);
         BaseNormalModel mBaseModel = new Gson().fromJson(data, BaseNormalModel.class);
         if (mBaseModel != null && mBaseModel.getResult() != null && mBaseModel.getResult().equals("1")) {
             CallBack.onStringResponse(data, response, id);

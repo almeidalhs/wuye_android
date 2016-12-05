@@ -24,6 +24,7 @@ import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Transformation;
 import android.widget.Gallery;
@@ -70,26 +71,29 @@ public class FancyCoverFlow extends Gallery {
      * Saturation factor (0-1) of items that reach the outer effects distance.
      */
     private float unselectedSaturation;
+    private float spacing;
+    private boolean isScend = false;
 
     public FancyCoverFlow(Context context) {
         super(context);
-        this.initialize();
+        this.initialize(context);
     }
 
     public FancyCoverFlow(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.initialize();
+        this.initialize(context);
         this.applyXmlAttributes(attrs);
     }
 
     public FancyCoverFlow(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        this.initialize();
+        this.initialize(context);
         this.applyXmlAttributes(attrs);
     }
 
-    private void initialize() {
+    private void initialize(Context context) {
         this.transformationCamera = new Camera();
+        this.spacing = dp2px(context, 5);
     }
 
     private void applyXmlAttributes(AttributeSet attrs) {
@@ -269,6 +273,10 @@ public class FancyCoverFlow extends Gallery {
         this.unselectedSaturation = unselectedSaturation;
     }
 
+    public void setScend(boolean scend) {
+        isScend = scend;
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -351,24 +359,37 @@ public class FancyCoverFlow extends Gallery {
             this.transformationCamera.restore();
         }
 
+        // final float zoomAmount = (this.unselectedScale - 1) * Math.abs(effectsAmount) + 1;
+        // Calculate the scale anchor (y anchor can be altered)
+        float translateX = childWidth / 2.0f;
+        float translateY = childHeight / 2.0f;
+        imageMatrix.preTranslate(-translateX, -translateY);
         // Zoom.
-        if (this.unselectedScale != 1) {
-//            final float zoomAmount = (this.unselectedScale - 1) * Math.abs(effectsAmount) + 1;
-            // Calculate the scale anchor (y anchor can be altered)
-            float translateX = childWidth / 2.0f;
-            float translateY = childHeight / 2.0f;
-            imageMatrix.preTranslate(-translateX, -translateY);
-            if (effectsAmount==0) {
+        if (isScend) {
+            if (coverFlowCenter-childWidth == childCenter+spacing) {
                 imageMatrix.postScale(1, 1.0f);
-            } else if (effectsAmount>0) {
-                imageMatrix.postScale(1, 0.85f);
-            } else if (effectsAmount<0) {
-                imageMatrix.postScale(1, 0.85f);
+            } else {
+                imageMatrix.postScale(0.85f, 0.85f);
             }
-            imageMatrix.postTranslate(translateX, translateY);
+        } else {
+            if (this.unselectedScale != 1) {
+                if (effectsAmount==0) {
+                    imageMatrix.postScale(1, 1.0f);
+                } else if (effectsAmount>0) {
+                    imageMatrix.postScale(1, 0.85f);
+                } else if (effectsAmount<0) {
+                    imageMatrix.postScale(1, 0.85f);
+                }
+            }
         }
+        imageMatrix.postTranslate(translateX, translateY);
 
         return true;
+    }
+
+    public int dp2px(Context context, int dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 
     public static class LayoutParams extends Gallery.LayoutParams {
@@ -385,58 +406,71 @@ public class FancyCoverFlow extends Gallery {
         }
     }
 
+    private boolean mScrolling;
+    private float touchDownX;
+
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                touchDownX = event.getX();
+                mScrolling = false;
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (Math.abs(touchDownX - event.getX()) >= ViewConfiguration.get(
+                        getContext()).getScaledTouchSlop()) {
+                    mScrolling = true;
+                } else {
+                    mScrolling = false;
+                }
                 break;
             case MotionEvent.ACTION_UP:
-                break;
-            case MotionEvent.ACTION_CANCEL:
+                mScrolling = false;
                 break;
         }
-        return super.onInterceptTouchEvent(ev);
+        return mScrolling;
     }
-//
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        float fisrtX = 0;
-//        float fisrtY = 0;
-//        switch (event.getAction()) {
-//            case MotionEvent.ACTION_DOWN:
-//                fisrtX = event.getX();
-//                fisrtY = event.getY();
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                final float touchDistancesX = Math.abs(event.getX()-fisrtX);
-//                final float touchDistancesY = Math.abs(event.getY()-fisrtY);
-//                if (touchDistancesX > 10 || touchDistancesY > 10) {
-//                } else {
-//                }
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                break;
-//            case MotionEvent.ACTION_CANCEL:
-//                break;
-//        }
-//        return super.onTouchEvent(event);
-//    }
 
-//    private boolean isScrollingLeft(MotionEvent e1, MotionEvent e2) {
-//        return e2.getX() > e1.getX();
-//    }
-//
-//    @Override
-//    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//        int keyCode;
-//        if (isScrollingLeft(e1, e2)) {
-//            keyCode = KeyEvent.KEYCODE_DPAD_LEFT;
-//        } else {
-//            keyCode = KeyEvent.KEYCODE_DPAD_RIGHT;
-//        }
-//        onKeyDown(keyCode, null);
-//        return true;
-//    }
+    float x1 = 0;
+    float x2 = 0;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                return true;
+            case MotionEvent.ACTION_MOVE:
+
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                if (touchDownX - x2 > dp2px(getContext(), 40)) {
+                    if(mSetOnSlideListener!=null){
+                        mSetOnSlideListener.onRightToLeftSlide();
+                    }
+                }
+                if (touchDownX - x2 < - dp2px(getContext(), 40)) {
+                    if(mSetOnSlideListener!=null){
+                        mSetOnSlideListener.onLeftToRightSlide();
+                    }
+                }
+                break;
+        }
+
+        return super.onTouchEvent(event);
+    }
+
+    private setOnSlideListener mSetOnSlideListener;
+
+    public setOnSlideListener getmSetOnSlideListener() {
+        return mSetOnSlideListener;
+    }
+
+    public void setmSetOnSlideListener(setOnSlideListener mSetOnSlideListener) {
+        this.mSetOnSlideListener = mSetOnSlideListener;
+    }
+
+    public interface setOnSlideListener{
+        void onRightToLeftSlide();
+        void onLeftToRightSlide();
+    }
 }
