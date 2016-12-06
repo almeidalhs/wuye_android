@@ -72,7 +72,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     private ImageView personalGenderIv;
     private ImageView personalTaskIv;
     private CustomImageView personalHeadIv;
-    private CustomImageView personalHeadVerifyImg;
+    private ImageView personalHeadVerifyImg;
     private TextView personalNameTx;
     private TextView personalGendercertificationTv;
     private GetMyUserIndexModel mGetUserIndexModel;
@@ -138,7 +138,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         personalNameTx = (TextView) personalScrollview.findViewById(R.id.personal_name_tx);
         personalGendercertificationTv = (TextView) personalScrollview.findViewById(R.id.personal_gendercertification_tv);
         personalHeadIv = (CustomImageView) personalScrollview.findViewById(R.id.personal_head_iv);
-        personalHeadVerifyImg = (CustomImageView) personalScrollview.findViewById(R.id.personal_head_verify_img);
+        personalHeadVerifyImg = (ImageView) personalScrollview.findViewById(R.id.personal_head_verify_img);
         personalMaillistLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_maillist_ll);
         personalServiceLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_service_ll);
         personalTaskLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_task_ll);

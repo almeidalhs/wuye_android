@@ -196,7 +196,7 @@ public class ChildrenCommentAdapter extends BaseAdapter {
         @Bind(R.id.item_children_comment_gender_iv)
         ImageView itemChildrenCommentGenderIv;
         @Bind(R.id.item_children_comment_verify_img)
-        CustomImageView itemChildrenCommentVerifyImg;
+        ImageView itemChildrenCommentVerifyImg;
         @Bind(R.id.item_children_comment_head_rl)
         RelativeLayout itemChildrenCommentHeadRl;
         @Bind(R.id.item_children_comment_name_tv)

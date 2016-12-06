@@ -108,7 +108,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile project(':baselibs')
@@ -122,6 +122,7 @@ dependencies {
     compile files('libs/nim-lucene-2.7.0.jar')
     compile files('libs/nim-rts-2.7.0.jar')
     compile files('libs/nrtc-sdk.jar')
-    compile'org.greenrobot:greendao:3.1.0'
-    compile'org.greenrobot:greendao-generator:3.1.0'
+    compile 'org.greenrobot:greendao:3.1.0'
+    compile 'org.greenrobot:greendao-generator:3.1.0'
+    compile files('libs/drawee-v0.12.0.jar')
 }

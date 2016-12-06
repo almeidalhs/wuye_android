@@ -282,7 +282,7 @@ public class PostingsDetailsCommentAdapter extends BaseAdapter {
         @Bind(R.id.item_postingsdetail_comment_gender_iv)
         ImageView itemPostingsdetailCommentGenderIv;
         @Bind(R.id.item_postingsdetail_comment_verify_img)
-        CustomImageView itemPostingsdetailCommentVerifyImg;
+        ImageView itemPostingsdetailCommentVerifyImg;
         @Bind(R.id.item_postingsdetail_comment_head_rl)
         RelativeLayout itemPostingsdetailCommentHeadRl;
         @Bind(R.id.item_postingsdetail_comment_name_tv)

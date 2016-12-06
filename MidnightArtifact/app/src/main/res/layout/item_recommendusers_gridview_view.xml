@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_recommenduser_root_rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:padding="@dimen/dimen_dp_2">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/item_recommenduser_iv"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        fresco:failureImage="@mipmap/icon_goodsdetail_business"
+        fresco:failureImageScaleType="centerInside"
+        fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />
+
+    <TextView
+        android:id="@+id/item_recommenduser_num_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_dp_5"
+        android:layout_marginTop="@dimen/dimen_dp_5"
+        style="@style/AudioFileInfoOverlayText_TWO"
+        android:drawableLeft="@mipmap/mchat_icon_num"
+        android:text=" 0"/>
+
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_30"
+        android:background="@color/color_88000000"/>
+
+    <RelativeLayout
+        android:id="@+id/item_recommenduser_head_rl"
+        android:layout_width="@dimen/dimen_dp_35"
+        android:layout_height="@dimen/dimen_dp_35"
+        android:layout_marginLeft="@dimen/dimen_dp_5"
+        android:layout_marginBottom="@dimen/dimen_dp_5"
+        android:layout_alignParentBottom="true">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/item_recommenduser_head_iv"
+            android:layout_width="@dimen/dimen_dp_35"
+            android:layout_height="@dimen/dimen_dp_35"
+            fresco:roundedCornerRadius="@dimen/dimen_dp_5"
+            fresco:placeholderImage="@mipmap/niming_ic"
+            fresco:failureImage="@mipmap/niming_ic"
+            fresco:failureImageScaleType="centerInside"
+            fresco:roundingBorderWidth="@dimen/dimen_dp_1"
+            fresco:roundingBorderColor="@android:color/white"/>
+
+        <ImageView
+            android:id="@+id/item_recommenduser_gender_iv"
+            android:layout_width="@dimen/dimen_dp_12"
+            android:layout_height="@dimen/dimen_dp_12"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/dimen_dp_1"
+            android:layout_marginRight="@dimen/dimen_dp_1"
+            android:src="@mipmap/personal_man_ic" />
+
+        <ImageView
+            android:id="@+id/item_recommenduser_verify_iv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_dp_10"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/dimen_dp_1"
+            android:layout_marginBottom="@dimen/dimen_dp_1"
+            android:layout_marginRight="@dimen/dimen_dp_1"
+            android:scaleType="fitXY"
+            android:src="@mipmap/personal_identification"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/item_recommenduser_name_tx"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen_dp_30"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="@color/color_white"
+        android:layout_toRightOf="@+id/item_recommenduser_head_rl"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/dimen_dp_5"
+        android:textSize="@dimen/dimen_sp_11"
+        android:text="name"/>
+
+</RelativeLayout>

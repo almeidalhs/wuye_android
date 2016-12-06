@@ -353,6 +353,7 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
             case R.id.discover_fm_rl:
                 break;
             case R.id.discover_find_rl:
+                startActivity(new Intent(getActivity(), RecommendUsersActivity.class));
                 break;
         }
     }

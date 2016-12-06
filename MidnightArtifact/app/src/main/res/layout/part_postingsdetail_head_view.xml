@@ -36,16 +36,14 @@
                 android:layout_alignParentRight="true"
                 android:src="@mipmap/personal_weman_ic" />
 
-            <com.base.baselibs.widget.CustomImageView
-                xmlns:img="http://schemas.android.com/apk/res-auto"
+            <ImageView
                 android:id="@+id/blogdetail_verify_img"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_dp_13"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
+                android:scaleType="fitXY"
                 android:src="@mipmap/personal_identification"
-                img:circle="false"
-                img:radius="@dimen/dimen_dp_5" />
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true" />
         </RelativeLayout>
 
         <TextView

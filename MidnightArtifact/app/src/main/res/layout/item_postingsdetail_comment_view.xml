@@ -37,15 +37,13 @@
                 android:layout_toRightOf="@+id/personal_name_tx"
                 android:src="@mipmap/personal_man_ic"/>
 
-            <com.base.baselibs.widget.CustomImageView
-                xmlns:img="http://schemas.android.com/apk/res-auto"
+            <ImageView
                 android:id="@+id/item_postingsdetail_comment_verify_img"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_dp_15"
+                android:layout_height="@dimen/dimen_dp_13"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                img:circle="false"
-                img:radius="@dimen/dimen_dp_5"
+                android:scaleType="fitXY"
                 android:src="@mipmap/personal_identification"/>
         </RelativeLayout>
 

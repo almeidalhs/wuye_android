@@ -305,7 +305,7 @@ public class PostingListAdapter extends BaseAdapter {
         @Bind(R.id.item_bloglist_gender_img)
         ImageView itemBloglistGenderImg;
         @Bind(R.id.item_bloglist_verify_img)
-        CustomImageView itemBloglistVerifyImg;
+        ImageView itemBloglistVerifyImg;
         @Bind(R.id.item_bloglist_head_rl)
         RelativeLayout itemBloglistHeadRl;
         @Bind(R.id.item_bloglist_name_tx)

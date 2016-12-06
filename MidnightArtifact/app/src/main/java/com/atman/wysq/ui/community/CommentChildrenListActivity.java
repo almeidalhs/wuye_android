@@ -87,7 +87,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
     private View headView;
     private RelativeLayout childrencommentHeadRl;
     private CustomImageView childrencommentHeadImg;
-    private CustomImageView childrencommentVerifyImg;
+    private ImageView childrencommentVerifyImg;
     private ImageView childrencommentGenderImg;
     private ImageView childrencommentSvipIv;
     private TextView childrencommentNameTx;
@@ -154,7 +154,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
         headView = LayoutInflater.from(mContext).inflate(R.layout.part_childrencomment_head_view, null);
         childrencommentHeadRl = (RelativeLayout) headView.findViewById(R.id.childrencomment_head_rl);
         childrencommentHeadImg = (CustomImageView) headView.findViewById(R.id.childrencomment_head_img);
-        childrencommentVerifyImg = (CustomImageView) headView.findViewById(R.id.childrencomment_verify_img);
+        childrencommentVerifyImg = (ImageView) headView.findViewById(R.id.childrencomment_verify_img);
         childrencommentGenderImg = (ImageView) headView.findViewById(R.id.childrencomment_gender_img);
         childrencommentSvipIv = (ImageView) headView.findViewById(R.id.childrencomment_svip_iv);
         childrencommentNameTx = (TextView) headView.findViewById(R.id.childrencomment_name_tx);

@@ -28,16 +28,14 @@
             android:layout_alignParentBottom="true"
             android:src="@mipmap/personal_man_ic"/>
 
-        <com.base.baselibs.widget.CustomImageView
-            xmlns:img="http://schemas.android.com/apk/res-auto"
+        <ImageView
             android:id="@+id/personal_head_verify_img"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_dp_20"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:visibility="gone"
-            img:circle="false"
-            img:radius="@dimen/dimen_dp_5"
+            android:scaleType="fitXY"
             android:src="@mipmap/personal_identification"/>
     </RelativeLayout>
 
