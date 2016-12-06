@@ -4,65 +4,181 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1">
+    <LinearLayout
+        android:id="@+id/mofriends_myattion_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_70"
+        android:background="@drawable/white_hollow_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
 
-        <ListView
-            android:id="@+id/mofriend_listview"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center" />
-
-        <TextView
-            android:id="@+id/mofriend_no_friends"
-            android:layout_width="fill_parent"
+        <ImageView
+            android:layout_width="@dimen/dimen_dp_30"
             android:layout_height="@dimen/dimen_dp_30"
-            android:layout_gravity="right|top"
-            android:gravity="center_vertical"
-            android:text="没有匹配的联系人"
-            android:textColor="#454545"
-            android:visibility="gone" />
+            android:layout_marginRight="@dimen/dimen_dp_15"
+            android:src="@mipmap/personal_addlist_ic" />
 
         <LinearLayout
-            android:id="@+id/mofriend_title_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/dimen_dp_30"
-            android:layout_gravity="right|top"
-            android:background="#efeff4"
-            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/mofriend_title_layout_catalog"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#efeff4"
-                android:paddingBottom="@dimen/dimen_dp_5"
-                android:paddingLeft="@dimen/dimen_dp_10"
-                android:paddingTop="@dimen/dimen_dp_5"
-                android:textColor="#979797"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的关注"
+                android:textColor="@color/personal_item_tx"
+                android:textSize="@dimen/dimen_sp_16" />
+
+            <TextView
+                android:id="@+id/mofriends_myattion_num_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:layout_marginTop="@dimen/dimen_dp_5"
+                android:textColor="@color/color_787878"
                 android:textSize="@dimen/dimen_sp_14" />
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/mofriend_dialog"
-            android:layout_width="@dimen/dimen_dp_80"
-            android:layout_height="@dimen/dimen_dp_80"
-            android:layout_gravity="center"
-            android:background="@drawable/show_head_toast_bg"
-            android:gravity="center"
-            android:textColor="#ffffffff"
-            android:textSize="@dimen/dimen_sp_30"
-            android:visibility="invisible" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
 
-        <com.atman.wysq.widget.telephonebook.SideBar
-            android:id="@+id/mofriend_sidrbar"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dimen_dp_55"
+            android:background="@color/color_line" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mofriends_myfans_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_70"
+        android:background="@drawable/white_hollow_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <ImageView
             android:layout_width="@dimen/dimen_dp_30"
-            android:layout_height="fill_parent"
-            android:layout_gravity="right|center"
-            android:layout_marginBottom="@dimen/dimen_dp_50"
-            android:layout_marginTop="@dimen/dimen_dp_50" />
-    </FrameLayout>
+            android:layout_height="@dimen/dimen_dp_30"
+            android:layout_marginRight="@dimen/dimen_dp_15"
+            android:src="@mipmap/personal_addlist_ic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的粉丝"
+                android:textColor="@color/personal_item_tx"
+                android:textSize="@dimen/dimen_sp_16" />
+
+            <TextView
+                android:id="@+id/mofriends_myfans_num_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:layout_marginTop="@dimen/dimen_dp_5"
+                android:textColor="@color/color_787878"
+                android:textSize="@dimen/dimen_sp_14" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dimen_dp_55"
+            android:background="@color/color_line" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mofriends_blacklist_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_70"
+        android:background="@drawable/white_hollow_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <ImageView
+            android:layout_width="@dimen/dimen_dp_30"
+            android:layout_height="@dimen/dimen_dp_30"
+            android:layout_marginRight="@dimen/dimen_dp_15"
+            android:src="@mipmap/personal_addlist_ic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="黑名单"
+                android:textColor="@color/personal_item_tx"
+                android:textSize="@dimen/dimen_sp_16" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="看谁不爽,拉进小黑屋啪啪啪"
+                android:layout_marginTop="@dimen/dimen_dp_5"
+                android:textColor="@color/color_787878"
+                android:textSize="@dimen/dimen_sp_14" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/color_line" />
+    </LinearLayout>
 </LinearLayout>

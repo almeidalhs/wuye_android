@@ -80,7 +80,7 @@
 
     <LinearLayout
         android:id="@+id/reply_bar_title_back_ll"
-        android:layout_width="@dimen/dimen_dp_48"
+        android:layout_width="@dimen/dimen_dp_40"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:clickable="true"

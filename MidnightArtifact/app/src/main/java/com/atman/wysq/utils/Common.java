@@ -171,6 +171,10 @@ public class Common {
     public static String Url_Get_Char_Ranking = hostUrl + "rest/user/charmest/";
     //获取财富排行
     public static String Url_Get_Gold_Ranking = hostUrl + "rest/user/goldcoinest/";
+    //获取夜友数量
+    public static String Url_Get_FansNum = hostUrl + "rest/user/getMyFansNum";
+    //获取我的粉丝
+    public static String Url_Get_FansList = hostUrl + "rest/user/followed/";
     /**************************http访问路径*****************************/
 
 
@@ -320,6 +324,10 @@ public class Common {
     public static int NET_GET_FINDLIKE_ID = 71;
     //排行榜
     public static int NET_GET_RANKING_ID = 72;
+    //获取夜友数量
+    public static int NET_GET_FANSNUM_ID = 73;
+    //获取粉丝列表
+    public static int NET_GET_FANSLIST_ID = 74;
     /**************************http访问回应识别码*****************************/
 
 

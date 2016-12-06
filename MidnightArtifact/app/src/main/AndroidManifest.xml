@@ -66,6 +66,9 @@
         <activity android:name=".ui.yunxinfriend.MessageCenterActivity"/>
         <activity android:name=".ui.yunxinfriend.SelectGiftActivity"
             android:theme="@style/giftStyle" android:windowSoftInputMode="stateUnchanged|adjustPan" />
+        <activity android:name=".ui.yunxinfriend.MyFansActivity" android:launchMode="singleTask"/>
+        <activity android:name=".ui.yunxinfriend.MyConcernActivity" android:launchMode="singleTask"/>
+        <activity android:name=".ui.yunxinfriend.BlackListActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.discover.AllRankingListActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.discover.RecommendUsersActivity" android:launchMode="singleTask"/>
 

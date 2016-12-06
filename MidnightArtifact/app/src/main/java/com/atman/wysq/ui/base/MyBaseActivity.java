@@ -36,6 +36,7 @@ import com.atman.wysq.utils.ScreenObserver;
 import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.base.BaseAppCompatActivity;
 import com.base.baselibs.net.YunXinAuthOutEvent;
+import com.base.baselibs.util.DensityUtil;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.PromptDialog;
@@ -253,6 +254,19 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         barRightTx.setVisibility(View.GONE);
         barRightIv.setBackgroundResource(id);
         return barRightIv;
+    }
+
+    protected ImageView setBarRightIv(int id, boolean isDis) {
+        if (isDis) {
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    , ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.rightMargin = DensityUtil.dp2px(this, 10);
+            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            barRightIv.setLayoutParams(layoutParams);
+        }
+        return setBarRightIv(id);
     }
 
     /**

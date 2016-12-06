@@ -27,7 +27,6 @@ import com.atman.wysq.ui.yunxinfriend.MessageCenterActivity;
 import com.atman.wysq.ui.yunxinfriend.MoFriendsActivity;
 import com.atman.wysq.ui.yunxinfriend.P2PChatActivity;
 import com.base.baselibs.iimp.AdapterInterface;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.PromptDialog;
 
@@ -88,7 +87,7 @@ public class MessageFragment extends MyBaseFragment implements AdapterInterface{
         super.initWidget(v);
         fragmentBarTitleIv.setImageResource(R.mipmap.top_message_ic);
         fragmentBarRightIv.setVisibility(View.VISIBLE);
-        fragmentBarRightIv.setImageResource(R.mipmap.message_top_right_ic);
+        fragmentBarRightIv.setImageResource(R.mipmap.live_main_list_img_members);
 
         mImMessageDao = MyBaseApplication.getApplication().getDaoSession().getImMessageDao();
 

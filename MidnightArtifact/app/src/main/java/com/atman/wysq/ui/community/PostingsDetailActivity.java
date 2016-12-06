@@ -193,7 +193,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
             }
         });
 
-        setBarRightIv(R.mipmap.postingsdetails_right_ic);
+        setBarRightIv(R.mipmap.postingsdetails_right_ic, true);
         getBarRightRl().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -193,7 +193,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
             showToast("已成功拉黑");
         }else if (id == Common.NET_DLELTE_FRIEND) {
             mGetMyUserIndexModel.getBody().setFriend(false);
-            otherpersonalRelationshipBt.setText("加好友");
+            otherpersonalRelationshipBt.setText("关注");
             otherpersonalRelationshipTv.setText("陌生人");
             MyBaseApplication.getApplication().getDaoSession().getAddFriendRecordDao().deleteAll();
         }
@@ -245,10 +245,10 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         initguardianIV();
 
         if (mGetMyUserIndexModel.getBody().isFriend()) {
-            otherpersonalRelationshipBt.setText("删除");
-            otherpersonalRelationshipTv.setText("好友");
+            otherpersonalRelationshipBt.setText("取消关注");
+            otherpersonalRelationshipTv.setText("关注");
         } else {
-            otherpersonalRelationshipBt.setText("加好友");
+            otherpersonalRelationshipBt.setText("关注");
             otherpersonalRelationshipTv.setText("陌生人");
         }
 

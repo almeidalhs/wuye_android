@@ -1,23 +1,35 @@
 package com.atman.wysq.ui.discover;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.RecommendUsersAdapter;
+import com.atman.wysq.model.event.YunXinMessageEvent;
 import com.atman.wysq.model.response.RecommendUserModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.community.MySecretListActivity;
+import com.atman.wysq.ui.community.MycollectionActivity;
+import com.atman.wysq.ui.community.ReplyListActivity;
+import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -143,7 +155,55 @@ public class RecommendUsersActivity extends MyBaseActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bar_right_iv:
+                showTopPopWin(v);
                 break;
         }
+    }
+
+    private void showTopPopWin(View v) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.top_recommenduser_popwin_layout, null);
+        final PopupWindow popupWindow = new PopupWindow(view, RelativeLayout.LayoutParams.MATCH_PARENT
+                ,RelativeLayout.LayoutParams.MATCH_PARENT);
+        TextView topWinFemaleTx = (TextView) view.findViewById(R.id.top_win_female_tx);
+        topWinFemaleTx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sofarTypeId = typeId[0];
+                setBarRightIv(R.mipmap.mchat_icon_more_female);
+                dohttp(false);
+                popupWindow.dismiss();
+            }
+        });
+        TextView topWinMaleTx = (TextView) view.findViewById(R.id.top_win_male_tx);
+        topWinMaleTx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sofarTypeId = typeId[1];
+                setBarRightIv(R.mipmap.mchat_icon_more_male);
+                dohttp(false);
+                popupWindow.dismiss();
+            }
+        });
+        TextView topWinIverifyTx = (TextView) view.findViewById(R.id.top_win_iverify_tx);
+        topWinIverifyTx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sofarTypeId = typeId[2];
+                setBarRightIv(R.mipmap.mchat_icon_more_iverify);
+                dohttp(false);
+                popupWindow.dismiss();
+            }
+        });
+        view.findViewById(R.id.top_win_iv3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.showAtLocation(v, 0, 0, 0);
     }
 }
