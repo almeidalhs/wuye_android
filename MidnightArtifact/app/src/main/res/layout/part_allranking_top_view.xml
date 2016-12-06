@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@color/color_white"
-    android:padding="@dimen/dimen_dp_15"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:orientation="vertical"
+    android:padding="@dimen/dimen_dp_15">
 
     <LinearLayout
         android:id="@+id/part_ranking_two_top_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:clickable="true"
         android:background="@drawable/ranking_two_radius_bg"
+        android:clickable="true"
+        android:gravity="center"
         android:orientation="vertical">
 
         <com.base.baselibs.widget.ShapeImageView xmlns:img="http://schemas.android.com/apk/res-auto"
@@ -28,40 +28,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_dp_10"
-            android:src="@mipmap/other_guard_two"/>
+            android:src="@mipmap/other_guard_two" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="2"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/dimen_sp_29"
-            android:text="2"/>
+            android:textSize="@dimen/dimen_sp_29" />
 
         <ImageView
             android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_dp_1"
+            android:layout_marginBottom="@dimen/dimen_dp_10"
             android:layout_marginLeft="@dimen/dimen_dp_10"
             android:layout_marginRight="@dimen/dimen_dp_10"
-            android:layout_marginBottom="@dimen/dimen_dp_10"
-            android:layout_height="@dimen/dimen_dp_1"
-            android:src="@color/color_white"/>
+            android:src="@color/color_white" />
 
         <TextView
             android:id="@+id/part_ranking_two_top_name_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="name"
-            android:textColor="@color/color_white"/>
+            android:textColor="@color/color_white" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/part_ranking_three_top_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:clickable="true"
         android:layout_alignParentRight="true"
         android:background="@drawable/ranking_three_radius_bg"
+        android:clickable="true"
+        android:gravity="center"
         android:orientation="vertical">
 
         <com.base.baselibs.widget.ShapeImageView xmlns:img="http://schemas.android.com/apk/res-auto"
@@ -77,40 +76,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_dp_10"
-            android:src="@mipmap/other_guard_three"/>
+            android:src="@mipmap/other_guard_three" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="3"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/dimen_sp_29"
-            android:text="3"/>
+            android:textSize="@dimen/dimen_sp_29" />
 
         <ImageView
             android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_dp_1"
+            android:layout_marginBottom="@dimen/dimen_dp_10"
             android:layout_marginLeft="@dimen/dimen_dp_10"
             android:layout_marginRight="@dimen/dimen_dp_10"
-            android:layout_marginBottom="@dimen/dimen_dp_10"
-            android:layout_height="@dimen/dimen_dp_1"
-            android:src="@color/color_white"/>
+            android:src="@color/color_white" />
 
         <TextView
             android:id="@+id/part_ranking_three_top_name_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="name"
-            android:textColor="@color/color_white"/>
+            android:textColor="@color/color_white" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/part_ranking_one_top_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:clickable="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/ranking_one_radius_bg"
+        android:clickable="true"
+        android:gravity="center"
         android:orientation="vertical">
 
         <com.base.baselibs.widget.ShapeImageView xmlns:img="http://schemas.android.com/apk/res-auto"
@@ -126,30 +124,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_dp_10"
-            android:src="@mipmap/other_guard_three"/>
+            android:src="@mipmap/other_guard_three" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="1"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/dimen_sp_29"
-            android:text="1"/>
+            android:textSize="@dimen/dimen_sp_29" />
 
         <ImageView
             android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_dp_1"
+            android:layout_marginBottom="@dimen/dimen_dp_10"
             android:layout_marginLeft="@dimen/dimen_dp_10"
             android:layout_marginRight="@dimen/dimen_dp_10"
-            android:layout_marginBottom="@dimen/dimen_dp_10"
-            android:layout_height="@dimen/dimen_dp_1"
-            android:src="@color/color_white"/>
+            android:src="@color/color_white" />
 
         <TextView
             android:id="@+id/part_ranking_one_top_name_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="name"
-            android:textColor="@color/color_white"/>
+            android:textColor="@color/color_white" />
     </LinearLayout>
 
 </RelativeLayout>
