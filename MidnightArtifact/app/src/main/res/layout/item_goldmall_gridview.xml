@@ -15,7 +15,7 @@
         android:id="@+id/two_category_name_tx"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_marginLeft="@dimen/dimen_dp_10"
         android:paddingBottom="@dimen/dimen_dp_2"
         android:paddingTop="@dimen/dimen_dp_2"
         android:singleLine="true"
@@ -35,8 +35,9 @@
             android:paddingBottom="@dimen/dimen_dp_2"
             android:paddingTop="@dimen/dimen_dp_2"
             android:singleLine="true"
-            android:text="¥660.00"
-            android:textColor="#d78b31"
+            android:drawableLeft="@mipmap/icon_gold"
+            android:text="  660.00"
+            android:textColor="@color/color_2B2B2B"
             android:textSize="@dimen/dimen_sp_13" />
 
         <TextView
@@ -73,23 +74,9 @@
         android:textColor="#666666"
         android:textSize="@dimen/dimen_sp_11" />
 
-    <TextView
-        android:id="@+id/two_category_coin_tx"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="@dimen/dimen_dp_10"
-        android:paddingBottom="@dimen/dimen_dp_2"
-        android:paddingTop="@dimen/dimen_dp_2"
-        android:singleLine="true"
-        android:text="赠送金币：  6"
-        android:textColor="#666666"
-        android:textSize="@dimen/dimen_sp_11" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView

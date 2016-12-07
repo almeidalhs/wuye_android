@@ -10,10 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.model.response.TwoLevelCategoryListResponseModel;
+import com.atman.wysq.model.response.GetGoldMallModel;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
-import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -30,20 +29,18 @@ import butterknife.ButterKnife;
  * 邮箱 bltang@atman.com
  * 电话 18578909061
  */
-public class TwoLevelCategoryListAdapter extends BaseAdapter {
+public class GoldMallAdapter extends BaseAdapter {
 
     private Context context;
     private ViewHolder holder;
     protected LayoutInflater layoutInflater;
-    private List<TwoLevelCategoryListResponseModel.BodyEntity> body;
-    private AdapterInterface mAdapterInterface;
+    private List<GetGoldMallModel.BodyBean> body;
     private int wight;
     private LinearLayout.LayoutParams params;
     private ImageLoader mImageLoader;
 
-    public TwoLevelCategoryListAdapter(Context context, int wight, AdapterInterface mAdapterInterface) {
+    public GoldMallAdapter(Context context, int wight) {
         this.context = context;
-        this.mAdapterInterface = mAdapterInterface;
         layoutInflater = LayoutInflater.from(context);
         this.wight = (wight - DensityUtil.dp2px(context, 6)) / 2;
         this.body = new ArrayList<>();
@@ -52,7 +49,7 @@ public class TwoLevelCategoryListAdapter extends BaseAdapter {
         mImageLoader = ImageLoader.getInstance();
     }
 
-    public void addBody(List<TwoLevelCategoryListResponseModel.BodyEntity> body) {
+    public void addBody(List<GetGoldMallModel.BodyBean> body) {
         this.body.addAll(body);
         notifyDataSetChanged();
     }
@@ -63,7 +60,7 @@ public class TwoLevelCategoryListAdapter extends BaseAdapter {
     }
 
     @Override
-    public TwoLevelCategoryListResponseModel.BodyEntity getItem(int position) {
+    public GetGoldMallModel.BodyBean getItem(int position) {
         return body.get(position);
     }
 
@@ -75,7 +72,7 @@ public class TwoLevelCategoryListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.item_twocategory_gridview_view, null);
+            convertView = layoutInflater.inflate(R.layout.item_goldmall_gridview, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -91,22 +88,21 @@ public class TwoLevelCategoryListAdapter extends BaseAdapter {
         mImageLoader.displayImage(Common.ImageUrl + url,
                 holder.twoCategoryIv, MyBaseApplication.getApplication().getOptionsNot());
         holder.twoCategoryNameTx.setText(body.get(position).getTitle());
-        holder.twoCategoryPriceTx.setText("¥ " + body.get(position).getDiscount_price());
+        holder.twoCategoryPriceTx.setText(" " + body.get(position).getGold_coin_price());
         holder.twoCategorySalesvolumeTx.setText("月销量：" + body.get(position).getSales());
         holder.twoCategoryExperienceTx.setText("赠送经验：  " + body.get(position).getIntegral());
-        holder.twoCategoryCoinTx.setText("赠送金币：  " + body.get(position).getGold_coin());
 
         holder.twoCategoryToolIv.setVisibility(View.GONE);
         holder.twoCategoryToolEmptyTx.setVisibility(View.GONE);
-//        if (body.get(position).getIcon()==null) {
-//            holder.twoCategoryToolIv.setVisibility(View.GONE);
-//            holder.twoCategoryToolEmptyTx.setVisibility(View.VISIBLE);
-//        } else {
-//            holder.twoCategoryToolIv.setVisibility(View.VISIBLE);
-//            holder.twoCategoryToolEmptyTx.setVisibility(View.GONE);
-//            mImageLoader.displayImage(Common.ImageUrl + body.get(position).getIcon(),
-//                    holder.twoCategoryToolIv, MyBaseApplication.getApp().getOptionsNot());
-//        }
+        if (body.get(position).getIcon() == null) {
+            holder.twoCategoryToolIv.setVisibility(View.GONE);
+            holder.twoCategoryToolEmptyTx.setVisibility(View.VISIBLE);
+        } else {
+            holder.twoCategoryToolIv.setVisibility(View.VISIBLE);
+            holder.twoCategoryToolEmptyTx.setVisibility(View.GONE);
+            mImageLoader.displayImage(Common.ImageUrl + body.get(position).getIcon(),
+                    holder.twoCategoryToolIv, MyBaseApplication.getApplication().getOptionsNot());
+        }
 
         return convertView;
     }
@@ -127,8 +123,6 @@ public class TwoLevelCategoryListAdapter extends BaseAdapter {
         TextView twoCategorySalesvolumeTx;
         @Bind(R.id.two_category_experience_tx)
         TextView twoCategoryExperienceTx;
-        @Bind(R.id.two_category_coin_tx)
-        TextView twoCategoryCoinTx;
         @Bind(R.id.two_category_tool_iv)
         ImageView twoCategoryToolIv;
         @Bind(R.id.two_category_tool_empty_tx)

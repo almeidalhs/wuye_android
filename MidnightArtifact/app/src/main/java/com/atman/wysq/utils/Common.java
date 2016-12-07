@@ -187,6 +187,8 @@ public class Common {
     public static String Url_Add_Follow = hostUrl + "rest/user/followAdd";
     //商城数据获取
     public static String Url_Get_Mall = hostUrl + "rest/category/club";
+    //金币商城商品
+    public static String Url_Get_GoldMall = hostUrl + "rest/mall/goods/1/";
     /**************************http访问路径*****************************/
 
 
@@ -352,6 +354,8 @@ public class Common {
     public static int NET_ADD_FOLLOW_ID = 79;
     //商城数据获取
     public static int NET_GET_MALL_ID = 80;
+    //金币商城商品
+    public static int NET_GET_GOLDMALL_ID = 81;
     /**************************http访问回应识别码*****************************/
 
 

@@ -24,6 +24,7 @@ import com.tbl.okhttputils.OkHttpUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Response;
 
 /**
@@ -71,17 +72,11 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
         super.initWidget(v);
 
         setBarTitleTx("我的金币");
-        setBarRightIv(R.mipmap.mycion_bar_right_ic).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(mContext, CoinAgreementActivity.class));
-            }
-        });
         goldCoin = getIntent().getIntExtra("goldCoin", 0);
         convertCoin = getIntent().getIntExtra("convertCoin", 0);
 
-        rechargeTotalcoinTv.setText(""+goldCoin);
-        rechargeCanoutcoinTv.setText(""+convertCoin);
+        rechargeTotalcoinTv.setText("" + goldCoin);
+        rechargeCanoutcoinTv.setText("" + convertCoin);
 
         initListView();
     }
@@ -171,5 +166,17 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
     @Override
     public void payResult(String str) {
         MyBaseApplication.getApplication().setFilterLock(false);
+    }
+
+    @OnClick({R.id.recharge_mygoldshop_one_tv, R.id.recharge_mygoldshop_two_tv})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.recharge_mygoldshop_one_tv:
+                startActivity(new Intent(mContext, CoinAgreementActivity.class));
+                break;
+            case R.id.recharge_mygoldshop_two_tv:
+                startActivity(new Intent(mContext, GoldMallActivity.class));
+                break;
+        }
     }
 }

@@ -81,7 +81,7 @@ public class MyGiftActivity extends MyBaseActivity {
     public void initWidget(View... v) {
         super.initWidget(v);
         setBarTitleTx("我的礼物");
-        setBarRightIv(R.mipmap.mygift_bar_right_ic).setOnClickListener(new View.OnClickListener() {
+        setBarRightIv(R.mipmap.mygift_bar_right_ic, true).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isLogin()) {
