@@ -395,7 +395,9 @@ public class GoodsDetailActivity extends MyBaseActivity implements ScrollViewLis
                     , mGoodsDetailsResponseModel.getBody().getTitle()
                     ,mGoodsDetailsResponseModel.getBody().getPic_img()
                     ,mGoodsDetailsResponseModel.getBody().getDiscount_price()
-                    ,mGoodsDetailsResponseModel.getBody().getGoods_id()));
+                    ,mGoodsDetailsResponseModel.getBody().getGoods_id()
+                    ,mGoodsDetailsResponseModel.getBody().getGoods_type()
+                    ,mGoodsDetailsResponseModel.getBody().getGold_coin_price()));
         }
     }
 

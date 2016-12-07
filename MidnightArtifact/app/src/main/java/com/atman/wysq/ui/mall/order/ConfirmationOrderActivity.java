@@ -78,6 +78,14 @@ public class ConfirmationOrderActivity extends MyBaseActivity implements PayDial
     Button confirmationorderAddBt;
     @Bind(R.id.confirmationorder_addr_rl)
     RelativeLayout confirmationorderAddrRl;
+    @Bind(R.id.confirmationorder_gold_rl)
+    RelativeLayout confirmationorderGoldRl;
+    @Bind(R.id.confirmationorder_alipay_rl)
+    RelativeLayout confirmationorderAlipayRl;
+    @Bind(R.id.pay_line)
+    ImageView payLine;
+    @Bind(R.id.confirmationorder_weixinpay_rl)
+    RelativeLayout confirmationorderWeixinpayRl;
 
     private Context mContext = ConfirmationOrderActivity.this;
     private GetAddressListResponseModel mGetAddressListResponseModel;
@@ -86,10 +94,13 @@ public class ConfirmationOrderActivity extends MyBaseActivity implements PayDial
 
     private String goodsName;
     private String goodsUrl;
+    private String goodsCoinPrice;
     private String GoodsPrice;
     private int goodsId;
     private int num = 1;
     private int mAddreId = -1;
+    private int goodsTypeId;
+    private int orderType = 1;
 
     private int whatPay = 0;
 
@@ -100,12 +111,16 @@ public class ConfirmationOrderActivity extends MyBaseActivity implements PayDial
         ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent(Context context, String goodsName, String goodsUrl, String GoodsPrice, int goodsId) {
+    public static Intent buildIntent(Context context, String goodsName, String goodsUrl
+            , String GoodsPrice, int goodsId, int goodsTypeId, String goodsCoinPrice) {
         Intent intent = new Intent(context, ConfirmationOrderActivity.class);
         intent.putExtra("goodsName", goodsName);
         intent.putExtra("goodsUrl", goodsUrl);
         intent.putExtra("GoodsPrice", GoodsPrice);
+        intent.putExtra("GoodsPrice", GoodsPrice);
         intent.putExtra("goodsId", goodsId);
+        intent.putExtra("goodsTypeId", goodsTypeId);
+        intent.putExtra("goodsCoinPrice", goodsCoinPrice);
         return intent;
     }
 
@@ -118,13 +133,25 @@ public class ConfirmationOrderActivity extends MyBaseActivity implements PayDial
 
         goodsName = getIntent().getStringExtra("goodsName");
         goodsUrl = getIntent().getStringExtra("goodsUrl");
+        goodsCoinPrice = getIntent().getStringExtra("goodsCoinPrice");
         GoodsPrice = getIntent().getStringExtra("GoodsPrice");
         goodsId = getIntent().getIntExtra("goodsId", -1);
+        goodsTypeId = getIntent().getIntExtra("goodsTypeId", -1);
 
         confirmationorderReduceBt.setEnabled(false);
         confirmationorderGoodsnameTv.setText(goodsName);
-        confirmationorderGoodspeiceTv.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice)));
-        confirmationorderOrderpriceTx.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice)));
+        if (goodsTypeId == 5) {
+            orderType = 21;
+            confirmationorderGoldRl.setVisibility(View.VISIBLE);
+            confirmationorderAlipayRl.setVisibility(View.GONE);
+            payLine.setVisibility(View.GONE);
+            confirmationorderWeixinpayRl.setVisibility(View.GONE);
+            confirmationorderGoodspeiceTv.setText(MyTools.formatfloat(Float.parseFloat(goodsCoinPrice)) + "金币");
+            confirmationorderOrderpriceTx.setText(MyTools.formatfloat(Float.parseFloat(goodsCoinPrice)) + "金币");
+        } else {
+            confirmationorderGoodspeiceTv.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice)));
+            confirmationorderOrderpriceTx.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice)));
+        }
         ImageLoader.getInstance().displayImage(Common.ImageUrl + goodsUrl, confirmationorderGoodsIv
                 , MyBaseApplication.getApplication().getOptionsNot());
 
@@ -191,16 +218,23 @@ public class ConfirmationOrderActivity extends MyBaseActivity implements PayDial
             }
         } else if (id == Common.NET_ADD_ORDER) {
             mAddOrderResponseModel = mGson.fromJson(data, AddOrderResponseModel.class);
-            if (confirmationorderAlipayIv.getVisibility() == View.VISIBLE) {
-                OkHttpUtils.postString().url(Common.Url_Recharge_Add_Order_Alipay + mAddOrderResponseModel.getBody().getOrder_id()).content("{}")
+            if (goodsTypeId==5) {
+                OkHttpUtils.postString().url(Common.Url_Recharge_Add_Order_Gold + mAddOrderResponseModel.getBody().getOrder_id()).content("{}")
                         .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .id(Common.NET_RECHARGE_ADD_ORDER_ALIPAY).tag(Common.NET_RECHARGE_ADD_ORDER_ALIPAY)
+                        .id(Common.NET_RECHARGE_ADD_ORDER_GOLD_ID).tag(Common.NET_RECHARGE_ADD_ORDER_GOLD_ID)
                         .build().execute(new MyStringCallback(mContext, this, true));
             } else {
-                OkHttpUtils.postString().url(Common.Url_Recharge_Add_Order_WeiXin).content("{\"order_id\":\"" + mAddOrderResponseModel.getBody().getOrder_id() + "\"}")
-                        .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .id(Common.NET_RECHARGE_ADD_ORDER_WEIXIN).tag(Common.NET_RECHARGE_ADD_ORDER_WEIXIN)
-                        .build().execute(new MyStringCallback(mContext, this, true));
+                if (confirmationorderAlipayIv.getVisibility() == View.VISIBLE) {
+                    OkHttpUtils.postString().url(Common.Url_Recharge_Add_Order_Alipay + mAddOrderResponseModel.getBody().getOrder_id()).content("{}")
+                            .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .id(Common.NET_RECHARGE_ADD_ORDER_ALIPAY).tag(Common.NET_RECHARGE_ADD_ORDER_ALIPAY)
+                            .build().execute(new MyStringCallback(mContext, this, true));
+                } else {
+                    OkHttpUtils.postString().url(Common.Url_Recharge_Add_Order_WeiXin).content("{\"order_id\":\"" + mAddOrderResponseModel.getBody().getOrder_id() + "\"}")
+                            .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .id(Common.NET_RECHARGE_ADD_ORDER_WEIXIN).tag(Common.NET_RECHARGE_ADD_ORDER_WEIXIN)
+                            .build().execute(new MyStringCallback(mContext, this, true));
+                }
             }
         } else if (id == Common.NET_RECHARGE_ADD_ORDER_ALIPAY) {
             whatPay = 0;
@@ -215,6 +249,9 @@ public class ConfirmationOrderActivity extends MyBaseActivity implements PayDial
             MyBaseApplication.getApplication().setFilterLock(true);
             WeiXinPayResponseModel WeiXinPayResponseModelm = mGson.fromJson(data, WeiXinPayResponseModel.class);
             mPayDialog.weixinPay(WeiXinPayResponseModelm);
+        } else if (id == Common.NET_RECHARGE_ADD_ORDER_GOLD_ID) {
+            showToast("支付成功!");
+            finish();
         }
     }
 
@@ -257,7 +294,7 @@ public class ConfirmationOrderActivity extends MyBaseActivity implements PayDial
                 AddOrderRequestModel.OrderEntity temp = new AddOrderRequestModel.OrderEntity(goodsId, num);
                 List<AddOrderRequestModel.OrderEntity> list = new ArrayList<>();
                 list.add(temp);
-                AddOrderRequestModel mAddOrderRequestModel = new AddOrderRequestModel(mAddreId, list, 1);
+                AddOrderRequestModel mAddOrderRequestModel = new AddOrderRequestModel(mAddreId, list, orderType);
 
                 OkHttpUtils.postString().url(Common.Url_Add_Order)
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).mediaType(Common.JSON)

@@ -115,14 +115,22 @@ public class OrderListAdapter extends BaseAdapter {
             }
             holder.itemOrderlistNameTx.setText(shop.get(position).getItems().get(0).getGoods_title());
             holder.itemOrderlistNumTx.setText("数量：" + shop.get(position).getItems().get(0).getAmount());
-            holder.itemOrderlistPriceTx.setText("单价：¥ " + shop.get(position).getItems().get(0).getPrice());
+            if (shop.get(position).getOrder_type()==21) {
+                holder.itemOrderlistPriceTx.setText("单价： " + (int)shop.get(position).getItems().get(0).getPrice()+"金币");
+            } else {
+                holder.itemOrderlistPriceTx.setText("单价：¥ " + shop.get(position).getItems().get(0).getPrice());
+            }
         }
-        holder.itemOrderlistTotalpriceTx.setText("总金额：¥ " + shop.get(position).getTotal_price());
-
-        if (shop.get(position).getOrder_type()==51) {
+        if (shop.get(position).getOrder_type()==21) {
             holder.itemOrderlistGoldIv.setVisibility(View.VISIBLE);
+            holder.itemOrderlistGoldIv.setBackgroundResource(R.mipmap.order_type_gold);
+            holder.itemOrderlistTotalpriceTx.setText("总金币：¥ " + (int)shop.get(position).getTotal_price());
+        } else if (shop.get(position).getOrder_type()==51) {
+            holder.itemOrderlistGoldIv.setVisibility(View.VISIBLE);
+            holder.itemOrderlistGoldIv.setBackgroundResource(R.mipmap.order_type_recharge);
         } else {
             holder.itemOrderlistGoldIv.setVisibility(View.INVISIBLE);
+            holder.itemOrderlistTotalpriceTx.setText("总金额：¥ " + shop.get(position).getTotal_price());
         }
 
         holder.itemOrderlistBt.setOnClickListener(new View.OnClickListener() {
