@@ -39,6 +39,7 @@
             android:textSize="@dimen/dimen_sp_12" />
 
         <LinearLayout
+            android:id="@+id/part_goodsdetail_top_bf_tool_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -129,7 +130,6 @@
                 android:layout_toRightOf="@+id/part_goodsdetail_top_bf_originalprice_tx"
                 android:background="#d78b31"
                 android:padding="@dimen/dimen_dp_5"
-                android:visibility="gone"
                 android:textSize="@dimen/dimen_sp_10"
                 android:text="包邮"
                 android:textColor="@color/color_white" />

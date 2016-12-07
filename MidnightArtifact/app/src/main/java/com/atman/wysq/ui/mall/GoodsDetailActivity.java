@@ -3,6 +3,7 @@ package com.atman.wysq.ui.mall;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -84,6 +85,8 @@ public class GoodsDetailActivity extends MyBaseActivity implements ScrollViewLis
     PullToRefreshScrollView pullToRefreshScrollView;
     @Bind(R.id.goodsdetail_head_root_ll)
     LinearLayout goodsdetailHeadRootLl;
+    @Bind(R.id.part_goodsdetail_top_bf_tool_ll)
+    LinearLayout partGoodsdetailTopBfToolLl;
     @Bind(R.id.tab_layout)
     TabLayout tabLayout;
     @Bind(R.id.goodsdetail_empty_tx)
@@ -209,28 +212,42 @@ public class GoodsDetailActivity extends MyBaseActivity implements ScrollViewLis
                 , partGoodsdetailTopBgIv, MyBaseApplication.getApplication().getOptionsNot());
         partGoodsdetailTopBfToolEmptyTx.setVisibility(View.GONE);
         partGoodsdetailTopBfToolIv.setVisibility(View.GONE);
-//        if (mGoodsDetailsResponseModel.getBody().getIcon() == null) {
-//            partGoodsdetailTopBfToolEmptyTx.setVisibility(View.VISIBLE);
-//            partGoodsdetailTopBfToolIv.setVisibility(View.GONE);
-//        } else {
-//            partGoodsdetailTopBfToolEmptyTx.setVisibility(View.GONE);
-//            partGoodsdetailTopBfToolIv.setVisibility(View.VISIBLE);
-//            ImageLoader.getInstance().displayImage(Common.ImageUrl + mGoodsDetailsResponseModel.getBody().getIcon()
-//                    , partGoodsdetailTopBfToolIv, MyBaseApplication.getApplication().getOptionsNot());
-//        }
-//        if (mGoodsDetailsResponseModel.getBody().getPostage() > 0) {
-            partGoodsdetailTopBfFreeTx.setVisibility(View.VISIBLE);
-//        } else {
-//            partGoodsdetailTopBfFreeTx.setVisibility(View.GONE);
-//        }
+        if (mGoodsDetailsResponseModel.getBody().getIcon() == null) {
+            partGoodsdetailTopBfToolEmptyTx.setVisibility(View.VISIBLE);
+            partGoodsdetailTopBfToolIv.setVisibility(View.GONE);
+        } else {
+            partGoodsdetailTopBfToolEmptyTx.setVisibility(View.GONE);
+            partGoodsdetailTopBfToolIv.setVisibility(View.VISIBLE);
+            ImageLoader.getInstance().displayImage(Common.ImageUrl + mGoodsDetailsResponseModel.getBody().getIcon()
+                    , partGoodsdetailTopBfToolIv, MyBaseApplication.getApplication().getOptionsNot());
+        }
+        if (mGoodsDetailsResponseModel.getBody().getPostage() > 0) {
+            partGoodsdetailTopBfFreeTx.setText("邮费:¥"+mGoodsDetailsResponseModel.getBody().getCharm_price());
+        } else {
+            partGoodsdetailTopBfFreeTx.setText("包邮");
+        }
         partGoodsdetailTopBfExperienceTx.setText("赠送经验：" + mGoodsDetailsResponseModel.getBody().getIntegral());
         partGoodsdetailTopBfCoinTx.setText("赠送金币：" + mGoodsDetailsResponseModel.getBody().getGold_coin());
         partGoodsdetailTopBfNameTx.setText(mGoodsDetailsResponseModel.getBody().getTitle());
-        partGoodsdetailTopBfPriceTx.setText("¥" + mGoodsDetailsResponseModel.getBody().getDiscount_price());
         partGoodsdetailTopBfOriginalpriceTx.setText("¥" + mGoodsDetailsResponseModel.getBody().getPrice());
         partGoodsdetailTopBfOriginalpriceTx.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);  // 设置中划线并加清晰
         partGoodsdetailTopBfSalesvolumeTx.setText("月销量：" + mGoodsDetailsResponseModel.getBody().getSales());
 
+        if (mGoodsDetailsResponseModel.getBody().getGoods_type()==5) {
+            partGoodsdetailTopBfToolLl.setVisibility(View.VISIBLE);
+            partGoodsdetailTopBfCoinTx.setVisibility(View.GONE);
+            partGoodsdetailTopBfOriginalpriceTx.setVisibility(View.GONE);
+            Drawable drawable = getResources().getDrawable(R.mipmap.icon_gold);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            partGoodsdetailTopBfPriceTx.setCompoundDrawables(drawable, null, null, null);
+            partGoodsdetailTopBfPriceTx.setText(" " + mGoodsDetailsResponseModel.getBody().getGold_coin_price());
+        } else {
+            partGoodsdetailTopBfPriceTx.setCompoundDrawables(null, null, null, null);
+            partGoodsdetailTopBfPriceTx.setText("¥" + mGoodsDetailsResponseModel.getBody().getDiscount_price());
+            partGoodsdetailTopBfToolLl.setVisibility(View.GONE);
+            partGoodsdetailTopBfCoinTx.setVisibility(View.VISIBLE);
+            partGoodsdetailTopBfOriginalpriceTx.setVisibility(View.VISIBLE);
+        }
         initCategoryView();
     }
 

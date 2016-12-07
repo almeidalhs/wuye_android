@@ -102,9 +102,36 @@ public class GoodsDetailsResponseModel implements Parcelable{
         private int integral;
         private int chat_prop_id;
         private long update_time;
+        private int goods_type;
         private int source;
         private int postage;
         private String icon;
+        private String gold_coin_price;
+        private String charm_price;
+
+        public int getGoods_type() {
+            return goods_type;
+        }
+
+        public void setGoods_type(int goods_type) {
+            this.goods_type = goods_type;
+        }
+
+        public String getGold_coin_price() {
+            return gold_coin_price;
+        }
+
+        public void setGold_coin_price(String gold_coin_price) {
+            this.gold_coin_price = gold_coin_price;
+        }
+
+        public String getCharm_price() {
+            return charm_price;
+        }
+
+        public void setCharm_price(String charm_price) {
+            this.charm_price = charm_price;
+        }
 
         protected BodyEntity(Parcel in) {
             goods_id = in.readInt();
