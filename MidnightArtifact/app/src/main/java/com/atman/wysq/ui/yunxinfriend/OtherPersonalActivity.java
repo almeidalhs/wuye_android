@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.atman.wysq.R;
 import com.atman.wysq.model.bean.AddFriendRecord;
 import com.atman.wysq.model.bean.TouChuanGiftNotice;
-import com.atman.wysq.model.bean.TouChuanOtherNotice;
 import com.atman.wysq.model.event.YunXinAddFriendEvent;
 import com.atman.wysq.model.greendao.gen.AddFriendRecordDao;
 import com.atman.wysq.model.response.GetUserIndexModel;
@@ -42,7 +41,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -194,8 +195,19 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
             Intent mIntent = new Intent();
             setResult(RESULT_OK,mIntent);
             finish();
-        }else if (id == Common.NET_DLELTE_FRIEND) {
+        } else if (id == Common.NET_DLELTE_FRIEND) {
             mGetMyUserIndexModel.getBody().setFriend(false);
+            otherpersonalRelationshipBt.setText("关注");
+            otherpersonalRelationshipTv.setText("陌生人");
+            MyBaseApplication.getApplication().getDaoSession().getAddFriendRecordDao().deleteAll();
+        } else if (id == Common.NET_ADD_FOLLOW_ID) {
+            showToast("关注成功");
+            mGetMyUserIndexModel.getBody().setUserFelation(1);
+            otherpersonalRelationshipBt.setText("取消关注");
+            otherpersonalRelationshipTv.setText("关注");
+        } else if (id == Common.NET_CANCEL_MYCONCERNLIST_ID) {
+            showToast("取消关注成功");
+            mGetMyUserIndexModel.getBody().setUserFelation(0);
             otherpersonalRelationshipBt.setText("关注");
             otherpersonalRelationshipTv.setText("陌生人");
             MyBaseApplication.getApplication().getDaoSession().getAddFriendRecordDao().deleteAll();
@@ -247,7 +259,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
 
         initguardianIV();
 
-        if (mGetMyUserIndexModel.getBody().isFriend()) {
+        if (mGetMyUserIndexModel.getBody().getUserFelation()==1) {
             otherpersonalRelationshipBt.setText("取消关注");
             otherpersonalRelationshipTv.setText("关注");
         } else {
@@ -293,7 +305,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         }
     }
 
-    private List<GetUserIndexModel.BodyEntity.VisitorMapEntity.VisitorListEntity> dataList = new ArrayList<>();
+    private List<GetUserIndexModel.BodyBean.VisitorMapBean.VisitorListBean> dataList = new ArrayList<>();
     private int num;
     private void initVisitorIV() {
         num = mGetMyUserIndexModel.getBody().getVisitorMap().getVisitorSize();
@@ -384,6 +396,8 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERINDEX);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BLACKLIST);
         OkHttpUtils.getInstance().cancelTag(Common.NET_DLELTE_FRIEND);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_MYCONCERNLIST_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_FOLLOW_ID);
     }
 
     @Override
@@ -457,53 +471,81 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
                     showWraning("亲，这是你自己哦！");
                     return;
                 }
-                if (mGetMyUserIndexModel.getBody().isFriend()) {
+                if (mGetMyUserIndexModel.getBody().getUserFelation()==1) {
                     PromptDialog.Builder builder = new PromptDialog.Builder(this);
-                    builder.setMessage("您确定要删除好友吗？");
-                    builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                    builder.setMessage("确定取消关注TA吗?");
+                    builder.setPositiveButton("不了", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
                     });
-                    builder.setNegativeButton("删除", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton("取消关注", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            OkHttpUtils.delete().url(Common.Url_Delete_Friends+id)
+                            OkHttpUtils.postString()
+                                    .url(Common.Url_Cancel_MyConcernList + id)
+                                    .tag(Common.NET_CANCEL_MYCONCERNLIST_ID).id(Common.NET_CANCEL_MYCONCERNLIST_ID)
+                                    .content(mGson.toJson(""))
                                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                                    .tag(Common.NET_DLELTE_FRIEND).id(Common.NET_DLELTE_FRIEND).build()
-                                    .execute(new MyStringCallback(mContext, OtherPersonalActivity.this, true));
+                                    .build().execute(new MyStringCallback(mContext, OtherPersonalActivity.this, true));
                         }
                     });
                     builder.show();
+//                    PromptDialog.Builder builder = new PromptDialog.Builder(this);
+//                    builder.setMessage("您确定要删除好友吗？");
+//                    builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            dialog.dismiss();
+//                        }
+//                    });
+//                    builder.setNegativeButton("删除", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            dialog.dismiss();
+//                            OkHttpUtils.delete().url(Common.Url_Delete_Friends+id)
+//                                    .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+//                                    .tag(Common.NET_DLELTE_FRIEND).id(Common.NET_DLELTE_FRIEND).build()
+//                                    .execute(new MyStringCallback(mContext, OtherPersonalActivity.this, true));
+//                        }
+//                    });
+//                    builder.show();
                 } else {
-                    if (mAddFriendRecord.size()>0) {
-                        showToast("已请求添加\""+mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName()+"\"为好友");
-                        return;
-                    }
-                    // 构造自定义通知，指定接收者
-                    CustomNotification notification = new CustomNotification();
-                    notification.setSessionId(String.valueOf(id));
-                    notification.setSessionType(SessionTypeEnum.P2P);
-                    // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
-                    // 这里以类型 “1” 作为“正在输入”的状态通知。
-                    TouChuanOtherNotice mTouChuanOtherNotice = new TouChuanOtherNotice();
-                    mTouChuanOtherNotice.setNoticeType(1);
-                    mTouChuanOtherNotice.setSend_nickName(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName());
-                    mTouChuanOtherNotice.setSend_userId(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId());
-                    mTouChuanOtherNotice.setReceive_nickName(mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName());
-                    mTouChuanOtherNotice.setReceive_userId(mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId());
-                    mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
-                    mTouChuanOtherNotice.setAddfriendType(1);
-                    notification.setContent(mGson.toJson(mTouChuanOtherNotice));
-                    // 发送自定义通知
-                    NIMClient.getService(MsgService.class).sendCustomNotification(notification);
-
-                    showToast("已请求添加\""+mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName()+"\"为好友");
-                    AddFriendRecord temp = new AddFriendRecord(null, String.valueOf(id)
-                            , PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID));
-                    mAddFriendRecordDao.insertOrReplace(temp);
+                    Map<String, Long> p = new HashMap<>();
+                    p.put("follow_user_id", id);
+                    OkHttpUtils.postString().url(Common.Url_Add_Follow).content(mGson.toJson(p))
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .mediaType(Common.JSON)
+                            .tag(Common.NET_ADD_FOLLOW_ID).id(Common.NET_ADD_FOLLOW_ID).build()
+                            .execute(new MyStringCallback(mContext, OtherPersonalActivity.this, true));
+//                    if (mAddFriendRecord.size()>0) {
+//                        showToast("已请求添加\""+mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName()+"\"为好友");
+//                        return;
+//                    }
+//                    // 构造自定义通知，指定接收者
+//                    CustomNotification notification = new CustomNotification();
+//                    notification.setSessionId(String.valueOf(id));
+//                    notification.setSessionType(SessionTypeEnum.P2P);
+//                    // 构建通知的具体内容。为了可扩展性，这里采用 json 格式，以 "id" 作为类型区分。
+//                    // 这里以类型 “1” 作为“正在输入”的状态通知。
+//                    TouChuanOtherNotice mTouChuanOtherNotice = new TouChuanOtherNotice();
+//                    mTouChuanOtherNotice.setNoticeType(1);
+//                    mTouChuanOtherNotice.setSend_nickName(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName());
+//                    mTouChuanOtherNotice.setSend_userId(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId());
+//                    mTouChuanOtherNotice.setReceive_nickName(mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName());
+//                    mTouChuanOtherNotice.setReceive_userId(mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId());
+//                    mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
+//                    mTouChuanOtherNotice.setAddfriendType(1);
+//                    notification.setContent(mGson.toJson(mTouChuanOtherNotice));
+//                    // 发送自定义通知
+//                    NIMClient.getService(MsgService.class).sendCustomNotification(notification);
+//
+//                    showToast("已请求添加\""+mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName()+"\"为好友");
+//                    AddFriendRecord temp = new AddFriendRecord(null, String.valueOf(id)
+//                            , PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID));
+//                    mAddFriendRecordDao.insertOrReplace(temp);
                 }
                 break;
             case R.id.otherpersonal_back_ll:

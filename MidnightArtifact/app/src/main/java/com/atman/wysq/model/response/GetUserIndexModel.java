@@ -11,24 +11,22 @@ import java.util.List;
  */
 public class GetUserIndexModel {
 
-    /**
-     * result : 1
-     * body : {"userDetailBean":{"userId":450000168,"userName":"w13817673794","nickName":"落霞与孤雾齐飞","addTime":1428647019000,"userExt":{"user_id":450000168,"integral":"205330","secret_type":0,"type":2,"icon":"/imageServer/C029174175f689b3451f9a80f8c9c28005d0.jpg","sex":"F","create_time":1428647019000,"update_time":1470239397000,"credit":191,"name_change":0,"next_level_integral":9999999999999999,"userLevel":10,"mobile":"13817673794","nick_name":"落霞与孤雾齐飞","status":2,"verify_status":1,"user_token":"dPzBXpL4J9aQ3cySaQESEJ9QMcE8zfmW/LjFsMQgC1X16dCt9c4Rx/ql8KRrfIuDklLNgcU/ZLIlbRjLGqXXwtmF4MAhylgY","can_live_room":1,"gold_coin":27366,"charm":125899,"can_chat":1,"can_shake":1,"convert_coin":55606,"around_site":"","vip_level":0,"hotel_id":0,"chat_count":161,"accrue_coin":496978},"follow_count":0,"followed_count":0,"favorited_count":7,"comment_count":31,"achieve_level_pic":"/propServer/achievement/new/color_dj_6.png","achieve_charm_pic":"/propServer/achievement/new/corlo_ml_4.png","achieve_gold_pic":"/propServer/achievement/new/color_cf_6.png"},"guardlist":[{"user_id":450000618,"integral":"123611","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"F","create_time":1469945073000,"credit":8,"name_change":0,"next_level_integral":76348,"userLevel":9,"mobile":"13920000007","nick_name":"夜友-11769","status":2,"verify_status":0,"can_live_room":1,"gold_coin":1526,"charm":79994,"can_chat":1,"can_shake":1,"convert_coin":1491,"vip_level":0,"chat_count":18,"accrue_coin":176054},{"user_id":450000174,"integral":"2.006300000000001e17","secret_type":1,"type":1,"icon":"/imageServer/30578fcb72a4fe134d3f930e23e5c536cb0b.jpg","sex":"M","create_time":1469100592000,"credit":3,"name_change":1,"next_level_integral":9999999999999999,"userLevel":10,"mobile":"13811111112","nick_name":"飘逸","status":2,"verify_status":0,"user_token":"0jRk1wSpv78iQTbBFxcLqe2ueiWbcdmN6Rff172eT3JS8trjTePis49aYtmkZGZ8D4MbX2ClSNjkA7tqwaNRmQ==","can_live_room":1,"gold_coin":15078,"charm":1356,"can_chat":1,"can_shake":1,"convert_coin":375,"vip_level":0,"chat_count":88,"accrue_coin":39493},{"user_id":450000170,"integral":"300091","secret_type":0,"type":1,"icon":"/imageServer/980A8161ee8cb1a74a968c4b82a0b72d45ea.jpg","sex":"M","create_time":1468837412000,"credit":100,"name_change":0,"next_level_integral":9999999999999999,"userLevel":10,"mobile":"14725836914","nick_name":"不哭不闹不上吊","status":2,"verify_status":0,"user_token":"+Y3VDsUJhfp0koDXoP9XpZ9QMcE8zfmW/LjFsMQgC1UfNf/CoMB++ed2zF5gHgXzaKA2rCJVITdm4tsLo3b6OdmF4MAhylgY","can_live_room":1,"gold_coin":193,"charm":30,"can_chat":1,"can_shake":1,"convert_coin":0,"vip_level":0,"chat_count":0,"accrue_coin":399}],"achieveList":["千娇百媚","富可敌国","号令江湖"],"blogImageMap":{"dataList":["imageServer/1D07a0c420a41dc94ba5bdacc69132c5942b-s.jpg","/imageServer/881981af4c183eb34694b391d1e21a4ee49d-s.jpg","/imageServer/350363933d5dea13455b838e1350f5f538fb-s.jpg","/imageServer/E60920a53d8801ff45e795dfe9f7cc7d630d-s.jpg"],"dataSize":108},"visitorMap":{"visitorSize":51,"visitorList":[{"user_id":450000392,"integral":"111351","secret_type":0,"type":2,"icon":"/imageServer/0CAE79d77aac29354e04b3c5e54d83e475a0.jpg","sex":"M","create_time":1470892639000,"credit":1,"name_change":1,"next_level_integral":88613,"userLevel":9,"mobile":"13820000001","nick_name":"ྋoཻ༾vཻ༾eཻ༾r༒","status":2,"verify_status":0,"user_token":"/DTMRtOUM2l2LBxWzhC+qvYwdZezAm/uq8h7ymv1P0XOIk8FaEapl+F6V4MeJR+tW/v2P0la7Vz9Im5US0Wm9MlNBFM2LFNs","gold_coin":56918,"charm":75,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":48,"accrue_coin":89153},{"user_id":450000632,"integral":"15216","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"F","create_time":1470892574000,"credit":1,"name_change":0,"next_level_integral":4767,"userLevel":6,"mobile":"13920000021","nick_name":"夜友-11783","status":2,"verify_status":1,"gold_coin":91956,"charm":8044,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":33,"accrue_coin":36833},{"user_id":450000626,"integral":"125297","secret_type":0,"type":1,"icon":"/imageServer/B0E20eecff8519f54ed59f3b9afe24d286bb.jpg","sex":"F","create_time":1470799288000,"credit":19,"name_change":1,"next_level_integral":74669,"userLevel":9,"mobile":"13920000015","nick_name":"西红柿","status":2,"verify_status":1,"gold_coin":45217,"charm":110827,"can_chat":1,"can_shake":1,"vip_level":3,"chat_count":20,"accrue_coin":216881},{"user_id":100002689,"integral":"781","secret_type":0,"type":1,"icon":"/imageServer/C379cdfe16ac415545cb91d11bda31836d40.jpg","sex":"M","create_time":1470791197000,"credit":4,"name_change":0,"next_level_integral":2197,"userLevel":4,"mobile":"15721205694","nick_name":"夜友\u2014\u201411301","status":2,"verify_status":0,"user_token":"VGcspMu4DHW0GCPWWQpk0NSL/Rea/7BHZSezjWO8jI52lDyspE6ysSEtLAzvqyXk8GVXGwLubQe7uyZoiQWRPA==","gold_coin":6135,"charm":11878,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":6,"accrue_coin":16533},{"user_id":450000633,"integral":"10149","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"F","create_time":1470727404000,"credit":6,"name_change":0,"next_level_integral":9800,"userLevel":6,"mobile":"13920000022","nick_name":"夜友-11784","status":2,"verify_status":1,"gold_coin":89115,"charm":61108,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":26,"accrue_coin":65623}]},"voiceUrl":"/imageServer/0D4Bbf2c2ff2e4e94d47b344cfadaa698606.caf","voiceLength":"5","friend":false}
-     */
-
     private String result;
     /**
-     * userDetailBean : {"userId":450000168,"userName":"w13817673794","nickName":"落霞与孤雾齐飞","addTime":1428647019000,"userExt":{"user_id":450000168,"integral":"205330","secret_type":0,"type":2,"icon":"/imageServer/C029174175f689b3451f9a80f8c9c28005d0.jpg","sex":"F","create_time":1428647019000,"update_time":1470239397000,"credit":191,"name_change":0,"next_level_integral":9999999999999999,"userLevel":10,"mobile":"13817673794","nick_name":"落霞与孤雾齐飞","status":2,"verify_status":1,"user_token":"dPzBXpL4J9aQ3cySaQESEJ9QMcE8zfmW/LjFsMQgC1X16dCt9c4Rx/ql8KRrfIuDklLNgcU/ZLIlbRjLGqXXwtmF4MAhylgY","can_live_room":1,"gold_coin":27366,"charm":125899,"can_chat":1,"can_shake":1,"convert_coin":55606,"around_site":"","vip_level":0,"hotel_id":0,"chat_count":161,"accrue_coin":496978},"follow_count":0,"followed_count":0,"favorited_count":7,"comment_count":31,"achieve_level_pic":"/propServer/achievement/new/color_dj_6.png","achieve_charm_pic":"/propServer/achievement/new/corlo_ml_4.png","achieve_gold_pic":"/propServer/achievement/new/color_cf_6.png"}
-     * guardlist : [{"user_id":450000618,"integral":"123611","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"F","create_time":1469945073000,"credit":8,"name_change":0,"next_level_integral":76348,"userLevel":9,"mobile":"13920000007","nick_name":"夜友-11769","status":2,"verify_status":0,"can_live_room":1,"gold_coin":1526,"charm":79994,"can_chat":1,"can_shake":1,"convert_coin":1491,"vip_level":0,"chat_count":18,"accrue_coin":176054},{"user_id":450000174,"integral":"2.006300000000001e17","secret_type":1,"type":1,"icon":"/imageServer/30578fcb72a4fe134d3f930e23e5c536cb0b.jpg","sex":"M","create_time":1469100592000,"credit":3,"name_change":1,"next_level_integral":9999999999999999,"userLevel":10,"mobile":"13811111112","nick_name":"飘逸","status":2,"verify_status":0,"user_token":"0jRk1wSpv78iQTbBFxcLqe2ueiWbcdmN6Rff172eT3JS8trjTePis49aYtmkZGZ8D4MbX2ClSNjkA7tqwaNRmQ==","can_live_room":1,"gold_coin":15078,"charm":1356,"can_chat":1,"can_shake":1,"convert_coin":375,"vip_level":0,"chat_count":88,"accrue_coin":39493},{"user_id":450000170,"integral":"300091","secret_type":0,"type":1,"icon":"/imageServer/980A8161ee8cb1a74a968c4b82a0b72d45ea.jpg","sex":"M","create_time":1468837412000,"credit":100,"name_change":0,"next_level_integral":9999999999999999,"userLevel":10,"mobile":"14725836914","nick_name":"不哭不闹不上吊","status":2,"verify_status":0,"user_token":"+Y3VDsUJhfp0koDXoP9XpZ9QMcE8zfmW/LjFsMQgC1UfNf/CoMB++ed2zF5gHgXzaKA2rCJVITdm4tsLo3b6OdmF4MAhylgY","can_live_room":1,"gold_coin":193,"charm":30,"can_chat":1,"can_shake":1,"convert_coin":0,"vip_level":0,"chat_count":0,"accrue_coin":399}]
-     * achieveList : ["千娇百媚","富可敌国","号令江湖"]
-     * blogImageMap : {"dataList":["imageServer/1D07a0c420a41dc94ba5bdacc69132c5942b-s.jpg","/imageServer/881981af4c183eb34694b391d1e21a4ee49d-s.jpg","/imageServer/350363933d5dea13455b838e1350f5f538fb-s.jpg","/imageServer/E60920a53d8801ff45e795dfe9f7cc7d630d-s.jpg"],"dataSize":108}
-     * visitorMap : {"visitorSize":51,"visitorList":[{"user_id":450000392,"integral":"111351","secret_type":0,"type":2,"icon":"/imageServer/0CAE79d77aac29354e04b3c5e54d83e475a0.jpg","sex":"M","create_time":1470892639000,"credit":1,"name_change":1,"next_level_integral":88613,"userLevel":9,"mobile":"13820000001","nick_name":"ྋoཻ༾vཻ༾eཻ༾r༒","status":2,"verify_status":0,"user_token":"/DTMRtOUM2l2LBxWzhC+qvYwdZezAm/uq8h7ymv1P0XOIk8FaEapl+F6V4MeJR+tW/v2P0la7Vz9Im5US0Wm9MlNBFM2LFNs","gold_coin":56918,"charm":75,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":48,"accrue_coin":89153},{"user_id":450000632,"integral":"15216","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"F","create_time":1470892574000,"credit":1,"name_change":0,"next_level_integral":4767,"userLevel":6,"mobile":"13920000021","nick_name":"夜友-11783","status":2,"verify_status":1,"gold_coin":91956,"charm":8044,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":33,"accrue_coin":36833},{"user_id":450000626,"integral":"125297","secret_type":0,"type":1,"icon":"/imageServer/B0E20eecff8519f54ed59f3b9afe24d286bb.jpg","sex":"F","create_time":1470799288000,"credit":19,"name_change":1,"next_level_integral":74669,"userLevel":9,"mobile":"13920000015","nick_name":"西红柿","status":2,"verify_status":1,"gold_coin":45217,"charm":110827,"can_chat":1,"can_shake":1,"vip_level":3,"chat_count":20,"accrue_coin":216881},{"user_id":100002689,"integral":"781","secret_type":0,"type":1,"icon":"/imageServer/C379cdfe16ac415545cb91d11bda31836d40.jpg","sex":"M","create_time":1470791197000,"credit":4,"name_change":0,"next_level_integral":2197,"userLevel":4,"mobile":"15721205694","nick_name":"夜友\u2014\u201411301","status":2,"verify_status":0,"user_token":"VGcspMu4DHW0GCPWWQpk0NSL/Rea/7BHZSezjWO8jI52lDyspE6ysSEtLAzvqyXk8GVXGwLubQe7uyZoiQWRPA==","gold_coin":6135,"charm":11878,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":6,"accrue_coin":16533},{"user_id":450000633,"integral":"10149","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"F","create_time":1470727404000,"credit":6,"name_change":0,"next_level_integral":9800,"userLevel":6,"mobile":"13920000022","nick_name":"夜友-11784","status":2,"verify_status":1,"gold_coin":89115,"charm":61108,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":26,"accrue_coin":65623}]}
-     * voiceUrl : /imageServer/0D4Bbf2c2ff2e4e94d47b344cfadaa698606.caf
-     * voiceLength : 5
+     * userDetailBean : {"userId":450214712,"userName":"w15700001001","nickName":"五七零一。","addTime":1478248172000,"userExt":{"user_id":450214712,"integral":"30696","secret_type":0,"type":1,"icon":"/imageServer/82450f281ac749a742c3a04d3d128d4fc03c.jpg","sex":"F","create_time":1478248172000,"update_time":1478248172000,"name_change":1,"next_level_integral":19289,"userLevel":7,"mobile":"15700001001","nick_name":"五七零一。","status":2,"verify_status":1,"can_live_room":1,"gold_coin":417584,"charm":820215,"can_chat":0,"can_shake":1,"convert_coin":417574,"vip_level":0,"chat_count":14,"accrue_coin":556514},"follow_count":12,"followed_count":478814964,"favorited_count":0,"comment_count":15,"achieve_level_pic":"/propServer/achievement/new/color_dj_4.png","achieve_charm_pic":"/propServer/achievement/new/corlo_ml_6.png","achieve_gold_pic":"/propServer/achievement/new/color_cf_6.png"}
+     * guardlist : [{"user_id":2200019,"integral":"162090","secret_type":0,"type":1,"icon":"/imageServer/760E3db40e8e9a3244cd98cb039dc529ae21.jpg","sex":"F","create_time":1478249959000,"name_change":1,"next_level_integral":37897,"userLevel":9,"mobile":"13500000002","nick_name":"红花非花","status":2,"verify_status":1,"can_live_room":1,"gold_coin":777880,"charm":491964,"can_chat":1,"can_shake":1,"convert_coin":14318,"vip_level":0,"chat_count":12,"accrue_coin":184045}]
+     * achieveList : ["倾国倾城","富可敌国","炉火纯青"]
+     * blogImageMap : {"dataList":["/imageServer/8D3C38978511498d47f898da5d707e93bbc0-s.jpg","/imageServer/3188d391af011f6f4117ab44dac2e23272f5-s.jpg","/imageServer/8C51c5c36bbfa7ab48fbb97b59a37aeefb62-s.jpg"],"dataSize":4}
+     * visitorMap : {"visitorSize":16,"visitorList":[{"user_id":100003790,"integral":"1","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"M","create_time":1481017667000,"name_change":0,"next_level_integral":48,"userLevel":1,"mobile":"18578909061","nick_name":"夜友-515857","status":2,"verify_status":0,"gold_coin":50,"charm":0,"vip_level":0,"accrue_coin":50}]}
+     * voiceUrl : /imageServer/5184466300f6dd5b43ef8809849543674c8a.caf
+     * voiceLength : 3
+     * signin : 0
+     * userFelation : 0
+     * isBlack : 0
      * friend : false
      */
 
-    private BodyEntity body;
+    private BodyBean body;
 
     public String getResult() {
         return result;
@@ -38,97 +36,99 @@ public class GetUserIndexModel {
         this.result = result;
     }
 
-    public BodyEntity getBody() {
+    public BodyBean getBody() {
         return body;
     }
 
-    public void setBody(BodyEntity body) {
+    public void setBody(BodyBean body) {
         this.body = body;
     }
 
-    public static class BodyEntity {
+    public static class BodyBean {
         /**
-         * userId : 450000168
-         * userName : w13817673794
-         * nickName : 落霞与孤雾齐飞
-         * addTime : 1428647019000
-         * userExt : {"user_id":450000168,"integral":"205330","secret_type":0,"type":2,"icon":"/imageServer/C029174175f689b3451f9a80f8c9c28005d0.jpg","sex":"F","create_time":1428647019000,"update_time":1470239397000,"credit":191,"name_change":0,"next_level_integral":9999999999999999,"userLevel":10,"mobile":"13817673794","nick_name":"落霞与孤雾齐飞","status":2,"verify_status":1,"user_token":"dPzBXpL4J9aQ3cySaQESEJ9QMcE8zfmW/LjFsMQgC1X16dCt9c4Rx/ql8KRrfIuDklLNgcU/ZLIlbRjLGqXXwtmF4MAhylgY","can_live_room":1,"gold_coin":27366,"charm":125899,"can_chat":1,"can_shake":1,"convert_coin":55606,"around_site":"","vip_level":0,"hotel_id":0,"chat_count":161,"accrue_coin":496978}
-         * follow_count : 0
-         * followed_count : 0
-         * favorited_count : 7
-         * comment_count : 31
-         * achieve_level_pic : /propServer/achievement/new/color_dj_6.png
-         * achieve_charm_pic : /propServer/achievement/new/corlo_ml_4.png
+         * userId : 450214712
+         * userName : w15700001001
+         * nickName : 五七零一。
+         * addTime : 1478248172000
+         * userExt : {"user_id":450214712,"integral":"30696","secret_type":0,"type":1,"icon":"/imageServer/82450f281ac749a742c3a04d3d128d4fc03c.jpg","sex":"F","create_time":1478248172000,"update_time":1478248172000,"name_change":1,"next_level_integral":19289,"userLevel":7,"mobile":"15700001001","nick_name":"五七零一。","status":2,"verify_status":1,"can_live_room":1,"gold_coin":417584,"charm":820215,"can_chat":0,"can_shake":1,"convert_coin":417574,"vip_level":0,"chat_count":14,"accrue_coin":556514}
+         * follow_count : 12
+         * followed_count : 478814964
+         * favorited_count : 0
+         * comment_count : 15
+         * achieve_level_pic : /propServer/achievement/new/color_dj_4.png
+         * achieve_charm_pic : /propServer/achievement/new/corlo_ml_6.png
          * achieve_gold_pic : /propServer/achievement/new/color_cf_6.png
          */
 
-        private UserDetailBeanEntity userDetailBean;
+        private UserDetailBeanBean userDetailBean;
         /**
-         * dataList : ["imageServer/1D07a0c420a41dc94ba5bdacc69132c5942b-s.jpg","/imageServer/881981af4c183eb34694b391d1e21a4ee49d-s.jpg","/imageServer/350363933d5dea13455b838e1350f5f538fb-s.jpg","/imageServer/E60920a53d8801ff45e795dfe9f7cc7d630d-s.jpg"]
-         * dataSize : 108
+         * dataList : ["/imageServer/8D3C38978511498d47f898da5d707e93bbc0-s.jpg","/imageServer/3188d391af011f6f4117ab44dac2e23272f5-s.jpg","/imageServer/8C51c5c36bbfa7ab48fbb97b59a37aeefb62-s.jpg"]
+         * dataSize : 4
          */
 
-        private BlogImageMapEntity blogImageMap;
+        private BlogImageMapBean blogImageMap;
         /**
-         * visitorSize : 51
-         * visitorList : [{"user_id":450000392,"integral":"111351","secret_type":0,"type":2,"icon":"/imageServer/0CAE79d77aac29354e04b3c5e54d83e475a0.jpg","sex":"M","create_time":1470892639000,"credit":1,"name_change":1,"next_level_integral":88613,"userLevel":9,"mobile":"13820000001","nick_name":"ྋoཻ༾vཻ༾eཻ༾r༒","status":2,"verify_status":0,"user_token":"/DTMRtOUM2l2LBxWzhC+qvYwdZezAm/uq8h7ymv1P0XOIk8FaEapl+F6V4MeJR+tW/v2P0la7Vz9Im5US0Wm9MlNBFM2LFNs","gold_coin":56918,"charm":75,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":48,"accrue_coin":89153},{"user_id":450000632,"integral":"15216","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"F","create_time":1470892574000,"credit":1,"name_change":0,"next_level_integral":4767,"userLevel":6,"mobile":"13920000021","nick_name":"夜友-11783","status":2,"verify_status":1,"gold_coin":91956,"charm":8044,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":33,"accrue_coin":36833},{"user_id":450000626,"integral":"125297","secret_type":0,"type":1,"icon":"/imageServer/B0E20eecff8519f54ed59f3b9afe24d286bb.jpg","sex":"F","create_time":1470799288000,"credit":19,"name_change":1,"next_level_integral":74669,"userLevel":9,"mobile":"13920000015","nick_name":"西红柿","status":2,"verify_status":1,"gold_coin":45217,"charm":110827,"can_chat":1,"can_shake":1,"vip_level":3,"chat_count":20,"accrue_coin":216881},{"user_id":100002689,"integral":"781","secret_type":0,"type":1,"icon":"/imageServer/C379cdfe16ac415545cb91d11bda31836d40.jpg","sex":"M","create_time":1470791197000,"credit":4,"name_change":0,"next_level_integral":2197,"userLevel":4,"mobile":"15721205694","nick_name":"夜友\u2014\u201411301","status":2,"verify_status":0,"user_token":"VGcspMu4DHW0GCPWWQpk0NSL/Rea/7BHZSezjWO8jI52lDyspE6ysSEtLAzvqyXk8GVXGwLubQe7uyZoiQWRPA==","gold_coin":6135,"charm":11878,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":6,"accrue_coin":16533},{"user_id":450000633,"integral":"10149","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"F","create_time":1470727404000,"credit":6,"name_change":0,"next_level_integral":9800,"userLevel":6,"mobile":"13920000022","nick_name":"夜友-11784","status":2,"verify_status":1,"gold_coin":89115,"charm":61108,"can_chat":1,"can_shake":1,"vip_level":0,"chat_count":26,"accrue_coin":65623}]
+         * visitorSize : 16
+         * visitorList : [{"user_id":100003790,"integral":"1","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"M","create_time":1481017667000,"name_change":0,"next_level_integral":48,"userLevel":1,"mobile":"18578909061","nick_name":"夜友-515857","status":2,"verify_status":0,"gold_coin":50,"charm":0,"vip_level":0,"accrue_coin":50}]
          */
 
-        private VisitorMapEntity visitorMap;
+        private VisitorMapBean visitorMap;
         private String voiceUrl;
         private String voiceLength;
+        private int signin;
+        private int userFelation;
+        private int isBlack;
         private boolean friend;
         /**
-         * user_id : 450000618
-         * integral : 123611
+         * user_id : 2200019
+         * integral : 162090
          * secret_type : 0
          * type : 1
-         * icon : /imageServer/9C66male.png
+         * icon : /imageServer/760E3db40e8e9a3244cd98cb039dc529ae21.jpg
          * sex : F
-         * create_time : 1469945073000
-         * credit : 8
-         * name_change : 0
-         * next_level_integral : 76348
+         * create_time : 1478249959000
+         * name_change : 1
+         * next_level_integral : 37897
          * userLevel : 9
-         * mobile : 13920000007
-         * nick_name : 夜友-11769
+         * mobile : 13500000002
+         * nick_name : 红花非花
          * status : 2
-         * verify_status : 0
+         * verify_status : 1
          * can_live_room : 1
-         * gold_coin : 1526
-         * charm : 79994
+         * gold_coin : 777880
+         * charm : 491964
          * can_chat : 1
          * can_shake : 1
-         * convert_coin : 1491
+         * convert_coin : 14318
          * vip_level : 0
-         * chat_count : 18
-         * accrue_coin : 176054
+         * chat_count : 12
+         * accrue_coin : 184045
          */
 
-        private List<GuardlistEntity> guardlist;
+        private List<GuardlistBean> guardlist;
         private List<String> achieveList;
 
-        public UserDetailBeanEntity getUserDetailBean() {
+        public UserDetailBeanBean getUserDetailBean() {
             return userDetailBean;
         }
 
-        public void setUserDetailBean(UserDetailBeanEntity userDetailBean) {
+        public void setUserDetailBean(UserDetailBeanBean userDetailBean) {
             this.userDetailBean = userDetailBean;
         }
 
-        public BlogImageMapEntity getBlogImageMap() {
+        public BlogImageMapBean getBlogImageMap() {
             return blogImageMap;
         }
 
-        public void setBlogImageMap(BlogImageMapEntity blogImageMap) {
+        public void setBlogImageMap(BlogImageMapBean blogImageMap) {
             this.blogImageMap = blogImageMap;
         }
 
-        public VisitorMapEntity getVisitorMap() {
+        public VisitorMapBean getVisitorMap() {
             return visitorMap;
         }
 
-        public void setVisitorMap(VisitorMapEntity visitorMap) {
+        public void setVisitorMap(VisitorMapBean visitorMap) {
             this.visitorMap = visitorMap;
         }
 
@@ -148,6 +148,30 @@ public class GetUserIndexModel {
             this.voiceLength = voiceLength;
         }
 
+        public int getSignin() {
+            return signin;
+        }
+
+        public void setSignin(int signin) {
+            this.signin = signin;
+        }
+
+        public int getUserFelation() {
+            return userFelation;
+        }
+
+        public void setUserFelation(int userFelation) {
+            this.userFelation = userFelation;
+        }
+
+        public int getIsBlack() {
+            return isBlack;
+        }
+
+        public void setIsBlack(int isBlack) {
+            this.isBlack = isBlack;
+        }
+
         public boolean isFriend() {
             return friend;
         }
@@ -156,11 +180,11 @@ public class GetUserIndexModel {
             this.friend = friend;
         }
 
-        public List<GuardlistEntity> getGuardlist() {
+        public List<GuardlistBean> getGuardlist() {
             return guardlist;
         }
 
-        public void setGuardlist(List<GuardlistEntity> guardlist) {
+        public void setGuardlist(List<GuardlistBean> guardlist) {
             this.guardlist = guardlist;
         }
 
@@ -172,43 +196,39 @@ public class GetUserIndexModel {
             this.achieveList = achieveList;
         }
 
-        public static class UserDetailBeanEntity {
+        public static class UserDetailBeanBean {
             private long userId;
             private String userName;
             private String nickName;
             private long addTime;
             /**
-             * user_id : 450000168
-             * integral : 205330
+             * user_id : 450214712
+             * integral : 30696
              * secret_type : 0
-             * type : 2
-             * icon : /imageServer/C029174175f689b3451f9a80f8c9c28005d0.jpg
+             * type : 1
+             * icon : /imageServer/82450f281ac749a742c3a04d3d128d4fc03c.jpg
              * sex : F
-             * create_time : 1428647019000
-             * update_time : 1470239397000
-             * credit : 191
-             * name_change : 0
-             * next_level_integral : 9999999999999999
-             * userLevel : 10
-             * mobile : 13817673794
-             * nick_name : 落霞与孤雾齐飞
+             * create_time : 1478248172000
+             * update_time : 1478248172000
+             * name_change : 1
+             * next_level_integral : 19289
+             * userLevel : 7
+             * mobile : 15700001001
+             * nick_name : 五七零一。
              * status : 2
              * verify_status : 1
-             * user_token : dPzBXpL4J9aQ3cySaQESEJ9QMcE8zfmW/LjFsMQgC1X16dCt9c4Rx/ql8KRrfIuDklLNgcU/ZLIlbRjLGqXXwtmF4MAhylgY
              * can_live_room : 1
-             * gold_coin : 27366
-             * charm : 125899
-             * can_chat : 1
+             * gold_coin : 417584
+             * charm : 820215
+             * can_chat : 0
              * can_shake : 1
-             * convert_coin : 55606
-             * around_site :
+             * convert_coin : 417574
              * vip_level : 0
-             * hotel_id : 0
-             * chat_count : 161
-             * accrue_coin : 496978
+             * chat_count : 14
+             * accrue_coin : 556514
              */
 
-            private UserExtEntity userExt;
+            private UserExtBean userExt;
             private int follow_count;
             private int followed_count;
             private int favorited_count;
@@ -249,11 +269,11 @@ public class GetUserIndexModel {
                 this.addTime = addTime;
             }
 
-            public UserExtEntity getUserExt() {
+            public UserExtBean getUserExt() {
                 return userExt;
             }
 
-            public void setUserExt(UserExtEntity userExt) {
+            public void setUserExt(UserExtBean userExt) {
                 this.userExt = userExt;
             }
 
@@ -313,7 +333,7 @@ public class GetUserIndexModel {
                 this.achieve_gold_pic = achieve_gold_pic;
             }
 
-            public static class UserExtEntity {
+            public static class UserExtBean {
                 private long user_id;
                 private String integral;
                 private int secret_type;
@@ -322,26 +342,31 @@ public class GetUserIndexModel {
                 private String sex;
                 private long create_time;
                 private long update_time;
-                private int credit;
                 private int name_change;
                 private long next_level_integral;
                 private int userLevel;
                 private String mobile;
                 private String nick_name;
+                private String around_site;
                 private int status;
                 private int verify_status;
-                private String user_token;
                 private int can_live_room;
                 private int gold_coin;
                 private int charm;
                 private int can_chat;
                 private int can_shake;
                 private int convert_coin;
-                private String around_site;
                 private int vip_level;
-                private int hotel_id;
                 private int chat_count;
                 private int accrue_coin;
+
+                public String getAround_site() {
+                    return around_site;
+                }
+
+                public void setAround_site(String around_site) {
+                    this.around_site = around_site;
+                }
 
                 public long getUser_id() {
                     return user_id;
@@ -407,14 +432,6 @@ public class GetUserIndexModel {
                     this.update_time = update_time;
                 }
 
-                public int getCredit() {
-                    return credit;
-                }
-
-                public void setCredit(int credit) {
-                    this.credit = credit;
-                }
-
                 public int getName_change() {
                     return name_change;
                 }
@@ -471,14 +488,6 @@ public class GetUserIndexModel {
                     this.verify_status = verify_status;
                 }
 
-                public String getUser_token() {
-                    return user_token;
-                }
-
-                public void setUser_token(String user_token) {
-                    this.user_token = user_token;
-                }
-
                 public int getCan_live_room() {
                     return can_live_room;
                 }
@@ -527,28 +536,12 @@ public class GetUserIndexModel {
                     this.convert_coin = convert_coin;
                 }
 
-                public String getAround_site() {
-                    return around_site;
-                }
-
-                public void setAround_site(String around_site) {
-                    this.around_site = around_site;
-                }
-
                 public int getVip_level() {
                     return vip_level;
                 }
 
                 public void setVip_level(int vip_level) {
                     this.vip_level = vip_level;
-                }
-
-                public int getHotel_id() {
-                    return hotel_id;
-                }
-
-                public void setHotel_id(int hotel_id) {
-                    this.hotel_id = hotel_id;
                 }
 
                 public int getChat_count() {
@@ -569,7 +562,7 @@ public class GetUserIndexModel {
             }
         }
 
-        public static class BlogImageMapEntity {
+        public static class BlogImageMapBean {
             private int dataSize;
             private List<String> dataList;
 
@@ -590,35 +583,30 @@ public class GetUserIndexModel {
             }
         }
 
-        public static class VisitorMapEntity {
+        public static class VisitorMapBean {
             private int visitorSize;
             /**
-             * user_id : 450000392
-             * integral : 111351
+             * user_id : 100003790
+             * integral : 1
              * secret_type : 0
-             * type : 2
-             * icon : /imageServer/0CAE79d77aac29354e04b3c5e54d83e475a0.jpg
+             * type : 1
+             * icon : /imageServer/9C66male.png
              * sex : M
-             * create_time : 1470892639000
-             * credit : 1
-             * name_change : 1
-             * next_level_integral : 88613
-             * userLevel : 9
-             * mobile : 13820000001
-             * nick_name : ྋoཻ༾vཻ༾eཻ༾r༒
+             * create_time : 1481017667000
+             * name_change : 0
+             * next_level_integral : 48
+             * userLevel : 1
+             * mobile : 18578909061
+             * nick_name : 夜友-515857
              * status : 2
              * verify_status : 0
-             * user_token : /DTMRtOUM2l2LBxWzhC+qvYwdZezAm/uq8h7ymv1P0XOIk8FaEapl+F6V4MeJR+tW/v2P0la7Vz9Im5US0Wm9MlNBFM2LFNs
-             * gold_coin : 56918
-             * charm : 75
-             * can_chat : 1
-             * can_shake : 1
+             * gold_coin : 50
+             * charm : 0
              * vip_level : 0
-             * chat_count : 48
-             * accrue_coin : 89153
+             * accrue_coin : 50
              */
 
-            private List<VisitorListEntity> visitorList;
+            private List<VisitorListBean> visitorList;
 
             public int getVisitorSize() {
                 return visitorSize;
@@ -628,15 +616,15 @@ public class GetUserIndexModel {
                 this.visitorSize = visitorSize;
             }
 
-            public List<VisitorListEntity> getVisitorList() {
+            public List<VisitorListBean> getVisitorList() {
                 return visitorList;
             }
 
-            public void setVisitorList(List<VisitorListEntity> visitorList) {
+            public void setVisitorList(List<VisitorListBean> visitorList) {
                 this.visitorList = visitorList;
             }
 
-            public static class VisitorListEntity {
+            public static class VisitorListBean {
                 private long user_id;
                 private String integral;
                 private int secret_type;
@@ -644,7 +632,6 @@ public class GetUserIndexModel {
                 private String icon;
                 private String sex;
                 private long create_time;
-                private int credit;
                 private int name_change;
                 private long next_level_integral;
                 private int userLevel;
@@ -652,13 +639,9 @@ public class GetUserIndexModel {
                 private String nick_name;
                 private int status;
                 private int verify_status;
-                private String user_token;
                 private int gold_coin;
                 private int charm;
-                private int can_chat;
-                private int can_shake;
                 private int vip_level;
-                private int chat_count;
                 private int accrue_coin;
 
                 public long getUser_id() {
@@ -717,14 +700,6 @@ public class GetUserIndexModel {
                     this.create_time = create_time;
                 }
 
-                public int getCredit() {
-                    return credit;
-                }
-
-                public void setCredit(int credit) {
-                    this.credit = credit;
-                }
-
                 public int getName_change() {
                     return name_change;
                 }
@@ -781,14 +756,6 @@ public class GetUserIndexModel {
                     this.verify_status = verify_status;
                 }
 
-                public String getUser_token() {
-                    return user_token;
-                }
-
-                public void setUser_token(String user_token) {
-                    this.user_token = user_token;
-                }
-
                 public int getGold_coin() {
                     return gold_coin;
                 }
@@ -805,36 +772,12 @@ public class GetUserIndexModel {
                     this.charm = charm;
                 }
 
-                public int getCan_chat() {
-                    return can_chat;
-                }
-
-                public void setCan_chat(int can_chat) {
-                    this.can_chat = can_chat;
-                }
-
-                public int getCan_shake() {
-                    return can_shake;
-                }
-
-                public void setCan_shake(int can_shake) {
-                    this.can_shake = can_shake;
-                }
-
                 public int getVip_level() {
                     return vip_level;
                 }
 
                 public void setVip_level(int vip_level) {
                     this.vip_level = vip_level;
-                }
-
-                public int getChat_count() {
-                    return chat_count;
-                }
-
-                public void setChat_count(int chat_count) {
-                    this.chat_count = chat_count;
                 }
 
                 public int getAccrue_coin() {
@@ -847,7 +790,7 @@ public class GetUserIndexModel {
             }
         }
 
-        public static class GuardlistEntity {
+        public static class GuardlistBean {
             private long user_id;
             private String integral;
             private int secret_type;
@@ -855,7 +798,6 @@ public class GetUserIndexModel {
             private String icon;
             private String sex;
             private long create_time;
-            private int credit;
             private int name_change;
             private long next_level_integral;
             private int userLevel;
@@ -927,14 +869,6 @@ public class GetUserIndexModel {
 
             public void setCreate_time(long create_time) {
                 this.create_time = create_time;
-            }
-
-            public int getCredit() {
-                return credit;
-            }
-
-            public void setCredit(int credit) {
-                this.credit = credit;
             }
 
             public int getName_change() {

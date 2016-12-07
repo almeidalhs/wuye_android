@@ -183,6 +183,8 @@ public class Common {
     public static String Url_Get_MyConcernList = hostUrl + "rest/user/follow/";
     //取消我的关注
     public static String Url_Cancel_MyConcernList = hostUrl + "rest/user/followCancel/";
+    //关注
+    public static String Url_Add_Follow = hostUrl + "rest/user/followAdd";
     /**************************http访问路径*****************************/
 
 
@@ -344,6 +346,8 @@ public class Common {
     public static int NET_Get_MYCONCERNLIST_ID = 77;
     //取消我的关注
     public static int NET_CANCEL_MYCONCERNLIST_ID = 78;
+    //关注
+    public static int NET_ADD_FOLLOW_ID = 79;
     /**************************http访问回应识别码*****************************/
 
 
