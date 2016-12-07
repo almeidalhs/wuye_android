@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
+import com.atman.wysq.model.response.MallModel;
 import com.atman.wysq.model.response.MallTopResponseModel;
 import com.atman.wysq.ui.base.WebPageActivity;
 import com.atman.wysq.ui.community.PostingsDetailActivity;
@@ -31,6 +32,44 @@ import java.io.File;
  * 电话 18578909061
  */
 public class UiHelper {
+
+    public static void toActivity(Context context, MallModel.BodyBean.AdListOneBean bodyEntity, boolean isLogin){
+        LogUtils.e("bodyEntity.getType():"+bodyEntity.getType());
+        switch (bodyEntity.getType()) {
+            case 1://URL
+                context.startActivity(WebPageActivity.buildIntent(context, bodyEntity.getAd_url(), ""));
+                break;
+            case 2://专辑
+
+                break;
+            case 3://任务
+                if (!isLogin) {
+                    context.startActivity(new Intent(context, LoginActivity.class));
+                } else {
+                    context.startActivity(new Intent(context, TaskListActivity.class));
+                }
+                break;
+            case 4://商品详情
+                context.startActivity(GoodsDetailActivity.buildIntent(context, bodyEntity.getAd_goods_id()));
+                break;
+            case 5://商品列表
+                context.startActivity(TwoLevelCategoryListActivity.buildIntent(context,
+                        bodyEntity.getAd_goods_id(), bodyEntity.getName(), false));
+                break;
+            case 6://帖子
+                context.startActivity(PostingsDetailActivity.buildIntent(context, ""
+                        , bodyEntity.getAd_goods_id(), false, 0));
+                break;
+            case 8://众筹
+                break;
+            case 9://心愿墙
+                break;
+            case 10://根据type取商品
+                context.startActivity(TwoLevelCategoryListActivity.buildIntent(context,
+                        bodyEntity.getAd_goods_id(), "VIP", true));
+                break;
+        }
+    }
 
     public static void toActivity(Context context, MallTopResponseModel.BodyEntity bodyEntity, boolean isLogin){
         LogUtils.e("bodyEntity.getType():"+bodyEntity.getType());

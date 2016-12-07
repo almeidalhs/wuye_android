@@ -135,6 +135,8 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_discover, null);
         ButterKnife.bind(this, view);
+
+        initView();
         return view;
     }
 
@@ -147,8 +149,6 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
     public void initWidget(View... v) {
         super.initWidget(v);
         fragmentBarTitleIv.setImageResource(R.mipmap.top_discover_ic);
-
-        initView();
     }
 
     private void initView() {
@@ -268,24 +268,26 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
             CharmestRankingModel.BodyBean body = null;
             int n = 3;
             n = Math.min(n, mCharmestRankingModel.getBody().size());
-            for (int i = 0; i < n; i++) {
-                itemCharmestLl.get(i).setVisibility(View.VISIBLE);
-                body = mCharmestRankingModel.getBody().get(i);
-                itemCharmestNameTv.get(i).setText(body.getNick_name());
-                if (body.getSex().equals("M")) {
-                    itemCharmestGenderIv.get(i).setImageResource(R.mipmap.personal_man_ic);
-                } else {
-                    itemCharmestGenderIv.get(i).setImageResource(R.mipmap.personal_weman_ic);
+            if (itemCharmestLl.size()!=0) {
+                for (int i = 0; i < n; i++) {
+                    itemCharmestLl.get(i).setVisibility(View.VISIBLE);
+                    body = mCharmestRankingModel.getBody().get(i);
+                    itemCharmestNameTv.get(i).setText(body.getNick_name());
+                    if (body.getSex().equals("M")) {
+                        itemCharmestGenderIv.get(i).setImageResource(R.mipmap.personal_man_ic);
+                    } else {
+                        itemCharmestGenderIv.get(i).setImageResource(R.mipmap.personal_weman_ic);
+                    }
+                    if (body.getVerify_status() == 1) {
+                        itemCharmestVerifyIv.get(i).setVisibility(View.VISIBLE);
+                        itemCharmestGenderIv.get(i).setVisibility(View.GONE);
+                    } else {
+                        itemCharmestVerifyIv.get(i).setVisibility(View.GONE);
+                        itemCharmestGenderIv.get(i).setVisibility(View.VISIBLE);
+                    }
+                    ImageLoader.getInstance().displayImage(Common.ImageUrl + body.getIcon()
+                            , itemCharmestHeadIv.get(i), MyBaseApplication.getApplication().getOptionsNot());
                 }
-                if (body.getVerify_status() == 1) {
-                    itemCharmestVerifyIv.get(i).setVisibility(View.VISIBLE);
-                    itemCharmestGenderIv.get(i).setVisibility(View.GONE);
-                } else {
-                    itemCharmestVerifyIv.get(i).setVisibility(View.GONE);
-                    itemCharmestGenderIv.get(i).setVisibility(View.VISIBLE);
-                }
-                ImageLoader.getInstance().displayImage(Common.ImageUrl + body.getIcon()
-                        , itemCharmestHeadIv.get(i), MyBaseApplication.getApplication().getOptionsNot());
             }
         } else if (id == Common.NET_GET_GOLD_RANKING_ID) {
             mGoldRankingModel = mGson.fromJson(data, GoldRankingModel.class);
@@ -293,24 +295,26 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
             GoldRankingModel.BodyBean body = null;
             int n = 3;
             n = Math.min(n, mGoldRankingModel.getBody().size());
-            for (int i = 0; i < n; i++) {
-                itemGoldLl.get(i).setVisibility(View.VISIBLE);
-                body = mGoldRankingModel.getBody().get(i);
-                itemGoldNameTv.get(i).setText(body.getNick_name());
-                if (body.getSex().equals("M")) {
-                    itemGoldGenderIv.get(i).setImageResource(R.mipmap.personal_man_ic);
-                } else {
-                    itemGoldGenderIv.get(i).setImageResource(R.mipmap.personal_weman_ic);
+            if (itemGoldLl.size()!=0) {
+                for (int i = 0; i < n; i++) {
+                    itemGoldLl.get(i).setVisibility(View.VISIBLE);
+                    body = mGoldRankingModel.getBody().get(i);
+                    itemGoldNameTv.get(i).setText(body.getNick_name());
+                    if (body.getSex().equals("M")) {
+                        itemGoldGenderIv.get(i).setImageResource(R.mipmap.personal_man_ic);
+                    } else {
+                        itemGoldGenderIv.get(i).setImageResource(R.mipmap.personal_weman_ic);
+                    }
+                    if (body.getVerify_status() == 1) {
+                        itemGoldVerifyIv.get(i).setVisibility(View.VISIBLE);
+                        itemGoldGenderIv.get(i).setVisibility(View.GONE);
+                    } else {
+                        itemGoldVerifyIv.get(i).setVisibility(View.GONE);
+                        itemGoldGenderIv.get(i).setVisibility(View.VISIBLE);
+                    }
+                    ImageLoader.getInstance().displayImage(Common.ImageUrl + body.getIcon()
+                            , itemGoldHeadIv.get(i), MyBaseApplication.getApplication().getOptionsNot());
                 }
-                if (body.getVerify_status() == 1) {
-                    itemGoldVerifyIv.get(i).setVisibility(View.VISIBLE);
-                    itemGoldGenderIv.get(i).setVisibility(View.GONE);
-                } else {
-                    itemGoldVerifyIv.get(i).setVisibility(View.GONE);
-                    itemGoldGenderIv.get(i).setVisibility(View.VISIBLE);
-                }
-                ImageLoader.getInstance().displayImage(Common.ImageUrl + body.getIcon()
-                        , itemGoldHeadIv.get(i), MyBaseApplication.getApplication().getOptionsNot());
             }
         }
     }

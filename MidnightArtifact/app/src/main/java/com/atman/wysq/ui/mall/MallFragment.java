@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -12,8 +14,10 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.MallCategoryListAdapter;
+import com.atman.wysq.adapter.RecommendForYouAdapter;
 import com.atman.wysq.model.response.MallGetCategoryResponseModel;
 import com.atman.wysq.model.response.MallGetTwoCategoryResponseModel;
+import com.atman.wysq.model.response.MallModel;
 import com.atman.wysq.model.response.MallTopResponseModel;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.base.MyBaseFragment;
@@ -21,6 +25,8 @@ import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.ui.mall.order.MyOrderListActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.UiHelper;
+import com.atman.wysq.widget.NoScrollGridView;
+import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.adview.ADInfo;
@@ -45,7 +51,8 @@ import okhttp3.Response;
  * 邮箱 bltang@atman.com
  * 电话 18578909061
  */
-public class MallFragment extends MyBaseFragment implements MallCategoryListAdapter.CategoryAdapterInterface {
+public class MallFragment extends MyBaseFragment implements View.OnClickListener
+        , MallCategoryListAdapter.CategoryAdapterInterface {
 
     @Bind(R.id.fragment_bar_title_iv)
     ImageView fragmentBarTitleIv;
@@ -60,11 +67,15 @@ public class MallFragment extends MyBaseFragment implements MallCategoryListAdap
     private CycleViewPager cycleViewPager;
 
     private String[] imageUrls;
-    private MallTopResponseModel mMallTopResponseModel;
-    private MallGetCategoryResponseModel mMallGetCategoryResponseModel;
     private MallCategoryListAdapter mAdapter;
 
     private View categoryHeadview;
+    private View categoryBottomview;
+    private LinearLayout partRecomForYouTopLl;
+    private NoScrollGridView partRecomforyouGv;
+    private RecommendForYouAdapter mRecommendForYouAdapter;
+
+    private MallModel mMallModel;
 
     private boolean isError = true;
 
@@ -90,7 +101,23 @@ public class MallFragment extends MyBaseFragment implements MallCategoryListAdap
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(getmWidth(),
                 getmWidth() * 168 / 413);
         mallTopAdLl.setLayoutParams(params);
+
+        categoryBottomview = LayoutInflater.from(getActivity()).inflate(R.layout.part_recommendforyou_boot_view, null);
+        partRecomForYouTopLl = (LinearLayout) categoryBottomview.findViewById(R.id.part_recomforyou_top_ll);
+        partRecomForYouTopLl.setOnClickListener(this);
+        partRecomforyouGv = (NoScrollGridView) categoryBottomview.findViewById(R.id.part_recomforyou_gv);
+        mRecommendForYouAdapter = new RecommendForYouAdapter(getActivity(), getmWidth());
+        partRecomforyouGv.setAdapter(mRecommendForYouAdapter);
+        partRecomforyouGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(GoodsDetailActivity.buildIntent(getActivity()
+                        , mRecommendForYouAdapter.getItem(position).getGoods_id()));
+            }
+        });
+
         mallCategoryListview.addHeaderView(categoryHeadview);
+        mallCategoryListview.addFooterView(categoryBottomview);
         fragmentBarRightTx.setVisibility(View.INVISIBLE);
         fragmentBarRightTx.setText("订单");
         fragmentBarRightTx.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +135,11 @@ public class MallFragment extends MyBaseFragment implements MallCategoryListAdap
     }
 
     private void initialize() {
+        imageUrls = new String[mMallModel.getBody().getAdListOne().size()];
+        for (int i = 0; i < mMallModel.getBody().getAdListOne().size(); i++) {
+            imageUrls[i] = Common.ImageUrl + mMallModel.getBody().getAdListOne().get(i)
+                    .getAd_pic().replace("<wysqimg=","").replace("=wysqimg>","");
+        }
 
         cycleViewPager = (CycleViewPager) getActivity().getFragmentManager()
                 .findFragmentById(R.id.fragment_cycle_viewpager_content);
@@ -160,8 +192,7 @@ public class MallFragment extends MyBaseFragment implements MallCategoryListAdap
             if (position<0) {
                 position = 0;
             }
-            UiHelper.toActivity(getActivity(), mMallTopResponseModel.getBody().get(position), isLogin());
-
+            UiHelper.toActivity(getActivity(), mMallModel.getBody().getAdListOne().get(position), isLogin());
         }
 
     };
@@ -186,11 +217,10 @@ public class MallFragment extends MyBaseFragment implements MallCategoryListAdap
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && getActivity() != null && isError) {
             isError = false;
-            OkHttpUtils.get().url(Common.Url_AdList + 2).addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-                    .tag(Common.NET_AD_LIST).id(Common.NET_AD_LIST).build()
-                    .execute(new MyStringCallback(getActivity(), this, true));
-            OkHttpUtils.get().url(Common.Url_Category_List).addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-                    .tag(Common.NET_CATEGORY_LIST).id(Common.NET_CATEGORY_LIST).build()
+
+            OkHttpUtils.get().url(Common.Url_Get_Mall)
+                    .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                    .tag(Common.NET_GET_MALL_ID).id(Common.NET_GET_MALL_ID).build()
                     .execute(new MyStringCallback(getActivity(), this, true));
         }
     }
@@ -198,32 +228,17 @@ public class MallFragment extends MyBaseFragment implements MallCategoryListAdap
     @Override
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
-        if (id == Common.NET_AD_LIST) {
-            mMallTopResponseModel = mGson.fromJson(data, MallTopResponseModel.class);
-            imageUrls = new String[mMallTopResponseModel.getBody().size()];
-            for (int i = 0; i < mMallTopResponseModel.getBody().size(); i++) {
-                imageUrls[i] = Common.ImageUrl + mMallTopResponseModel.getBody().get(i).getAd_pic().replace("<wysqimg=","").replace("=wysqimg>","");
-            }
+        if (id == Common.NET_GET_MALL_ID) {
+            mMallModel = mGson.fromJson(data, MallModel.class);
+
             initialize();
-        } else if (id == Common.NET_CATEGORY_LIST) {
-            mMallGetCategoryResponseModel = mGson.fromJson(data, MallGetCategoryResponseModel.class);
             initListView();
-            mAdapter.clearTwoCategory();
-            for (int i = 0; i < mMallGetCategoryResponseModel.getBody().size(); i++) {
-                OkHttpUtils.get().url(Common.Url_Two_Category_List + mMallGetCategoryResponseModel.getBody().get(i).getGoods_category_id())
-                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .tag(Common.NET_TWO_CATEGORY_LIST).id(Common.NET_TWO_CATEGORY_LIST).build()
-                        .execute(new MyStringCallback(getActivity(), this, true));
-            }
-        } else if (id == Common.NET_TWO_CATEGORY_LIST) {
-            MallGetTwoCategoryResponseModel mMallGetTwoCategoryResponseModel
-                    = mGson.fromJson(data, MallGetTwoCategoryResponseModel.class);
-            mAdapter.addTwoCategory(mMallGetTwoCategoryResponseModel);
+            mRecommendForYouAdapter.addBody(mMallModel.getBody().getGoodsList());
         }
     }
 
     private void initListView() {
-        mAdapter = new MallCategoryListAdapter(getActivity(), getmWidth(), mMallGetCategoryResponseModel.getBody(), this);
+        mAdapter = new MallCategoryListAdapter(getActivity(), getmWidth(), mMallModel.getBody().getCategoryList(), this);
         mallCategoryListview.setAdapter(mAdapter);
         mallCategoryListview.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), true, true));
     }
@@ -243,12 +258,19 @@ public class MallFragment extends MyBaseFragment implements MallCategoryListAdap
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_AD_LIST);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_CATEGORY_LIST);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_MALL_ID);
     }
 
     @Override
     public void onItemClick(View view, int id, String name) {
         startActivity(TwoLevelCategoryListActivity.buildIntent(getActivity(), id, name, false));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.part_recomforyou_top_ll:
+                break;
+        }
     }
 }

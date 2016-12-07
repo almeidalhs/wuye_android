@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="@dimen/dimen_dp_10"
+    android:background="@color/color_white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/part_recomforyou_top_ll"
+        android:paddingBottom="@dimen/dimen_dp_10"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitStart"
+            android:src="@mipmap/club_pregood_top_img"/>
+    </LinearLayout>
+
+    <com.atman.wysq.widget.NoScrollGridView
+        android:id="@+id/part_recomforyou_gv"
+        android:numColumns="2"
+        android:scrollbars="none"
+        android:verticalSpacing="@dimen/dimen_dp_10"
+        android:horizontalSpacing="@dimen/dimen_dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

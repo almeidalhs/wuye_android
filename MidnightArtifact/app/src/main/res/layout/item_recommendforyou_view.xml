@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/white_hollow_stroke_bg"
+    android:padding="@dimen/dimen_dp_1"
+    android:orientation="vertical">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/item_recommendforyou_iv"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:scaleType="centerCrop"
+        fresco:failureImage="@mipmap/icon_goodsdetail_business"
+        fresco:failureImageScaleType="centerInside"
+        fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />
+
+    <ImageView
+        android:background="@color/color_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_1" />
+
+    <TextView
+        android:id="@+id/item_recommendforyou_name_tx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/dimen_dp_5"
+        android:paddingBottom="@dimen/dimen_dp_2"
+        android:paddingTop="@dimen/dimen_dp_4"
+        android:singleLine="true"
+        android:text="赠送金币：  6"
+        android:textColor="#666666"
+        android:textSize="@dimen/dimen_sp_11" />
+
+    <TextView
+        android:id="@+id/item_recommendforyou_price_tx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_dp_5"
+        android:paddingBottom="@dimen/dimen_dp_2"
+        android:paddingTop="@dimen/dimen_dp_2"
+        android:singleLine="true"
+        android:text="¥660.00"
+        android:textColor="#d78b31"
+        android:textSize="@dimen/dimen_sp_13" />
+
+</LinearLayout>
