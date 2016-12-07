@@ -175,6 +175,14 @@ public class Common {
     public static String Url_Get_FansNum = hostUrl + "rest/user/getMyFansNum";
     //获取我的粉丝
     public static String Url_Get_FansList = hostUrl + "rest/user/followed/";
+    //获取黑名单
+    public static String Url_Get_BlackList = hostUrl + "rest/corruption/blacklist/";
+    //从黑名单移除
+    public static String Url_Cancel_BlackList = hostUrl + "rest/corruption/cancel/";
+    //获取我的关注
+    public static String Url_Get_MyConcernList = hostUrl + "rest/user/follow/";
+    //取消我的关注
+    public static String Url_Cancel_MyConcernList = hostUrl + "rest/user/followCancel/";
     /**************************http访问路径*****************************/
 
 
@@ -328,6 +336,14 @@ public class Common {
     public static int NET_GET_FANSNUM_ID = 73;
     //获取粉丝列表
     public static int NET_GET_FANSLIST_ID = 74;
+    //获取黑名单
+    public static int NET_GET_BLACKLIST_ID = 75;
+    //从黑名单移除
+    public static int NET_CANCEL_BLACKLIST_ID = 76;
+    //获取我的关注
+    public static int NET_Get_MYCONCERNLIST_ID = 77;
+    //取消我的关注
+    public static int NET_CANCEL_MYCONCERNLIST_ID = 78;
     /**************************http访问回应识别码*****************************/
 
 
@@ -346,5 +362,6 @@ public class Common {
     public static int toOrderDetail = 1010;
     public static int toPostDetail = 1011;
     public static int toSelectGift = 1012;
+    public static int toOtherPersonal = 1013;
     /**************************跳转码*****************************/
 }

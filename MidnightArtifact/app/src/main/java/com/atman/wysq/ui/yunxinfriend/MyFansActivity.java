@@ -48,6 +48,7 @@ public class MyFansActivity extends MyBaseActivity implements AdapterInterface {
     @Override
     protected void onResume() {
         super.onResume();
+        doHttp(true);
     }
 
     @Override
@@ -73,7 +74,6 @@ public class MyFansActivity extends MyBaseActivity implements AdapterInterface {
     @Override
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
-        doHttp(true);
     }
 
     private void doHttp(boolean b) {

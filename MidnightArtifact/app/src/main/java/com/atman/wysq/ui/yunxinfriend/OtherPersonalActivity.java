@@ -191,6 +191,9 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
             updataView();
         } else if (id == Common.NET_ADD_BLACKLIST) {
             showToast("已成功拉黑");
+            Intent mIntent = new Intent();
+            setResult(RESULT_OK,mIntent);
+            finish();
         }else if (id == Common.NET_DLELTE_FRIEND) {
             mGetMyUserIndexModel.getBody().setFriend(false);
             otherpersonalRelationshipBt.setText("关注");
