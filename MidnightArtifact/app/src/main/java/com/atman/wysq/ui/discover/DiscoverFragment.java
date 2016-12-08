@@ -207,6 +207,7 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
         fancyCoverFlow.setFadingEdgeLength(0);
         topAdapter = new FindTopAdapter(getActivity(), mRecommendUserModel, 1, this);
         fancyCoverFlow.setAdapter(topAdapter);
+        fancyCoverFlow.setScend(false);
         fancyCoverFlow.setSelection(mRecommendUserModel.getBody().size() / 2
                 + mRecommendUserModel.getBody().size()*10000 - 1);
     }

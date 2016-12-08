@@ -22,6 +22,8 @@ import android.content.res.TypedArray;
 import android.graphics.Camera;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -93,7 +95,6 @@ public class FancyCoverFlow extends Gallery {
 
     private void initialize(Context context) {
         this.transformationCamera = new Camera();
-        this.spacing = dp2px(context, 5);
     }
 
     private void applyXmlAttributes(AttributeSet attrs) {
@@ -102,9 +103,11 @@ public class FancyCoverFlow extends Gallery {
         this.actionDistance = a.getInteger(R.styleable.FancyCoverFlow_actionDistance, ACTION_DISTANCE_AUTO);
         this.scaleDownGravity = a.getFloat(R.styleable.FancyCoverFlow_scaleDownGravity, 1.0f);
         this.maxRotation = a.getInteger(R.styleable.FancyCoverFlow_maxRotation, 45);
+        this.spacing = a.getDimensionPixelOffset(R.styleable.FancyCoverFlow_mySpacing, 0);
         this.unselectedAlpha = a.getFloat(R.styleable.FancyCoverFlow_unselectedAlpha, 0.3f);
         this.unselectedSaturation = a.getFloat(R.styleable.FancyCoverFlow_unselectedSaturation, 0.0f);
         this.unselectedScale = a.getFloat(R.styleable.FancyCoverFlow_unselectedScale, 0.75f);
+
     }
 
     public float getReflectionRatio() {
@@ -406,71 +409,41 @@ public class FancyCoverFlow extends Gallery {
         }
     }
 
-    private boolean mScrolling;
-    private float touchDownX;
-
+    float gTouchStartX;
+    float gTouchStartY;
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        int action = ev.getAction();
+        switch(action){
             case MotionEvent.ACTION_DOWN:
-                touchDownX = event.getX();
-                mScrolling = false;
+                gTouchStartX = ev.getX();
+                gTouchStartY = ev.getY();
+                super.onTouchEvent(ev);
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (Math.abs(touchDownX - event.getX()) >= ViewConfiguration.get(
-                        getContext()).getScaledTouchSlop()) {
-                    mScrolling = true;
-                } else {
-                    mScrolling = false;
+                final float touchDistancesX = Math.abs(ev.getX()-gTouchStartX);
+                final float touchDistancesY = Math.abs(ev.getY()-gTouchStartY);
+                if(touchDistancesY *2 >= touchDistancesX){
+                    return false;
+                }else{
+                    return true;
                 }
+            case MotionEvent.ACTION_CANCEL:
                 break;
             case MotionEvent.ACTION_UP:
-                mScrolling = false;
                 break;
         }
-        return mScrolling;
+        return false;
     }
 
-    float x1 = 0;
-    float x2 = 0;
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                return true;
-            case MotionEvent.ACTION_MOVE:
-
-                break;
-            case MotionEvent.ACTION_UP:
-                x2 = event.getX();
-                if (touchDownX - x2 > dp2px(getContext(), 40)) {
-                    if(mSetOnSlideListener!=null){
-                        mSetOnSlideListener.onRightToLeftSlide();
-                    }
-                }
-                if (touchDownX - x2 < - dp2px(getContext(), 40)) {
-                    if(mSetOnSlideListener!=null){
-                        mSetOnSlideListener.onLeftToRightSlide();
-                    }
-                }
-                break;
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                           float velocityY) {
+        if(e2.getX() > e1.getX()){
+            onKeyDown(KeyEvent.KEYCODE_DPAD_LEFT, null);
+        }else{
+            onKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT, null);
         }
-
-        return super.onTouchEvent(event);
-    }
-
-    private setOnSlideListener mSetOnSlideListener;
-
-    public setOnSlideListener getmSetOnSlideListener() {
-        return mSetOnSlideListener;
-    }
-
-    public void setmSetOnSlideListener(setOnSlideListener mSetOnSlideListener) {
-        this.mSetOnSlideListener = mSetOnSlideListener;
-    }
-
-    public interface setOnSlideListener{
-        void onRightToLeftSlide();
-        void onLeftToRightSlide();
+        return false;
     }
 }

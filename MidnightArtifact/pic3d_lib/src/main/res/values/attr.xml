@@ -21,6 +21,7 @@
         <attr name="unselectedSaturation" format="float"/>
         <attr name="unselectedScale" format="float"/>
         <attr name="maxRotation" format="integer"/>
+        <attr name="mySpacing" format="dimension"/>
         <attr name="scaleDownGravity" format="float"/>
         <attr name="actionDistance" format="integer">
             <enum name="auto" value="2147483647" />
