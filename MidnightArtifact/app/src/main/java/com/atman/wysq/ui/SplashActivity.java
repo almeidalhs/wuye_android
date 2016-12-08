@@ -10,21 +10,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
+import com.atman.wysq.model.response.ConfigModel;
 import com.atman.wysq.model.response.GetGoldenRoleModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
-import com.atman.wysq.widget.downfile.DownloadFile;
+import com.atman.wysq.utils.FileUtils;
 import com.base.baselibs.iimp.TimeCountInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.util.TimeCount;
+import com.google.gson.Gson;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
+import com.tbl.okhttputils.callback.FileCallBack;
+
+import org.apache.http.protocol.HTTP;
+
+import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 import okhttp3.Response;
 
 /**
@@ -102,14 +111,41 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
         super.onResume();
         String us = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_US);
         String pw = PreferenceUtil.getPreferences(mContext, PreferenceUtil.PARM_PW);
-        new DownloadFile(SplashActivity.this, splashIvOne, splashIvTwo)
-                .execute("http://www.5ys7.com/url_resource.json");
+
+        DownloadConfigFile();
+
         timeCount.start();
 
         OkHttpUtils.get().url(Common.Url_Get_GoldenRole)
                 .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_GET_GOLDENROLE).id(Common.NET_GET_GOLDENROLE).build()
                 .execute(new MyStringCallback(mContext, this, false));
+    }
+
+    private void DownloadConfigFile() {
+        OkHttpUtils.get().url("http://www.5ys7.com/url_resource.json").addHeader("charset", HTTP.UTF_8)
+                .build().execute(new FileCallBack(FileUtils.SDPATH_FILE, "config.txt") {
+            @Override
+            public void onError(Call call, Exception e, int code, int id) {
+                LogUtils.e("e:"+e.toString());
+            }
+
+            @Override
+            public void onResponse(File data, Response response, int id) {
+                ConfigModel mConfigModel = new Gson().fromJson(FileUtils.convertCodeAndGetText("config.txt")
+                        , ConfigModel.class);
+                if (mConfigModel != null) {
+                    ImageLoader.getInstance().displayImage(mConfigModel.getKStartUPAdBgUrl(), splashIvOne);
+                    ImageLoader.getInstance().displayImage(mConfigModel.getKStartUpAdUrl(), splashIvTwo);
+                    MyBaseApplication.mWEB_URL = mConfigModel.getKStartUpAdWebUrl();
+                    MyBaseApplication.mWEB_ID = mConfigModel.getKStartUpAdGoodsId();
+                    MyBaseApplication.mWEB_TYPE = mConfigModel.getKStartUpAdType();
+                    MyBaseApplication.mShop = mConfigModel.getShop();
+                    MyBaseApplication.mDownLoad_URL = mConfigModel.getWuyeandroid();
+                    MyBaseApplication.kPrivateChatCost = mConfigModel.getkPrivateChatCost();
+                }
+            }
+        });
     }
 
     @OnClick(R.id.jump_tx)

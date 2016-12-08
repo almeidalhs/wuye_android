@@ -62,9 +62,6 @@ public class MyStringCallback extends StringCallback {
     @Override
     public void onError(Call call, Exception e, int code, int id) {
         LogUtils.e("e:"+e.toString()+",id:"+id);
-        if (e.toString().contains("Canceled") || e.toString().contains("Socket closed")) {
-            return;
-        }
 
         if (e.toString().contains("timeout") || e.toString().contains("java.net.SocketTimeoutException")
                 || e.toString().contains("Failed to connect")) {

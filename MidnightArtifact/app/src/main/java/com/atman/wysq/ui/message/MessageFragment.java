@@ -211,7 +211,9 @@ public class MessageFragment extends MyBaseFragment implements AdapterInterface{
                     } else if (mTouChuanOtherNotice.get(0).getAddfriendType()==3) {
                         str = mTouChuanOtherNotice.get(0).getReceive_nickName()+":拒绝了你的加好友请求";
                     }
-                } else if (mTouChuanOtherNotice.get(0).getNoticeType()==8 || mTouChuanOtherNotice.get(0).getNoticeType()==4) {
+                } else if (mTouChuanOtherNotice.get(0).getNoticeType()==8
+                        || mTouChuanOtherNotice.get(0).getNoticeType()==4
+                        || mTouChuanOtherNotice.get(0).getNoticeType()==3) {
                     str = mTouChuanOtherNotice.get(0).getSend_nickName()+":"+mTouChuanOtherNotice.get(0).getGiftMessage();
                 }
             }

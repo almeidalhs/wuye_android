@@ -306,6 +306,9 @@ public class BaseAppCompatActivity extends SwipeBackActivity
         if (id==65) {
             return;
         }
+        if (e.toString().contains("Canceled") || e.toString().contains("Socket closed")) {
+            return;
+        }
         showToast(e.toString().replace("java.io.IOException: ",""));
     }
 

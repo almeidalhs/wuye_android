@@ -163,7 +163,7 @@ public class GetHisVisitorAdapter extends BaseAdapter {
         @Bind(R.id.item_browse_svip_iv)
         ImageView itemBrowseSvipIv;
         @Bind(R.id.item_browse_verify_img)
-        CustomImageView itemBrowseVerifyImg;
+        ImageView itemBrowseVerifyImg;
         @Bind(R.id.item_browse_head_rl)
         RelativeLayout itemBrowseHeadRl;
         @Bind(R.id.item_browse_name_tx)

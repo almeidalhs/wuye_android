@@ -172,7 +172,7 @@ public class GetHisGuardianAdapter extends BaseAdapter {
         @Bind(R.id.item_browse_gender_iv)
         ImageView itemBrowseGenderIv;
         @Bind(R.id.item_browse_verify_img)
-        CustomImageView itemBrowseVerifyImg;
+        ImageView itemBrowseVerifyImg;
         @Bind(R.id.item_browse_svip_iv)
         ImageView itemBrowseSvipIv;
         @Bind(R.id.item_browse_head_rl)

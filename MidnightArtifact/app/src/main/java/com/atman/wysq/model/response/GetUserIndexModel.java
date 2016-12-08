@@ -230,7 +230,7 @@ public class GetUserIndexModel {
 
             private UserExtBean userExt;
             private int follow_count;
-            private int followed_count;
+            private long followed_count;
             private int favorited_count;
             private int comment_count;
             private String achieve_level_pic;
@@ -285,11 +285,11 @@ public class GetUserIndexModel {
                 this.follow_count = follow_count;
             }
 
-            public int getFollowed_count() {
+            public long getFollowed_count() {
                 return followed_count;
             }
 
-            public void setFollowed_count(int followed_count) {
+            public void setFollowed_count(long followed_count) {
                 this.followed_count = followed_count;
             }
 

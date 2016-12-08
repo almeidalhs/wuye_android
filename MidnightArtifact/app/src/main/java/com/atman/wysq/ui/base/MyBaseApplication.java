@@ -291,7 +291,20 @@ public class MyBaseApplication extends BaseApplication {
                         mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
                         mTouChuanOtherNotice.setNoticeType(4);
                         getDaoSession().getTouChuanOtherNoticeDao().insert(mTouChuanOtherNotice);
-                    } else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==20030) {//踢下线
+                    } else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==3) {//注册打招呼
+                        if (mGiftMessageModel.getCenter_user_name()==null || String.valueOf(mGiftMessageModel.getCenter_user_id())
+                                .equals(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID))) {
+                            continue;
+                        }
+                        TouChuanOtherNotice mTouChuanOtherNotice = new TouChuanOtherNotice();
+                        mTouChuanOtherNotice.setReceive_userId(Long.valueOf(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID)));
+                        mTouChuanOtherNotice.setSend_userId(mGiftMessageModel.getCenter_user_id());
+                        mTouChuanOtherNotice.setSend_nickName(mGiftMessageModel.getCenter_user_name());
+                        mTouChuanOtherNotice.setGiftMessage(mGiftMessageModel.getCenter_content());
+                        mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
+                        mTouChuanOtherNotice.setNoticeType(3);
+                        getDaoSession().getTouChuanOtherNoticeDao().insert(mTouChuanOtherNotice);
+                    }  else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==20030) {//踢下线
                         logout();
                     }
                     EventBus.getDefault().post(new YunXinAddFriendEvent());

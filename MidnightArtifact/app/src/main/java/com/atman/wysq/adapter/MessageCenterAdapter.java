@@ -129,7 +129,9 @@ public class MessageCenterAdapter extends BaseAdapter {
                     holder.itemMessagecenterTypeTx.setText(dataList.get(position).getPropMessage());
                 }
             }
-        } else if (dataList.get(position).getNoticeType() == 8 || dataList.get(position).getNoticeType() == 4) {
+        } else if (dataList.get(position).getNoticeType() == 8
+                || dataList.get(position).getNoticeType() == 4
+                || dataList.get(position).getNoticeType() == 3) {
             holder.itemMessagecenterTypeTx.setText(dataList.get(position).getGiftMessage());
         }
         String time = String.valueOf(dataList.get(position).getTime());

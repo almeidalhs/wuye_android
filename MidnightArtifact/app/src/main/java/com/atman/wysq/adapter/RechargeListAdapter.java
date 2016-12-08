@@ -10,12 +10,8 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.ConfigModel;
-import com.atman.wysq.model.response.GetTaskAllModel;
 import com.base.baselibs.iimp.AdapterInterface;
-import com.base.baselibs.util.LogUtils;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
