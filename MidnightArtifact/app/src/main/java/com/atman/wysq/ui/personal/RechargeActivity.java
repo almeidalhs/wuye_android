@@ -3,6 +3,7 @@ package com.atman.wysq.ui.personal;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,20 +36,23 @@ import okhttp3.Response;
  * 电话 18578909061
  */
 public class RechargeActivity extends MyBaseActivity implements AdapterInterface, PayDialog.payItemCallback
-        , PayDialog.payResultCallback {
+        , PayDialog.payResultCallback, View.OnClickListener {
 
     @Bind(R.id.recharge_listview)
     ListView rechargeListview;
-    @Bind(R.id.recharge_totalcoin_tv)
-    TextView rechargeTotalcoinTv;
-    @Bind(R.id.recharge_canoutcoin_tv)
-    TextView rechargeCanoutcoinTv;
+
+    private TextView rechargeTotalcoinTv;
+    private TextView rechargeCanoutcoinTv;
+    private TextView rechargeMygoldshopOneTv;
+    private TextView rechargeMygoldshopTwoTv;
 
     private Context mContext = RechargeActivity.this;
     private int whatPay = 0;
 
     private RechargeListAdapter mAdapter;
     private PayDialog mPayDialog;
+
+    private View headView;
 
     private int goldCoin = 0;
     private int convertCoin = 0;
@@ -75,6 +79,14 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
         goldCoin = getIntent().getIntExtra("goldCoin", 0);
         convertCoin = getIntent().getIntExtra("convertCoin", 0);
 
+        headView = LayoutInflater.from(mContext).inflate(R.layout.part_recharge_head_view, null);
+        rechargeTotalcoinTv = (TextView) headView.findViewById(R.id.recharge_totalcoin_tv);
+        rechargeCanoutcoinTv = (TextView) headView.findViewById(R.id.recharge_canoutcoin_tv);
+        rechargeMygoldshopOneTv = (TextView) headView.findViewById(R.id.recharge_mygoldshop_one_tv);
+        rechargeMygoldshopOneTv.setOnClickListener(this);
+        rechargeMygoldshopTwoTv = (TextView) headView.findViewById(R.id.recharge_mygoldshop_two_tv);
+        rechargeMygoldshopTwoTv.setOnClickListener(this);
+
         rechargeTotalcoinTv.setText("" + goldCoin);
         rechargeCanoutcoinTv.setText("" + convertCoin);
 
@@ -83,6 +95,7 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
 
     private void initListView() {
         mAdapter = new RechargeListAdapter(mContext, MyBaseApplication.mShop, this);
+        rechargeListview.addHeaderView(headView);
         rechargeListview.setAdapter(mAdapter);
     }
 
@@ -168,7 +181,6 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
         MyBaseApplication.getApplication().setFilterLock(false);
     }
 
-    @OnClick({R.id.recharge_mygoldshop_one_tv, R.id.recharge_mygoldshop_two_tv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.recharge_mygoldshop_one_tv:
