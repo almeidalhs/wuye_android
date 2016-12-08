@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.MyConcernListAdapter;
@@ -35,6 +36,9 @@ public class MyConcernActivity extends MyBaseActivity
 
     @Bind(R.id.pull_refresh_recycler)
     PullToRefreshRecyclerView pullRefreshRecycler;
+    @Bind(R.id.myconcern_empty_tx)
+    TextView myconcernEmptyTx;
+
     private Context mContext = MyConcernActivity.this;
     private MyConcernListAdapter mAdapter;
     private GetFansListModel mGetFansListModel;
@@ -105,6 +109,17 @@ public class MyConcernActivity extends MyBaseActivity
             }
         } else if (id == Common.NET_CANCEL_MYCONCERNLIST_ID) {
             mAdapter.removeData(mPosition);
+        }
+        isNullChange();
+    }
+
+    private void isNullChange() {
+        if (mAdapter!=null && mAdapter.getItemCount()>0) {
+            myconcernEmptyTx.setVisibility(View.GONE);
+            pullRefreshRecycler.setVisibility(View.VISIBLE);
+        } else {
+            myconcernEmptyTx.setVisibility(View.VISIBLE);
+            pullRefreshRecycler.setVisibility(View.GONE);
         }
     }
 

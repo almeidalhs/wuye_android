@@ -58,6 +58,7 @@ public class RecommendUsersActivity extends MyBaseActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        disableLoginCheck();
         setContentView(R.layout.activity_recommendusers);
         ButterKnife.bind(this);
     }

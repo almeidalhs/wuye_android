@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.BlackListAdapter;
@@ -33,6 +34,8 @@ public class BlackListActivity extends MyBaseActivity
 
     @Bind(R.id.pull_refresh_recycler)
     PullToRefreshRecyclerView pullRefreshRecycler;
+    @Bind(R.id.black_empty_tx)
+    TextView blackEmptyTx;
 
     private Context mContext = BlackListActivity.this;
     private BlackListAdapter mAdapter;
@@ -104,6 +107,17 @@ public class BlackListActivity extends MyBaseActivity
         } else if (id == Common.NET_CANCEL_BLACKLIST_ID) {
             mAdapter.removeData(mPosition);
         }
+        isNullChange();
+    }
+
+    private void isNullChange() {
+        if (mAdapter!=null && mAdapter.getItemCount()>0) {
+            blackEmptyTx.setVisibility(View.GONE);
+            pullRefreshRecycler.setVisibility(View.VISIBLE);
+        } else {
+            blackEmptyTx.setVisibility(View.VISIBLE);
+            pullRefreshRecycler.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -159,10 +173,10 @@ public class BlackListActivity extends MyBaseActivity
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         OkHttpUtils.postString()
-                                .url(Common.Url_Cancel_BlackList+mAdapter.getItemById(position).getUser_id())
+                                .url(Common.Url_Cancel_BlackList + mAdapter.getItemById(position).getUser_id())
                                 .tag(Common.NET_CANCEL_BLACKLIST_ID).id(Common.NET_CANCEL_BLACKLIST_ID)
                                 .content(mGson.toJson(""))
-                                .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                                 .build().execute(new MyStringCallback(mContext, BlackListActivity.this, true));
                     }
                 });

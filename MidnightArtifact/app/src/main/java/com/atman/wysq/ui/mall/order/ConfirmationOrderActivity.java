@@ -296,6 +296,13 @@ public class ConfirmationOrderActivity extends MyBaseActivity implements PayDial
                 list.add(temp);
                 AddOrderRequestModel mAddOrderRequestModel = new AddOrderRequestModel(mAddreId, list, orderType);
 
+                if (goodsTypeId==5) {
+                    String str = String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin());
+                    if (Float.parseFloat(goodsCoinPrice) >Float.parseFloat(str)) {
+                        showWraning("账户\"获得金币\"不足,请先检查帐号\"获取金币\"余额或稍后再试!");
+                        return;
+                    }
+                }
                 OkHttpUtils.postString().url(Common.Url_Add_Order)
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).mediaType(Common.JSON)
                         .content(mGson.toJson(mAddOrderRequestModel)).tag(Common.NET_ADD_ORDER).id(Common.NET_ADD_ORDER)
