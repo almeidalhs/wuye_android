@@ -12,7 +12,7 @@
         android:visibility="gone"
         android:textSize="@dimen/dimen_sp_18"
         android:textColor="@color/color_black"
-        android:text="暂无关注夜友"/>
+        android:text="您还未关注任何人"/>
 
     <com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"

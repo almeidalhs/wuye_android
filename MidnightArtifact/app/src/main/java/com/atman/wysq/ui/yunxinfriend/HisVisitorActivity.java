@@ -171,7 +171,7 @@ public class HisVisitorActivity extends MyBaseActivity implements AdapterInterfa
         if (id == Common.NET_GET_BROWSE) {
             mGetUserBrowseModel = mGson.fromJson(data, GetUserBrowseModel.class);
             if (mGetUserBrowseModel.getBody().getDataList() == null || mGetUserBrowseModel.getBody().getDataList().size() == 0) {
-                if (mAdapter != null && mAdapter.getCount() > 0) {
+                if (mAdapter != null && mAdapter.getShop().size() > 0) {
                     showToast("没有更多");
                 }
                 onLoad(PullToRefreshBase.Mode.PULL_FROM_START, pullToRefreshListView);
@@ -187,6 +187,11 @@ public class HisVisitorActivity extends MyBaseActivity implements AdapterInterfa
                     }
                 }
                 mAdapter.addBody(dataList);
+            }
+            if (mAdapter.getShop().size()==0) {
+                pullToRefreshListView.getRefreshableView().setDividerHeight(0);
+            } else {
+                pullToRefreshListView.getRefreshableView().setDividerHeight(1);
             }
         }
     }

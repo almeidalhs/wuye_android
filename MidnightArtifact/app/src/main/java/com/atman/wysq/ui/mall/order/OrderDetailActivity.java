@@ -214,9 +214,15 @@ public class OrderDetailActivity extends MyBaseActivity implements PayDialog.pay
 
         orderDetailTimeTx.setText(MyTools.convertTime(mGetOrderDetailModel.getBody().getCreate_time(), "yyyy.MM.dd HH:mm"));
         orderDetailTitleTx.setText(title);
-        orderDetailPriceTx.setText("单价：¥ " + price);
         orderDetailNumTx.setText("数量：" + num);
-        orderDetailTotalpriceTx.setText("总金额：¥ " + totalPrice);
+
+        if (mGetOrderDetailModel.getBody().getOrder_type()==21) {
+            orderDetailPriceTx.setText("单价： " + (int)price +"金币");
+            orderDetailTotalpriceTx.setText("总金币： " + (int)totalPrice);
+        } else {
+            orderDetailPriceTx.setText("单价：¥ " + price);
+            orderDetailTotalpriceTx.setText("总金额：¥ " + totalPrice);
+        }
 
         if (mGetAddressByOrderIdModel.getBody() != null) {
             twoLl.setVisibility(View.VISIBLE);

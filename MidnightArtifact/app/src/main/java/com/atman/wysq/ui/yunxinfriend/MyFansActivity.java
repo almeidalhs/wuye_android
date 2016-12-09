@@ -64,7 +64,7 @@ public class MyFansActivity extends MyBaseActivity implements AdapterInterface {
 
         View mEmpty = LayoutInflater.from(mContext).inflate(R.layout.part_list_empty, null);
         TextView mEmptyTX = (TextView) mEmpty.findViewById(R.id.empty_list_tx);
-        mEmptyTX.setText("暂无粉丝");
+        mEmptyTX.setText("你还没有粉丝哦");
 
         mAdapter = new GetFansListAdapter(mContext, this);
         pullToRefreshListView.setEmptyView(mEmpty);

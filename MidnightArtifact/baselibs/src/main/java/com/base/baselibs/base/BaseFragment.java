@@ -152,6 +152,10 @@ public class BaseFragment extends Fragment implements IInit,PullToRefreshBase.On
         if (id!=10) {
             showToast(e.toString().replace("java.io.IOException: ",""));
         }
+        if (e.toString().contains("Canceled") || e.toString().contains("Socket closed")
+                || e.toString().contains("参数错误，请参考API文档")) {
+            return;
+        }
         cancelLoading();
     }
 

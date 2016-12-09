@@ -24,7 +24,7 @@ containing a value of this type.
 <tr><td><code>auto</code></td><td>2147483647</td><td></td></tr>
 </table>
          */
-        public static final int actionDistance=0x7f010005;
+        public static final int actionDistance=0x7f010006;
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -33,6 +33,16 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int maxRotation=0x7f010003;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int mySpacing=0x7f010004;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -40,7 +50,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int scaleDownGravity=0x7f010004;
+        public static final int scaleDownGravity=0x7f010005;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -81,6 +91,7 @@ containing a value of this type.
            <tr><th>Attribute</th><th>Description</th></tr>
            <tr><td><code>{@link #FancyCoverFlow_actionDistance at.technikum.mti.fancycoverflow.test:actionDistance}</code></td><td></td></tr>
            <tr><td><code>{@link #FancyCoverFlow_maxRotation at.technikum.mti.fancycoverflow.test:maxRotation}</code></td><td></td></tr>
+           <tr><td><code>{@link #FancyCoverFlow_mySpacing at.technikum.mti.fancycoverflow.test:mySpacing}</code></td><td></td></tr>
            <tr><td><code>{@link #FancyCoverFlow_scaleDownGravity at.technikum.mti.fancycoverflow.test:scaleDownGravity}</code></td><td></td></tr>
            <tr><td><code>{@link #FancyCoverFlow_unselectedAlpha at.technikum.mti.fancycoverflow.test:unselectedAlpha}</code></td><td></td></tr>
            <tr><td><code>{@link #FancyCoverFlow_unselectedSaturation at.technikum.mti.fancycoverflow.test:unselectedSaturation}</code></td><td></td></tr>
@@ -88,6 +99,7 @@ containing a value of this type.
            </table>
            @see #FancyCoverFlow_actionDistance
            @see #FancyCoverFlow_maxRotation
+           @see #FancyCoverFlow_mySpacing
            @see #FancyCoverFlow_scaleDownGravity
            @see #FancyCoverFlow_unselectedAlpha
            @see #FancyCoverFlow_unselectedSaturation
@@ -95,7 +107,7 @@ containing a value of this type.
          */
         public static final int[] FancyCoverFlow = {
             0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003,
-            0x7f010004, 0x7f010005
+            0x7f010004, 0x7f010005, 0x7f010006
         };
         /**
           <p>This symbol is the offset where the {@link at.technikum.mti.fancycoverflow.test.R.attr#actionDistance}
@@ -118,7 +130,7 @@ containing a value of this type.
 </table>
           @attr name at.technikum.mti.fancycoverflow.test:actionDistance
         */
-        public static final int FancyCoverFlow_actionDistance = 5;
+        public static final int FancyCoverFlow_actionDistance = 6;
         /**
           <p>This symbol is the offset where the {@link at.technikum.mti.fancycoverflow.test.R.attr#maxRotation}
           attribute's value can be found in the {@link #FancyCoverFlow} array.
@@ -134,6 +146,22 @@ containing a value of this type.
         */
         public static final int FancyCoverFlow_maxRotation = 3;
         /**
+          <p>This symbol is the offset where the {@link at.technikum.mti.fancycoverflow.test.R.attr#mySpacing}
+          attribute's value can be found in the {@link #FancyCoverFlow} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name at.technikum.mti.fancycoverflow.test:mySpacing
+        */
+        public static final int FancyCoverFlow_mySpacing = 4;
+        /**
           <p>This symbol is the offset where the {@link at.technikum.mti.fancycoverflow.test.R.attr#scaleDownGravity}
           attribute's value can be found in the {@link #FancyCoverFlow} array.
 
@@ -146,7 +174,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name at.technikum.mti.fancycoverflow.test:scaleDownGravity
         */
-        public static final int FancyCoverFlow_scaleDownGravity = 4;
+        public static final int FancyCoverFlow_scaleDownGravity = 5;
         /**
           <p>This symbol is the offset where the {@link at.technikum.mti.fancycoverflow.test.R.attr#unselectedAlpha}
           attribute's value can be found in the {@link #FancyCoverFlow} array.

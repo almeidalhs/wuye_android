@@ -3,19 +3,15 @@ package com.base.baselibs.base;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
 import com.base.baselibs.R;
 import com.base.baselibs.iimp.IInit;
-import com.base.baselibs.net.BaseErrorModel;
-import com.base.baselibs.net.BaseNormalModel;
 import com.base.baselibs.net.httpCallBack;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.WaitingDialog;
-import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
 import okhttp3.Call;
@@ -53,13 +49,13 @@ public class BaseAppCompatActivity extends SwipeBackActivity
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
-        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+        overridePendingTransition(R.anim.slide_right_in, 0);
     }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode, Bundle options) {
         super.startActivityForResult(intent, requestCode, options);
-        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+        overridePendingTransition(R.anim.slide_right_in, 0);
     }
 
     @Override
@@ -98,7 +94,7 @@ public class BaseAppCompatActivity extends SwipeBackActivity
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+        overridePendingTransition(0, R.anim.slide_right_out);
     }
 
     /**
@@ -306,7 +302,8 @@ public class BaseAppCompatActivity extends SwipeBackActivity
         if (id==65) {
             return;
         }
-        if (e.toString().contains("Canceled") || e.toString().contains("Socket closed")) {
+        if (e.toString().contains("Canceled") || e.toString().contains("Socket closed")
+                || e.toString().contains("参数错误，请参考API文档")) {
             return;
         }
         showToast(e.toString().replace("java.io.IOException: ",""));

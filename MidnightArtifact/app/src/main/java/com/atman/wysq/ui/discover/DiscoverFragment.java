@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,12 +22,15 @@ import com.atman.wysq.ui.base.MyBaseFragment;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.CustomImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import at.technikum.mti.fancycoverflow.FancyCoverFlow;
 import butterknife.Bind;
@@ -41,7 +45,8 @@ import okhttp3.Response;
  * 邮箱 bltang@atman.com
  * 电话 18578909061
  */
-public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterface {
+public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterface
+        , View.OnClickListener {
 
     @Bind(R.id.fragment_bar_title_iv)
     ImageView fragmentBarTitleIv;
@@ -111,6 +116,7 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
     FancyCoverFlow findFlow;
 
     private boolean isError = true;
+    private int mPosition;
     private RecommendUserModel mRecommendUserModel;
     private RecommendUserModel mFindLikeModel;
     private FindTopAdapter topAdapter;
@@ -153,8 +159,11 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
 
     private void initView() {
         itemCharmestHeadIv.add(itemCharmestOneHeadIv);
+        itemCharmestOneHeadIv.setOnClickListener(this);
         itemCharmestHeadIv.add(itemCharmestTwoHeadIv);
+        itemCharmestTwoHeadIv.setOnClickListener(this);
         itemCharmestHeadIv.add(itemCharmestThreeHeadIv);
+        itemCharmestThreeHeadIv.setOnClickListener(this);
 
         itemCharmestGenderIv.add(itemCharmestOneGenderIv);
         itemCharmestGenderIv.add(itemCharmestTwoGenderIv);
@@ -173,8 +182,11 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
         itemCharmestLl.add(itemCharmestThreeLl);
 
         itemGoldHeadIv.add(itemGoldOneHeadIv);
+        itemGoldOneHeadIv.setOnClickListener(this);
         itemGoldHeadIv.add(itemGoldTwoHeadIv);
+        itemGoldTwoHeadIv.setOnClickListener(this);
         itemGoldHeadIv.add(itemGoldThreeHeadIv);
+        itemGoldThreeHeadIv.setOnClickListener(this);
 
         itemGoldGenderIv.add(itemGoldOneGenderIv);
         itemGoldGenderIv.add(itemGoldTwoGenderIv);
@@ -201,6 +213,17 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
             int num = Math.min(1, mFindLikeModel.getBody().size());
             findFlow.setSelection(num);
         }
+        findFlow.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                LogUtils.e("position"+position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void initTop3D() {
@@ -242,6 +265,8 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .tag(Common.NET_GET_CHAR_RANKING_ID).id(Common.NET_GET_CHAR_RANKING_ID).build()
                         .execute(new MyStringCallback(getActivity(), this, true));
+                Map<String, String> p = new HashMap<>();
+                p.put("Content-Type", "application/json; charset=utf-8");
                 OkHttpUtils.get().url(Common.Url_Get_RecommendFriends)
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .tag(Common.NET_GET_RECOMMENDFRIENDS).id(Common.NET_GET_RECOMMENDFRIENDS).build()
@@ -359,6 +384,30 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
                 break;
             case R.id.discover_find_rl:
                 startActivity(new Intent(getActivity(), RecommendUsersActivity.class));
+                break;
+            case R.id.item_charmest_one_head_iv:
+                startActivity(OtherPersonalActivity.buildIntent(getActivity()
+                        , mCharmestRankingModel.getBody().get(0).getUser_id()));
+                break;
+            case R.id.item_charmest_two_head_iv:
+                startActivity(OtherPersonalActivity.buildIntent(getActivity()
+                        , mCharmestRankingModel.getBody().get(1).getUser_id()));
+                break;
+            case R.id.item_charmest_three_head_iv:
+                startActivity(OtherPersonalActivity.buildIntent(getActivity()
+                        , mCharmestRankingModel.getBody().get(2).getUser_id()));
+                break;
+            case R.id.item_gold_one_head_iv:
+                startActivity(OtherPersonalActivity.buildIntent(getActivity()
+                        , mGoldRankingModel.getBody().get(0).getUser_id()));
+                break;
+            case R.id.item_gold_two_head_iv:
+                startActivity(OtherPersonalActivity.buildIntent(getActivity()
+                        , mGoldRankingModel.getBody().get(1).getUser_id()));
+                break;
+            case R.id.item_gold_three_head_iv:
+                startActivity(OtherPersonalActivity.buildIntent(getActivity()
+                        , mGoldRankingModel.getBody().get(2).getUser_id()));
                 break;
         }
     }

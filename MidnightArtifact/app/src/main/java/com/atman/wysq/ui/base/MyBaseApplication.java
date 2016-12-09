@@ -628,11 +628,16 @@ public class MyBaseApplication extends BaseApplication {
     }
 
     public String getCookie() {
+        String key = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY);
+        String token = PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_TOKEN);
+//        if (token.isEmpty() && !key.isEmpty()) {
+//            token = key.replace("-","");
+//        }
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("USER_KEY=");
-        stringBuilder.append(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_KEY));
+        stringBuilder.append(key);
         stringBuilder.append(";USER_TOKEN=");
-        stringBuilder.append(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USER_TOKEN));
+        stringBuilder.append(token);
         return stringBuilder.toString();
     }
 

@@ -124,7 +124,7 @@ public class OrderListAdapter extends BaseAdapter {
         if (shop.get(position).getOrder_type()==21) {
             holder.itemOrderlistGoldIv.setVisibility(View.VISIBLE);
             holder.itemOrderlistGoldIv.setBackgroundResource(R.mipmap.order_type_gold);
-            holder.itemOrderlistTotalpriceTx.setText("总金币：¥ " + (int)shop.get(position).getTotal_price());
+            holder.itemOrderlistTotalpriceTx.setText("总金币： " + (int)shop.get(position).getTotal_price());
         } else if (shop.get(position).getOrder_type()==51) {
             holder.itemOrderlistGoldIv.setVisibility(View.VISIBLE);
             holder.itemOrderlistGoldIv.setBackgroundResource(R.mipmap.order_type_recharge);

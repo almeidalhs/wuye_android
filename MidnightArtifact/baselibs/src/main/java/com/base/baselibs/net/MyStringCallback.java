@@ -94,8 +94,7 @@ public class MyStringCallback extends StringCallback {
             BaseErrorThreeModel mBaseErrorThreeModel = new Gson().fromJson(data, BaseErrorThreeModel.class);
             if (mBaseErrorThreeModel.getBody().getError_code().equals("20030")) {
 //                CustomToast.showToast(mContext, mBaseErrorThreeModel.getBody().getError_description(), 50000);
-//                CallBack.clearData();
-                EventBus.getDefault().post(new YunXinAuthOutEvent());
+                CallBack.clearData();
             } else {
                 CallBack.onError(null, new IOException(mBaseErrorThreeModel.getBody().getError_description()), 200, id);
             }
@@ -104,7 +103,7 @@ public class MyStringCallback extends StringCallback {
             if (mBaseErrorTwoModel != null && mBaseErrorTwoModel.getBody()!=null
                     && mBaseErrorTwoModel.getBody().getError_code()!=null
                     && mBaseErrorTwoModel.getBody().getError_code().equals("20030")) {
-                CustomToast.showToast(mContext, mBaseErrorTwoModel.getBody().getError_description(), 50000);
+//                CustomToast.showToast(mContext, mBaseErrorTwoModel.getBody().getError_description(), 50000);
                 CallBack.clearData();
             } else {
                 BaseErrorModel mBaseErrorModel = new Gson().fromJson(data, BaseErrorModel.class);

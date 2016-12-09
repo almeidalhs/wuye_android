@@ -19,7 +19,7 @@
             android:layout_width="@dimen/dimen_dp_30"
             android:layout_height="@dimen/dimen_dp_30"
             android:layout_marginRight="@dimen/dimen_dp_15"
-            android:src="@mipmap/personal_addlist_ic" />
+            android:src="@mipmap/ic_myconcern" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,7 +79,7 @@
             android:layout_width="@dimen/dimen_dp_30"
             android:layout_height="@dimen/dimen_dp_30"
             android:layout_marginRight="@dimen/dimen_dp_15"
-            android:src="@mipmap/personal_addlist_ic" />
+            android:src="@mipmap/ic_myfans" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -139,7 +139,7 @@
             android:layout_width="@dimen/dimen_dp_30"
             android:layout_height="@dimen/dimen_dp_30"
             android:layout_marginRight="@dimen/dimen_dp_15"
-            android:src="@mipmap/personal_addlist_ic" />
+            android:src="@mipmap/ic_black" />
 
         <LinearLayout
             android:layout_width="match_parent"

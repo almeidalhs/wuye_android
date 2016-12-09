@@ -50,8 +50,9 @@ public class MyBaseFragment extends BaseFragment {
 
     @Override
     public void clearData() {
-        super.clearData();
         MyBaseApplication.getApplication().cleanLoginData();
+        super.clearData();
+        ((MyBaseActivity) getActivity()).LogoutWarn();
     }
 
     public void toPhone(Context mContext, String phonenumber){

@@ -197,10 +197,9 @@ public class MainActivity extends MyBaseActivity {
         initViewpager();
         initBottomBar();
         setSwipeBackEnable(false);
-        rtWidth = getmWidth()/8;
         params = (RelativeLayout.LayoutParams)tabSessionUnreadTx.getLayoutParams();
-        rtWidth = (int)(rtWidth/(getResources().getDisplayMetrics().density/2));
-        params.setMargins(DensityUtil.dp2px(mContext,(rtWidth/2+DensityUtil.dp2px(mContext, 5))), DensityUtil.dp2px(mContext, 5), 0, 0);
+        rtWidth = getmWidth()/10;
+        params.setMargins(rtWidth+DensityUtil.dp2px(mContext, 5), DensityUtil.dp2px(mContext, 5), 0, 0);
     }
 
     @Override

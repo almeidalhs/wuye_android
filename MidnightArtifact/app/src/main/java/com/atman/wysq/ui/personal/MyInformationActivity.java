@@ -162,7 +162,7 @@ public class MyInformationActivity extends MyBaseActivity {
         } else if (id == Common.NET_LOGOUT) {
             NIMClient.getService(AuthService.class).logout();
             showToast("已退出登录");
-            clearData();
+            logout();
         } else if (id == Common.NET_GET_VERSION) {
             final CheckVersionModel mCheckVersionModel = mGson.fromJson(data, CheckVersionModel.class);
             if (mCheckVersionModel.getResult().equals("1") && mCheckVersionModel.getBody()!=null) {

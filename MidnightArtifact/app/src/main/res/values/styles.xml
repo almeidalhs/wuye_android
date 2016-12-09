@@ -24,9 +24,16 @@
         <item name="colorPrimary">@color/color_black</item>
         <item name="colorAccent">@color/color_black</item>
         <item name="colorPrimaryDark">@color/color_black</item>
-        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
         <item name="android:windowBackground">@color/activity_default_bg</item>
         <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="PersonalStyle" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/color_black</item>
+        <item name="colorAccent">@color/color_black</item>
+        <item name="colorPrimaryDark">@color/color_black</item>
+        <item name="android:windowBackground">@color/activity_default_bg</item>
+        <item name="android:windowIsTranslucent">false</item>
     </style>
 
     <style name="giftStyle" parent="@style/Theme.AppCompat.Light.NoActionBar">

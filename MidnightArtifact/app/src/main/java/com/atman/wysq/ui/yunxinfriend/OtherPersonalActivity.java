@@ -202,15 +202,21 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
             MyBaseApplication.getApplication().getDaoSession().getAddFriendRecordDao().deleteAll();
         } else if (id == Common.NET_ADD_FOLLOW_ID) {
             showToast("关注成功");
-            mGetMyUserIndexModel.getBody().setUserFelation(1);
-            otherpersonalRelationshipBt.setText("取消关注");
-            otherpersonalRelationshipTv.setText("关注");
+            if (mGetMyUserIndexModel.getBody().getUserFelation()==0) {
+                mGetMyUserIndexModel.getBody().setUserFelation(1);
+            } else {
+                mGetMyUserIndexModel.getBody().setUserFelation(3);
+            }
+            setViewFelation(mGetMyUserIndexModel.getBody().getUserFelation());
         } else if (id == Common.NET_CANCEL_MYCONCERNLIST_ID) {
             showToast("取消关注成功");
             mGetMyUserIndexModel.getBody().setUserFelation(0);
             otherpersonalRelationshipBt.setText("关注");
             otherpersonalRelationshipTv.setText("陌生人");
             MyBaseApplication.getApplication().getDaoSession().getAddFriendRecordDao().deleteAll();
+        } else if (id == Common.NET_CANCEL_BLACKLIST_ID) {
+            mGetMyUserIndexModel.getBody().setIsBlack(0);
+            showToast("已从黑名单移除");
         }
     }
 
@@ -259,15 +265,22 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
 
         initguardianIV();
 
-        if (mGetMyUserIndexModel.getBody().getUserFelation()==1) {
+        setViewFelation(mGetMyUserIndexModel.getBody().getUserFelation());
+
+        otherpersonalOftenaddrTv.setText(mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getAround_site());
+    }
+
+    private void setViewFelation(int userFelation) {
+        if (userFelation==1) {
             otherpersonalRelationshipBt.setText("取消关注");
             otherpersonalRelationshipTv.setText("关注");
-        } else {
+        } else if (userFelation==3) {
+            otherpersonalRelationshipBt.setText("取消关注");
+            otherpersonalRelationshipTv.setText("互相关注");
+        }else {
             otherpersonalRelationshipBt.setText("关注");
             otherpersonalRelationshipTv.setText("陌生人");
         }
-
-        otherpersonalOftenaddrTv.setText(mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getAround_site());
     }
 
     private void initguardianIV() {
@@ -395,6 +408,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERINDEX);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BLACKLIST);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_BLACKLIST_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_DLELTE_FRIEND);
         OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_MYCONCERNLIST_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_FOLLOW_ID);
@@ -471,7 +485,8 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
                     showWraning("亲，这是你自己哦！");
                     return;
                 }
-                if (mGetMyUserIndexModel.getBody().getUserFelation()==1) {
+                if (mGetMyUserIndexModel.getBody().getUserFelation()==1
+                        || mGetMyUserIndexModel.getBody().getUserFelation()==3) {
                     PromptDialog.Builder builder = new PromptDialog.Builder(this);
                     builder.setMessage("确定取消关注TA吗?");
                     builder.setPositiveButton("不了", new DialogInterface.OnClickListener() {
@@ -580,6 +595,10 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
                     showWraning("亲，这是你自己哦！");
                     return;
                 }
+                if (mGetMyUserIndexModel.getBody().getIsBlack()==1) {
+                    showToast("你已被对方加入黑名单");
+                    return;
+                }
                 startActivity(P2PChatActivity.buildIntent(mContext, String.valueOf(id)
                         , mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName()
                         , mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getSex()
@@ -592,6 +611,9 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
     private void showBottomImg() {
         BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
         String[] str = new String[]{"举报", "把TA加入黑名单"};
+        if (mGetMyUserIndexModel.getBody().getIsBlack()==1) {
+            str[1] = "从黑名单移除";
+        }
         builder.setItems(str, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -607,11 +629,20 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
                         showToast("不能将自己加入黑名单");
                         return;
                     }
-                    OkHttpUtils.postString().url(Common.Url_Add_BlackList)
-                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                            .content("{\"black_user_id\":" + id + "}")
-                            .mediaType(Common.JSON).id(Common.NET_ADD_BLACKLIST).tag(Common.NET_ADD_BLACKLIST)
-                            .build().execute(new MyStringCallback(mContext, OtherPersonalActivity.this, true));
+                    if (mGetMyUserIndexModel.getBody().getIsBlack()==1) {
+                        OkHttpUtils.postString()
+                                .url(Common.Url_Cancel_BlackList + id)
+                                .tag(Common.NET_CANCEL_BLACKLIST_ID).id(Common.NET_CANCEL_BLACKLIST_ID)
+                                .content(mGson.toJson(""))
+                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                                .build().execute(new MyStringCallback(mContext, OtherPersonalActivity.this, true));
+                    } else {
+                        OkHttpUtils.postString().url(Common.Url_Add_BlackList)
+                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                                .content("{\"black_user_id\":" + id + "}")
+                                .mediaType(Common.JSON).id(Common.NET_ADD_BLACKLIST).tag(Common.NET_ADD_BLACKLIST)
+                                .build().execute(new MyStringCallback(mContext, OtherPersonalActivity.this, true));
+                    }
                 }
             }
         });

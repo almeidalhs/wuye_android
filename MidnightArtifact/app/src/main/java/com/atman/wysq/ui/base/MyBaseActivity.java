@@ -323,7 +323,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         if (PreferenceUtil.getIntPreferences(this, PreferenceUtil.PARM_GESTURE_ERROR) <= 0
                 && PreferenceUtil.getBoolPreferences(this, PreferenceUtil.PARM_ISOPEN_GESTURE)
                 && mShouldLogin && isLogin()) {
-            clearData();
+            MyBaseApplication.getApplication().cleanLoginData();
             finish();
         }
 
@@ -368,6 +368,14 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Override
     public void clearData() {
         super.clearData();
+        LogoutWarn();
+//        MyBaseApplication.getApplication().cleanLoginData();
+//        Intent mIntent = new Intent();
+//        setResult(RESULT_OK, mIntent);
+//        mAty.finish();
+    }
+
+    public void logout() {
         MyBaseApplication.getApplication().cleanLoginData();
         Intent mIntent = new Intent();
         setResult(RESULT_OK, mIntent);
@@ -459,22 +467,29 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
     public void onUserEvent(YunXinAuthOutEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
         if (!getTopActivity(mAty).equals("") && getTopActivity(mAty).contains(mAty.getLocalClassName())) {
-            PromptDialog.Builder builder = new PromptDialog.Builder(mAty);
-            builder.setTitle("账号异常");
-            builder.setMessage("您的账号已在别处登录，请退出登录，如非您本人操作，请尽快修改您的密码！");
-            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    clearData();
-                    dialog.dismiss();
+            LogoutWarn();
+        }
+    }
+
+    public void LogoutWarn() {
+        PromptDialog.Builder builder = new PromptDialog.Builder(mAty);
+        builder.setTitle("账号异常");
+        builder.setMessage("您的账号已在别处登录，请退出登录，如非您本人操作，请尽快修改您的密码！");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MyBaseApplication.getApplication().cleanLoginData();
+                dialog.dismiss();
+                if (!(mAty instanceof MainActivity)) {
                     startActivity(new Intent(mAty, MainActivity.class));
                     finish();
                 }
-            });
-            builder.setCancelable(false);
-            builder.show();
-        }
+            }
+        });
+        builder.setCancelable(false);
+        builder.show();
     }
+
 
     private String getTopActivity(Context context) {
         ActivityManager manager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);

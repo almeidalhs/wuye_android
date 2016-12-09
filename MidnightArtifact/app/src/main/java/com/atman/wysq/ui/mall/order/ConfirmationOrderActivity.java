@@ -312,10 +312,18 @@ public class ConfirmationOrderActivity extends MyBaseActivity implements PayDial
                 num -= 1;
                 if (num > 1) {
                     confirmationorderNumBt.setText(num + "");
-                    confirmationorderOrderpriceTx.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice) * num));
+                    if (goodsTypeId == 5) {
+                        confirmationorderOrderpriceTx.setText((int)(Float.parseFloat(goodsCoinPrice) * num)+"金币");
+                    } else {
+                        confirmationorderOrderpriceTx.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice) * num));
+                    }
                 } else {
                     confirmationorderNumBt.setText("1");
-                    confirmationorderOrderpriceTx.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice)));
+                    if (goodsTypeId == 5) {
+                        confirmationorderOrderpriceTx.setText((int)(Float.parseFloat(goodsCoinPrice))+"金币");
+                    } else {
+                        confirmationorderOrderpriceTx.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice)));
+                    }
                     confirmationorderReduceBt.setEnabled(false);
                 }
                 break;
@@ -323,7 +331,11 @@ public class ConfirmationOrderActivity extends MyBaseActivity implements PayDial
                 confirmationorderReduceBt.setEnabled(true);
                 num += 1;
                 confirmationorderNumBt.setText(num + "");
-                confirmationorderOrderpriceTx.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice) * num));
+                if (goodsTypeId == 5) {
+                    confirmationorderOrderpriceTx.setText((int)(Float.parseFloat(goodsCoinPrice) * num)+"金币");
+                } else {
+                    confirmationorderOrderpriceTx.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice) * num));
+                }
                 break;
         }
     }

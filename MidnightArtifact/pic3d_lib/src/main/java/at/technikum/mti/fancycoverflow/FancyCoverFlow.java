@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Transformation;
+import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.SpinnerAdapter;
 
@@ -285,7 +286,6 @@ public class FancyCoverFlow extends Gallery {
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
-
     // 重载视图显示顺序让左到中间显示，再到右到中间显示
     protected int getChildDrawingOrder(int childCount, int i) {
         int selectedIndex = getSelectedItemPosition() - getFirstVisiblePosition();
@@ -434,6 +434,27 @@ public class FancyCoverFlow extends Gallery {
                 break;
         }
         return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch(event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_CANCEL:
+                break;
+            case MotionEvent.ACTION_UP:
+                if (isScend) {
+                    if (getSelectedItemPosition()==0) {
+                        setSelection(1);
+                    } else if (getSelectedItemPosition() == getCount()-1) {
+                        setSelection(getCount()-2);
+                    }
+                }
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 
     @Override

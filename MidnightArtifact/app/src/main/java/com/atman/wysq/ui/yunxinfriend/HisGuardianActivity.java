@@ -175,6 +175,11 @@ public class HisGuardianActivity extends MyBaseActivity implements AdapterInterf
                 mAdapter.addBody(mGetHisGuardModel.getBody().getDataList());
                 headViewNumTx.setText(""+mAdapter.getShop().size());
             }
+            if (mAdapter.getShop().size()==0) {
+                pullToRefreshListView.getRefreshableView().setDividerHeight(0);
+            } else {
+                pullToRefreshListView.getRefreshableView().setDividerHeight(1);
+            }
         }
     }
 

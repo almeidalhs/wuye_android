@@ -261,6 +261,14 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     }
 
     @Override
+    public void clearData() {
+        super.clearData();
+        if (!isLogin()) {
+            hitSetring();
+        }
+    }
+
+    @Override
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_GET_USERINDEX) {
@@ -665,7 +673,12 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
                 path = UiHelper.photoBefor(getActivity(), path, PICK_FROM_CAMERA);
                 break;
             case R.id.personal_setting_iv:
-                getActivity().startActivityForResult(new Intent(getActivity(), MyInformationActivity.class), Common.toMyInfo);
+                if (!isLogin()) {
+                    showLogin();
+                } else {
+                    getActivity().startActivityForResult(new Intent(getActivity()
+                            , MyInformationActivity.class), Common.toMyInfo);
+                }
                 break;
             case R.id.personal_head_iv:
                 if (!isLogin()) {

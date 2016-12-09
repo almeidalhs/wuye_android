@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.MainActivity"/>
+        <activity android:name=".ui.MainActivity" android:theme="@style/PersonalStyle"  />
         <activity android:name=".ui.PictureBrowsingActivity"/>
         <activity android:name=".ui.login.LoginActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.login.RegisterActivity"/>
