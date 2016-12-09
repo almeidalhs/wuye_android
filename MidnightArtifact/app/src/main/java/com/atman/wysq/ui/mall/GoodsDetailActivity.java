@@ -1,6 +1,7 @@
 package com.atman.wysq.ui.mall;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -33,6 +34,7 @@ import com.base.baselibs.util.DensityUtil;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.MyListView;
 import com.base.baselibs.widget.MyViewPager;
+import com.base.baselibs.widget.PromptDialog;
 import com.handmark.pulltorefresh.library.ObservableScrollView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
@@ -222,7 +224,7 @@ public class GoodsDetailActivity extends MyBaseActivity implements ScrollViewLis
                     , partGoodsdetailTopBfToolIv, MyBaseApplication.getApplication().getOptionsNot());
         }
         if (mGoodsDetailsResponseModel.getBody().getPostage() > 0) {
-            partGoodsdetailTopBfFreeTx.setText("邮费:¥"+mGoodsDetailsResponseModel.getBody().getCharm_price());
+            partGoodsdetailTopBfFreeTx.setText("邮费:¥"+mGoodsDetailsResponseModel.getBody().getPostage());
         } else {
             partGoodsdetailTopBfFreeTx.setText("包邮");
         }
@@ -234,7 +236,7 @@ public class GoodsDetailActivity extends MyBaseActivity implements ScrollViewLis
         partGoodsdetailTopBfSalesvolumeTx.setText("月销量：" + mGoodsDetailsResponseModel.getBody().getSales());
 
         if (mGoodsDetailsResponseModel.getBody().getGoods_type()==5) {
-            partGoodsdetailTopBfToolLl.setVisibility(View.VISIBLE);
+            partGoodsdetailTopBfToolLl.setVisibility(View.GONE);
             partGoodsdetailTopBfCoinTx.setVisibility(View.GONE);
             partGoodsdetailTopBfOriginalpriceTx.setVisibility(View.GONE);
             Drawable drawable = getResources().getDrawable(R.mipmap.icon_gold);
@@ -332,9 +334,22 @@ public class GoodsDetailActivity extends MyBaseActivity implements ScrollViewLis
 
     @Override
     public void onError(Call call, Exception e, int code, int id) {
-        super.onError(call, e, code, id);
         page = 1;
         onLoad(PullToRefreshBase.Mode.BOTH, pullToRefreshScrollView);
+        if (id == 21 && e.toString().contains("参数值非法")) {
+            PromptDialog.Builder builder = new PromptDialog.Builder(this);
+            builder.setMessage("商品加载失败,可能商品已下架或稍后再试!");
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            builder.show();
+        } else {
+            super.onError(call, e, code, id);
+        }
     }
 
     @Override

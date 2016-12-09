@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.model.response.GetBolgListModel;
 import com.atman.wysq.model.response.GetMyCollectionModel;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
@@ -21,7 +20,6 @@ import com.atman.wysq.utils.MyTools;
 import com.atman.wysq.widget.face.SmileUtils;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.CustomImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -88,11 +86,11 @@ public class MyCollectionListAdapter extends BaseAdapter {
     }
 
     public int addBrowse(int num) {
-        int p=0;
+        int p = 0;
         for (int i = 0; i < shop.size(); i++) {
             if (num == shop.get(i).getBlog_id()) {
                 shop.get(i).setView_count(shop.get(i).getView_count() + 1);
-                p=i;
+                p = i;
             }
         }
         return p;
@@ -108,22 +106,34 @@ public class MyCollectionListAdapter extends BaseAdapter {
             num = 0;
         }
         if (posi >= visibleFirstPosi && posi <= visibleLastPosi) {
-            View view = listView.getChildAt(posi - visibleFirstPosi+num);
+            View view = listView.getChildAt(posi - visibleFirstPosi + num);
             ViewHolder holder = (ViewHolder) view.getTag();
 
-            if (holder==null) {
+            if (holder == null) {
                 return;
             }
-            holder.itemBloglistBrowseTx.setText(shop.get(posi).getView_count()+"");
+            holder.itemBloglistBrowseTx.setText(shop.get(posi).getView_count() + "");
             Drawable drawable = null;
             if (shop.get(posi).getFavorite_id() > 0) {
                 drawable = context.getResources().getDrawable(R.mipmap.square_like_press);
+                holder.itemBloglistCollectionimgTx.setTextColor(context.getResources().getColor(R.color.color_fda7a7));
             } else {
                 drawable = context.getResources().getDrawable(R.mipmap.square_like_default);
+                holder.itemBloglistCollectionimgTx.setTextColor(context.getResources().getColor(R.color.color_787878));
             }
             /// 这一步必须要做,否则不会显示.
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            holder.itemBloglistCollectionImgTx.setCompoundDrawables(drawable, null, null, null);
+            holder.itemBloglistCollectionimgTx.setCompoundDrawables(drawable, null, null, null);
+            if (shop.get(posi).getReplay_flag() == 1) {
+                drawable = context.getResources().getDrawable(R.mipmap.square_comment_press);
+                holder.itemBloglistCommentimgTx.setTextColor(context.getResources().getColor(R.color.color_fed676));
+            } else {
+                drawable = context.getResources().getDrawable(R.mipmap.square_comment);
+                holder.itemBloglistCommentimgTx.setTextColor(context.getResources().getColor(R.color.color_787878));
+            }
+            /// 这一步必须要做,否则不会显示.
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            holder.itemBloglistCommentimgTx.setCompoundDrawables(drawable, null, null, null);
         }
     }
 
@@ -150,7 +160,7 @@ public class MyCollectionListAdapter extends BaseAdapter {
             holder.itemBloglistHighlyTx.setVisibility(View.GONE);
         }
 
-        if (mBodyEntity.getGoods_id()>0) {
+        if (mBodyEntity.getGoods_id() > 0) {
             holder.itemBloglistTopRl.setVisibility(View.GONE);
             holder.itemBloglistBottomLl.setVisibility(View.GONE);
             holder.itemBloglistTitleTx.setVisibility(View.GONE);
@@ -170,14 +180,26 @@ public class MyCollectionListAdapter extends BaseAdapter {
 //        }
 
         Drawable drawable = null;
-        if (mBodyEntity.getFavorite_id()>0) {
+        if (mBodyEntity.getFavorite_id() > 0) {
             drawable = context.getResources().getDrawable(R.mipmap.square_like_press);
+            holder.itemBloglistCollectionimgTx.setTextColor(context.getResources().getColor(R.color.color_fda7a7));
         } else {
             drawable = context.getResources().getDrawable(R.mipmap.square_like_default);
+            holder.itemBloglistCollectionimgTx.setTextColor(context.getResources().getColor(R.color.color_787878));
         }
         /// 这一步必须要做,否则不会显示.
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-        holder.itemBloglistCollectionImgTx.setCompoundDrawables(drawable,null,null,null);
+        holder.itemBloglistCollectionimgTx.setCompoundDrawables(drawable, null, null, null);
+        if (mBodyEntity.getReplay_flag() == 1) {
+            drawable = context.getResources().getDrawable(R.mipmap.square_comment_press);
+            holder.itemBloglistCommentimgTx.setTextColor(context.getResources().getColor(R.color.color_fed676));
+        } else {
+            drawable = context.getResources().getDrawable(R.mipmap.square_comment);
+            holder.itemBloglistCommentimgTx.setTextColor(context.getResources().getColor(R.color.color_787878));
+        }
+        /// 这一步必须要做,否则不会显示.
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        holder.itemBloglistCommentimgTx.setCompoundDrawables(drawable, null, null, null);
 
         if (mBodyEntity.getSex().equals("M")) {
             holder.itemBloglistGenderImg.setImageResource(R.mipmap.personal_man_ic);
@@ -197,7 +219,7 @@ public class MyCollectionListAdapter extends BaseAdapter {
             String img = temp.substring(temp.indexOf("<wysqimg=") + 9, temp.indexOf("=wysqimg>"));
             String str = temp.substring(0, temp.indexOf("<wysqimg="));
             if (!img.startsWith("/")) {
-                img = "/"+img;
+                img = "/" + img;
             }
             holder.itemBloglistContentimgTx.setText(SmileUtils.getEmotionContent(context, holder.itemBloglistContentimgTx, str));
             ImageLoader.getInstance().displayImage(Common.ImageUrl + img
@@ -247,7 +269,7 @@ public class MyCollectionListAdapter extends BaseAdapter {
             holder.itemBloglistNameTx.setTextColor(context.getResources().getColor(R.color.color_333333));
         } else {
             holder.itemBloglistLevelTx.setVisibility(View.VISIBLE);
-            if (mBodyEntity.getVerify_status()==1) {
+            if (mBodyEntity.getVerify_status() == 1) {
                 holder.itemBloglistVerifyImg.setVisibility(View.VISIBLE);
                 holder.itemBloglistGenderImg.setVisibility(View.GONE);
             } else {
@@ -268,7 +290,7 @@ public class MyCollectionListAdapter extends BaseAdapter {
                     holder.itemBloglistVipTx.setVisibility(View.VISIBLE);
                 }
             }
-            if (shop.get(position).getVip_level()>=3) {
+            if (shop.get(position).getVip_level() >= 3) {
                 holder.itemBloglistNameTx.setTextColor(context.getResources().getColor(R.color.color_red));
             } else {
                 holder.itemBloglistNameTx.setTextColor(context.getResources().getColor(R.color.color_333333));
@@ -300,17 +322,23 @@ public class MyCollectionListAdapter extends BaseAdapter {
         @Bind(R.id.item_bloglist_gender_img)
         ImageView itemBloglistGenderImg;
         @Bind(R.id.item_bloglist_verify_img)
-        CustomImageView itemBloglistVerifyImg;
+        ImageView itemBloglistVerifyImg;
         @Bind(R.id.item_bloglist_head_rl)
         RelativeLayout itemBloglistHeadRl;
         @Bind(R.id.item_bloglist_name_tx)
         TextView itemBloglistNameTx;
         @Bind(R.id.item_bloglist_level_tx)
         TextView itemBloglistLevelTx;
+        @Bind(R.id.item_bloglist_vip_tx)
+        TextView itemBloglistVipTx;
+        @Bind(R.id.item_bloglist_svip_iv)
+        ImageView itemBloglistSvipIv;
         @Bind(R.id.item_bloglist_time_tx)
         TextView itemBloglistTimeTx;
         @Bind(R.id.item_bloglist_top_rl)
         RelativeLayout itemBloglistTopRl;
+        @Bind(R.id.item_bloglist_highly_tx)
+        TextView itemBloglistHighlyTx;
         @Bind(R.id.item_bloglist_title_tx)
         TextView itemBloglistTitleTx;
         @Bind(R.id.item_bloglist_content_tx)
@@ -329,18 +357,14 @@ public class MyCollectionListAdapter extends BaseAdapter {
         TextView itemBloglistBrowseTx;
         @Bind(R.id.item_bloglist_browse_ll)
         LinearLayout itemBloglistBrowseLl;
-        @Bind(R.id.item_bloglist_vip_tx)
-        TextView itemBloglistVipTx;
-        @Bind(R.id.item_bloglist_svip_iv)
-        ImageView itemBloglistSvipIv;
-        @Bind(R.id.item_bloglist_highly_tx)
-        TextView itemBloglistHighlyTx;
+        @Bind(R.id.item_bloglist_collectionimg_tx)
+        TextView itemBloglistCollectionimgTx;
         @Bind(R.id.item_bloglist_collection_tx)
         TextView itemBloglistCollectionTx;
-        @Bind(R.id.item_bloglist_collectionimg_tx)
-        TextView itemBloglistCollectionImgTx;
         @Bind(R.id.item_bloglist_collection_ll)
         LinearLayout itemBloglistCollectionLl;
+        @Bind(R.id.item_bloglist_commentimg_tx)
+        TextView itemBloglistCommentimgTx;
         @Bind(R.id.item_bloglist_comment_tx)
         TextView itemBloglistCommentTx;
         @Bind(R.id.item_bloglist_comment_ll)

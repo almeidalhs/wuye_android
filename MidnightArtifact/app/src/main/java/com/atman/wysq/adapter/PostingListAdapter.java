@@ -20,7 +20,6 @@ import com.atman.wysq.utils.MyTools;
 import com.atman.wysq.widget.face.SmileUtils;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.CustomImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -87,11 +86,11 @@ public class PostingListAdapter extends BaseAdapter {
     }
 
     public int addBrowse(int num) {
-        int p=0;
+        int p = 0;
         for (int i = 0; i < shop.size(); i++) {
             if (num == shop.get(i).getBlog_id()) {
                 shop.get(i).setView_count(shop.get(i).getView_count() + 1);
-                p=i;
+                p = i;
             }
         }
         return p;
@@ -107,22 +106,34 @@ public class PostingListAdapter extends BaseAdapter {
             num = 0;
         }
         if (posi >= visibleFirstPosi && posi <= visibleLastPosi) {
-            View view = listView.getChildAt(posi - visibleFirstPosi+num);
+            View view = listView.getChildAt(posi - visibleFirstPosi + num);
             ViewHolder holder = (ViewHolder) view.getTag();
 
-            if (holder==null) {
+            if (holder == null) {
                 return;
             }
-            holder.itemBloglistBrowseTx.setText(shop.get(posi).getView_count()+"");
+            holder.itemBloglistBrowseTx.setText(shop.get(posi).getView_count() + "");
             Drawable drawable = null;
             if (shop.get(posi).getFavorite_id() > 0) {
                 drawable = context.getResources().getDrawable(R.mipmap.square_like_press);
+                holder.itemBloglistCollectionimgTx.setTextColor(context.getResources().getColor(R.color.color_fda7a7));
             } else {
                 drawable = context.getResources().getDrawable(R.mipmap.square_like_default);
+                holder.itemBloglistCollectionimgTx.setTextColor(context.getResources().getColor(R.color.color_787878));
             }
             /// 这一步必须要做,否则不会显示.
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             holder.itemBloglistCollectionimgTx.setCompoundDrawables(drawable, null, null, null);
+            if (shop.get(posi).getReplay_flag() == 1) {
+                drawable = context.getResources().getDrawable(R.mipmap.square_comment_press);
+                holder.itemBloglistCommentimgTx.setTextColor(context.getResources().getColor(R.color.color_fed676));
+            } else {
+                drawable = context.getResources().getDrawable(R.mipmap.square_comment);
+                holder.itemBloglistCommentimgTx.setTextColor(context.getResources().getColor(R.color.color_787878));
+            }
+            /// 这一步必须要做,否则不会显示.
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            holder.itemBloglistCommentimgTx.setCompoundDrawables(drawable, null, null, null);
         }
     }
 
@@ -184,7 +195,7 @@ public class PostingListAdapter extends BaseAdapter {
                 holder.itemBloglistVerifyImg.setVisibility(View.GONE);
                 holder.itemBloglistGenderImg.setVisibility(View.VISIBLE);
             }
-            if (shop.get(position).getVip_level()>=3) {
+            if (shop.get(position).getVip_level() >= 3) {
                 holder.itemBloglistNameTx.setTextColor(context.getResources().getColor(R.color.color_red));
             } else {
                 holder.itemBloglistNameTx.setTextColor(context.getResources().getColor(R.color.color_333333));
@@ -211,12 +222,24 @@ public class PostingListAdapter extends BaseAdapter {
         Drawable drawable = null;
         if (mBodyEntity.getFavorite_id() > 0) {
             drawable = context.getResources().getDrawable(R.mipmap.square_like_press);
+            holder.itemBloglistCollectionimgTx.setTextColor(context.getResources().getColor(R.color.color_fda7a7));
         } else {
             drawable = context.getResources().getDrawable(R.mipmap.square_like_default);
+            holder.itemBloglistCollectionimgTx.setTextColor(context.getResources().getColor(R.color.color_787878));
         }
         /// 这一步必须要做,否则不会显示.
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         holder.itemBloglistCollectionimgTx.setCompoundDrawables(drawable, null, null, null);
+        if (mBodyEntity.getReplay_flag() == 1) {
+            drawable = context.getResources().getDrawable(R.mipmap.square_comment_press);
+            holder.itemBloglistCommentimgTx.setTextColor(context.getResources().getColor(R.color.color_fed676));
+        } else {
+            drawable = context.getResources().getDrawable(R.mipmap.square_comment);
+            holder.itemBloglistCommentimgTx.setTextColor(context.getResources().getColor(R.color.color_787878));
+        }
+        /// 这一步必须要做,否则不会显示.
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        holder.itemBloglistCommentimgTx.setCompoundDrawables(drawable, null, null, null);
 
         if (mBodyEntity.getSex().equals("M")) {
             holder.itemBloglistGenderImg.setImageResource(R.mipmap.personal_man_ic);
@@ -346,6 +369,8 @@ public class PostingListAdapter extends BaseAdapter {
         TextView itemBloglistCollectionTx;
         @Bind(R.id.item_bloglist_collection_ll)
         LinearLayout itemBloglistCollectionLl;
+        @Bind(R.id.item_bloglist_commentimg_tx)
+        TextView itemBloglistCommentimgTx;
         @Bind(R.id.item_bloglist_comment_tx)
         TextView itemBloglistCommentTx;
         @Bind(R.id.item_bloglist_comment_ll)
