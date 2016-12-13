@@ -28,7 +28,7 @@ public class GiftMessageModel {
     private String center_user_name;
     private String center_user_avatar;
     private long center_time;
-    private List<?> addvalue;
+    private List<String> addvalue;
 
     public String getWYNotice() {
         return WYNotice;
@@ -102,11 +102,11 @@ public class GiftMessageModel {
         this.center_time = center_time;
     }
 
-    public List<?> getAddvalue() {
+    public List<String> getAddvalue() {
         return addvalue;
     }
 
-    public void setAddvalue(List<?> addvalue) {
+    public void setAddvalue(List<String> addvalue) {
         this.addvalue = addvalue;
     }
 }

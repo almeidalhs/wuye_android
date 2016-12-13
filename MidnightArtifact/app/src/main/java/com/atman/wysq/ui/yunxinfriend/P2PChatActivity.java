@@ -37,6 +37,7 @@ import com.atman.wysq.model.request.SeedMessageModel;
 import com.atman.wysq.model.request.SeedMessagePayModel;
 import com.atman.wysq.model.response.ChatAudioModel;
 import com.atman.wysq.model.response.GetMessageModel;
+import com.atman.wysq.model.response.IsBalckModel;
 import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
@@ -153,6 +154,8 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
     private String mUuid;
     private String mText;
 
+    private boolean mIsBalck = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -268,14 +271,24 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (mIsBalck) {
+                        showWraning("你已被对方加入黑名单");
+                        return true;
+                    }
                     touched = true;
                     initAudioRecord();
                     onStartAudioRecord();
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL
                         || event.getAction() == MotionEvent.ACTION_UP) {
+                    if (mIsBalck) {
+                        return true;
+                    }
                     touched = false;
                     onEndAudioRecord(isCancelled(v, event));
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (mIsBalck) {
+                        return true;
+                    }
                     touched = false;
                     cancelAudioRecord(isCancelled(v, event));
                 }
@@ -576,6 +589,16 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        MyBaseApplication.mLocationID = id;
+        OkHttpUtils.get().url(Common.Url_IsTaBalck + "/" + id)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .tag(Common.NET_ISTABALCK_ID).id(Common.NET_ISTABALCK_ID).build()
+                .execute(new MyStringCallback(mContext, this, true));
+    }
+
+    @Override
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
     }
@@ -585,6 +608,11 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
         super.onStringResponse(data, response, id);
         if (id == Common.NET_SEEDMESSAGE_PAY) {
             isPay(true);
+        } else if (id == Common.NET_ISTABALCK_ID) {
+            IsBalckModel mIsBalckModel = mGson.fromJson(data, IsBalckModel.class);
+            if (mIsBalckModel.getBody()==1) {
+                mIsBalck = true;
+            }
         }
     }
 
@@ -606,7 +634,9 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MyBaseApplication.mLocationID = "0";
         OkHttpUtils.getInstance().cancelTag(Common.NET_SEEDMESSAGE_PAY);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ISTABALCK_ID);
         ReceiveMessageObserver(false);
         initSeedResult(false);
     }
@@ -695,6 +725,10 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
 
                     return;
                 }
+                if (mIsBalck) {
+                    showWraning("你已被对方加入黑名单");
+                    return;
+                }
                 // 创建文本消息
                 IMMessage message = MessageBuilder.createTextMessage(id, SessionTypeEnum.P2P
                         , blogdetailAddcommentEt.getText().toString());
@@ -726,6 +760,10 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
                 if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
                     return;
                 }
+                if (mIsBalck) {
+                    showWraning("你已被对方加入黑名单");
+                    return;
+                }
                 GuessAttachment attachment = new GuessAttachment();
 //                IMMessage CustomMessage = MessageBuilder.createCustomMessage(id, SessionTypeEnum.P2P, attachment.getValue().getDesc(), attachment);
                 IMMessage messageF = MessageBuilder.createTextMessage(id, SessionTypeEnum.P2P, blogdetailAddcommentEt.getText().toString());
@@ -746,6 +784,7 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
         if (player!=null) {
             player.stop();
         }
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 
     private void seedMessage(IMMessage message, int contentType, String contentImageSUrl, String contentFinger, boolean isGiftMessage) {
@@ -938,6 +977,10 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
             mUuid = message.getUuid();
             seedMessage(message, ContentTypeInter.contentTypeImageSmall, file.getPath(), "", true);
         } else {
+            if (mIsBalck) {
+                showWraning("你已被对方加入黑名单");
+                return;
+            }
             if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
                 imageUri = data.getData();
             } else if (requestCode == TAKE_BIG_PICTURE) {

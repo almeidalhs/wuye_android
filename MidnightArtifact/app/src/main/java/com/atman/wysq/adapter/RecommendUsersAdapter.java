@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -34,6 +35,7 @@ public class RecommendUsersAdapter extends BaseAdapter {
     private ViewHolder holder;
     protected LayoutInflater layoutInflater;
     private List<RecommendUserModel.BodyBean> body;
+    private AbsListView.LayoutParams layoutParamsRl;
     private RelativeLayout.LayoutParams layoutParams;
 
     public RecommendUsersAdapter(Context context, int wight) {
@@ -42,6 +44,8 @@ public class RecommendUsersAdapter extends BaseAdapter {
         this.body = new ArrayList<>();
         float dis = context.getResources().getDimension(R.dimen.dimen_dp_5);
         int w = wight / 2 - DensityUtil.dp2px(context, (int) dis);
+        layoutParamsRl = new AbsListView.LayoutParams(w
+                , w * 320 / 200);
         layoutParams = new RelativeLayout.LayoutParams(w
                 , w * 320 / 200);
     }
@@ -78,7 +82,7 @@ public class RecommendUsersAdapter extends BaseAdapter {
 
         RecommendUserModel.BodyBean temp = body.get(position);
 
-        holder.itemRecommenduserRootRl.setLayoutParams(layoutParams);
+        holder.itemRecommenduserRootRl.setLayoutParams(layoutParamsRl);
         holder.itemRecommenduserNumTv.setText(" " + temp.getChat_count());
         holder.itemRecommenduserNameTx.setText(temp.getNick_name());
         holder.itemRecommenduserIv.setLayoutParams(layoutParams);

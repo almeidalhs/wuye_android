@@ -12,35 +12,27 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.atman.wysq.R;
-import com.atman.wysq.model.bean.ImMessage;
-import com.atman.wysq.model.bean.ImSession;
 import com.atman.wysq.model.bean.TouChuanGiftNotice;
 import com.atman.wysq.model.bean.TouChuanOtherNotice;
 import com.atman.wysq.model.event.YunXinAddFriendEvent;
-import com.atman.wysq.model.response.GiftMessageModel;
-import com.base.baselibs.net.YunXinAuthOutEvent;
 import com.atman.wysq.model.event.YunXinMessageEvent;
 import com.atman.wysq.model.greendao.gen.DaoMaster;
 import com.atman.wysq.model.greendao.gen.DaoSession;
-import com.atman.wysq.model.greendao.gen.ImSessionDao;
 import com.atman.wysq.model.greendao.gen.TouChuanOtherNoticeDao;
-import com.atman.wysq.model.response.ChatAudioModel;
 import com.atman.wysq.model.response.ConfigModel;
 import com.atman.wysq.model.response.GetGoldenRoleModel;
-import com.atman.wysq.model.response.GetMessageModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.ui.MainActivity;
+import com.atman.wysq.ui.receiver.RootMessageObserver;
 import com.atman.wysq.yunxin.DemoCache;
-import com.atman.wysq.yunxin.model.ContentTypeInter;
 import com.atman.wysq.yunxin.utils.SystemUtil;
 import com.base.baselibs.base.BaseApplication;
+import com.base.baselibs.net.YunXinAuthOutEvent;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PhoneInfo;
 import com.base.baselibs.util.PreferenceUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -49,7 +41,6 @@ import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
@@ -106,6 +97,7 @@ public class MyBaseApplication extends BaseApplication {
     public static String mDownLoad_URL = "";
     public static String kPrivateChatCost = "";
     public static String mHEAD_URL = "";
+    public static String mLocationID = "0";
     public int mLOGIN_STATUS = 0;//0:登录中，1：登录成功，2：登录失败
     public static int mUserCion = 0;
     public static List<ConfigModel.ShopEntity> mShop ;
@@ -252,192 +244,6 @@ public class MyBaseApplication extends BaseApplication {
         }, b);
     }
 
-    String nick = "";
-    String sex = "F";
-    String icon = "";
-    String verify_status = "0";
-    Observer<List<IMMessage>> rootMessageObserver = new Observer<List<IMMessage>>() {
-        @Override
-        public void onEvent(List<IMMessage> messages) {
-            // 处理新收到的消息，为了上传处理方便，SDK 保证参数 messages 全部来自同一个聊天对象。
-            LogUtils.e("messages.size():"+messages.size());
-            for (int i=0;i<messages.size();i++) {
-                try {
-                    LogUtils.e("messages.get(i).getContent():"+messages.get(i).getContent());
-                    GiftMessageModel mGiftMessageModel = new Gson().fromJson(messages.get(i).getContent(), GiftMessageModel.class);
-                    if (mGiftMessageModel!=null && mGiftMessageModel.getType()==1) {//礼物通知
-                        if (mGiftMessageModel.getCenter_user_name()==null || String.valueOf(mGiftMessageModel.getCenter_user_id())
-                                .equals(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID))) {
-                            continue;
-                        }
-                        TouChuanOtherNotice mTouChuanOtherNotice = new TouChuanOtherNotice();
-                        mTouChuanOtherNotice.setReceive_userId(Long.valueOf(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID)));
-                        mTouChuanOtherNotice.setSend_userId(mGiftMessageModel.getCenter_user_id());
-                        mTouChuanOtherNotice.setSend_nickName(mGiftMessageModel.getCenter_user_name());
-                        mTouChuanOtherNotice.setGiftMessage(mGiftMessageModel.getCenter_content());
-                        mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
-                        mTouChuanOtherNotice.setNoticeType(8);
-                        getDaoSession().getTouChuanOtherNoticeDao().insert(mTouChuanOtherNotice);
-                    } else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==4) {//帖子回复
-                        if (mGiftMessageModel.getCenter_user_name()==null || String.valueOf(mGiftMessageModel.getCenter_user_id())
-                                .equals(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID))) {
-                            continue;
-                        }
-                        TouChuanOtherNotice mTouChuanOtherNotice = new TouChuanOtherNotice();
-                        mTouChuanOtherNotice.setReceive_userId(Long.valueOf(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID)));
-                        mTouChuanOtherNotice.setSend_userId(mGiftMessageModel.getCenter_user_id());
-                        mTouChuanOtherNotice.setSend_nickName(mGiftMessageModel.getCenter_user_name());
-                        mTouChuanOtherNotice.setGiftMessage(mGiftMessageModel.getCenter_content());
-                        mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
-                        mTouChuanOtherNotice.setNoticeType(4);
-                        getDaoSession().getTouChuanOtherNoticeDao().insert(mTouChuanOtherNotice);
-                    } else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==3) {//注册打招呼
-                        if (mGiftMessageModel.getCenter_user_name()==null || String.valueOf(mGiftMessageModel.getCenter_user_id())
-                                .equals(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID))) {
-                            continue;
-                        }
-                        TouChuanOtherNotice mTouChuanOtherNotice = new TouChuanOtherNotice();
-                        mTouChuanOtherNotice.setReceive_userId(Long.valueOf(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID)));
-                        mTouChuanOtherNotice.setSend_userId(mGiftMessageModel.getCenter_user_id());
-                        mTouChuanOtherNotice.setSend_nickName(mGiftMessageModel.getCenter_user_name());
-                        mTouChuanOtherNotice.setGiftMessage(mGiftMessageModel.getCenter_content());
-                        mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
-                        mTouChuanOtherNotice.setNoticeType(3);
-                        getDaoSession().getTouChuanOtherNoticeDao().insert(mTouChuanOtherNotice);
-                    }  else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==20030) {//踢下线
-                        logout();
-                    }
-                    EventBus.getDefault().post(new YunXinAddFriendEvent());
-                } catch (JsonSyntaxException e){
-                    LogUtils.e("e:"+e.toString());
-                }
-
-                if (messages.get(i).getRemoteExtension()!=null && messages.get(i).getRemoteExtension().get("extra")!=null) {
-                    ImMessage temp = null;
-                    boolean isMy = false;
-                    if (messages.get(i).getFromAccount().equals(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID))) {
-                        isMy = true;
-                    }
-                    String data = new Gson().toJson(messages.get(i).getRemoteExtension().get("extra"));
-                    data = data.replace("\\","").replace("u003d",":").replace("u0027","\"").replace("\"{","{").replace("}\"","}")
-                            .replace("\"contentFinger\":\"\"","\"contentFinger\":0").replace("\"fingerValue\":\"\"","\"fingerValue\":0");
-                    GetMessageModel mGetMessageModel = null;
-                    LogUtils.e("data:"+data);
-                    try {
-                        mGetMessageModel = new Gson().fromJson(data, GetMessageModel.class);
-                    } catch (JsonSyntaxException e){
-                        LogUtils.e(">>>>>e:"+e.toString());
-                    }
-                    if (mGetMessageModel == null) {
-                        continue;
-                    }
-                    int messageType = mGetMessageModel.getContentType();
-                    if (messageType == ContentTypeInter.contentTypeText) {
-                        temp = new ImMessage(null, messages.get(i).getUuid()
-                                , PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID), messages.get(i).getSessionId()
-                                , messages.get(i).getFromAccount(), mGetMessageModel.getSendUser().getNickName()
-                                , mGetMessageModel.getSendUser().getIcon(), mGetMessageModel.getSendUser().getSex()
-                                , mGetMessageModel.getSendUser().getVerify_status()
-                                , isMy, messages.get(i).getTime(), messageType
-                                , messages.get(i).getContent(), "", "", "", "", "", "", "", "", 0, 0, false, 1);
-                    } else if (messageType == ContentTypeInter.contentTypeImage) {
-                        temp = new ImMessage(null, messages.get(i).getUuid()
-                                , PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID), messages.get(i).getSessionId()
-                                , messages.get(i).getFromAccount(), mGetMessageModel.getSendUser().getNickName()
-                                , mGetMessageModel.getSendUser().getIcon(), mGetMessageModel.getSendUser().getSex()
-                                , mGetMessageModel.getSendUser().getVerify_status()
-                                , isMy, messages.get(i).getTime(), messageType
-                                , "[图片]", ((FileAttachment)messages.get(i).getAttachment()).getPathForSave()
-                                , ((FileAttachment)messages.get(i).getAttachment()).getUrl()
-                                , ((FileAttachment)messages.get(i).getAttachment()).getThumbPathForSave(), "", "", "", "", "", 0, 0, false, 1);
-                        if (isOriginImageHasDownloaded(messages.get(i))) {
-                            AbortableFuture future = NIMClient.getService(MsgService.class).downloadAttachment(messages.get(i), true);
-                            future.setCallback(callback);
-                        }
-                    } else if (messageType == ContentTypeInter.contentTypeFinger) {
-                        String contentFinger = String.valueOf(mGetMessageModel.getContentFinger());
-                        int fingerValue = 1;
-                        String str = "[石头]";
-                        if (contentFinger.equals("2")) {
-                            str = "[剪刀]";
-                            fingerValue = 2;
-                        } else if (contentFinger.equals("3")) {
-                            str = "[布]";
-                            fingerValue = 3;
-                        }
-                        temp = new ImMessage(null, messages.get(i).getUuid()
-                                , PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID), messages.get(i).getSessionId()
-                                , messages.get(i).getFromAccount(), mGetMessageModel.getSendUser().getNickName()
-                                , mGetMessageModel.getSendUser().getIcon(), mGetMessageModel.getSendUser().getSex()
-                                , mGetMessageModel.getSendUser().getVerify_status()
-                                , isMy, messages.get(i).getTime(), messageType
-                                , str, "", "", "", "", "", "", "", "", 0, fingerValue, false, 1);
-                    } else if (messageType == ContentTypeInter.contentTypeAudio) {
-                        ChatAudioModel mChatAudioModel = new Gson().fromJson(messages.get(i).getAttachment().toJson(true), ChatAudioModel.class);
-                        temp = new ImMessage(null, messages.get(i).getUuid()
-                                , PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID), messages.get(i).getSessionId()
-                                , messages.get(i).getFromAccount(), mGetMessageModel.getSendUser().getNickName()
-                                , mGetMessageModel.getSendUser().getIcon(), mGetMessageModel.getSendUser().getSex()
-                                , mGetMessageModel.getSendUser().getVerify_status()
-                                , isMy, messages.get(i).getTime(), messageType
-                                , "[语音]", "", "", "", "", "", "",
-                                ((FileAttachment)messages.get(i).getAttachment()).getPathForSave()
-                                , ((FileAttachment)messages.get(i).getAttachment()).getUrl(), mChatAudioModel.getDur(), 0, false, 1);
-                    } else if (messageType == ContentTypeInter.contentTypeImageSmall) {
-                        String url = "";
-                        if (mGetMessageModel.getContentImageSUrl().contains("http:")) {
-                            url = mGetMessageModel.getContentImageSUrl();
-                        } else {
-                            url = ((FileAttachment)messages.get(i).getAttachment()).getUrl();
-                        }
-                        temp = new ImMessage(null, messages.get(i).getUuid()
-                                , PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID), messages.get(i).getSessionId()
-                                , messages.get(i).getFromAccount(), mGetMessageModel.getSendUser().getNickName()
-                                , mGetMessageModel.getSendUser().getIcon(), mGetMessageModel.getSendUser().getSex()
-                                , mGetMessageModel.getSendUser().getVerify_status()
-                                , isMy, messages.get(i).getTime(), messageType
-                                , "[图片]", "", "", "", url
-                                , url
-                                , url, "", "", 0, 0, false, 1);
-                        if (isOriginImageHasDownloaded(messages.get(i))) {
-                            AbortableFuture future = NIMClient.getService(MsgService.class).downloadAttachment(messages.get(i), true);
-                            future.setCallback(callback);
-                        }
-                    }
-                    if (!messages.get(i).getSessionId().equals(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID))) {
-                        mDaoSession.getImMessageDao().insertOrReplace(temp);
-
-                        ImSession mImSession = mDaoSession.getImSessionDao().queryBuilder().where(ImSessionDao.Properties.UserId.eq(messages.get(i).getSessionId())
-                                , ImSessionDao.Properties.LoginUserId.eq(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID))).build().unique();
-                        if (!messages.get(i).getFromAccount().equals(String.valueOf(
-                                PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID)))) {
-                            nick = mGetMessageModel.getSendUser().getNickName();
-                            sex = mGetMessageModel.getSendUser().getSex();
-                            icon = mGetMessageModel.getSendUser().getIcon();
-                            verify_status = String.valueOf(mGetMessageModel.getSendUser().getVerify_status());
-                        }
-                        if (mImSession==null) {
-                            ImSession mImSessionTemp = new ImSession(messages.get(i).getSessionId()
-                                    , PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID), temp.getContent()
-                                    , nick, icon, sex, Integer.parseInt(verify_status), System.currentTimeMillis(), 1);
-                            mDaoSession.getImSessionDao().insertOrReplace(mImSessionTemp);
-                        } else {
-                            mImSession.setContent(temp.getContent());
-                            mImSession.setNickName(nick);
-                            mImSession.setSex(sex);
-                            mImSession.setIcon(icon);
-                            mImSession.setVerify_status(Integer.parseInt(verify_status));
-                            mImSession.setTime(System.currentTimeMillis());
-                            mImSession.setUnreadNum(mImSession.getUnreadNum()+1);
-                            mDaoSession.getImSessionDao().update(mImSession);
-                        }
-                    }
-                }
-            }
-            EventBus.getDefault().post(new YunXinMessageEvent());
-        }
-    };
-
     public boolean isOriginImageHasDownloaded(final IMMessage message) {
         if (message.getAttachStatus() == AttachStatusEnum.transferred &&
                 !TextUtils.isEmpty(((FileAttachment) message.getAttachment()).getPath())) {
@@ -466,7 +272,7 @@ public class MyBaseApplication extends BaseApplication {
     };
 
     public void ReceiveMessageObserver(boolean b) {
-        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(rootMessageObserver, b);
+        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(new RootMessageObserver(this), b);
     }
 
     public boolean inMainProcess() {
@@ -482,14 +288,14 @@ public class MyBaseApplication extends BaseApplication {
         // 如果将新消息通知提醒托管给 SDK 完成，需要添加以下配置。否则无需设置。
         StatusBarNotificationConfig config = new StatusBarNotificationConfig();
         config.notificationEntrance = MainActivity.class; // 点击通知栏跳转到该Activity
-        config.notificationSmallIconId = R.mipmap.ic_launcher;
+        config.notificationSmallIconId = R.drawable.ic_app;
         // 呼吸灯配置
         config.ledARGB = Color.GREEN;
         config.ledOnMs = 1000;
         config.ledOffMs = 1500;
         // 通知铃声的uri字符串
         config.notificationSound = "android.resource://com.netease.nim.demo/raw/msg";
-        options.statusBarNotificationConfig = config;
+//        options.statusBarNotificationConfig = config;
 
         // 配置保存图片，文件，log 等数据的目录
         // 如果 options 中没有设置这个值，SDK 会使用下面代码示例中的位置作为 SDK 的数据目录。
@@ -796,7 +602,7 @@ public class MyBaseApplication extends BaseApplication {
                 }, b);
     }
 
-    private void logout() {
+    public void logout() {
         // 被踢出、账号被禁用、密码错误等情况，自动登录失败，需要返回到登录界面进行重新登录操作
         cleanLoginData();
         EventBus.getDefault().post(new YunXinAuthOutEvent());

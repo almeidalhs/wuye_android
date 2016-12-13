@@ -116,20 +116,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:background="#F0A7A0"
+                android:orientation="vertical"
                 android:layout_marginBottom="@dimen/dimen_dp_10"
                 android:layout_marginTop="@dimen/dimen_dp_10">
 
-                <at.technikum.mti.fancycoverflow.FancyCoverFlow
-                    android:id="@+id/findFlow"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/discover_find_rv"
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
-                    android:spacing="@dimen/dimen_dp_5"
-                    fcf:maxRotation="0"
-                    fcf:mySpacing="@dimen/dimen_dp_5"
-                    fcf:scaleDownGravity="0.0"
-                    fcf:unselectedAlpha="1.0"
-                    fcf:unselectedSaturation="2.0"
-                    fcf:unselectedScale="0.4" />
+                    android:background="#F0A7A0"
+                    android:layout_centerVertical="true"
+                    android:scrollbars="none" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

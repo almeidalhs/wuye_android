@@ -164,7 +164,7 @@ public class MessageSessionListAdapter extends BaseAdapter {
         @Bind(R.id.item_session_gender_iv)
         ImageView itemSessionGenderIv;
         @Bind(R.id.item_session_verify_img)
-        CustomImageView itemSessionVerifyImg;
+        ImageView itemSessionVerifyImg;
         @Bind(R.id.item_session_head_rl)
         RelativeLayout itemSessionHeadRl;
         @Bind(R.id.item_session_unread_tx)

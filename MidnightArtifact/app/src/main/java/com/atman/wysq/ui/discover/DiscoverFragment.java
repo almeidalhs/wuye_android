@@ -2,17 +2,18 @@ package com.atman.wysq.ui.discover;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.adapter.FindLikeAdapter;
 import com.atman.wysq.adapter.FindTopAdapter;
+import com.atman.wysq.adapter.GalleryAdapter;
 import com.atman.wysq.iimp.SpAdapterInterface;
 import com.atman.wysq.model.response.CharmestRankingModel;
 import com.atman.wysq.model.response.GoldRankingModel;
@@ -21,8 +22,8 @@ import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.base.MyBaseFragment;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
+import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.CustomImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
@@ -46,7 +47,7 @@ import okhttp3.Response;
  * 电话 18578909061
  */
 public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterface
-        , View.OnClickListener {
+        , View.OnClickListener, AdapterInterface {
 
     @Bind(R.id.fragment_bar_title_iv)
     ImageView fragmentBarTitleIv;
@@ -112,15 +113,15 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
     TextView itemGoldThreeNameTv;
     @Bind(R.id.item_gold_three_ll)
     LinearLayout itemGoldThreeLl;
-    @Bind(R.id.findFlow)
-    FancyCoverFlow findFlow;
+    @Bind(R.id.discover_find_rv)
+    RecyclerView discoverFindRv;
 
     private boolean isError = true;
     private int mPosition;
     private RecommendUserModel mRecommendUserModel;
     private RecommendUserModel mFindLikeModel;
     private FindTopAdapter topAdapter;
-    private FindLikeAdapter likeAdapter;
+    private GalleryAdapter adapter;
 
     private CharmestRankingModel mCharmestRankingModel;
     private GoldRankingModel mGoldRankingModel;
@@ -206,22 +207,27 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
     }
 
     private void initLike() {
-        likeAdapter = new FindLikeAdapter(getActivity(), mFindLikeModel, 2, this);
-        findFlow.setAdapter(likeAdapter);
-        findFlow.setScend(true);
-        if (mFindLikeModel != null && mFindLikeModel.getBody().size()>1) {
-            int num = Math.min(1, mFindLikeModel.getBody().size());
-            findFlow.setSelection(num);
-        }
-        findFlow.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        adapter = new GalleryAdapter(getActivity(), mFindLikeModel.getBody(), this);
+        //设置布局管理器
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        discoverFindRv.setLayoutManager(linearLayoutManager);
+        //设置适配器
+        discoverFindRv.setAdapter(adapter);
+        discoverFindRv.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                LogUtils.e("position"+position);
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int position = linearLayoutManager.findFirstVisibleItemPosition();
+                if (newState==0) {
+                    adapter.setSlecteID(position+1);
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
             }
         });
     }
@@ -232,7 +238,7 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
         fancyCoverFlow.setAdapter(topAdapter);
         fancyCoverFlow.setScend(false);
         fancyCoverFlow.setSelection(mRecommendUserModel.getBody().size() / 2
-                + mRecommendUserModel.getBody().size()*10000 - 1);
+                + mRecommendUserModel.getBody().size() * 10000 - 1);
     }
 
     @Override
@@ -271,7 +277,7 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .tag(Common.NET_GET_RECOMMENDFRIENDS).id(Common.NET_GET_RECOMMENDFRIENDS).build()
                         .execute(new MyStringCallback(getActivity(), this, true));
-                OkHttpUtils.get().url(Common.Url_Get_RecommendFriends+"/2")
+                OkHttpUtils.get().url(Common.Url_Get_RecommendFriends + "/2")
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .tag(Common.NET_GET_FINDLIKE_ID).id(Common.NET_GET_FINDLIKE_ID).build()
                         .execute(new MyStringCallback(getActivity(), this, true));
@@ -294,7 +300,7 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
             CharmestRankingModel.BodyBean body = null;
             int n = 3;
             n = Math.min(n, mCharmestRankingModel.getBody().size());
-            if (itemCharmestLl.size()!=0) {
+            if (itemCharmestLl.size() != 0) {
                 for (int i = 0; i < n; i++) {
                     itemCharmestLl.get(i).setVisibility(View.VISIBLE);
                     body = mCharmestRankingModel.getBody().get(i);
@@ -321,7 +327,7 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
             GoldRankingModel.BodyBean body = null;
             int n = 3;
             n = Math.min(n, mGoldRankingModel.getBody().size());
-            if (itemGoldLl.size()!=0) {
+            if (itemGoldLl.size() != 0) {
                 for (int i = 0; i < n; i++) {
                     itemGoldLl.get(i).setVisibility(View.VISIBLE);
                     body = mGoldRankingModel.getBody().get(i);
@@ -381,6 +387,7 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
                 startActivity(new Intent(getActivity(), AllRankingListActivity.class));
                 break;
             case R.id.discover_fm_rl:
+                showWraning("此功能还在开发中，敬请期待！");
                 break;
             case R.id.discover_find_rl:
                 startActivity(new Intent(getActivity(), RecommendUsersActivity.class));
@@ -424,10 +431,12 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
                     fancyCoverFlow.setSelection(position, true);
                 }
                 break;
-            case 2:
-                startActivity(OtherPersonalActivity.buildIntent(getActivity()
-                        , likeAdapter.getItem(position).getUser_id()));
-                break;
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        startActivity(OtherPersonalActivity.buildIntent(getActivity()
+                , adapter.getItem(position).getUser_id()));
     }
 }

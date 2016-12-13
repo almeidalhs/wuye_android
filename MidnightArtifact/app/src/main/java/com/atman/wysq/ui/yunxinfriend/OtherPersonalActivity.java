@@ -273,13 +273,13 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
     private void setViewFelation(int userFelation) {
         if (userFelation==1) {
             otherpersonalRelationshipBt.setText("取消关注");
-            otherpersonalRelationshipTv.setText("关注");
+            otherpersonalRelationshipTv.setText("已关注");
         } else if (userFelation==3) {
             otherpersonalRelationshipBt.setText("取消关注");
             otherpersonalRelationshipTv.setText("互相关注");
-        }else {
+        }else if (userFelation==2) {
             otherpersonalRelationshipBt.setText("关注");
-            otherpersonalRelationshipTv.setText("陌生人");
+            otherpersonalRelationshipTv.setText("粉丝");
         }
     }
 
@@ -625,10 +625,6 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
                 if (which == 0) {//举报
                     startActivity(ReportActivity.buildIntent(mContext, id, 1));
                 } else if (which == 1) {//把TA加入黑名单
-                    if (MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUser_id() == id) {
-                        showToast("不能将自己加入黑名单");
-                        return;
-                    }
                     if (mGetMyUserIndexModel.getBody().getIsBlack()==1) {
                         OkHttpUtils.postString()
                                 .url(Common.Url_Cancel_BlackList + id)
