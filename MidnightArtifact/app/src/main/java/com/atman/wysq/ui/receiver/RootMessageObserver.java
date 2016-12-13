@@ -91,7 +91,9 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                                 content += mGiftMessageModel.getAddvalue().get(x);
                             }
                         }
-                        Toast.makeText(context, content, Toast.LENGTH_LONG).show();
+                        if (!content.contains("您发送了一条私信")) {
+                            Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
+                        }
                         return;
                     } else {
                         content = mGiftMessageModel.getCenter_user_name() +":" + mGiftMessageModel.getCenter_content();

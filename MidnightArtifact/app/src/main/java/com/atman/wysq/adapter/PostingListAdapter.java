@@ -113,6 +113,7 @@ public class PostingListAdapter extends BaseAdapter {
                 return;
             }
             holder.itemBloglistBrowseTx.setText(shop.get(posi).getView_count() + "");
+            holder.itemBloglistCollectionTx.setText(shop.get(posi).getFavorite_count() + "");
             Drawable drawable = null;
             if (shop.get(posi).getFavorite_id() > 0) {
                 drawable = context.getResources().getDrawable(R.mipmap.square_like_press);
