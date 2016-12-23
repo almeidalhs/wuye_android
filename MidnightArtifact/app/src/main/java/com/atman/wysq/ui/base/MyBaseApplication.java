@@ -302,6 +302,7 @@ public class MyBaseApplication extends BaseApplication {
         // 该目录目前包含 log, file, image, audio, video, thumb 这6个目录。
         // 如果第三方 APP 需要缓存清理功能， 清理这个目录下面个子目录的内容即可。
         String sdkPath = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/nim";
+        LogUtils.e("sdkPath:"+sdkPath);
         options.sdkStorageRootPath = sdkPath;
 
         // 配置是否需要预下载附件缩略图，默认为 true

@@ -249,7 +249,6 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
                         mImSessionDelete = mImSessionDao.queryBuilder().where(ImSessionDao.Properties.UserId.eq(id), ImSessionDao.Properties.LoginUserId.eq(
                                 String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId()))).build().unique();
                         if (mImSessionDelete!=null) {
-                            LogUtils.e("mImSessionDelete");
                             mImSessionDao.delete(mImSessionDelete);
                             EventBus.getDefault().post(new YunXinMessageEvent());
                         }
@@ -527,6 +526,8 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
                                 , "[语音]", "", "", "", "", "", "",
                                 ((FileAttachment)messages.get(i).getAttachment()).getPathForSave()
                                 , ((FileAttachment)messages.get(i).getAttachment()).getUrl(), mChatAudioModel.getDur(), 0, false, 1);
+                        AbortableFuture future = NIMClient.getService(MsgService.class).downloadAttachment(messages.get(i), true);
+                        future.setCallback(callback);
                     } else if (messageType == ContentTypeInter.contentTypeImageSmall) {
                         String url = "";
                         if (mGetMessageModel.getContentImageSUrl().contains("http:")) {
@@ -1056,12 +1057,10 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
 
         @Override
         public void onFailed(int i) {
-
         }
 
         @Override
         public void onException(Throwable throwable) {
-
         }
     };
 

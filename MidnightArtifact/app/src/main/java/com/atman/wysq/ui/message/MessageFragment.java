@@ -220,7 +220,8 @@ public class MessageFragment extends MyBaseFragment implements AdapterInterface{
             temp = new ImSession("0",PreferenceUtil.getPreferences(getActivity(), PreferenceUtil.PARM_USERID)
                     ,str,"通知中心","","",-1,time,num);
             mImSession = mImSessionDao.queryBuilder().where(ImSessionDao.Properties.NickName.notEq(""), ImSessionDao.Properties.LoginUserId.eq(
-                    PreferenceUtil.getPreferences(getActivity(), PreferenceUtil.PARM_USERID))).build().list();
+                    PreferenceUtil.getPreferences(getActivity(), PreferenceUtil.PARM_USERID)))
+                    .orderDesc(ImSessionDao.Properties.Time).build().list();
         } else {
             temp = new ImSession("0",PreferenceUtil.getPreferences(getActivity(), PreferenceUtil.PARM_USERID)
                     ,"暂时还没有通知","通知中心","","",-1,System.currentTimeMillis(),0);
