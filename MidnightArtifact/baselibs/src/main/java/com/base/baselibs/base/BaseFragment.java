@@ -70,7 +70,9 @@ public class BaseFragment extends Fragment implements IInit,PullToRefreshBase.On
     }
 
     public void cancelLoading() {
-        getBaseAppCompatActivity().cancelLoading();
+        if (getBaseAppCompatActivity()!=null) {
+            getBaseAppCompatActivity().cancelLoading();
+        }
     }
 
     public void showToast(String text) {

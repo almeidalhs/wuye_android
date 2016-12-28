@@ -19,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
+import com.atman.wysq.model.request.LoginRequestModel;
+import com.atman.wysq.ui.MainActivity;
 import com.base.baselibs.net.YunXinAuthOutEvent;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.model.response.GetTaskAllModel;
@@ -34,12 +36,15 @@ import com.atman.wysq.ui.yunxinfriend.HisVisitorActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.LogUtils;
+import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.CustomImageView;
 import com.base.baselibs.widget.PromptDialog;
 import com.base.baselibs.widget.RoundImageView;
 import com.base.baselibs.widget.pullzoom.PullZoomScrollVIew;
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
@@ -212,7 +217,8 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         }
     }
 
-    private void hitSetring() {
+    public void hitSetring() {
+        LogUtils.e("hitSetring");
         personalHeadIv.setImageResource(R.mipmap.ic_launcher);
         personalSettingIv.setVisibility(View.INVISIBLE);
         personalGenderIv.setVisibility(View.INVISIBLE);
@@ -268,6 +274,26 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         }
     }
 
+    private void checkLogin() {
+        String us = PreferenceUtil.getPreferences(getActivity(), PreferenceUtil.PARM_US);
+        String pw = PreferenceUtil.getPreferences(getActivity(), PreferenceUtil.PARM_PW);
+        boolean iu = PreferenceUtil.getBoolPreferences(getActivity(), PreferenceUtil.PARM_ISOUT);
+        if (isLogin() && iu) {
+            LoginRequestModel mLoginRequestModel = new LoginRequestModel(us, pw
+                    ,MyBaseApplication.mPhoneDeviceId
+                    ,MyBaseApplication.mDeviceToken,false
+                    ,MyBaseApplication.mVersionName
+                    ,MyBaseApplication.mPhoneModel
+                    ,MyBaseApplication.mChannel);
+            OkHttpUtils.postString()
+                    .url(Common.Url_Login).tag(getActivity()).id(Common.NET_LOGIN_ID)
+                    .content(mGson.toJson(mLoginRequestModel))
+                    .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                    .build().connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
+                    .execute(new MyStringCallback(getActivity(), this, true));
+        }
+    }
+
     @Override
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
@@ -275,6 +301,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             mGetUserIndexModel = mGson.fromJson(data, GetMyUserIndexModel.class);
             MyBaseApplication.mGetMyUserIndexModel = mGetUserIndexModel;
             UpDateUI();
+            checkLogin();
             OkHttpUtils.get().url(Common.Url_Get_Task)
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                     .tag(Common.NET_GET_RASK).id(Common.NET_GET_RASK).build()
@@ -321,6 +348,10 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         } else if (id == Common.NET_VERIFY) {
             showToast("提交成功，请等待审核！");
         } else if (id == Common.NET_GET_RASK) {
+            if (mGson==null) {
+                mGson = new Gson();
+                return;
+            }
             GetTaskAllModel mGetTaskAllModel = mGson.fromJson(data, GetTaskAllModel.class);
             for (int i=0;i<mGetTaskAllModel.getBody().size();i++) {
                 if (mGetTaskAllModel.getBody().get(i).getTask_complete() == 1
@@ -331,19 +362,30 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
                     personalTaskIv.setVisibility(View.INVISIBLE);
                 }
             }
+        } else if (id == Common.NET_LOGIN_ID) {
+            PreferenceUtil.saveBoolPreference(getActivity(), PreferenceUtil.PARM_ISOUT, false);
         }
     }
 
     @Override
     public void onError(Call call, Exception e, int code, int id) {
         super.onError(call, e, code, id);
-        isHead = false;
-        MyBaseApplication.getApplication().setFilterLock(false);
+        if (id == Common.NET_LOGIN_ID) {
+            PreferenceUtil.saveBoolPreference(getActivity(), PreferenceUtil.PARM_ISOUT, false);
+            MyBaseApplication.getApplication().cleanLoginData();
+            hitSetring();
+        } else {
+            isHead = false;
+            MyBaseApplication.getApplication().setFilterLock(false);
+        }
     }
 
     private void UpDateUI() {
         MyBaseApplication.mUserCion = mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin();
         MyBaseApplication.mHEAD_URL = mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon();
+        if (personalSettingIv==null) {
+            return;
+        }
         personalSettingIv.setVisibility(View.VISIBLE);
         personalGenderIv.setVisibility(View.VISIBLE);
 

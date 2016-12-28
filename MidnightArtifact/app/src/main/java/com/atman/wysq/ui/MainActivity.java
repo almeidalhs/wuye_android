@@ -36,6 +36,7 @@ import com.atman.wysq.ui.mall.TwoLevelCategoryListActivity;
 import com.atman.wysq.ui.message.MessageFragment;
 import com.atman.wysq.ui.personal.PersonalFragment;
 import com.atman.wysq.ui.personal.TaskListActivity;
+import com.atman.wysq.ui.receiver.StartReciverSeriver;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.widget.face.FaceConversionUtil;
 import com.base.baselibs.net.MyStringCallback;
@@ -139,6 +140,8 @@ public class MainActivity extends MyBaseActivity {
         OkHttpUtils.get().url(Common.Url_Get_Version + "?version=" + MyBaseApplication.mVersionName.replace("v", ""))
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .id(Common.NET_GET_VERSION).tag(Common.NET_GET_VERSION).build().execute(new MyStringCallback(mContext, this, false));
+
+        startService(new Intent(mContext, StartReciverSeriver.class));
     }
 
     public void countUnReadNum() {

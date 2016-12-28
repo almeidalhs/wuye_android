@@ -39,6 +39,11 @@ public class BaseAppCompatActivity extends SwipeBackActivity
         requestWindowFeature(Window.FEATURE_NO_TITLE);//隐藏bar
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//设置竖屏
+        AppManager.getAppManager().addActivity(this);
+    }
+
+    public void exitApp(){
+        AppManager.getAppManager().AppExit(this);
     }
 
     @Override
@@ -89,6 +94,8 @@ public class BaseAppCompatActivity extends SwipeBackActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // 结束Activity&从堆栈中移除
+        AppManager.getAppManager().finishActivity(this);
     }
 
     @Override

@@ -23,6 +23,7 @@ public class PreferenceUtil {
 	public static final String PARM_GESTURE_PW = "Gesture_PW";
 	public static final String PARM_ISOPEN_GESTURE = "IsOpen_Gesture";
 	public static final String PARM_GESTURE_ERROR = "Gesture_error";
+	public static final String PARM_ISOUT = "isout";
 
 	/**
 	 * a method to save global data
@@ -85,6 +86,9 @@ public class PreferenceUtil {
 	 * @return
 	 */
 	public static String getPreferences(Context context, String param) {
+		if (context==null) {
+			return "";
+		}
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
 		return prefs.getString(param, "");
 	}

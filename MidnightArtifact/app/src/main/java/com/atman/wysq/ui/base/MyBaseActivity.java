@@ -30,10 +30,12 @@ import com.atman.wysq.ui.community.PostActivity;
 import com.atman.wysq.ui.community.PostingsDetailActivity;
 import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.ui.mall.order.ConfirmationOrderActivity;
+import com.atman.wysq.ui.receiver.StartReciverSeriver;
 import com.atman.wysq.ui.yunxinfriend.P2PChatActivity;
 import com.atman.wysq.ui.yunxinfriend.SelectGiftActivity;
 import com.atman.wysq.utils.ScreenObserver;
 import com.atman.wysq.utils.UiHelper;
+import com.atman.wysq.yunxin.utils.SystemUtil;
 import com.base.baselibs.base.BaseAppCompatActivity;
 import com.base.baselibs.net.YunXinAuthOutEvent;
 import com.base.baselibs.util.DensityUtil;
@@ -333,6 +335,15 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+//        if (PreferenceUtil.getBoolPreferences(this,PreferenceUtil.PARM_ISOUT)) {
+//            Intent intent = new Intent(this, SplashActivity.class)
+//                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//            return;
+//        }
+        Intent intent = new Intent();
+        intent.setAction(StartReciverSeriver.ACTION_END);
+        this.sendOrderedBroadcast(intent,null);
 
         if (mShouldLogin) {
             if (!isLogin()) {
@@ -355,6 +366,9 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        Intent intent = new Intent();
+        intent.setAction(StartReciverSeriver.ACTION_START);
+        this.sendOrderedBroadcast(intent,null);
     }
 
     @Override
@@ -467,11 +481,16 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
     public void onUserEvent(YunXinAuthOutEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
         if (!getTopActivity(mAty).equals("") && getTopActivity(mAty).contains(mAty.getLocalClassName())) {
+            LogUtils.e("mAty.getClass().getName():"+mAty.getClass().getName());
             LogoutWarn();
         }
     }
 
+    PromptDialog mPromptDialog;
     public void LogoutWarn() {
+        if (mPromptDialog!=null && mPromptDialog.isShowing()) {
+            return;
+        }
         PromptDialog.Builder builder = new PromptDialog.Builder(mAty);
         builder.setTitle("账号异常");
         builder.setMessage("您的账号已在别处登录，请退出登录，如非您本人操作，请尽快修改您的密码！");
@@ -481,13 +500,14 @@ public class MyBaseActivity extends BaseAppCompatActivity {
                 MyBaseApplication.getApplication().cleanLoginData();
                 dialog.dismiss();
                 if (!(mAty instanceof MainActivity)) {
+                    EventBus.getDefault().unregister(this);
                     startActivity(new Intent(mAty, MainActivity.class));
                     finish();
                 }
             }
         });
         builder.setCancelable(false);
-        builder.show();
+        mPromptDialog = builder.show();
     }
 
 

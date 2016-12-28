@@ -75,6 +75,8 @@
 
         <activity android:name="com.choicepicture_library.ImageGridActivity"/>
 
+        <service android:name=".ui.receiver.StartReciverSeriver"/>
+
         <!--友盟相关-->
         <meta-data android:value="5785ad9c67e58e13f00017c8" android:name="UMENG_APPKEY"/>
         <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>

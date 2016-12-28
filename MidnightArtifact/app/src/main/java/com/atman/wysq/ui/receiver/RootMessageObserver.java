@@ -317,7 +317,10 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
     }
 
     private void showNotification(Bitmap result) {
-        if (content.contains("我正在直播中") || content.contains("您发送了一条私信")) {
+        LogUtils.e("content:"+content);
+        LogUtils.e("nick:"+nick);
+        if (content.isEmpty() || content.equals("") || content.contains("null")
+                || content.contains("我正在直播中") || content.contains("您发送了一条私信")) {
             return;
         }
         if (isScreenOn(context)) {//屏幕亮的
