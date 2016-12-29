@@ -195,6 +195,8 @@ public class Common {
     public static String Url_IsTaBalck = hostUrl + "rest/corruption/isBlack/";
     //获取直播列表
     public static String Url_GetLiveList = hostUrl + "rest/live/list/";
+    //获取我的直播数据
+    public static String Url_GetMyLiveInfo = hostUrl + "rest/live/myroom";
     /**************************http访问路径*****************************/
 
 
@@ -368,6 +370,8 @@ public class Common {
     public static int NET_ISTABALCK_ID = 83;
     //获取直播列表
     public static int NET_GETLIVELIST_ID = 84;
+    //获取我的直播数据
+    public static int NET_GETMYLIVEINFO_ID = 85;
     /**************************http访问回应识别码*****************************/
 
 
