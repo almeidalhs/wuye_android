@@ -387,7 +387,12 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
                 startActivity(new Intent(getActivity(), AllRankingListActivity.class));
                 break;
             case R.id.discover_fm_rl:
-                showWraning("此功能还在开发中，敬请期待！");
+//                showWraning("此功能还在开发中，敬请期待！");
+                if (!isLogin()) {
+                    showLogin();
+                } else {
+                    getActivity().startActivity(new Intent(getActivity(), LiveHallActivity.class));
+                }
                 break;
             case R.id.discover_find_rl:
                 startActivity(new Intent(getActivity(), RecommendUsersActivity.class));

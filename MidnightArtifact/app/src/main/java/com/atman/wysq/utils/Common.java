@@ -193,6 +193,8 @@ public class Common {
     public static String Url_Recharge_Add_Order_Gold = hostUrl + "rest/mall/pay/";
     //判断是否被对方拉黑
     public static String Url_IsTaBalck = hostUrl + "rest/corruption/isBlack/";
+    //获取直播列表
+    public static String Url_GetLiveList = hostUrl + "rest/live/list/";
     /**************************http访问路径*****************************/
 
 
@@ -364,6 +366,8 @@ public class Common {
     public static int NET_RECHARGE_ADD_ORDER_GOLD_ID = 82;
     //判断是否被对方拉黑
     public static int NET_ISTABALCK_ID = 83;
+    //获取直播列表
+    public static int NET_GETLIVELIST_ID = 84;
     /**************************http访问回应识别码*****************************/
 
 
