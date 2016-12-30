@@ -1,8 +1,16 @@
 package com.atman.wysq.ui.discover;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +25,19 @@ import com.atman.wysq.model.response.MyLiveInfoModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.widget.ShowLivePopWindow;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.DensityUtil;
+import com.base.baselibs.util.StringUtils;
+import com.base.baselibs.widget.BottomDialog;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -194,12 +207,90 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.part_livepop_bg_iv:
-                showToast("选择照片");
+                showHeadImg(v);
                 break;
             case R.id.part_livepop_golive_tx:
                 showToast("开始直播");
                 pop.dismiss();
                 break;
         }
+    }
+
+    private Uri imageUri;//The Uri to store the big bitmap
+    private final int CHOOSE_BIG_PICTURE = 444;
+    private final int TAKE_BIG_PICTURE = 555;
+    private final int CROP_BIG_PICTURE = 666;
+    private int outputX = 350;
+    private String path = "";
+    private void showHeadImg(View view) {
+        BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
+//        builder.setTitle(Html.fromHtml("<font color=\"#f9464a\">修改封面图片</font>"));
+        builder.setItems(new String[]{"拍照", "相册选取"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (which == 0) {//拍照
+                    path = UiHelper.photo(mContext, path, TAKE_BIG_PICTURE);
+                } else {//选择照片
+                    Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
+                    getAlbum.setType("image/*");
+                    startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
+                }
+                MyBaseApplication.getApplication().setFilterLock(true);
+            }
+        });
+        builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
+            imageUri = data.getData();
+            cropImageUri(imageUri, outputX, outputX, CROP_BIG_PICTURE);
+        } else if (requestCode == TAKE_BIG_PICTURE) {
+            imageUri = Uri.parse("file:///" + path);
+            cropImageUri(imageUri, outputX, outputX, CROP_BIG_PICTURE);
+        } else if (requestCode == CROP_BIG_PICTURE) {
+            popSimpleDraweeView.setImageURI(imageUri);
+//            if (imageUri != null) {
+//                OkHttpUtils.post().url(Common.Url_Reset_Head)
+//                        .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+//                        .addParams("uploadType", "img")
+//                        .addFile("files0_name", StringUtils.getFileName(imageUri.getPath()),
+//                                new File(imageUri.getPath())).id(Common.NET_RESET_HEAD)
+//                        .tag(Common.NET_RESET_HEAD).build().execute(new MyStringCallback(mContext, this, true));
+//            }
+        }
+    }
+
+    //裁减照片
+    private void cropImageUri(Uri uri, int outputX, int outputY, int requestCode) {
+        if (uri == null) {
+            return;
+        }
+        MyBaseApplication.getApplication().setFilterLock(true);
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", outputX);
+        intent.putExtra("outputY", outputY);
+        intent.putExtra("scale", true);
+        imageUri = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        intent.putExtra("return-data", false);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true); // no face detection
+        startActivityForResult(intent, requestCode);
     }
 }
