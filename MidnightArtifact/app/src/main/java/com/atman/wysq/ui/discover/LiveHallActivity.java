@@ -4,13 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +17,11 @@ import android.widget.TextView;
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.LiveHallGridViewAdapter;
 import com.atman.wysq.model.response.GetLiveHallModel;
+import com.atman.wysq.model.response.HeadImgResultModel;
+import com.atman.wysq.model.response.HeadImgSuccessModel;
 import com.atman.wysq.model.response.MyLiveInfoModel;
+import com.atman.wysq.model.response.ToLiveEorrModel;
+import com.atman.wysq.model.response.UpLiveDataInfoModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
@@ -38,6 +38,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -68,6 +70,9 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
     private MyLiveInfoModel mMyLiveInfoModel;
     private TextView partLivepopGoliveTx;
 
+    private boolean myRoomTitleInfoSta = false;
+    private boolean myRoomPicInfoSta = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,27 +85,37 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
         super.initWidget(v);
         setBarTitleTx("直播大厅");
 
-        mLiveRightTX = setBarRightTx(" 我要直播");
-        Drawable drawable = getResources().getDrawable(R.mipmap.live_main_img_livecr);
-        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-        mLiveRightTX.setCompoundDrawables(drawable, null, null, null);
+        if (MyBaseApplication.getApplication().mGetMyUserIndexModel==null) {
+            finish();
+            return;
+        }
 
-        mLiveRightRL = getBarRightRl();
-        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT
-                , RelativeLayout.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        params.rightMargin = DensityUtil.dp2px(mContext, 10);
-        mLiveRightRL.setLayoutParams(params);
-        mLiveRightRL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pop = new ShowLivePopWindow(LiveHallActivity.this, v, getmWidth());
-                OkHttpUtils.get().url(Common.Url_GetMyLiveInfo)
-                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .tag(Common.NET_GETMYLIVEINFO_ID).id(Common.NET_GETMYLIVEINFO_ID).build()
-                        .execute(new MyStringCallback(mContext, LiveHallActivity.this, true));
-            }
-        });
+        if (MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                .getUserDetailBean().getUserExt().getCan_live_room()==1) {
+
+            mLiveRightTX = setBarRightTx(" 我要直播");
+            Drawable drawable = getResources().getDrawable(R.mipmap.live_main_img_livecr);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mLiveRightTX.setCompoundDrawables(drawable, null, null, null);
+
+            mLiveRightRL = getBarRightRl();
+            params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT
+                    , RelativeLayout.LayoutParams.MATCH_PARENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            params.rightMargin = DensityUtil.dp2px(mContext, 10);
+            mLiveRightRL.setLayoutParams(params);
+            mLiveRightRL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pop = new ShowLivePopWindow(LiveHallActivity.this, v, getmWidth());
+                    OkHttpUtils.get().url(Common.Url_GetMyLiveInfo)
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .tag(Common.NET_GETMYLIVEINFO_ID).id(Common.NET_GETMYLIVEINFO_ID).build()
+                            .execute(new MyStringCallback(mContext, LiveHallActivity.this, true));
+                }
+            });
+        }
+
 
         initGridView();
     }
@@ -159,7 +174,42 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
             popSimpleDraweeView.setOnClickListener(this);
             partLivepopGoliveTx = pop.getPartLivepopGoliveTx();
             partLivepopGoliveTx.setOnClickListener(this);
+        } else if (id == Common.NET_RESET_HEAD) {
+            HeadImgResultModel mHeadImgResultModel = mGson.fromJson(data, HeadImgResultModel.class);
+            if (mHeadImgResultModel!=null && mHeadImgResultModel.getFiles().size()>0 ) {
+                if (!mHeadImgResultModel.getFiles().get(0).isSuccessful()) {
+                    showToast("封面图片修改失败");
+                } else {
+                    HeadImgSuccessModel mHeadImgSuccessModel = mGson.fromJson(data, HeadImgSuccessModel.class);
+                    upLiveData(mHeadImgSuccessModel.getFiles().get(0).getUrl(), pop.getTitlle());
+                }
+            }
+        } else if (id == Common.NET_UPDATA_MYLIVEINFO_ID) {
+            UpLiveDataInfoModel mUpLiveDataInfoModel = mGson.fromJson(data, UpLiveDataInfoModel.class);
+            if (mUpLiveDataInfoModel.getBody()==null) {
+                ToLiveEorrModel mToLiveEorrModel = mGson.fromJson(data, ToLiveEorrModel.class);
+                showWraning(mToLiveEorrModel.getResult());
+            } else {
+                toMyLive(mUpLiveDataInfoModel.getBody().getRoom_name()
+                        , mUpLiveDataInfoModel.getBody().getPic_url()
+                        , mUpLiveDataInfoModel.getBody().getLive_room_id());
+            }
         }
+    }
+
+    private void toMyLive(String title, String url, long roomId) {
+        startActivity(MyLiveRoomActivity.buildIntent(mContext, title, url, roomId));
+    }
+
+    private void upLiveData(String url, String titlle) {
+        Map<String, String> p = new HashMap<>();
+        p.put("pic_url", url);
+        p.put("room_name", titlle);
+        p.put("description", titlle);
+        OkHttpUtils.postString().url(Common.Url_UpData_MyLiveInfo).id(Common.NET_UPDATA_MYLIVEINFO_ID)
+                .content(mGson.toJson(p)).mediaType(Common.JSON).tag(Common.NET_UPDATA_MYLIVEINFO_ID)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
+                .execute(new MyStringCallback(mContext, this, true));
     }
 
     @Override
@@ -196,6 +246,8 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GETLIVELIST_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GETMYLIVEINFO_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_RESET_HEAD);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_UPDATA_MYLIVEINFO_ID);
     }
 
     @Override
@@ -210,8 +262,37 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
                 showHeadImg(v);
                 break;
             case R.id.part_livepop_golive_tx:
+                if (pop.getTitlle()==null || pop.getTitlle().trim().isEmpty()) {
+                    showWraning("主题描述不能为空");
+                    return;
+                }
+                if ((mMyLiveInfoModel.getBody()==null || mMyLiveInfoModel.getBody().getPic_url()==null)
+                        && imageUri == null) {
+                    showWraning("封面图片不能为空");
+                    return;
+                }
                 showToast("开始直播");
                 pop.dismiss();
+                if (!pop.getTitlle().equals(mMyLiveInfoModel.getBody().getRoom_name())) {
+                    myRoomTitleInfoSta = true;
+                }
+                if (myRoomTitleInfoSta && !myRoomPicInfoSta) {
+                    upLiveData(mMyLiveInfoModel.getBody().getPic_url(), pop.getTitlle());
+                } else {
+                    if (myRoomPicInfoSta) {
+                        if (imageUri != null) {
+                            OkHttpUtils.post().url(Common.Url_Reset_Head)
+                                    .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                                    .addFile("files0_name", StringUtils.getFileName(imageUri.getPath()),
+                                            new File(imageUri.getPath())).id(Common.NET_RESET_HEAD)
+                                    .tag(Common.NET_RESET_HEAD).build().execute(new MyStringCallback(mContext, this, true));
+                        }
+                    } else {
+                        toMyLive(mMyLiveInfoModel.getBody().getRoom_name()
+                                , mMyLiveInfoModel.getBody().getPic_url()
+                                , mMyLiveInfoModel.getBody().getLive_room_id());
+                    }
+                }
                 break;
         }
     }
@@ -219,12 +300,9 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
     private Uri imageUri;//The Uri to store the big bitmap
     private final int CHOOSE_BIG_PICTURE = 444;
     private final int TAKE_BIG_PICTURE = 555;
-    private final int CROP_BIG_PICTURE = 666;
-    private int outputX = 350;
     private String path = "";
     private void showHeadImg(View view) {
         BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
-//        builder.setTitle(Html.fromHtml("<font color=\"#f9464a\">修改封面图片</font>"));
         builder.setItems(new String[]{"拍照", "相册选取"}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -255,42 +333,12 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
             return;
         }if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
             imageUri = data.getData();
-            cropImageUri(imageUri, outputX, outputX, CROP_BIG_PICTURE);
         } else if (requestCode == TAKE_BIG_PICTURE) {
             imageUri = Uri.parse("file:///" + path);
-            cropImageUri(imageUri, outputX, outputX, CROP_BIG_PICTURE);
-        } else if (requestCode == CROP_BIG_PICTURE) {
+        }
+        if (imageUri != null) {
+            myRoomPicInfoSta = true;
             popSimpleDraweeView.setImageURI(imageUri);
-//            if (imageUri != null) {
-//                OkHttpUtils.post().url(Common.Url_Reset_Head)
-//                        .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-//                        .addParams("uploadType", "img")
-//                        .addFile("files0_name", StringUtils.getFileName(imageUri.getPath()),
-//                                new File(imageUri.getPath())).id(Common.NET_RESET_HEAD)
-//                        .tag(Common.NET_RESET_HEAD).build().execute(new MyStringCallback(mContext, this, true));
-//            }
         }
-    }
-
-    //裁减照片
-    private void cropImageUri(Uri uri, int outputX, int outputY, int requestCode) {
-        if (uri == null) {
-            return;
-        }
-        MyBaseApplication.getApplication().setFilterLock(true);
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", outputX);
-        intent.putExtra("outputY", outputY);
-        intent.putExtra("scale", true);
-        imageUri = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        intent.putExtra("return-data", false);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        intent.putExtra("noFaceDetection", true); // no face detection
-        startActivityForResult(intent, requestCode);
     }
 }

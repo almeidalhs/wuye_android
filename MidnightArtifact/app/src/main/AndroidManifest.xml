@@ -74,6 +74,7 @@
         <activity android:name=".ui.discover.RecommendUsersActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.discover.LiveHallActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.discover.DirectSeedingRoomActivity" android:launchMode="singleTask"/>
+        <activity android:name=".ui.discover.MyLiveRoomActivity" android:launchMode="singleTask"/>
 
         <activity android:name="com.choicepicture_library.ImageGridActivity"/>
 
