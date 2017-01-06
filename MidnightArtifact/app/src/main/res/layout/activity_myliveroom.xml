@@ -17,6 +17,7 @@
         android:src="@mipmap/live_live_icon_close" />
 
     <LinearLayout
+        android:id="@+id/myliveroom_ll"
         android:layout_marginTop="@dimen/dimen_dp_100"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,7 +78,7 @@
                 android:layout_marginLeft="@dimen/dimen_dp_10"
                 android:layout_marginRight="@dimen/dimen_dp_10"
                 android:singleLine="true"
-                android:text="name"
+                android:text="--"
                 android:textColor="@color/color_white"
                 android:textSize="@dimen/dimen_sp_14" />
 
@@ -91,7 +92,7 @@
                 android:layout_marginLeft="@dimen/dimen_dp_10"
                 android:layout_marginRight="@dimen/dimen_dp_10"
                 android:singleLine="true"
-                android:text="name"
+                android:text="--"
                 android:textColor="@color/color_white"
                 android:textSize="@dimen/dimen_sp_14" />
 
@@ -104,7 +105,7 @@
                 android:background="@drawable/level_blue_bg"
                 android:paddingLeft="@dimen/dimen_dp_3"
                 android:paddingRight="@dimen/dimen_dp_3"
-                android:text="Lv.2"
+                android:text="Lv.0"
                 android:textColor="@color/color_white"
                 android:textSize="@dimen/dimen_sp_12" />
 
@@ -169,5 +170,24 @@
                 android:background="@drawable/liveroom_anim" />
         </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/myliveroom_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_aaffffff"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/myliveroom_pic_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dimen_dp_20"
+        android:layout_marginBottom="@dimen/dimen_dp_10"
+        android:src="@mipmap/live_action_icon_image" />
 
 </RelativeLayout>

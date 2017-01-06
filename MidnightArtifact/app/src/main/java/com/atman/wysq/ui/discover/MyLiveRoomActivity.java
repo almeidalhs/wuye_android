@@ -10,10 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
+import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
-import com.atman.wysq.ui.personal.MyInformationActivity;
+import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
-import com.base.baselibs.util.DataCleanManager;
 import com.base.baselibs.widget.PromptDialog;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -83,8 +83,38 @@ public class MyLiveRoomActivity extends MyBaseActivity {
         myliveroomTitleTv.setText(title);
         if (pic_url != null && !pic_url.isEmpty()) {
             ImageLoader.getInstance().displayImage(Common.ImageUrl + pic_url, myliveroomBgIv);
-//            myliveroomHeadIv.setImageURI(Common.ImageUrl+pic_url);
         }
+
+        GetMyUserIndexModel mGetUserIndexModel = MyBaseApplication.getApplication().mGetMyUserIndexModel;
+        myliveroomLevelTx.setText("Lv." + mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getUserLevel());
+        if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>=4) {
+            myliveroomVipTx.setVisibility(View.GONE);
+            myliveroomSvipIv.setVisibility(View.VISIBLE);
+        } else {
+            myliveroomSvipIv.setVisibility(View.GONE);
+            if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()==0) {
+                myliveroomVipTx.setVisibility(View.GONE);
+            } else {
+                myliveroomVipTx.setText("VIP."+mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level());
+                myliveroomVipTx.setVisibility(View.VISIBLE);
+            }
+        }
+        myliveroomNameTv.setText(mGetUserIndexModel.getBody().getUserDetailBean().getNickName());
+
+        if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getSex().equals("M")) {
+            myliveroomGenderIv.setImageResource(R.mipmap.personal_man_ic);
+        } else {
+            myliveroomGenderIv.setImageResource(R.mipmap.personal_weman_ic);
+        }
+        if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVerify_status() == 1) {
+            myliveroomVerifyIv.setVisibility(View.VISIBLE);
+            myliveroomGenderIv.setVisibility(View.GONE);
+        } else {
+            myliveroomVerifyIv.setVisibility(View.GONE);
+            myliveroomGenderIv.setVisibility(View.VISIBLE);
+        }
+        myliveroomHeadIv.setImageURI(Common.ImageUrl+mGetUserIndexModel.getBody()
+                .getUserDetailBean().getUserExt().getIcon());
 
         animationDrawable = (AnimationDrawable) myliveroomAnimIv.getBackground();
         animationDrawable.start();
@@ -113,11 +143,13 @@ public class MyLiveRoomActivity extends MyBaseActivity {
         }
     }
 
-    @OnClick({R.id.myliveroom_back_iv})
+    @OnClick({R.id.myliveroom_back_iv, R.id.myliveroom_pic_iv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.myliveroom_back_iv:
                 showWarnExit();
+                break;
+            case R.id.myliveroom_pic_iv:
                 break;
         }
     }
