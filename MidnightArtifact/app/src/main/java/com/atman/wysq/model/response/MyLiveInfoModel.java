@@ -1,10 +1,12 @@
 package com.atman.wysq.model.response;
 
+import java.io.Serializable;
+
 /**
  * Created by tangbingliang on 16/12/29.
  */
 
-public class MyLiveInfoModel {
+public class MyLiveInfoModel implements Serializable {
     /**
      * result : 1
      * body : {"live_room_id":38,"room_name":"超大图片","user_id":450214623,"cid":"d12a0f8f919c4140af62770227bb4e93","pic_url":"/imageServer/A5167e00147d6f7040b0bfaee1bc2d547758.jpg","description":"超大图片","member_count":0,"status":0,"create_time":1470212262000,"update_time":1458618547000,"room_id":30234,"currentRecord":{"live_record_id":767,"live_room_id":38,"channel":"77979a06f80b4e7388f72bca0fa41154","pushUrl":"rtmp://p201.live.126.net/live/77979a06f80b4e7388f72bca0fa41154?wsSecret=ba6702f1744e018d10b23891271c98e1&wsTime=1470212216","rtmpPullUrl":"rtmp://v201.live.126.net/live/77979a06f80b4e7388f72bca0fa41154","start_time":1470212218000,"end_time":1470212218000,"create_time":1470212218000,"update_time":1470212218000},"userExt":{"user_id":450214623,"integral":"158460","secret_type":0,"type":1,"icon":"/imageServer/DC1Ec5c24d27e1894e16aaee5502e7d84da0.jpg","sex":"M","create_time":1458618425000,"update_time":1458618425000,"name_change":1,"next_level_integral":41514,"userLevel":9,"mobile":"13860000022","nick_name":"后规模","status":2,"verify_status":0,"can_live_room":1,"gold_coin":10000511,"charm":3653,"can_chat":1,"can_shake":1,"convert_coin":0,"around_site":"强大g","vip_level":0,"chat_count":53,"accrue_coin":10158715}}
@@ -29,7 +31,7 @@ public class MyLiveInfoModel {
         this.body = body;
     }
 
-    public static class BodyBean {
+    public static class BodyBean implements Serializable {
         /**
          * live_room_id : 38
          * room_name : 超大图片
@@ -164,7 +166,7 @@ public class MyLiveInfoModel {
             this.userExt = userExt;
         }
 
-        public static class CurrentRecordBean {
+        public static class CurrentRecordBean implements Serializable {
             /**
              * live_record_id : 767
              * live_room_id : 38
@@ -260,7 +262,7 @@ public class MyLiveInfoModel {
             }
         }
 
-        public static class UserExtBean {
+        public static class UserExtBean implements Serializable {
             /**
              * user_id : 450214623
              * integral : 158460

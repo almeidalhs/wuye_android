@@ -11,16 +11,21 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
+import com.atman.wysq.model.response.MyLiveInfoModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.MyTools;
+import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.widget.PromptDialog;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tbl.okhttputils.OkHttpUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 import okhttp3.Response;
 
 /**
@@ -56,6 +61,10 @@ public class MyLiveRoomActivity extends MyBaseActivity {
     private String title;
     private AnimationDrawable animationDrawable;
 
+    private MyLiveInfoModel mMyLiveInfoModel;
+    private long startTime;
+    private long endTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +72,11 @@ public class MyLiveRoomActivity extends MyBaseActivity {
         ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent(Context context, String title, String pic_url, long roomId) {
+    public static Intent buildIntent(Context context, MyLiveInfoModel temp) {
         Intent intent = new Intent(context, MyLiveRoomActivity.class);
-        intent.putExtra("title", title);
-        intent.putExtra("pic_url", pic_url);
-        intent.putExtra("roomId", roomId);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("temp", temp);
+        intent.putExtras(bundle);
         return intent;
     }
 
@@ -76,9 +85,10 @@ public class MyLiveRoomActivity extends MyBaseActivity {
         super.initWidget(v);
         hideTitleBar();
 
-        roomId = getIntent().getLongExtra("roomId", -1);
-        pic_url = getIntent().getStringExtra("pic_url");
-        title = getIntent().getStringExtra("title");
+        mMyLiveInfoModel = (MyLiveInfoModel) getIntent().getSerializableExtra("temp");
+        roomId = mMyLiveInfoModel.getBody().getLive_room_id();
+        pic_url = mMyLiveInfoModel.getBody().getPic_url();
+        title = mMyLiveInfoModel.getBody().getRoom_name();
 
         myliveroomTitleTv.setText(title);
         if (pic_url != null && !pic_url.isEmpty()) {
@@ -123,6 +133,28 @@ public class MyLiveRoomActivity extends MyBaseActivity {
     @Override
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
+
+        OkHttpUtils.postString().url(Common.Url_Live_Enter+roomId).id(Common.NET_LIVE_ENTER_ID)
+                .content(mGson.toJson("")).mediaType(Common.JSON).tag(Common.NET_LIVE_ENTER_ID)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
+                .execute(new MyStringCallback(mContext, this, false));
+        OkHttpUtils.postString().url(Common.Url_Live_UserLog+roomId).id(Common.NET_LIVE_USERLOG_ID)
+                .content(mGson.toJson("")).mediaType(Common.JSON).tag(Common.NET_LIVE_USERLOG_ID)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
+                .execute(new MyStringCallback(mContext, this, false));
+
+        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onError(Call call, Exception e, int code, int id) {
+        if (id == Common.NET_LIVE_ENTER_ID) {
+
+        } else if (id == Common.NET_LIVE_USERLOG_ID) {
+
+        } else {
+            super.onError(call, e, code, id);
+        }
     }
 
     @Override
@@ -133,6 +165,11 @@ public class MyLiveRoomActivity extends MyBaseActivity {
     @Override
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
+        if (id == Common.NET_LIVE_ENTER_ID) {
+
+        } else if (id == Common.NET_LIVE_USERLOG_ID) {
+
+        }
     }
 
     @Override
@@ -141,6 +178,9 @@ public class MyLiveRoomActivity extends MyBaseActivity {
         if (animationDrawable != null) {
             animationDrawable.stop();
         }
+
+        OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_ENTER_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_USERLOG_ID);
     }
 
     @OnClick({R.id.myliveroom_back_iv, R.id.myliveroom_pic_iv})
@@ -155,9 +195,12 @@ public class MyLiveRoomActivity extends MyBaseActivity {
     }
 
     private void showWarnExit() {
+        endTime = System.currentTimeMillis();
+
         PromptDialog.Builder builder = new PromptDialog.Builder(MyLiveRoomActivity.this);
         builder.setTitle("确定要结束本次直播吗？");
-        builder.setMessage("直播开始：今天 13:41\n直播持续：18分钟25秒");
+        builder.setMessage("直播开始："+ MyTools.convertTimeS(startTime)
+                +"\n直播持续："+ MyTools.getTwoTimeCount(startTime, endTime));
         builder.setPositiveButton("再来一会", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

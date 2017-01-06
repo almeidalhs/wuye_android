@@ -3,6 +3,8 @@ package com.atman.wysq.utils;
 import android.hardware.Camera;
 import android.text.TextUtils;
 
+import com.base.baselibs.util.LogUtils;
+
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -238,5 +240,46 @@ public class MyTools {
      */
     public static long getGapCountM(long startDate, long endDate) {
         return (endDate - startDate) / (1000 * 60);
+    }
+    /**
+     * 两个时间相差距离多少天多少小时多少分多少秒
+     * @return String 返回值为：xx天xx小时xx分xx秒
+     */
+    public static String getTwoTimeCount(long startDate, long endDate) {
+        long day = 0;
+        long hour = 0;
+        long min = 0;
+        long sec = 0;
+        long diff = endDate - startDate;
+
+        String reStr = "";
+
+        day = diff / (24 * 60 * 60 * 1000);
+        hour = (diff / (60 * 60 * 1000) - day * 24);
+        min = ((diff / (60 * 1000)) - day * 24 * 60 - hour * 60);
+        sec = (diff/1000-day*24*60*60-hour*60*60-min*60);
+
+        if (day>0) {
+            reStr += day + "天";
+        }
+
+        if (reStr.isEmpty()) {
+            if (hour>0) {
+                reStr += hour + "小时";
+            }
+        } else {
+            reStr += hour + "小时";
+        }
+
+        if (reStr.isEmpty()) {
+            if (min>0) {
+                reStr += min + "分";
+            }
+        } else {
+            reStr += min + "分";
+        }
+
+        reStr += sec + "秒";
+        return reStr;
     }
 }

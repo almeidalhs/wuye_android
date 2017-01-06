@@ -21,7 +21,6 @@ import com.atman.wysq.model.response.HeadImgResultModel;
 import com.atman.wysq.model.response.HeadImgSuccessModel;
 import com.atman.wysq.model.response.MyLiveInfoModel;
 import com.atman.wysq.model.response.ToLiveEorrModel;
-import com.atman.wysq.model.response.UpLiveDataInfoModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
@@ -185,20 +184,18 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
                 }
             }
         } else if (id == Common.NET_UPDATA_MYLIVEINFO_ID) {
-            UpLiveDataInfoModel mUpLiveDataInfoModel = mGson.fromJson(data, UpLiveDataInfoModel.class);
-            if (mUpLiveDataInfoModel.getBody()==null) {
+            mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
+            if (mMyLiveInfoModel.getBody()==null) {
                 ToLiveEorrModel mToLiveEorrModel = mGson.fromJson(data, ToLiveEorrModel.class);
                 showWraning(mToLiveEorrModel.getResult());
             } else {
-                toMyLive(mUpLiveDataInfoModel.getBody().getRoom_name()
-                        , mUpLiveDataInfoModel.getBody().getPic_url()
-                        , mUpLiveDataInfoModel.getBody().getLive_room_id());
+                toMyLive(mMyLiveInfoModel);
             }
         }
     }
 
-    private void toMyLive(String title, String url, long roomId) {
-        startActivity(MyLiveRoomActivity.buildIntent(mContext, title, url, roomId));
+    private void toMyLive(MyLiveInfoModel temp) {
+        startActivity(MyLiveRoomActivity.buildIntent(mContext, temp));
     }
 
     private void upLiveData(String url, String titlle) {
@@ -288,9 +285,7 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
                                     .tag(Common.NET_RESET_HEAD).build().execute(new MyStringCallback(mContext, this, true));
                         }
                     } else {
-                        toMyLive(mMyLiveInfoModel.getBody().getRoom_name()
-                                , mMyLiveInfoModel.getBody().getPic_url()
-                                , mMyLiveInfoModel.getBody().getLive_room_id());
+                        toMyLive(mMyLiveInfoModel);
                     }
                 }
                 break;

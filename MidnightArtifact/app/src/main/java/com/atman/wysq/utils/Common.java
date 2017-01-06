@@ -199,6 +199,10 @@ public class Common {
     public static String Url_GetMyLiveInfo = hostUrl + "rest/live/myroom";
     //更新直播信息
     public static String Url_UpData_MyLiveInfo = hostUrl + "rest/live/update";
+    //访客进入直播间
+    public static String Url_Live_Enter = hostUrl + "rest/live/enter/";
+    //访客进入直播间 人流量统计
+    public static String Url_Live_UserLog = hostUrl + "rest/live/userlog/";
     /**************************http访问路径*****************************/
 
 
@@ -376,6 +380,10 @@ public class Common {
     public static int NET_GETMYLIVEINFO_ID = 85;
     //更新直播信息
     public static int NET_UPDATA_MYLIVEINFO_ID = 86;
+    //访客进入直播间
+    public static int NET_LIVE_ENTER_ID = 87;
+    //访客进入直播间 人流量统计
+    public static int NET_LIVE_USERLOG_ID = 88;
     /**************************http访问回应识别码*****************************/
 
 
