@@ -28,8 +28,18 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.netease.LSMediaCapture.lsLogUtil;
 import com.netease.LSMediaCapture.lsMediaCapture;
 import com.netease.LSMediaCapture.lsMessageHandler;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.chatroom.ChatRoomService;
+import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
+import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
+import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -66,6 +76,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
     private Context mContext = MyLiveRoomActivity.this;
     private long roomId;
+    private long chatRoomId;
     private String mliveStreamingURL;
     private String Pic_url;
     private String title;
@@ -93,6 +104,8 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     public static final int HAVE_AUDIO = 0;
     public static final int OpenQoS = 0;
 
+    private Observer<List<ChatRoomMessage>> incomingChatRoomMsg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +132,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
         mMyLiveInfoModel = (MyLiveInfoModel) getIntent().getSerializableExtra("temp");
         roomId = mMyLiveInfoModel.getBody().getLive_room_id();
+        chatRoomId = mMyLiveInfoModel.getBody().getRoom_id();
         Pic_url = mMyLiveInfoModel.getBody().getPic_url();
         mliveStreamingURL = mMyLiveInfoModel.getBody().getCurrentRecord().getPushUrl();
         title = mMyLiveInfoModel.getBody().getRoom_name();
@@ -178,6 +192,48 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
         //9、Demo控件的初始化（Demo层实现，用户不需要添加该操作）
         buttonInit();
+
+        initChatRoom();
+    }
+
+    private void initChatRoom() {
+        incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
+            @Override
+            public void onEvent(List<ChatRoomMessage> messages) {
+                // 处理新收到的消息
+                LogUtils.e(">>>>>messages:"+messages.get(0).getContent());
+                LogUtils.e(">>>>>messages:"+messages.get(0).getMsgType());
+            }
+        };
+
+        LogUtils.e(">>>chatRoomId:"+chatRoomId);
+        EnterChatRoomData data = new EnterChatRoomData(chatRoomId+"");
+        NIMClient.getService(ChatRoomService.class).enterChatRoom(data)
+                .setCallback(new RequestCallback<EnterChatRoomResultData>() {
+                    @Override
+                    public void onSuccess(EnterChatRoomResultData enterChatRoomResultData) {
+                        LogUtils.e(">>>>onSuccess:");
+                    }
+
+                    @Override
+                    public void onFailed(int i) {
+                        LogUtils.e(">>>>onFailed:"+i);
+                        showWraning("消息服务器连接失败，请稍后再试，或者重新登录！");
+                    }
+
+                    @Override
+                    public void onException(Throwable throwable) {
+                        LogUtils.e(">>>>onException:"+throwable.toString());
+                        showWraning("消息服务器连接失败，请稍后再试，或者重新登录！");
+                    }
+                });
+
+        receiveRegister(true);
+    }
+
+    private void receiveRegister(boolean b) {
+        NIMClient.getService(ChatRoomServiceObserver.class)
+                .observeReceiveMessage(incomingChatRoomMsg, b);
     }
 
     //按钮初始化
@@ -287,6 +343,8 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     @Override
     protected void onDestroy() {
         closeLive();
+        receiveRegister(false);
+        NIMClient.getService(ChatRoomService.class).exitChatRoom(chatRoomId+"");
         super.onDestroy();
         if (animationDrawable != null) {
             animationDrawable.stop();
