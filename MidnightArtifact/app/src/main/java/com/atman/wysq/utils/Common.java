@@ -203,6 +203,8 @@ public class Common {
     public static String Url_Live_Enter = hostUrl + "rest/live/enter/";
     //访客进入直播间 人流量统计
     public static String Url_Live_UserLog = hostUrl + "rest/live/userlog/";
+    //更新直播状态
+    public static String Url_Live_Status = hostUrl + "rest/live/updateStatus/";
     /**************************http访问路径*****************************/
 
 
@@ -384,6 +386,8 @@ public class Common {
     public static int NET_LIVE_ENTER_ID = 87;
     //访客进入直播间 人流量统计
     public static int NET_LIVE_USERLOG_ID = 88;
+    //更新直播状态
+    public static int NET_LIVE_STATUS_ID = 89;
     /**************************http访问回应识别码*****************************/
 
 

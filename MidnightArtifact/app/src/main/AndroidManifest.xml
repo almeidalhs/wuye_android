@@ -78,6 +78,8 @@
 
         <activity android:name="com.choicepicture_library.ImageGridActivity"/>
 
+        <activity android:name=".ui.yunzhibo.MediaPreviewActivity"/>
+
         <service android:name=".ui.receiver.StartReciverSeriver"/>
 
         <!--友盟相关-->
@@ -193,6 +195,17 @@
             android:name="com.netease.cosine.target.receiver"
             android:value="com.netease.nimlib.service.NimReceiver"/>
         <!--网易云信-->
+
+        <!--网易云直播-->
+        <!-- 声明直播异常报警服务 -->
+        <service android:name="com.netease.livestreamingcapture.AlertService"/>
+
+        <receiver android:name="com.netease.pushservice.receiver.PushServiceBootReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_BATTERY_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <!--网易云直播-->
     </application>
 
 </manifest>

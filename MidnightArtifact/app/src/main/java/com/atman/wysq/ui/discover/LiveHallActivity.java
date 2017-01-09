@@ -268,7 +268,6 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
                     showWraning("封面图片不能为空");
                     return;
                 }
-                showToast("开始直播");
                 pop.dismiss();
                 if (!pop.getTitlle().equals(mMyLiveInfoModel.getBody().getRoom_name())) {
                     myRoomTitleInfoSta = true;
