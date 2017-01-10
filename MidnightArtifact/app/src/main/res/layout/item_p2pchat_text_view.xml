@@ -70,7 +70,6 @@
                 android:id="@+id/item_p2pchat_image_left_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/item_message_left_bg"
                 android:maxWidth="@dimen/dimen_dp_100"
                 android:layout_marginTop="@dimen/dimen_dp_5"
                 android:visibility="gone" />
@@ -176,7 +175,6 @@
                     android:id="@+id/item_p2pchat_image_right_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/item_message_right_bg"
                     android:scaleType="centerInside"
                     android:layout_marginTop="@dimen/dimen_dp_5"
                     android:maxWidth="@dimen/dimen_dp_100"

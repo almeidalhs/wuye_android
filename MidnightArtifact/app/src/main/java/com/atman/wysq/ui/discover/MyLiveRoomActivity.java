@@ -595,12 +595,6 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             case MSG_URL_NOT_AUTH://直播URL非法，URL格式不符合视频云要求
                 showToast("MSG_URL_NOT_AUTH  直播地址不合法");
                 break;
-            case MSG_SEND_STATICS_LOG_ERROR://发送统计信息出错
-                //LogUtils.e("test: in handleMessage, MSG_SEND_STATICS_LOG_ERROR");
-                break;
-            case MSG_SEND_HEARTBEAT_LOG_ERROR://发送心跳信息出错
-                //LogUtils.e("test: in handleMessage, MSG_SEND_HEARTBEAT_LOG_ERROR");
-                break;
             case MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR://音频采集参数不支持
                 LogUtils.e("test: in handleMessage, MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR");
                 break;

@@ -2,6 +2,13 @@ package com.atman.wysq.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -24,7 +31,6 @@ import com.atman.wysq.widget.face.SmileUtils;
 import com.atman.wysq.yunxin.model.ChatRoomTypeInter;
 import com.atman.wysq.yunxin.model.ContentTypeInter;
 import com.base.baselibs.util.DensityUtil;
-import com.base.baselibs.util.LogUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -232,20 +238,21 @@ public class ChatRoomAdapter extends BaseAdapter {
                     holderText.itemP2pchatImageRightIv.setVisibility(View.VISIBLE);
                     if (temp.getImageThumUrl().startsWith("http")) {
                         ImageLoader.getInstance().displayImage(temp.getImageUrl(), holderText.itemP2pchatImageRightIv
-                                , MyBaseApplication.getApplication().getOptionsNot(), mListener);
+                                , MyBaseApplication.getApplication().getOptionsNot(), new picImage(0));
                     } else {
                         File mFile = new File(temp.getImageFilePath());
                         if (mFile.exists()) {
                             ImageLoader.getInstance().displayImage("file://" + temp.getImageFilePath(), holderText.itemP2pchatImageRightIv
-                                    , MyBaseApplication.getApplication().getOptionsNot());
+                                    , MyBaseApplication.getApplication().getOptionsNot(), new picImage(0));
                         } else {
                             ImageLoader.getInstance().displayImage(temp.getImageUrl(), holderText.itemP2pchatImageRightIv
-                                    , MyBaseApplication.getApplication().getOptionsNot(), mListener);
+                                    , MyBaseApplication.getApplication().getOptionsNot(), new picImage(0));
                         }
                     }
                 } else {
                     holderText.itemP2pchatImageLeftIv.setVisibility(View.VISIBLE);
-                    ImageLoader.getInstance().displayImage(temp.getImageUrl(), holderText.itemP2pchatImageLeftIv, MyBaseApplication.getApplication().getOptionsNot());
+                    ImageLoader.getInstance().displayImage(temp.getImageUrl(), holderText.itemP2pchatImageLeftIv
+                            , MyBaseApplication.getApplication().getOptionsNot(), new picImage(1));
                 }
                 break;
             case ChatRoomTypeInter.ChatRoomTypeAudio:
@@ -342,6 +349,102 @@ public class ChatRoomAdapter extends BaseAdapter {
 
         }
     };
+
+    class picImage implements ImageLoadingListener{
+        private int direct;
+
+        public picImage (int direct) {
+            this.direct = direct;
+        }
+
+        @Override
+        public void onLoadingStarted(String s, View view) {
+
+        }
+
+        @Override
+        public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+        }
+
+        @Override
+        public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+            ImageView im = (ImageView) view;
+            int w = DensityUtil.dp2px(context, 90);
+            int h = DensityUtil.dp2px(context, 122);
+            im.getLayoutParams().height = h;
+            im.getLayoutParams().width = w;
+            im.setImageBitmap(canvasTriangle(bitmap, direct, w, h));
+            if (!isBottom) {
+                isBottom = true;
+                handler.postDelayed(runnable, 500);
+            }
+        }
+
+        @Override
+        public void onLoadingCancelled(String s, View view) {
+
+        }
+    }
+
+    /**
+     * 绘制成微信聊天效果
+     * @param bitmapimg
+     * @param direct
+     * @return
+     */
+    public Bitmap canvasTriangle(Bitmap bitmapimg, int direct, int width, int height) {
+        Bitmap srcmapimg = bitmapimg;
+        Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(output);
+
+        srcmapimg = bigImage(srcmapimg, (float) width, (float) height);
+
+        //设置默认背景颜色
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, srcmapimg.getWidth(), srcmapimg.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        if (direct == 0) {//右边
+            Bitmap bpRight = BitmapFactory.decodeResource(context.getResources(),R.mipmap.im_imageview_right_bg);
+            Rect rectRight = new Rect(0, 0, bpRight.getWidth(), bpRight.getHeight());
+            canvas.drawBitmap(bpRight, rectRight, rectRight, paint);
+        } else if (direct == 1) {//左边
+            Bitmap bpLeft = BitmapFactory.decodeResource(context.getResources(),R.mipmap.im_imageview_left_bg);
+            Rect rectLeft = new Rect(0, 0, bpLeft.getWidth(), bpLeft.getHeight());
+            canvas.drawBitmap(bpLeft, rectLeft, rectLeft, paint);
+        }
+        //两层绘制交集。显示上层
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(srcmapimg, rect, rect, paint);
+        return output;
+    }
+
+    //把传进来的bitmap对象转换为宽度为x,长度为y的bitmap对象
+    public Bitmap bigImage(Bitmap b,float x,float y) {
+
+        float scale;
+        float dx = 0, dy = 0;
+
+        if (b.getWidth() * y > x * b.getHeight()) {
+            scale = (float) y / (float) b.getHeight();
+            dx = (x - b.getWidth() * scale) * 0.5f;
+        } else {
+            scale = (float) x / (float) b.getWidth();
+            dy = (y - b.getHeight() * scale) * 0.5f;
+        }
+
+        Matrix mDrawMatrix = new Matrix();
+        mDrawMatrix.setScale(scale, scale);
+        mDrawMatrix.postTranslate((int) (dx + 0.5f), (int) (dy + 0.5f));
+        Bitmap resizeBmp = Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), mDrawMatrix, true);
+        int n = (resizeBmp.getWidth() - (int) x)/2;
+        resizeBmp = Bitmap.createBitmap(resizeBmp, n, 0, (int) x, resizeBmp.getHeight());
+        return resizeBmp;
+    }
 
     public interface RoomAdapterInter {
         void onItem(View v, int position);
