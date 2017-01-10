@@ -5,26 +5,39 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
+import com.atman.wysq.adapter.ChatRoomAdapter;
+import com.atman.wysq.model.bean.ImMessage;
+import com.atman.wysq.model.response.ChatRoomMessageModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.model.response.MyLiveInfoModel;
 import com.atman.wysq.model.response.MyLiveStatusModel;
+import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.MyTools;
+import com.atman.wysq.yunxin.model.ChatRoomTypeInter;
+import com.atman.wysq.yunxin.model.ContentTypeInter;
+import com.atman.wysq.yunxin.model.CustomAttachment;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.PromptDialog;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.netease.LSMediaCapture.lsLogUtil;
 import com.netease.LSMediaCapture.lsMediaCapture;
 import com.netease.LSMediaCapture.lsMessageHandler;
@@ -36,9 +49,16 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
+import com.netease.nimlib.sdk.media.player.AudioPlayer;
+import com.netease.nimlib.sdk.media.player.OnPlayListener;
+import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
+import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
+import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.Bind;
@@ -51,7 +71,8 @@ import okhttp3.Response;
  * Created by tangbingliang on 17/1/5.
  */
 
-public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandler {
+public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandler
+        , ChatRoomAdapter.RoomAdapterInter {
 
     @Bind(R.id.myliveroom_bg_iv)
     ImageView myliveroomBgIv;
@@ -73,6 +94,10 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     ImageView myliveroomSvipIv;
     @Bind(R.id.myliveroom_anim_iv)
     ImageView myliveroomAnimIv;
+    @Bind(R.id.chatroom_lv)
+    PullToRefreshListView chatroomLv;
+    @Bind(R.id.myliveroom_num_tv)
+    TextView myliveroomNumTv;
 
     private Context mContext = MyLiveRoomActivity.this;
     private long roomId;
@@ -105,6 +130,9 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     public static final int OpenQoS = 0;
 
     private Observer<List<ChatRoomMessage>> incomingChatRoomMsg;
+    private ChatRoomAdapter mAdapter;
+    private AudioPlayer player;
+    private int positionAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,19 +172,20 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
         GetMyUserIndexModel mGetUserIndexModel = MyBaseApplication.getApplication().mGetMyUserIndexModel;
         myliveroomLevelTx.setText("Lv." + mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getUserLevel());
-        if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>=4) {
+        if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level() >= 4) {
             myliveroomVipTx.setVisibility(View.GONE);
             myliveroomSvipIv.setVisibility(View.VISIBLE);
         } else {
             myliveroomSvipIv.setVisibility(View.GONE);
-            if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()==0) {
+            if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level() == 0) {
                 myliveroomVipTx.setVisibility(View.GONE);
             } else {
-                myliveroomVipTx.setText("VIP."+mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level());
+                myliveroomVipTx.setText("VIP." + mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level());
                 myliveroomVipTx.setVisibility(View.VISIBLE);
             }
         }
         myliveroomNameTv.setText(mGetUserIndexModel.getBody().getUserDetailBean().getNickName());
+        player = new AudioPlayer(mContext);
 
         if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getSex().equals("M")) {
             myliveroomGenderIv.setImageResource(R.mipmap.personal_man_ic);
@@ -170,7 +199,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             myliveroomVerifyIv.setVisibility(View.GONE);
             myliveroomGenderIv.setVisibility(View.VISIBLE);
         }
-        myliveroomHeadIv.setImageURI(Common.ImageUrl+mGetUserIndexModel.getBody()
+        myliveroomHeadIv.setImageURI(Common.ImageUrl + mGetUserIndexModel.getBody()
                 .getUserDetailBean().getUserExt().getIcon());
 
         m_liveStreamingOn = false;
@@ -197,17 +226,12 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     private void initChatRoom() {
-        incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
-            @Override
-            public void onEvent(List<ChatRoomMessage> messages) {
-                // 处理新收到的消息
-                LogUtils.e(">>>>>messages:"+messages.get(0).getContent());
-                LogUtils.e(">>>>>messages:"+messages.get(0).getMsgType());
-            }
-        };
+        initRefreshView(PullToRefreshBase.Mode.DISABLED, chatroomLv);
+        mAdapter = new ChatRoomAdapter(mContext, getmWidth(), chatroomLv, false, handler, runnable, this);
+        chatroomLv.setAdapter(mAdapter);
 
-        LogUtils.e(">>>chatRoomId:"+chatRoomId);
-        EnterChatRoomData data = new EnterChatRoomData(chatRoomId+"");
+        LogUtils.e(">>>chatRoomId:" + chatRoomId);
+        EnterChatRoomData data = new EnterChatRoomData(chatRoomId + "");
         NIMClient.getService(ChatRoomService.class).enterChatRoom(data)
                 .setCallback(new RequestCallback<EnterChatRoomResultData>() {
                     @Override
@@ -217,21 +241,107 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
                     @Override
                     public void onFailed(int i) {
-                        LogUtils.e(">>>>onFailed:"+i);
+                        LogUtils.e(">>>>onFailed:" + i);
                         showWraning("消息服务器连接失败，请稍后再试，或者重新登录！");
                     }
 
                     @Override
                     public void onException(Throwable throwable) {
-                        LogUtils.e(">>>>onException:"+throwable.toString());
+                        LogUtils.e(">>>>onException:" + throwable.toString());
                         showWraning("消息服务器连接失败，请稍后再试，或者重新登录！");
                     }
                 });
+
+
+        incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
+            @Override
+            public void onEvent(List<ChatRoomMessage> messages) {
+                // 处理新收到的消息
+                LogUtils.e(">>>>>messages:" + messages.size());
+                LogUtils.e(">>>>>messages:" + messages.get(0).getContent());
+                LogUtils.e(">>>>>messages:" + messages.get(0).getMsgType());
+                for (int i = 0; i < messages.size(); i++) {
+                    ChatRoomMessageModel temp = null;
+                    if (messages.get(i).getContent() != null) {
+                        temp = mGson.fromJson(messages.get(i).getContent().toString()
+                                , ChatRoomMessageModel.class);
+                    } else {
+                        if (messages.get(i).getRemoteExtension()!=null) {
+                            temp = mGson.fromJson(mGson.toJson(messages.get(i).getRemoteExtension())
+                                    , ChatRoomMessageModel.class);
+                        }
+                    }
+                    ImMessage mImMessage = null;
+                    int n = Integer.parseInt(myliveroomNumTv.getText().toString());
+                    LogUtils.e("n:"+n);
+                    if (temp!=null) {
+                        if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystem) {
+                            myliveroomNumTv.setText(String.valueOf(n+1));
+                        } else if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
+                            if (n-1<0) {
+                                myliveroomNumTv.setText("0");
+                            } else {
+                                myliveroomNumTv.setText(String.valueOf(n-1));
+                            }
+                        } else {
+                            LogUtils.e(">>>>>>>>>:"+(messages.get(i).getMsgType() == MsgTypeEnum.image));
+                            if (messages.get(i).getMsgType() == MsgTypeEnum.text) {
+                                mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                        , messages.get(i).getSessionId()
+                                        , messages.get(i).getFromAccount()
+                                        , temp.getUser().getNickName()
+                                        , temp.getUser().getIcon()
+                                        , temp.getUser().getSex()
+                                        , temp.getUser().getVerify_status()
+                                        , false, System.currentTimeMillis()
+                                        , ChatRoomTypeInter.ChatRoomTypeText
+                                        , temp.getContent(), "", "", "", "", "", "", "", "", 0, 0, false, 1);
+                            } else if (messages.get(i).getMsgType() == MsgTypeEnum.image) {
+                                String url = ((FileAttachment)messages.get(i).getAttachment()).getUrl();
+                                String urlThumb = ((FileAttachment)messages.get(i).getAttachment()).getThumbPathForSave();
+                                mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                        , messages.get(i).getSessionId()
+                                        , messages.get(i).getFromAccount()
+                                        , temp.getUser().getNickName()
+                                        , temp.getUser().getIcon()
+                                        , temp.getUser().getSex()
+                                        , temp.getUser().getVerify_status()
+                                        , false, System.currentTimeMillis()
+                                        , ChatRoomTypeInter.ChatRoomTypeImage
+                                        , "[图片]", url, url, urlThumb, "", "", "", "", "", 0, 0, false, 1);
+                            } else if (messages.get(i).getMsgType() == MsgTypeEnum.audio) {
+                                String urlAudio = ((AudioAttachment)messages.get(i).getAttachment()).getUrl();
+                                String pathAudio = ((AudioAttachment)messages.get(i).getAttachment()).getPathForSave();
+                                long Duration = ((AudioAttachment)messages.get(i).getAttachment()).getDuration();
+                                LogUtils.e("urlAudio:"+urlAudio);
+                                LogUtils.e("pathAudio:"+pathAudio);
+                                LogUtils.e("Duration:"+Duration);
+                                mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                        , messages.get(i).getSessionId()
+                                        , messages.get(i).getFromAccount()
+                                        , temp.getUser().getNickName()
+                                        , temp.getUser().getIcon()
+                                        , temp.getUser().getSex()
+                                        , temp.getUser().getVerify_status()
+                                        , false, System.currentTimeMillis()
+                                        , ChatRoomTypeInter.ChatRoomTypeAudio
+                                        , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration/1000, 0, false, 1);
+                            }
+                            mAdapter.addImMessageDao(mImMessage);
+                        }
+                    }
+                }
+            }
+        };
 
         receiveRegister(true);
     }
 
     private void receiveRegister(boolean b) {
+        LogUtils.e(">>>>>>>>>b:"+b);
         NIMClient.getService(ChatRoomServiceObserver.class)
                 .observeReceiveMessage(incomingChatRoomMsg, b);
     }
@@ -243,14 +353,14 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             return;
         }
         showToast("正在链接服务器，请稍后...");
-        LogUtils.e("mliveStreamingURL:"+mliveStreamingURL);
+        LogUtils.e("mliveStreamingURL:" + mliveStreamingURL);
         mThread = new Thread() {
             public void run() { //正常网络下initLiveStream 1、2s就可完成，当网络很差时initLiveStream可能会消耗5-10s，因此另起线程防止UI卡住
                 m_liveStreamingInitFinished = mLSMediaCapture.initLiveStream(mliveStreamingURL, mLSLiveStreamingParaCtx);
                 if (m_liveStreamingInitFinished) {
                     startAV();
                 } else {
-                    if(Thread.currentThread() != Looper.getMainLooper().getThread()){
+                    if (Thread.currentThread() != Looper.getMainLooper().getThread()) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -278,11 +388,11 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
 
-        OkHttpUtils.postString().url(Common.Url_Live_Enter+roomId).id(Common.NET_LIVE_ENTER_ID)
+        OkHttpUtils.postString().url(Common.Url_Live_Enter + roomId).id(Common.NET_LIVE_ENTER_ID)
                 .content(mGson.toJson("")).mediaType(Common.JSON).tag(Common.NET_LIVE_ENTER_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
                 .execute(new MyStringCallback(mContext, this, false));
-        OkHttpUtils.postString().url(Common.Url_Live_UserLog+roomId).id(Common.NET_LIVE_USERLOG_ID)
+        OkHttpUtils.postString().url(Common.Url_Live_UserLog + roomId).id(Common.NET_LIVE_USERLOG_ID)
                 .content(mGson.toJson("")).mediaType(Common.JSON).tag(Common.NET_LIVE_USERLOG_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
                 .execute(new MyStringCallback(mContext, this, false));
@@ -341,10 +451,18 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (player!=null) {
+            player.stop();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         closeLive();
         receiveRegister(false);
-        NIMClient.getService(ChatRoomService.class).exitChatRoom(chatRoomId+"");
+        NIMClient.getService(ChatRoomService.class).exitChatRoom(chatRoomId + "");
         super.onDestroy();
         if (animationDrawable != null) {
             animationDrawable.stop();
@@ -410,8 +528,8 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
         PromptDialog.Builder builder = new PromptDialog.Builder(MyLiveRoomActivity.this);
         builder.setTitle("确定要结束本次直播吗？");
-        builder.setMessage("直播开始："+ MyTools.convertTimeS(startTime)
-                +"\n直播持续："+ MyTools.getTwoTimeCount(startTime, endTime));
+        builder.setMessage("直播开始：" + MyTools.convertTimeS(startTime)
+                + "\n直播持续：" + MyTools.getTwoTimeCount(startTime, endTime));
         builder.setPositiveButton("再来一会", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -505,11 +623,11 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             case MSG_STOP_LIVESTREAMING_FINISHED://停止直播完成
                 LogUtils.e("test: MSG_STOP_LIVESTREAMING_FINISHED");
                 m_liveStreamingOn = false;
-                {
-                    mIntentLiveStreamingStopFinished.putExtra("LiveStreamingStopFinished", 1);
-                    sendBroadcast(mIntentLiveStreamingStopFinished);
-                }
-                upLiveStatus(0);
+            {
+                mIntentLiveStreamingStopFinished.putExtra("LiveStreamingStopFinished", 1);
+                sendBroadcast(mIntentLiveStreamingStopFinished);
+            }
+            upLiveStatus(0);
             break;
             case MSG_STOP_VIDEO_CAPTURE_FINISHED:
                 LogUtils.e("test: in handleMessage: MSG_STOP_VIDEO_CAPTURE_FINISHED");
@@ -562,7 +680,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     private void upLiveStatus(int i) {
-        OkHttpUtils.postString().url(Common.Url_Live_Status+i).id(Common.NET_LIVE_STATUS_ID)
+        OkHttpUtils.postString().url(Common.Url_Live_Status + i).id(Common.NET_LIVE_STATUS_ID)
                 .content(mGson.toJson("")).mediaType(Common.JSON).tag(Common.NET_LIVE_STATUS_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
                 .execute(new MyStringCallback(mContext, this, false));
@@ -618,5 +736,94 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            chatroomLv.getRefreshableView().smoothScrollToPosition(mAdapter.getCount());
+        }
+    };
+
+    @Override
+    public void onItem(View v, int position) {
+        switch (v.getId()) {
+            case R.id.item_p2pchat_text_headleft_iv:
+                startActivity(OtherPersonalActivity.buildIntent(mContext, Long.valueOf(mAdapter.getItem(position).getUserId())));
+                break;
+            case R.id.item_p2pchat_image_left_iv:
+            case R.id.item_p2pchat_image_right_iv:
+                String imagePath = "";
+                if (mAdapter.getItem(position).getImageThumUrl().startsWith("http")) {
+                    imagePath = mAdapter.getItem(position).getImageUrl();
+                } else {
+                    File mFile = new File(mAdapter.getItem(position).getImageFilePath());
+                    if (mFile.exists()) {
+                        imagePath = "file://"+mAdapter.getItem(position).getImageFilePath();
+                    } else {
+                        imagePath = mAdapter.getItem(position).getImageUrl();
+                    }
+                }
+
+                Intent intent = new Intent();
+                intent.putExtra("image", imagePath);
+                intent.putExtra("num", 0);
+                intent.setClass(mContext, PictureBrowsingActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
+
+    @Override
+    public void onItemAudio(View v, int position, final AnimationDrawable animationDrawable) {
+        switch (v.getId()) {
+            case R.id.item_p2pchat_audio_right_ll:
+            case R.id.item_p2pchat_audio_left_ll:
+                if ((new File(mAdapter.getItem(position).getAudioFilePath()).exists())) {
+                    if (player!=null && positionAudio!=position) {
+                        player.stop();
+                    }
+                    player.setDataSource(mAdapter.getItem(position).getAudioFilePath());
+                    player.setOnPlayListener(new OnPlayListener() {
+                        @Override
+                        public void onPrepared() {
+
+                        }
+
+                        @Override
+                        public void onCompletion() {
+                            animationDrawable.stop();
+                            animationDrawable.selectDrawable(0);
+                        }
+
+                        @Override
+                        public void onInterrupt() {
+                            animationDrawable.stop();
+                            animationDrawable.selectDrawable(0);
+                        }
+
+                        @Override
+                        public void onError(String s) {
+                            animationDrawable.stop();
+                            animationDrawable.selectDrawable(0);
+                        }
+
+                        @Override
+                        public void onPlaying(long l) {
+                            animationDrawable.start();
+                        }
+                    });
+                    if (animationDrawable.isRunning()) {
+                        player.stop();
+                    } else {
+                        player.start(AudioManager.STREAM_MUSIC);
+                    }
+                } else {
+                    showToast("没有文件");
+                }
+                positionAudio = position;
+                break;
+        }
     }
 }
