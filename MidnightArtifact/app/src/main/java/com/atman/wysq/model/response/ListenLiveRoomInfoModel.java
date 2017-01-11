@@ -1,5 +1,7 @@
 package com.atman.wysq.model.response;
 
+import java.io.Serializable;
+
 /**
  * Created by tangbingliang on 17/1/11.
  */
@@ -165,6 +167,99 @@ public class ListenLiveRoomInfoModel {
         }
 
         public static class CurrentRecordBean {
+            /**
+             * live_record_id : 838
+             * live_room_id : 107
+             * channel : bea474b46ddb40db8f88676e08075c0f
+             * pushUrl : rtmp://p201.live.126.net/live/bea474b46ddb40db8f88676e08075c0f?wsSecret=6cc5f8fb8ae64c3132f8f6e8b53dfe62&wsTime=1470732067
+             * rtmpPullUrl : http://v201.live.126.net/live/bea474b46ddb40db8f88676e08075c0f.flv
+             * start_time : 1470732075000
+             * end_time : 1470732074000
+             * create_time : 1470732074000
+             * update_time : 1470732074000
+             */
+
+            private long live_record_id;
+            private long live_room_id;
+            private String channel;
+            private String pushUrl;
+            private String rtmpPullUrl;
+            private long start_time;
+            private long end_time;
+            private long create_time;
+            private long update_time;
+
+            public long getLive_record_id() {
+                return live_record_id;
+            }
+
+            public void setLive_record_id(long live_record_id) {
+                this.live_record_id = live_record_id;
+            }
+
+            public long getLive_room_id() {
+                return live_room_id;
+            }
+
+            public void setLive_room_id(long live_room_id) {
+                this.live_room_id = live_room_id;
+            }
+
+            public String getChannel() {
+                return channel;
+            }
+
+            public void setChannel(String channel) {
+                this.channel = channel;
+            }
+
+            public String getPushUrl() {
+                return pushUrl;
+            }
+
+            public void setPushUrl(String pushUrl) {
+                this.pushUrl = pushUrl;
+            }
+
+            public String getRtmpPullUrl() {
+                return rtmpPullUrl;
+            }
+
+            public void setRtmpPullUrl(String rtmpPullUrl) {
+                this.rtmpPullUrl = rtmpPullUrl;
+            }
+
+            public long getStart_time() {
+                return start_time;
+            }
+
+            public void setStart_time(long start_time) {
+                this.start_time = start_time;
+            }
+
+            public long getEnd_time() {
+                return end_time;
+            }
+
+            public void setEnd_time(long end_time) {
+                this.end_time = end_time;
+            }
+
+            public long getCreate_time() {
+                return create_time;
+            }
+
+            public void setCreate_time(long create_time) {
+                this.create_time = create_time;
+            }
+
+            public long getUpdate_time() {
+                return update_time;
+            }
+
+            public void setUpdate_time(long update_time) {
+                this.update_time = update_time;
+            }
         }
 
         public static class UserExtBean {

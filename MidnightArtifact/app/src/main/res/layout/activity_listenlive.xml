@@ -138,6 +138,30 @@
 
             </RelativeLayout>
 
+            <LinearLayout
+                android:id="@+id/buffering_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <ProgressBar
+                    style="@android:style/Widget.ProgressBar.Large"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:layout_marginLeft="@dimen/dimen_dp_10"
+                    android:text="缓冲中..."
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="13dp" />
+            </LinearLayout>
+
         </RelativeLayout>
 
         <ImageView
