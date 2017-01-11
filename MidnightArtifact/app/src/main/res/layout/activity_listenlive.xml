@@ -6,19 +6,19 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         xmlns:fresco="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/myliveroom_bg_iv"
+        android:id="@+id/listenlive_bg_iv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
     <ImageView
-        android:id="@+id/myliveroom_back_iv"
+        android:id="@+id/listenlive_back_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/live_live_icon_close" />
 
     <LinearLayout
-        android:id="@+id/myliveroom_ll"
+        android:id="@+id/listenlive_ll"
         android:layout_marginTop="@dimen/dimen_dp_100"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:padding="@dimen/dimen_dp_10">
 
             <RelativeLayout
-                android:id="@+id/myliveroom_rl"
+                android:id="@+id/listenlive_rl"
                 android:layout_width="@dimen/dimen_dp_45"
                 android:layout_height="@dimen/dimen_dp_45"
                 android:layout_alignParentLeft="true"
@@ -39,7 +39,7 @@
 
                 <com.facebook.drawee.view.SimpleDraweeView
                     xmlns:fresco="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/myliveroom_head_iv"
+                    android:id="@+id/listenlive_head_iv"
                     android:layout_width="@dimen/dimen_dp_45"
                     android:layout_height="@dimen/dimen_dp_45"
                     fresco:roundedCornerRadius="@dimen/dimen_dp_5"
@@ -50,7 +50,7 @@
                     fresco:placeholderImage="@mipmap/ic_launcher" />
 
                 <ImageView
-                    android:id="@+id/myliveroom_gender_iv"
+                    android:id="@+id/listenlive_gender_iv"
                     android:layout_width="@dimen/dimen_dp_15"
                     android:layout_height="@dimen/dimen_dp_15"
                     android:layout_marginRight="@dimen/dimen_dp_2"
@@ -60,7 +60,7 @@
                     android:src="@mipmap/personal_man_ic" />
 
                 <ImageView
-                    android:id="@+id/myliveroom_verify_iv"
+                    android:id="@+id/listenlive_verify_iv"
                     android:layout_width="match_parent"
                     android:layout_margin="@dimen/dimen_dp_2"
                     android:layout_height="@dimen/dimen_dp_15"
@@ -72,8 +72,8 @@
             </RelativeLayout>
 
             <TextView
-                android:layout_toRightOf="@+id/myliveroom_rl"
-                android:id="@+id/myliveroom_name_tv"
+                android:layout_toRightOf="@+id/listenlive_rl"
+                android:id="@+id/listenlive_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_dp_10"
@@ -84,9 +84,9 @@
                 android:textSize="@dimen/dimen_sp_14" />
 
             <TextView
-                android:layout_toRightOf="@+id/myliveroom_rl"
-                android:id="@+id/myliveroom_title_tv"
-                android:layout_below="@+id/myliveroom_name_tv"
+                android:layout_toRightOf="@+id/listenlive_rl"
+                android:id="@+id/listenlive_title_tv"
+                android:layout_below="@+id/listenlive_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_dp_5"
@@ -98,8 +98,8 @@
                 android:textSize="@dimen/dimen_sp_14" />
 
             <TextView
-                android:id="@+id/myliveroom_level_tx"
-                android:layout_toRightOf="@+id/myliveroom_name_tv"
+                android:id="@+id/listenlive_level_tx"
+                android:layout_toRightOf="@+id/listenlive_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
@@ -111,14 +111,14 @@
                 android:textSize="@dimen/dimen_sp_12" />
 
             <RelativeLayout
-                android:layout_toRightOf="@+id/myliveroom_level_tx"
+                android:layout_toRightOf="@+id/listenlive_level_tx"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="@dimen/dimen_dp_3">
 
                 <TextView
-                    android:id="@+id/myliveroom_vip_tx"
+                    android:id="@+id/listenlive_vip_tx"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/level_red_bg"
@@ -130,7 +130,7 @@
                     android:textSize="@dimen/dimen_sp_10" />
 
                 <ImageView
-                    android:id="@+id/myliveroom_svip_iv"
+                    android:id="@+id/listenlive_svip_iv"
                     android:layout_width="@dimen/dimen_dp_50"
                     android:layout_height="@dimen/dimen_dp_13"
                     android:src="@mipmap/other_svip_ic"
@@ -163,7 +163,7 @@
                 android:textColor="@color/color_bfbfbf" />
 
             <TextView
-                android:id="@+id/myliveroom_num_tv"
+                android:id="@+id/listenlive_num_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -173,7 +173,7 @@
                 android:textColor="@color/color_bfbfbf" />
 
             <ImageView
-                android:id="@+id/myliveroom_anim_iv"
+                android:id="@+id/listenlive_anim_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -182,7 +182,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_below="@+id/myliveroom_ll"
+        android:layout_below="@+id/listenlive_ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_aaffffff"
@@ -205,7 +205,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/myliveroom_pic_iv"
+        android:id="@+id/listenlive_pic_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

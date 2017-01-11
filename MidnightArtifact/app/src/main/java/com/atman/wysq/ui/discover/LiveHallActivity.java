@@ -132,8 +132,7 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
         pullToRefreshGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(DirectSeedingRoomActivity.buildIntent(mContext
-                        , mAdapter.getItem(position).getRoom_id()));
+                startActivity(ListenLiveActivity.buildIntent(mContext, mAdapter.getItem(position)));
             }
         });
     }

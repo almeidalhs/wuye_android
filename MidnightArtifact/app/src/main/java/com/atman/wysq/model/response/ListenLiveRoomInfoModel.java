@@ -1,20 +1,17 @@
 package com.atman.wysq.model.response;
 
-import java.io.Serializable;
-import java.util.List;
-
 /**
- * Created by tangbingliang on 16/12/29.
+ * Created by tangbingliang on 17/1/11.
  */
 
-public class GetLiveHallModel implements Serializable {
+public class ListenLiveRoomInfoModel {
     /**
      * result : 1
-     * body : [{"live_room_id":107,"room_name":"一个人是因为","user_id":450000638,"cid":"bea474b46ddb40db8f88676e08075c0f","pic_url":"/imageServer/5EA0d929365a8fd44465a7ce991e0390975f.jpg","description":"一个人是因为","member_count":0,"status":1,"create_time":1470732074000,"update_time":1470732074000,"room_id":3816042,"currentRecord":{"live_record_id":838,"live_room_id":107,"channel":"bea474b46ddb40db8f88676e08075c0f","pushUrl":"rtmp://p201.live.126.net/live/bea474b46ddb40db8f88676e08075c0f?wsSecret=6cc5f8fb8ae64c3132f8f6e8b53dfe62&wsTime=1470732067","rtmpPullUrl":"http://v201.live.126.net/live/bea474b46ddb40db8f88676e08075c0f.flv","start_time":1470732075000,"end_time":1470732074000,"create_time":1470732074000,"update_time":1470732074000},"userExt":{"user_id":450000638,"integral":"10057","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"F","create_time":1440562844000,"update_time":1440562844000,"name_change":0,"next_level_integral":9942,"userLevel":6,"mobile":"13920000027","nick_name":"夜友-11789","status":2,"verify_status":1,"can_live_room":1,"gold_coin":20846,"charm":21,"can_chat":1,"can_shake":1,"convert_coin":14,"vip_level":0,"chat_count":7,"accrue_coin":27413},"cost_gold":5}]
+     * body : {"live_room_id":38,"room_name":"超大图片不","user_id":450214623,"cid":"d12a0f8f919c4140af62770227bb4e93","pic_url":"/imageServer/7A4981a2f2ced1ec4dab9b3075be200ecb7f.jpg","description":"超大图片不","member_count":1,"status":1,"create_time":1470212262000,"update_time":1458618547000,"room_id":30234,"currentRecord":{},"userExt":{"user_id":450214623,"integral":"158460","secret_type":0,"type":1,"icon":"/imageServer/DC1Ec5c24d27e1894e16aaee5502e7d84da0.jpg","sex":"M","create_time":1458618425000,"update_time":1458618425000,"name_change":1,"next_level_integral":41513,"userLevel":9,"mobile":"13860000022","nick_name":"后规模","status":2,"verify_status":0,"can_live_room":1,"gold_coin":10000790,"charm":3655,"can_chat":1,"can_shake":1,"convert_coin":279,"around_site":"强大g","vip_level":0,"chat_count":53,"accrue_coin":10158994}}
      */
 
     private String result;
-    private List<BodyBean> body;
+    private BodyBean body;
 
     public String getResult() {
         return result;
@@ -24,30 +21,29 @@ public class GetLiveHallModel implements Serializable {
         this.result = result;
     }
 
-    public List<BodyBean> getBody() {
+    public BodyBean getBody() {
         return body;
     }
 
-    public void setBody(List<BodyBean> body) {
+    public void setBody(BodyBean body) {
         this.body = body;
     }
 
-    public static class BodyBean implements Serializable {
+    public static class BodyBean {
         /**
-         * live_room_id : 107
-         * room_name : 一个人是因为
-         * user_id : 450000638
-         * cid : bea474b46ddb40db8f88676e08075c0f
-         * pic_url : /imageServer/5EA0d929365a8fd44465a7ce991e0390975f.jpg
-         * description : 一个人是因为
-         * member_count : 0
+         * live_room_id : 38
+         * room_name : 超大图片不
+         * user_id : 450214623
+         * cid : d12a0f8f919c4140af62770227bb4e93
+         * pic_url : /imageServer/7A4981a2f2ced1ec4dab9b3075be200ecb7f.jpg
+         * description : 超大图片不
+         * member_count : 1
          * status : 1
-         * create_time : 1470732074000
-         * update_time : 1470732074000
-         * room_id : 3816042
-         * currentRecord : {"live_record_id":838,"live_room_id":107,"channel":"bea474b46ddb40db8f88676e08075c0f","pushUrl":"rtmp://p201.live.126.net/live/bea474b46ddb40db8f88676e08075c0f?wsSecret=6cc5f8fb8ae64c3132f8f6e8b53dfe62&wsTime=1470732067","rtmpPullUrl":"http://v201.live.126.net/live/bea474b46ddb40db8f88676e08075c0f.flv","start_time":1470732075000,"end_time":1470732074000,"create_time":1470732074000,"update_time":1470732074000}
-         * userExt : {"user_id":450000638,"integral":"10057","secret_type":0,"type":1,"icon":"/imageServer/9C66male.png","sex":"F","create_time":1440562844000,"update_time":1440562844000,"name_change":0,"next_level_integral":9942,"userLevel":6,"mobile":"13920000027","nick_name":"夜友-11789","status":2,"verify_status":1,"can_live_room":1,"gold_coin":20846,"charm":21,"can_chat":1,"can_shake":1,"convert_coin":14,"vip_level":0,"chat_count":7,"accrue_coin":27413}
-         * cost_gold : 5
+         * create_time : 1470212262000
+         * update_time : 1458618547000
+         * room_id : 30234
+         * currentRecord : {}
+         * userExt : {"user_id":450214623,"integral":"158460","secret_type":0,"type":1,"icon":"/imageServer/DC1Ec5c24d27e1894e16aaee5502e7d84da0.jpg","sex":"M","create_time":1458618425000,"update_time":1458618425000,"name_change":1,"next_level_integral":41513,"userLevel":9,"mobile":"13860000022","nick_name":"后规模","status":2,"verify_status":0,"can_live_room":1,"gold_coin":10000790,"charm":3655,"can_chat":1,"can_shake":1,"convert_coin":279,"around_site":"强大g","vip_level":0,"chat_count":53,"accrue_coin":10158994}
          */
 
         private long live_room_id;
@@ -60,10 +56,9 @@ public class GetLiveHallModel implements Serializable {
         private int status;
         private long create_time;
         private long update_time;
-        private long room_id;
+        private int room_id;
         private CurrentRecordBean currentRecord;
         private UserExtBean userExt;
-        private int cost_gold;
 
         public long getLive_room_id() {
             return live_room_id;
@@ -145,11 +140,11 @@ public class GetLiveHallModel implements Serializable {
             this.update_time = update_time;
         }
 
-        public long getRoom_id() {
+        public int getRoom_id() {
             return room_id;
         }
 
-        public void setRoom_id(long room_id) {
+        public void setRoom_id(int room_id) {
             this.room_id = room_id;
         }
 
@@ -169,136 +164,36 @@ public class GetLiveHallModel implements Serializable {
             this.userExt = userExt;
         }
 
-        public int getCost_gold() {
-            return cost_gold;
+        public static class CurrentRecordBean {
         }
 
-        public void setCost_gold(int cost_gold) {
-            this.cost_gold = cost_gold;
-        }
-
-        public static class CurrentRecordBean implements Serializable {
+        public static class UserExtBean {
             /**
-             * live_record_id : 838
-             * live_room_id : 107
-             * channel : bea474b46ddb40db8f88676e08075c0f
-             * pushUrl : rtmp://p201.live.126.net/live/bea474b46ddb40db8f88676e08075c0f?wsSecret=6cc5f8fb8ae64c3132f8f6e8b53dfe62&wsTime=1470732067
-             * rtmpPullUrl : http://v201.live.126.net/live/bea474b46ddb40db8f88676e08075c0f.flv
-             * start_time : 1470732075000
-             * end_time : 1470732074000
-             * create_time : 1470732074000
-             * update_time : 1470732074000
-             */
-
-            private long live_record_id;
-            private long live_room_id;
-            private String channel;
-            private String pushUrl;
-            private String rtmpPullUrl;
-            private long start_time;
-            private long end_time;
-            private long create_time;
-            private long update_time;
-
-            public long getLive_record_id() {
-                return live_record_id;
-            }
-
-            public void setLive_record_id(long live_record_id) {
-                this.live_record_id = live_record_id;
-            }
-
-            public long getLive_room_id() {
-                return live_room_id;
-            }
-
-            public void setLive_room_id(long live_room_id) {
-                this.live_room_id = live_room_id;
-            }
-
-            public String getChannel() {
-                return channel;
-            }
-
-            public void setChannel(String channel) {
-                this.channel = channel;
-            }
-
-            public String getPushUrl() {
-                return pushUrl;
-            }
-
-            public void setPushUrl(String pushUrl) {
-                this.pushUrl = pushUrl;
-            }
-
-            public String getRtmpPullUrl() {
-                return rtmpPullUrl;
-            }
-
-            public void setRtmpPullUrl(String rtmpPullUrl) {
-                this.rtmpPullUrl = rtmpPullUrl;
-            }
-
-            public long getStart_time() {
-                return start_time;
-            }
-
-            public void setStart_time(long start_time) {
-                this.start_time = start_time;
-            }
-
-            public long getEnd_time() {
-                return end_time;
-            }
-
-            public void setEnd_time(long end_time) {
-                this.end_time = end_time;
-            }
-
-            public long getCreate_time() {
-                return create_time;
-            }
-
-            public void setCreate_time(long create_time) {
-                this.create_time = create_time;
-            }
-
-            public long getUpdate_time() {
-                return update_time;
-            }
-
-            public void setUpdate_time(long update_time) {
-                this.update_time = update_time;
-            }
-        }
-
-        public static class UserExtBean implements Serializable {
-            /**
-             * user_id : 450000638
-             * integral : 10057
+             * user_id : 450214623
+             * integral : 158460
              * secret_type : 0
              * type : 1
-             * icon : /imageServer/9C66male.png
-             * sex : F
-             * create_time : 1440562844000
-             * update_time : 1440562844000
-             * name_change : 0
-             * next_level_integral : 9942
-             * userLevel : 6
-             * mobile : 13920000027
-             * nick_name : 夜友-11789
+             * icon : /imageServer/DC1Ec5c24d27e1894e16aaee5502e7d84da0.jpg
+             * sex : M
+             * create_time : 1458618425000
+             * update_time : 1458618425000
+             * name_change : 1
+             * next_level_integral : 41513
+             * userLevel : 9
+             * mobile : 13860000022
+             * nick_name : 后规模
              * status : 2
-             * verify_status : 1
+             * verify_status : 0
              * can_live_room : 1
-             * gold_coin : 20846
-             * charm : 21
+             * gold_coin : 10000790
+             * charm : 3655
              * can_chat : 1
              * can_shake : 1
-             * convert_coin : 14
+             * convert_coin : 279
+             * around_site : 强大g
              * vip_level : 0
-             * chat_count : 7
-             * accrue_coin : 27413
+             * chat_count : 53
+             * accrue_coin : 10158994
              */
 
             private long user_id;
@@ -317,13 +212,14 @@ public class GetLiveHallModel implements Serializable {
             private int status;
             private int verify_status;
             private int can_live_room;
-            private long gold_coin;
+            private int gold_coin;
             private int charm;
             private int can_chat;
             private int can_shake;
             private int convert_coin;
+            private String around_site;
             private int vip_level;
-            private long chat_count;
+            private int chat_count;
             private int accrue_coin;
 
             public long getUser_id() {
@@ -454,11 +350,11 @@ public class GetLiveHallModel implements Serializable {
                 this.can_live_room = can_live_room;
             }
 
-            public long getGold_coin() {
+            public int getGold_coin() {
                 return gold_coin;
             }
 
-            public void setGold_coin(long gold_coin) {
+            public void setGold_coin(int gold_coin) {
                 this.gold_coin = gold_coin;
             }
 
@@ -494,6 +390,14 @@ public class GetLiveHallModel implements Serializable {
                 this.convert_coin = convert_coin;
             }
 
+            public String getAround_site() {
+                return around_site;
+            }
+
+            public void setAround_site(String around_site) {
+                this.around_site = around_site;
+            }
+
             public int getVip_level() {
                 return vip_level;
             }
@@ -502,11 +406,11 @@ public class GetLiveHallModel implements Serializable {
                 this.vip_level = vip_level;
             }
 
-            public long getChat_count() {
+            public int getChat_count() {
                 return chat_count;
             }
 
-            public void setChat_count(long chat_count) {
+            public void setChat_count(int chat_count) {
                 this.chat_count = chat_count;
             }
 
