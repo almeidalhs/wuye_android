@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:id="@+id/listenlive_bg_iv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,9 +18,9 @@
 
     <LinearLayout
         android:id="@+id/listenlive_ll"
-        android:layout_marginTop="@dimen/dimen_dp_100"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_dp_100"
         android:background="@color/color_88000000"
         android:orientation="vertical">
 
@@ -37,61 +36,60 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerInParent="true">
 
-                <com.facebook.drawee.view.SimpleDraweeView
-                    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/listenlive_head_iv"
                     android:layout_width="@dimen/dimen_dp_45"
                     android:layout_height="@dimen/dimen_dp_45"
-                    fresco:roundedCornerRadius="@dimen/dimen_dp_5"
-                    fresco:roundingBorderWidth="@dimen/dimen_dp_2"
-                    fresco:roundingBorderColor="@android:color/white"
                     fresco:failureImage="@mipmap/ic_launcher"
                     fresco:failureImageScaleType="centerInside"
-                    fresco:placeholderImage="@mipmap/ic_launcher" />
+                    fresco:placeholderImage="@mipmap/ic_launcher"
+                    fresco:roundedCornerRadius="@dimen/dimen_dp_5"
+                    fresco:roundingBorderColor="@android:color/white"
+                    fresco:roundingBorderWidth="@dimen/dimen_dp_2" />
 
                 <ImageView
                     android:id="@+id/listenlive_gender_iv"
                     android:layout_width="@dimen/dimen_dp_15"
                     android:layout_height="@dimen/dimen_dp_15"
-                    android:layout_marginRight="@dimen/dimen_dp_2"
-                    android:layout_marginBottom="@dimen/dimen_dp_2"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
+                    android:layout_marginBottom="@dimen/dimen_dp_2"
+                    android:layout_marginRight="@dimen/dimen_dp_2"
                     android:src="@mipmap/personal_man_ic" />
 
                 <ImageView
                     android:id="@+id/listenlive_verify_iv"
                     android:layout_width="match_parent"
-                    android:layout_margin="@dimen/dimen_dp_2"
                     android:layout_height="@dimen/dimen_dp_15"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/dimen_dp_2"
                     android:scaleType="fitXY"
                     android:src="@mipmap/personal_identification"
                     android:visibility="gone" />
             </RelativeLayout>
 
             <TextView
-                android:layout_toRightOf="@+id/listenlive_rl"
                 android:id="@+id/listenlive_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_dp_10"
                 android:layout_marginRight="@dimen/dimen_dp_10"
+                android:layout_toRightOf="@+id/listenlive_rl"
                 android:singleLine="true"
                 android:text="--"
                 android:textColor="@color/color_white"
                 android:textSize="@dimen/dimen_sp_14" />
 
             <TextView
-                android:layout_toRightOf="@+id/listenlive_rl"
                 android:id="@+id/listenlive_title_tv"
-                android:layout_below="@+id/listenlive_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_dp_5"
+                android:layout_below="@+id/listenlive_name_tv"
                 android:layout_marginLeft="@dimen/dimen_dp_10"
                 android:layout_marginRight="@dimen/dimen_dp_10"
+                android:layout_marginTop="@dimen/dimen_dp_5"
+                android:layout_toRightOf="@+id/listenlive_rl"
                 android:singleLine="true"
                 android:text="--"
                 android:textColor="@color/color_white"
@@ -99,10 +97,10 @@
 
             <TextView
                 android:id="@+id/listenlive_level_tx"
-                android:layout_toRightOf="@+id/listenlive_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
+                android:layout_toRightOf="@+id/listenlive_name_tv"
                 android:background="@drawable/level_blue_bg"
                 android:paddingLeft="@dimen/dimen_dp_3"
                 android:paddingRight="@dimen/dimen_dp_3"
@@ -111,9 +109,9 @@
                 android:textSize="@dimen/dimen_sp_12" />
 
             <RelativeLayout
-                android:layout_toRightOf="@+id/listenlive_level_tx"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/listenlive_level_tx"
                 android:layout_weight="1"
                 android:paddingLeft="@dimen/dimen_dp_3">
 
@@ -125,9 +123,9 @@
                     android:paddingLeft="@dimen/dimen_dp_5"
                     android:paddingRight="@dimen/dimen_dp_5"
                     android:text="VIP.0"
-                    android:visibility="gone"
                     android:textColor="@color/color_white"
-                    android:textSize="@dimen/dimen_sp_10" />
+                    android:textSize="@dimen/dimen_sp_10"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:id="@+id/listenlive_svip_iv"
@@ -144,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:orientation="horizontal"
-                android:visibility="gone" >
+                android:visibility="gone">
 
                 <ProgressBar
                     style="@android:style/Widget.ProgressBar.Large"
@@ -155,8 +153,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:adjustViewBounds="true"
                     android:layout_marginLeft="@dimen/dimen_dp_10"
+                    android:adjustViewBounds="true"
                     android:text="缓冲中..."
                     android:textColor="#FFFFFFFF"
                     android:textSize="13dp" />
@@ -181,20 +179,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="当前直播间人数："
-                android:textSize="@dimen/dimen_sp_11"
                 android:layout_marginBottom="@dimen/dimen_dp_5"
-                android:textColor="@color/color_bfbfbf" />
+                android:text="当前直播间人数："
+                android:textColor="@color/color_bfbfbf"
+                android:textSize="@dimen/dimen_sp_11" />
 
             <TextView
                 android:id="@+id/listenlive_num_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_dp_5"
                 android:layout_weight="1"
                 android:text="0"
-                android:textSize="@dimen/dimen_sp_11"
-                android:layout_marginBottom="@dimen/dimen_dp_5"
-                android:textColor="@color/color_bfbfbf" />
+                android:textColor="@color/color_bfbfbf"
+                android:textSize="@dimen/dimen_sp_11" />
 
             <ImageView
                 android:id="@+id/listenlive_anim_iv"
@@ -205,15 +203,14 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_below="@+id/listenlive_ll"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_aaffffff"
-        android:orientation="vertical">
+        android:layout_below="@+id/listenlive_ll"
+        android:layout_above="@+id/FaceRelativeLayout"
+        android:background="@color/color_aaffffff">
 
-        <com.handmark.pulltorefresh.library.PullToRefreshListView
-            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
             android:id="@+id/chatroom_lv"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -223,19 +220,170 @@
             android:listSelector="#00000000"
             ptr:ptrAnimationStyle="flip"
             ptr:ptrMode="both"
-            ptr:ptrScrollingWhileRefreshingEnabled="true">
-        </com.handmark.pulltorefresh.library.PullToRefreshListView>
+            ptr:ptrScrollingWhileRefreshingEnabled="true"></com.handmark.pulltorefresh.library.PullToRefreshListView>
 
-    </LinearLayout>
+        <FrameLayout
+            android:id="@+id/layoutPlayAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@mipmap/nim_dialog_toast_bg"
+            android:visibility="gone">
+
+            <Chronometer
+                android:id="@+id/timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="00:00"
+                android:textColor="@color/color_white"
+                android:textSize="45sp" />
+
+            <LinearLayout
+                android:id="@+id/timer_tip_container"
+                android:layout_width="188dp"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/timer_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="手指上滑，取消发送"
+                    android:textColor="@color/color_white"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </FrameLayout>
+    </FrameLayout>
 
     <ImageView
-        android:id="@+id/listenlive_pic_iv"
+        android:id="@+id/listenlive_gift_iv"
+        android:layout_above="@+id/FaceRelativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/dimen_dp_20"
         android:layout_marginBottom="@dimen/dimen_dp_10"
-        android:src="@mipmap/live_action_icon_image" />
+        android:layout_marginRight="@dimen/dimen_dp_20"
+        android:src="@mipmap/live_action_icon_gift" />
+
+    <ImageView
+        android:layout_above="@+id/FaceRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:src="@color/color_line" />
+
+    <com.atman.wysq.widget.face.FaceRelativeLayout
+        android:id="@+id/FaceRelativeLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/ll1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/dimen_dp_5"
+            android:paddingTop="@dimen/dimen_dp_5">
+
+            <ImageView
+                android:id="@+id/p2pchat_record_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_5"
+                android:layout_marginRight="@dimen/dimen_dp_5"
+                android:src="@mipmap/chat_record_ic" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.base.baselibs.widget.MyCleanEditText
+                    android:id="@+id/blogdetail_addcomment_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/et_addcomment_bg_selector"
+                    android:hint=""
+                    android:imeOptions="actionSend"
+                    android:maxLength="250"
+                    android:maxLines="3"
+                    android:padding="@dimen/dimen_dp_5"
+                    android:textColor="@color/color_black"
+                    android:textSize="@dimen/dimen_sp_15" />
+
+                <Button
+                    android:id="@+id/p2pchat_record_bt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/et_addcomment_bg_selector"
+                    android:gravity="center"
+                    android:minHeight="@dimen/dimen_dp_30"
+                    android:text="按住 说话"
+                    android:textColor="@color/color_black"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/blogdetail_addemol_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_5"
+                android:layout_marginRight="@dimen/dimen_dp_5"
+                android:src="@mipmap/chat_face_ic" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dimen_dp_5">
+
+                <ImageView
+                    android:id="@+id/p2pchat_pic_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/chat_add_ic" />
+
+                <Button
+                    android:id="@+id/p2pchat_send_bt"
+                    android:layout_width="@dimen/dimen_dp_35"
+                    android:layout_height="@dimen/dimen_dp_30"
+                    android:background="@drawable/bt_send_bg_selector"
+                    android:text="发送"
+                    android:textColor="@color/color_black"
+                    android:textSize="@dimen/dimen_sp_13"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/ll_facechoose"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dimen_dp_150"
+            android:layout_below="@+id/ll1"
+            android:background="@color/color_white"
+            android:visibility="gone">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_contains"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+
+            <LinearLayout
+                android:id="@+id/iv_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/dimen_dp_6"
+                android:gravity="center"
+                android:orientation="horizontal"></LinearLayout>
+        </RelativeLayout>
+    </com.atman.wysq.widget.face.FaceRelativeLayout>
 
 </RelativeLayout>

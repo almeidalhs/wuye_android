@@ -473,7 +473,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         mMap.put("user",mUserMap);
         mMap.put("sendTime",message.getTime());
         mMap.put("type",1);
-        mMap.put("id",message.getSessionId());
+        mMap.put("id",chatRoomId);
         message.setRemoteExtension(mMap);
         // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
         ImMessage mImMessage = new ImMessage(null, message.getUuid()
