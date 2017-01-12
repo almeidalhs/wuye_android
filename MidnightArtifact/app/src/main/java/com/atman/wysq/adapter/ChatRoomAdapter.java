@@ -178,6 +178,8 @@ public class ChatRoomAdapter extends BaseAdapter {
         holderText.itemP2pchatFingerRightIv.setVisibility(View.GONE);
         holderText.itemP2pchatAudioRightLl.setVisibility(View.GONE);
         holderText.itemP2pchatRightPayTx.setVisibility(View.GONE);
+        holderText.itemP2pchatNotiTx.setVisibility(View.GONE);
+
         if (temp.getIsSelfSend()) {
             holderText.itemP2pchatTextHeadrightRl.setVisibility(View.VISIBLE);
             holderText.itemP2pchatTextHeadleftRl.setVisibility(View.GONE);
@@ -223,14 +225,33 @@ public class ChatRoomAdapter extends BaseAdapter {
 
         switch (type) {
             case ChatRoomTypeInter.ChatRoomTypeText:
-                if (temp.getIsSelfSend()) {
-                    holderText.itemP2pchatTextRightTx.setVisibility(View.VISIBLE);
-                    holderText.itemP2pchatTextRightTx.setText(SmileUtils.getEmotionContent(context
-                            , holderText.itemP2pchatTextRightTx, temp.getContent()));
+                if (temp.getIsGiftMessage()) {
+                    holderText.itemP2pchatTextLeftTx.setVisibility(View.GONE);
+                    holderText.itemP2pchatImageLeftIv.setVisibility(View.GONE);
+                    holderText.itemP2pchatFingerLeftIv.setVisibility(View.GONE);
+                    holderText.itemP2pchatAudioLeftLl.setVisibility(View.GONE);
+
+                    holderText.itemP2pchatTextRightTx.setVisibility(View.GONE);
+                    holderText.itemP2pchatImageRightIv.setVisibility(View.GONE);
+                    holderText.itemP2pchatFingerRightIv.setVisibility(View.GONE);
+                    holderText.itemP2pchatAudioRightLl.setVisibility(View.GONE);
+                    holderText.itemP2pchatRightPayTx.setVisibility(View.GONE);
+
+                    holderText.itemP2pchatTextHeadrightRl.setVisibility(View.GONE);
+                    holderText.itemP2pchatTextHeadleftRl.setVisibility(View.GONE);
+
+                    holderText.itemP2pchatNotiTx.setText(temp.getContent());
+                    holderText.itemP2pchatNotiTx.setVisibility(View.VISIBLE);
                 } else {
-                    holderText.itemP2pchatTextLeftTx.setVisibility(View.VISIBLE);
-                    holderText.itemP2pchatTextLeftTx.setText(SmileUtils.getEmotionContent(context
-                            , holderText.itemP2pchatTextRightTx, temp.getContent()));
+                    if (temp.getIsSelfSend()) {
+                        holderText.itemP2pchatTextRightTx.setVisibility(View.VISIBLE);
+                        holderText.itemP2pchatTextRightTx.setText(SmileUtils.getEmotionContent(context
+                                , holderText.itemP2pchatTextRightTx, temp.getContent()));
+                    } else {
+                        holderText.itemP2pchatTextLeftTx.setVisibility(View.VISIBLE);
+                        holderText.itemP2pchatTextLeftTx.setText(SmileUtils.getEmotionContent(context
+                                , holderText.itemP2pchatTextRightTx, temp.getContent()));
+                    }
                 }
                 break;
             case ChatRoomTypeInter.ChatRoomTypeImage:
@@ -497,6 +518,8 @@ public class ChatRoomAdapter extends BaseAdapter {
         ImageView itemP2pchatFingerRightIv;
         @Bind(R.id.item_p2pchat_audio_right_iv)
         ImageView itemP2pchatAudioRightIv;
+        @Bind(R.id.item_p2pchat_noti_tx)
+        TextView itemP2pchatNotiTx;
         @Bind(R.id.item_p2pchat_audio_right_tx)
         TextView itemP2pchatAudioRightTx;
         @Bind(R.id.item_p2pchat_audio_right_ll)

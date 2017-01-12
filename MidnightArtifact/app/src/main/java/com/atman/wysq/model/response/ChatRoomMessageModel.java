@@ -25,10 +25,28 @@ public class ChatRoomMessageModel {
     private String id;
     private UserBean user;
     private String content;
+    private String giftName;
+    private String giftMessage;
     private double sendTime;
     private int isAnchorImage;
     private int cmdType;
     private int banChatUserId;
+
+    public String getGiftName() {
+        return giftName;
+    }
+
+    public void setGiftName(String giftName) {
+        this.giftName = giftName;
+    }
+
+    public String getGiftMessage() {
+        return giftMessage;
+    }
+
+    public void setGiftMessage(String giftMessage) {
+        this.giftMessage = giftMessage;
+    }
 
     public int getIsself() {
         return isself;

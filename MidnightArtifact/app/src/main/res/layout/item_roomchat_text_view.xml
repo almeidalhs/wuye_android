@@ -62,6 +62,22 @@
             android:src="@mipmap/personal_identification"/>
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/item_p2pchat_noti_tx"
+        android:layout_below="@+id/item_p2pchat_text_time_tx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dimen_dp_5"
+        android:paddingBottom="@dimen/dimen_dp_5"
+        android:paddingLeft="@dimen/dimen_dp_5"
+        android:paddingRight="@dimen/dimen_dp_5"
+        android:visibility="gone"
+        android:textColor="@color/color_2B2B2B"
+        android:textSize="@dimen/dimen_sp_12"
+        android:layout_marginLeft="@dimen/dimen_dp_10"
+        android:layout_marginRight="@dimen/dimen_dp_10"
+        android:background="@drawable/chatroom_noti_bg"/>
+
     <RelativeLayout
         android:id="@+id/item_p2pchat_text_headright_rl"
         android:layout_below="@+id/item_p2pchat_text_time_tx"

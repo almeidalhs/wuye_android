@@ -868,8 +868,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                             seedMessge(message, ChatRoomTypeInter.ChatRoomTypeText, "", mText, giftId);
                         }
                     }
-                } else {
-
                 }
             }
         }, b);

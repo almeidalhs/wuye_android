@@ -261,14 +261,17 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             @Override
             public void onEvent(List<ChatRoomMessage> messages) {
                 // 处理新收到的消息
-                LogUtils.e(">>>>>messages:" + messages.size());
-                LogUtils.e(">>>>>messages:" + messages.get(0).getContent());
-                LogUtils.e(">>>>>messages:" + messages.get(0).getMsgType());
+                LogUtils.e(">>>>>messages.size():" + messages.size());
+                LogUtils.e(">>>>>messages.get(0).getContent():" + messages.get(0).getContent());
+                LogUtils.e(">>>>>messages.get(0).getMsgType():" + messages.get(0).getMsgType());
                 for (int i = 0; i < messages.size(); i++) {
                     ChatRoomMessageModel temp = null;
                     if (messages.get(i).getContent() != null) {
                         temp = mGson.fromJson(messages.get(i).getContent().toString()
                                 , ChatRoomMessageModel.class);
+                        LogUtils.e("temp.getGiftName():"+temp.getGiftName());
+                        LogUtils.e("temp.getGiftMessage():"+temp.getGiftMessage());
+                        LogUtils.e("temp.getContent():"+temp.getContent());
                     } else {
                         LogUtils.e(">>>>>>>>:"+messages.get(i).getRemoteExtension());
                         if (messages.get(i).getRemoteExtension()!=null) {
@@ -281,13 +284,38 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                     LogUtils.e("n:"+n);
                     if (temp!=null) {
                         if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystem) {
-                            myliveroomNumTv.setText(String.valueOf(n+1));
+                            if (temp.getGiftId()<=0) {
+                                myliveroomNumTv.setText(String.valueOf(n+1));
+                            }
+                            mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                    , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                    , messages.get(i).getSessionId()
+                                    , messages.get(i).getFromAccount()
+                                    , temp.getUser().getNickName()
+                                    , temp.getUser().getIcon()
+                                    , temp.getUser().getSex()
+                                    , temp.getUser().getVerify_status()
+                                    , false, System.currentTimeMillis()
+                                    , ChatRoomTypeInter.ChatRoomTypeText
+                                    , temp.getContent(), "", "", "", "", "", "", "", "", 0, 0, true, 1);
                         } else if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
                             if (n-1<0) {
                                 myliveroomNumTv.setText("0");
                             } else {
                                 myliveroomNumTv.setText(String.valueOf(n-1));
                             }
+
+                            mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                    , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                    , messages.get(i).getSessionId()
+                                    , messages.get(i).getFromAccount()
+                                    , temp.getUser().getNickName()
+                                    , temp.getUser().getIcon()
+                                    , temp.getUser().getSex()
+                                    , temp.getUser().getVerify_status()
+                                    , false, System.currentTimeMillis()
+                                    , ChatRoomTypeInter.ChatRoomTypeText
+                                    , temp.getContent(), "", "", "", "", "", "", "", "", 0, 0, true, 1);
                         } else {
                             if (messages.get(i).getMsgType() == MsgTypeEnum.text) {
                                 mImMessage = new ImMessage(null, messages.get(i).getUuid()
@@ -334,8 +362,10 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                                         , ChatRoomTypeInter.ChatRoomTypeAudio
                                         , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration/1000, 0, false, 1);
                             }
-                            mAdapter.addImMessageDao(mImMessage);
                         }
+                        mAdapter.addImMessageDao(mImMessage);
+                    } else {
+                        LogUtils.e("temp is null");
                     }
                 }
             }
