@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -17,8 +18,10 @@ import com.atman.wysq.model.bean.ImMessage;
 import com.atman.wysq.model.response.ChatRoomMessageModel;
 import com.atman.wysq.model.response.GetLiveHallModel;
 import com.atman.wysq.model.response.ListenLiveRoomInfoModel;
+import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.yunxin.model.ChatRoomTypeInter;
 import com.base.baselibs.net.MyStringCallback;
@@ -39,11 +42,13 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.netease.nimlib.sdk.media.player.AudioPlayer;
+import com.netease.nimlib.sdk.media.player.OnPlayListener;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.tbl.okhttputils.OkHttpUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -95,6 +100,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     private AnimationDrawable animationDrawable;
     private AudioPlayer player;
     private long listenTime = 0;
+    private int positionAudio;
 
     private ListenLiveRoomInfoModel mListenLiveRoomInfoModel;
 
@@ -235,7 +241,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                                 listenliveNumTv.setText(String.valueOf(n-1));
                             }
                         } else {
-                            LogUtils.e(">>>>>>>>>:"+(messages.get(i).getMsgType() == MsgTypeEnum.image));
                             if (messages.get(i).getMsgType() == MsgTypeEnum.text) {
                                 mImMessage = new ImMessage(null, messages.get(i).getUuid()
                                         , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
@@ -262,6 +267,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                                         , false, System.currentTimeMillis()
                                         , ChatRoomTypeInter.ChatRoomTypeImage
                                         , "[图片]", url, url, urlThumb, "", "", "", "", "", 0, 0, false, 1);
+                                if (temp.getIsAnchorImage()==1) {
+                                    listenliveBgIv.setImageURI(url);
+                                }
                             } else if (messages.get(i).getMsgType() == MsgTypeEnum.audio) {
                                 String urlAudio = ((AudioAttachment)messages.get(i).getAttachment()).getUrl();
                                 String pathAudio = ((AudioAttachment)messages.get(i).getAttachment()).getPathForSave();
@@ -292,7 +300,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     private void receiveRegister(boolean b) {
-        LogUtils.e(">>>>>>>>>b:"+b);
         NIMClient.getService(ChatRoomServiceObserver.class)
                 .observeReceiveMessage(incomingChatRoomMsg, b);
     }
@@ -314,17 +321,12 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
         mMediaPlayer.setOnPreparedListener(mPreparedListener);
         mMediaPlayer.setOnErrorListener(mErrorListener);
-        mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
         mMediaPlayer.setOnInfoListener(mInfoListener);
-        mMediaPlayer.setOnVideoParseErrorListener(mVideoParseErrorListener);
         int ret = -1;
-        LogUtils.e("mliveStreamingURL:"+mliveStreamingURL);
         try {
             ret = mMediaPlayer.setDataSource(mliveStreamingURL);//设置数据源，返回0正常，返回-1地址非法
-            LogUtils.e("ret:"+ret);
         } catch (IOException e) {
             e.printStackTrace();
-            LogUtils.e(">>>>>:"+e.toString());
         }
         if (ret < 0) {
             showWraning("地址非法！");
@@ -334,21 +336,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         mMediaPlayer.setPlaybackTimeout(30000);
         mMediaPlayer.prepareAsync(mContext);//需要传入VideoView的上下文信息
     }
-
-    /*
-    * 该监听器在视频码流解析失败时的消息，此时音频播放正常，视频可能无画面，用户可以在此处添加处理逻辑，比如退出重新播放。
-    * */
-    NELivePlayer.OnVideoParseErrorListener mVideoParseErrorListener = new NELivePlayer.OnVideoParseErrorListener(){
-
-        /**
-         * 视频码流解析发生错误时调用, 此时音频播放正常, 无画面, 可以在该函数内添加处理逻辑。
-         * @param neLivePlayer 播放器实例
-         */
-        @Override
-        public void onVideoParseError(NELivePlayer neLivePlayer) {
-            LogUtils.e("onVideoParseError:>>>>>无画面");
-        }
-    };
 
     /*
     * 在缓冲开始、缓冲结束时调用，可以在该函数内添加处理逻辑
@@ -404,22 +391,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         public boolean onError(NELivePlayer neLivePlayer, int what, int extra) {
             showToast("播放出错");
             return false;
-        }
-    };
-
-    /*
-    * 该监听器用于监听当前播放器已经缓冲的百分比，当缓冲达到100%时，则可以开始播放。
-    * */
-    NELivePlayer.OnBufferingUpdateListener mBufferingUpdateListener = new NELivePlayer.OnBufferingUpdateListener(){
-
-        /**
-         * 网络视频流缓冲发生变化时调用，可以在该函数内添加处理逻辑
-         * @param  neLivePlayer 播放器实例
-         * @param  percent 缓冲百分比
-         */
-        @Override
-        public void onBufferingUpdate(NELivePlayer neLivePlayer, int percent) {
-            LogUtils.e("已缓冲："+percent+"％");
         }
     };
 
@@ -534,12 +505,83 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
     @Override
     public void onItem(View v, int position) {
+        switch (v.getId()) {
+            case R.id.item_p2pchat_text_headleft_iv:
+                startActivity(OtherPersonalActivity.buildIntent(mContext, Long.valueOf(mAdapter.getItem(position).getUserId())));
+                break;
+            case R.id.item_p2pchat_image_left_iv:
+            case R.id.item_p2pchat_image_right_iv:
+                String imagePath = "";
+                if (mAdapter.getItem(position).getImageThumUrl().startsWith("http")) {
+                    imagePath = mAdapter.getItem(position).getImageUrl();
+                } else {
+                    File mFile = new File(mAdapter.getItem(position).getImageFilePath());
+                    if (mFile.exists()) {
+                        imagePath = "file://"+mAdapter.getItem(position).getImageFilePath();
+                    } else {
+                        imagePath = mAdapter.getItem(position).getImageUrl();
+                    }
+                }
 
+                Intent intent = new Intent();
+                intent.putExtra("image", imagePath);
+                intent.putExtra("num", 0);
+                intent.setClass(mContext, PictureBrowsingActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 
     @Override
-    public void onItemAudio(View v, int position, AnimationDrawable animationDrawable) {
+    public void onItemAudio(View v, int position, final AnimationDrawable animationDrawable) {
+        switch (v.getId()) {
+            case R.id.item_p2pchat_audio_right_ll:
+            case R.id.item_p2pchat_audio_left_ll:
+                if ((new File(mAdapter.getItem(position).getAudioFilePath()).exists())) {
+                    if (player!=null && positionAudio!=position) {
+                        player.stop();
+                    }
+                    player.setDataSource(mAdapter.getItem(position).getAudioFilePath());
+                    player.setOnPlayListener(new OnPlayListener() {
+                        @Override
+                        public void onPrepared() {
 
+                        }
+
+                        @Override
+                        public void onCompletion() {
+                            animationDrawable.stop();
+                            animationDrawable.selectDrawable(0);
+                        }
+
+                        @Override
+                        public void onInterrupt() {
+                            animationDrawable.stop();
+                            animationDrawable.selectDrawable(0);
+                        }
+
+                        @Override
+                        public void onError(String s) {
+                            animationDrawable.stop();
+                            animationDrawable.selectDrawable(0);
+                        }
+
+                        @Override
+                        public void onPlaying(long l) {
+                            animationDrawable.start();
+                        }
+                    });
+                    if (animationDrawable.isRunning()) {
+                        player.stop();
+                    } else {
+                        player.start(AudioManager.STREAM_MUSIC);
+                    }
+                } else {
+                    showToast("没有文件");
+                }
+                positionAudio = position;
+                break;
+        }
     }
 
     @Override

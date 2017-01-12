@@ -42,6 +42,7 @@ import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.personal.RechargeActivity;
+import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.yunxin.model.ContentTypeInter;
@@ -51,6 +52,7 @@ import com.base.baselibs.iimp.MyTextWatcherTwo;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PreferenceUtil;
+import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.PromptDialog;
 import com.google.gson.Gson;
@@ -79,6 +81,7 @@ import com.tbl.okhttputils.OkHttpUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -999,12 +1002,29 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
                     //最后根据索引值获取图片路径
                     String path = cursor.getString(column_index);
                     LogUtils.e("path:"+path);
-                    message = MessageBuilder.createImageMessage(id, SessionTypeEnum.P2P,
-                            new File(path), "");
+                    try {
+                        File temp = BitmapTools.revitionImage(mContext, Uri.parse("file:///" + path));
+                        if (temp==null) {
+                            showToast("发送失败");
+                            return;
+                        }
+                        message = MessageBuilder.createImageMessage(id, SessionTypeEnum.P2P,
+                                temp, "");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
-                    LogUtils.e("path:"+path);
-                    message = MessageBuilder.createImageMessage(id, SessionTypeEnum.P2P,
-                            new File(imageUri.getPath()), "");
+                    try {
+                        File temp = BitmapTools.revitionImage(mContext, imageUri);
+                        if (temp==null) {
+                            showToast("发送失败");
+                            return;
+                        }
+                        message = MessageBuilder.createImageMessage(id, SessionTypeEnum.P2P,
+                                temp, "");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 seedMessage(message, ContentTypeInter.contentTypeImage, "", "", false);
             }

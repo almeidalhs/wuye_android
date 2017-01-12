@@ -20,18 +20,15 @@ import android.widget.TextView;
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.ChatRoomAdapter;
 import com.atman.wysq.model.bean.ImMessage;
-import com.atman.wysq.model.request.ChatRoomSeedMessageModel;
 import com.atman.wysq.model.response.ChatRoomMessageModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
-import com.atman.wysq.model.response.HeadImgResultModel;
-import com.atman.wysq.model.response.HeadImgSuccessModel;
 import com.atman.wysq.model.response.MyLiveInfoModel;
 import com.atman.wysq.model.response.MyLiveStatusModel;
-import com.atman.wysq.model.response.ToLiveEorrModel;
 import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
+import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.MyTools;
 import com.atman.wysq.utils.UiHelper;
@@ -63,6 +60,7 @@ import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,6 +137,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     private ChatRoomAdapter mAdapter;
     private AudioPlayer player;
     private int positionAudio;
+    private String resulturl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,7 +235,6 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         mAdapter = new ChatRoomAdapter(mContext, getmWidth(), chatroomLv, false, handler, runnable, this);
         chatroomLv.setAdapter(mAdapter);
 
-        LogUtils.e(">>>chatRoomId:" + chatRoomId);
         EnterChatRoomData data = new EnterChatRoomData(chatRoomId + "");
         NIMClient.getService(ChatRoomService.class).enterChatRoom(data)
                 .setCallback(new RequestCallback<EnterChatRoomResultData>() {
@@ -291,7 +289,6 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                                 myliveroomNumTv.setText(String.valueOf(n-1));
                             }
                         } else {
-                            LogUtils.e(">>>>>>>>>:"+(messages.get(i).getMsgType() == MsgTypeEnum.image));
                             if (messages.get(i).getMsgType() == MsgTypeEnum.text) {
                                 mImMessage = new ImMessage(null, messages.get(i).getUuid()
                                         , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
@@ -348,7 +345,6 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     private void receiveRegister(boolean b) {
-        LogUtils.e(">>>>>>>>>b:"+b);
         NIMClient.getService(ChatRoomServiceObserver.class)
                 .observeReceiveMessage(incomingChatRoomMsg, b);
     }
@@ -446,39 +442,12 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             MyLiveStatusModel mMyLiveStatusModel = mGson.fromJson(data, MyLiveStatusModel.class);
             if (mMyLiveStatusModel.getBody().getStatus() == 1) {
                 startTime = System.currentTimeMillis();
-                LogUtils.e("test: MSG_START_LIVESTREAMING_FINISHED");
                 showToast("直播中...");
                 animationDrawable = (AnimationDrawable) myliveroomAnimIv.getBackground();
                 animationDrawable.start();
                 m_liveStreamingOn = true;
             } else {
                 MyLiveRoomActivity.this.finish();
-            }
-        } else if (id == Common.NET_RESET_HEAD) {
-            HeadImgResultModel mHeadImgResultModel = mGson.fromJson(data, HeadImgResultModel.class);
-            if (mHeadImgResultModel!=null && mHeadImgResultModel.getFiles().size()>0 ) {
-                if (!mHeadImgResultModel.getFiles().get(0).isSuccessful()) {
-                    showToast("封面图片修改失败");
-                } else {
-                    HeadImgSuccessModel mHeadImgSuccessModel = mGson.fromJson(data, HeadImgSuccessModel.class);
-                    Map<String, String> p = new HashMap<>();
-                    p.put("pic_url", mHeadImgSuccessModel.getFiles().get(0).getUrl());
-                    p.put("room_name", title);
-                    p.put("description", title);
-                    OkHttpUtils.postString().url(Common.Url_UpData_MyLiveInfo).id(Common.NET_UPDATA_MYLIVEINFO_ID)
-                            .content(mGson.toJson(p)).mediaType(Common.JSON).tag(Common.NET_UPDATA_MYLIVEINFO_ID)
-                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
-                            .execute(new MyStringCallback(mContext, this, true));
-                }
-            }
-        } else if (id == Common.NET_UPDATA_MYLIVEINFO_ID) {
-            mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
-            if (mMyLiveInfoModel.getBody()==null) {
-                ToLiveEorrModel mToLiveEorrModel = mGson.fromJson(data, ToLiveEorrModel.class);
-                showWraning(mToLiveEorrModel.getResult());
-            } else {
-                seedMessge();
-                myliveroomBgIv.setImageURI(imageUri);
             }
         }
     }
@@ -488,28 +457,37 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         GetMyUserIndexModel.BodyBean.UserDetailBeanBean.UserExtBean temp = null;
         temp = MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt();
 
-        LogUtils.e("imageUri:"+imageUri);
-        LogUtils.e("imageUri.getPath():"+imageUri.getPath());
+        String url = resulturl;
         ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomImageMessage(String.valueOf(chatRoomId)
-                , new File(imageUri.getPath()), "");
+                , new File(url), "");
 
-        ChatRoomSeedMessageModel.UserBean mUserBean = new ChatRoomSeedMessageModel.UserBean();
-        mUserBean.setIcon(temp.getIcon());
-        mUserBean.setSex(temp.getSex());
-        mUserBean.setNickName(temp.getNick_name());
-        mUserBean.setUserId(temp.getUser_id());
-        mUserBean.setUserLevel(temp.getUserLevel());
-        mUserBean.setVerify_status(temp.getVerify_status());
-
-        ChatRoomSeedMessageModel mMessage = new ChatRoomSeedMessageModel();
-        mMessage.setIsAnchorImage(1);//1是主播
-        mMessage.setUser(mUserBean);
-
+        Map<String, Object> mUserMap = new HashMap<>();
+        mUserMap.put("verify_status", temp.getVerify_status());
+        mUserMap.put("nickName", temp.getNick_name());
+        mUserMap.put("icon", temp.getIcon());
+        mUserMap.put("sex", temp.getSex());
+        mUserMap.put("userId", temp.getUser_id());
+        mUserMap.put("userLevel", temp.getUserLevel());
         Map<String, Object> mMap = new HashMap<>();
         mMap.put("isAnchorImage",1);
-        mMap.put("user",mUserBean);
+        mMap.put("user",mUserMap);
+        mMap.put("sendTime",message.getTime());
+        mMap.put("type",1);
+        mMap.put("id",message.getSessionId());
         message.setRemoteExtension(mMap);
         // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
+        ImMessage mImMessage = new ImMessage(null, message.getUuid()
+                , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                , message.getSessionId()
+                , message.getFromAccount()
+                , temp.getNick_name()
+                , temp.getIcon()
+                , temp.getSex()
+                , temp.getVerify_status()
+                , true, message.getTime()
+                , ChatRoomTypeInter.ChatRoomTypeImage
+                , "[图片]", url, url, url, "", "", "", "", "", 0, 0, false, 1);
+        mAdapter.addImMessageDao(mImMessage);
         NIMClient.getService(ChatRoomService.class).sendMessage(message, false);
     }
 
@@ -533,8 +511,6 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_ENTER_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_USERLOG_ID);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_RESET_HEAD);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_UPDATA_MYLIVEINFO_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_STATUS_ID);
     }
 
@@ -617,12 +593,18 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         }
         if (imageUri != null) {
             if (imageUri != null) {
-                seedMessge();
-//                OkHttpUtils.post().url(Common.Url_Reset_Head)
-//                        .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-//                        .addFile("files0_name", StringUtils.getFileName(imageUri.getPath()),
-//                                new File(imageUri.getPath())).id(Common.NET_RESET_HEAD)
-//                        .tag(Common.NET_RESET_HEAD).build().execute(new MyStringCallback(mContext, this, true));
+                try {
+                    File temp = BitmapTools.revitionImage(mContext, imageUri);
+                    if (temp==null) {
+                        showToast("发送失败");
+                        return;
+                    }
+                    resulturl = temp.getPath();
+                    myliveroomBgIv.setImageURI(imageUri);
+                    seedMessge();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

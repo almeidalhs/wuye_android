@@ -20,6 +20,7 @@
         android:layout_below="@+id/item_p2pchat_text_time_tx"
         android:layout_toRightOf="@+id/item_children_host_tx"
         android:layout_marginLeft="@dimen/dimen_dp_10"
+        android:layout_marginRight="@dimen/dimen_dp_5"
         android:layout_width="@dimen/dimen_dp_40"
         android:layout_height="@dimen/dimen_dp_40">
 
@@ -66,7 +67,8 @@
         android:layout_below="@+id/item_p2pchat_text_time_tx"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/item_children_host_tx"
-        android:layout_marginLeft="@dimen/dimen_dp_10"
+        android:layout_marginRight="@dimen/dimen_dp_10"
+        android:layout_marginLeft="@dimen/dimen_dp_5"
         android:layout_width="@dimen/dimen_dp_40"
         android:layout_height="@dimen/dimen_dp_40">
 
