@@ -757,7 +757,7 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
                 if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
                     return;
                 }
-                startActivityForResult(SelectGiftActivity.buildIntent(mContext, id), Common.toSelectGift);
+                startActivityForResult(SelectGiftActivity.buildIntent(mContext, id, false), Common.toSelectGift);
                 p2pchatAddLl.setVisibility(View.GONE);
                 break;
             case R.id.p2pchat_add_finger_tv:

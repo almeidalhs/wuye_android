@@ -33,6 +33,7 @@ import com.atman.wysq.model.response.ChatRoomMessageModel;
 import com.atman.wysq.model.response.GetLiveHallModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.model.response.ListenLiveRoomInfoModel;
+import com.atman.wysq.model.response.MyLiveInfoModel;
 import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
@@ -422,6 +423,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                     @Override
                     public void onSuccess(EnterChatRoomResultData enterChatRoomResultData) {
                         LogUtils.e(">>>>onSuccess:");
+                        getLiveNum();
                     }
 
                     @Override
@@ -458,16 +460,11 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                         }
                     }
                     ImMessage mImMessage = null;
-                    int n = Integer.parseInt(listenliveNumTv.getText().toString());
-                    LogUtils.e("n:" + n);
                     if (temp != null) {
-                        if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystem) {
-                            listenliveNumTv.setText(String.valueOf(n + 1));
-                        } else if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
-                            if (n - 1 < 0) {
-                                listenliveNumTv.setText("0");
-                            } else {
-                                listenliveNumTv.setText(String.valueOf(n - 1));
+                        if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystem
+                                || temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
+                            if (temp.getGiftId()<=0) {
+                                getLiveNum();
                             }
                         } else {
                             if (messages.get(i).getMsgType() == MsgTypeEnum.text) {
@@ -526,7 +523,13 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         };
 
         receiveRegister(true);
-        initSeedResult(true);
+    }
+
+    private void getLiveNum() {
+        OkHttpUtils.get().url(Common.Url_Live_Num + roomId)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .tag(Common.NET_LIVE_NUM_ID).id(Common.NET_LIVE_NUM_ID).build()
+                .execute(new MyStringCallback(mContext, ListenLiveActivity.this, false));
     }
 
     private void receiveRegister(boolean b) {
@@ -600,6 +603,10 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         public void onPrepared(NELivePlayer mp) {
             mMediaPlayer.start();
             showToast("收听中");
+            String str = "【"+temp.getNick_name()+"】进入了电台";
+            ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
+                    String.valueOf(chatRoomId), str);
+            seedMessge(message, ChatRoomTypeInter.ChatRoomTypeSystem, "", str, "0");
             animationDrawable = (AnimationDrawable) listenliveAnimIv.getBackground();
             animationDrawable.start();
         }
@@ -619,7 +626,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
          */
         @Override
         public boolean onError(NELivePlayer neLivePlayer, int what, int extra) {
-            showToast("播放出错");
+            showWraning("当前电台可能已关闭，\n去收听别的电台吧");
             return false;
         }
     };
@@ -672,6 +679,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
         } else if (id == Common.NET_LIVE_MONEY_ID) {
 
+        } else if (id == Common.NET_LIVE_NUM_ID) {
+            MyLiveInfoModel mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
+            setLiveNum(mMyLiveInfoModel.getBody().getMember_count()+"");
         }
     }
 
@@ -690,6 +700,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_ENTER_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_USERLOG_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_MONEY_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_NUM_ID);
     }
 
     @Override
@@ -714,8 +725,11 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                String str = "【"+temp.getNick_name()+"】离开了电台";
+                ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
+                        String.valueOf(chatRoomId), str);
+                seedMessge(message, ChatRoomTypeInter.ChatRoomTypeSystemCMD, "", str, "0");
                 receiveRegister(false);
-                initSeedResult(false);
                 mMediaPlayer.release();
                 finish();
             }
@@ -748,7 +762,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
                     return;
                 }
-                startActivityForResult(SelectGiftActivity.buildIntent(mContext, String.valueOf(temp.getUser_id()))
+                startActivityForResult(SelectGiftActivity.buildIntent(mContext, String.valueOf(temp.getUser_id()), true)
                         , Common.toSelectGift);
                 break;
             case R.id.p2pchat_record_iv:
@@ -855,24 +869,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         builder.show();
     }
 
-    private void initSeedResult(boolean b) {
-        // 监听消息发送状态的变化通知
-        NIMClient.getService(ChatRoomServiceObserver.class).observeMsgStatus(new Observer<ChatRoomMessage>() {
-            @Override
-            public void onEvent(ChatRoomMessage chatRoomMessage) {
-                if (chatRoomMessage.getStatus() == MsgStatusEnum.success) {
-                    if (mUuid == chatRoomMessage.getUuid()) {
-                        if (!mText.isEmpty() && !TextUtils.isEmpty(mText)) {
-                            ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
-                                    String.valueOf(chatRoomId), mText);
-                            seedMessge(message, ChatRoomTypeInter.ChatRoomTypeText, "", mText, giftId);
-                        }
-                    }
-                }
-            }
-        }, b);
-    }
-
     @Override
     public void startActivityForResult(Intent intent, int requestCode, Bundle options) {
         super.startActivityForResult(intent, requestCode, options);
@@ -886,13 +882,19 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             return;
         }
         if (requestCode == Common.toSelectGift) {
-            mText = data.getStringExtra("text");
+//            mText = data.getStringExtra("text");
+//            String name = data.getStringExtra("name");
             giftId = String.valueOf(data.getIntExtra("giftId", 0));
-            File file = ImageLoader.getInstance().getDiskCache().get(Common.ImageUrl+data.getStringExtra("url"));
-            ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomImageMessage(
-                    String.valueOf(chatRoomId), file, "");
-            seedMessge(message, ChatRoomTypeInter.ChatRoomTypeImage, file.getPath(), "", giftId);
-            mUuid = message.getUuid();
+//            File file = ImageLoader.getInstance().getDiskCache().get(Common.ImageUrl+data.getStringExtra("url"));
+//            ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomImageMessage(
+//                    String.valueOf(chatRoomId), file, "");
+//            seedMessge(message, ChatRoomTypeInter.ChatRoomTypeImage, file.getPath(), "", giftId);
+//            mUuid = message.getUuid();
+
+            String str = "【"+temp.getNick_name()+"】赠送主播礼物："+data.getStringExtra("name");
+            ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
+                    String.valueOf(chatRoomId), str);
+            seedMessge(message, ChatRoomTypeInter.ChatRoomTypeText, "", str, giftId);
         } else {
             if (mIsBalck) {
                 showWraning("你已被对方加入黑名单");
@@ -936,7 +938,11 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         mMap.put("isAnchorImage",0);
         mMap.put("user",mUserMap);
         mMap.put("sendTime",me.getTime());
-        mMap.put("type",type);
+        if (Integer.parseInt(giftId)>0 || type>3) {
+            mMap.put("type",3);
+        } else {
+            mMap.put("type",type);
+        }
         mMap.put("content",text);
         mMap.put("id",chatRoomId);
         mMap.put("giftId",giftId);
@@ -946,17 +952,32 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         switch (type) {
             case ChatRoomTypeInter.ChatRoomTypeText:
                 me.setContent(mGson.toJson(mMap));
-                mImMessage = new ImMessage(null, me.getUuid()
-                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
-                        , me.getSessionId()
-                        , me.getFromAccount()
-                        , temp.getNick_name()
-                        , temp.getIcon()
-                        , temp.getSex()
-                        , temp.getVerify_status()
-                        , true, me.getTime()
-                        , ChatRoomTypeInter.ChatRoomTypeText
-                        , text, "", "", "", "", "", "", "", "", 0, 0, false, 1);
+                if (Integer.parseInt(giftId)>0) {
+                    mImMessage = new ImMessage(null, me.getUuid()
+                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                            , me.getSessionId()
+                            , me.getFromAccount()
+                            , temp.getNick_name()
+                            , temp.getIcon()
+                            , temp.getSex()
+                            , temp.getVerify_status()
+                            , true, me.getTime()
+                            , ChatRoomTypeInter.ChatRoomTypeText
+                            , text, "", "", "", "", "", "", "", "", 0, 0, true, 1);
+                } else {
+                    mImMessage = new ImMessage(null, me.getUuid()
+                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                            , me.getSessionId()
+                            , me.getFromAccount()
+                            , temp.getNick_name()
+                            , temp.getIcon()
+                            , temp.getSex()
+                            , temp.getVerify_status()
+                            , true, me.getTime()
+                            , ChatRoomTypeInter.ChatRoomTypeText
+                            , text, "", "", "", "", "", "", "", "", 0, 0, false, 1);
+                }
+                mAdapter.addImMessageDao(mImMessage);
                 break;
             case ChatRoomTypeInter.ChatRoomTypeImage:
                 me.setRemoteExtension(mMap);
@@ -971,6 +992,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                         , true, me.getTime()
                         , ChatRoomTypeInter.ChatRoomTypeImage
                         , "[图片]", url, url, url, "", "", "", "", "", 0, 0, false, 1);
+                mAdapter.addImMessageDao(mImMessage);
                 break;
             case ChatRoomTypeInter.ChatRoomTypeAudio:
                 me.setRemoteExtension(mMap);
@@ -988,9 +1010,15 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                         , true, me.getTime()
                         , ChatRoomTypeInter.ChatRoomTypeAudio
                         , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration/1000, 0, false, 1);
+                mAdapter.addImMessageDao(mImMessage);
+                break;
+            default:
+                me.setContent(mGson.toJson(mMap));
+                me.setRemoteExtension(mMap);
                 break;
         }
-        mAdapter.addImMessageDao(mImMessage);
+        LogUtils.e(">>>>:"+me.getRemoteExtension().toString());
+        LogUtils.e(">>>>:"+me.getMsgType());
         NIMClient.getService(ChatRoomService.class).sendMessage(me, true);
     }
 

@@ -241,6 +241,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                     @Override
                     public void onSuccess(EnterChatRoomResultData enterChatRoomResultData) {
                         LogUtils.e(">>>>onSuccess:");
+                        getLiveNum();
                     }
 
                     @Override
@@ -280,31 +281,12 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                         }
                     }
                     ImMessage mImMessage = null;
-                    int n = Integer.parseInt(myliveroomNumTv.getText().toString());
-                    LogUtils.e("n:"+n);
                     if (temp!=null) {
-                        if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystem) {
+                        if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystem
+                                || temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
                             if (temp.getGiftId()<=0) {
-                                myliveroomNumTv.setText(String.valueOf(n+1));
+                                getLiveNum();
                             }
-                            mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                    , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
-                                    , messages.get(i).getSessionId()
-                                    , messages.get(i).getFromAccount()
-                                    , temp.getUser().getNickName()
-                                    , temp.getUser().getIcon()
-                                    , temp.getUser().getSex()
-                                    , temp.getUser().getVerify_status()
-                                    , false, System.currentTimeMillis()
-                                    , ChatRoomTypeInter.ChatRoomTypeText
-                                    , temp.getContent(), "", "", "", "", "", "", "", "", 0, 0, true, 1);
-                        } else if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
-                            if (n-1<0) {
-                                myliveroomNumTv.setText("0");
-                            } else {
-                                myliveroomNumTv.setText(String.valueOf(n-1));
-                            }
-
                             mImMessage = new ImMessage(null, messages.get(i).getUuid()
                                     , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
                                     , messages.get(i).getSessionId()
@@ -372,6 +354,13 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         };
 
         receiveRegister(true);
+    }
+
+    private void getLiveNum() {
+        OkHttpUtils.get().url(Common.Url_Live_Num + roomId)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .tag(Common.NET_LIVE_NUM_ID).id(Common.NET_LIVE_NUM_ID).build()
+                .execute(new MyStringCallback(mContext, MyLiveRoomActivity.this, false));
     }
 
     private void receiveRegister(boolean b) {
@@ -479,6 +468,9 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             } else {
                 MyLiveRoomActivity.this.finish();
             }
+        } else if (id == Common.NET_LIVE_NUM_ID) {
+            MyLiveInfoModel mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
+            myliveroomNumTv.setText(mMyLiveInfoModel.getBody().getMember_count()+"");
         }
     }
 
@@ -541,6 +533,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_ENTER_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_USERLOG_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_NUM_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_STATUS_ID);
     }
 

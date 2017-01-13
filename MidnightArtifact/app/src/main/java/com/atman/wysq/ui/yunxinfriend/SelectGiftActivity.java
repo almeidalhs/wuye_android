@@ -10,7 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,7 +23,6 @@ import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.personal.RechargeActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.SortComparator;
-import com.atman.wysq.widget.face.FaceRelativeLayout;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.MyCleanEditText;
@@ -60,6 +58,8 @@ public class SelectGiftActivity extends MyBaseActivity {
     TextView selectgiftMycionTx;
     @Bind(R.id.gift_dot_ll)
     LinearLayout giftDotLl;
+    @Bind(R.id.ll1)
+    LinearLayout ll1;
 
     private Context mContext = SelectGiftActivity.this;
     private List<GiftListModel.BodyEntity> mGiftList = new ArrayList<>();
@@ -68,6 +68,7 @@ public class SelectGiftActivity extends MyBaseActivity {
     private List<ImageView> pointViews;
     private int myCion;
     private String id;
+    private boolean isLisenLive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +78,10 @@ public class SelectGiftActivity extends MyBaseActivity {
         setSwipeBackEnable(false);
     }
 
-    public static Intent buildIntent(Context context, String id){
+    public static Intent buildIntent(Context context, String id, boolean isLisenLive) {
         Intent intent = new Intent(context, SelectGiftActivity.class);
         intent.putExtra("id", id);
+        intent.putExtra("isLisenLive", isLisenLive);
         return intent;
     }
 
@@ -88,9 +90,13 @@ public class SelectGiftActivity extends MyBaseActivity {
         super.initWidget(v);
 
         id = getIntent().getStringExtra("id");
+        isLisenLive = getIntent().getBooleanExtra("isLisenLive", false);
 
         hideTitleBar();
         getRootContentLl().setBackgroundResource(R.color.color_gift_all);
+        if (isLisenLive) {
+            ll1.setVisibility(View.GONE);
+        }
     }
 
     private void initViewpager() {
@@ -212,7 +218,7 @@ public class SelectGiftActivity extends MyBaseActivity {
         overridePendingTransition(com.base.baselibs.R.anim.activity_bottom_in, com.base.baselibs.R.anim.activity_bottom_out);
     }
 
-    @OnClick({R.id.selectgift_top_view, R.id.blogdetail_send_bt,R.id.selectgift_cionmart_tx})
+    @OnClick({R.id.selectgift_top_view, R.id.blogdetail_send_bt, R.id.selectgift_cionmart_tx})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.selectgift_top_view:
@@ -232,23 +238,23 @@ public class SelectGiftActivity extends MyBaseActivity {
         }
     }
 
-    public void backResuilt (String url, String text, int price, String name, String giftPic, int giftId) {
-        if (myCion-price>=0) {
+    public void backResuilt(String url, String text, int price, String name, String giftPic, int giftId) {
+        if (myCion - price >= 0) {
             MyBaseApplication.getApplication().mGetMyUserIndexModel
-                    .getBody().getUserDetailBean().getUserExt().setGold_coin(myCion-price);
+                    .getBody().getUserDetailBean().getUserExt().setGold_coin(myCion - price);
         }
         Intent mIntent = new Intent();
-        mIntent.putExtra("giftId",giftId);
-        mIntent.putExtra("url",url);
-        mIntent.putExtra("giftPic",giftPic);
-        mIntent.putExtra("price",price);
-        mIntent.putExtra("name",name);
+        mIntent.putExtra("giftId", giftId);
+        mIntent.putExtra("url", url);
+        mIntent.putExtra("giftPic", giftPic);
+        mIntent.putExtra("price", price);
+        mIntent.putExtra("name", name);
         if (blogdetailAddcommentEt.getText().toString().trim().isEmpty()) {
             mIntent.putExtra("text", text);
         } else {
             mIntent.putExtra("text", blogdetailAddcommentEt.getText().toString().trim());
         }
-        setResult(RESULT_OK,mIntent);
+        setResult(RESULT_OK, mIntent);
         finish();
     }
 
