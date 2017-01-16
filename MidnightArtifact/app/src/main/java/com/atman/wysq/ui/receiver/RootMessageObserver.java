@@ -110,9 +110,9 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                                             , mGiftMessageModel.getGiftId(), 0));
                                     break;
                                 default:
-                                    if (content.contains("您在直播间消耗")) {
-                                        return;
-                                    }
+//                                    if (content.contains("您在直播间消耗")) {
+//                                        return;
+//                                    }
                                     Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
                                     break;
                             }

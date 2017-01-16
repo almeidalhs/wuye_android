@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -27,18 +26,19 @@ import com.atman.wysq.model.bean.ImMessage;
 import com.atman.wysq.model.event.GiftEvent;
 import com.atman.wysq.model.response.ChatRoomMessageModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
+import com.atman.wysq.model.response.GetUserIndexModel;
 import com.atman.wysq.model.response.GiftListModel;
 import com.atman.wysq.model.response.MyLiveInfoModel;
 import com.atman.wysq.model.response.MyLiveStatusModel;
 import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
-import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
+import com.atman.wysq.ui.community.ReportActivity;
 import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.MyTools;
 import com.atman.wysq.utils.UiHelper;
-import com.atman.wysq.widget.GiftPopWindow;
+import com.atman.wysq.widget.ShowHeadPopWindow;
 import com.atman.wysq.yunxin.model.ChatRoomTypeInter;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
@@ -90,7 +90,7 @@ import okhttp3.Response;
  */
 
 public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandler
-        , ChatRoomAdapter.RoomAdapterInter {
+        , ChatRoomAdapter.RoomAdapterInter, ShowHeadPopWindow.onHeadPopClickListenner {
 
     @Bind(R.id.myliveroom_bg_iv)
     SimpleDraweeView myliveroomBgIv;
@@ -592,6 +592,14 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         } else if (id == Common.NET_GET_GIFTLIST) {
             mGiftListModel = mGson.fromJson(data, GiftListModel.class);
             mGiftList = mGiftListModel.getBody();
+        } else if (id == Common.NET_GET_USERINDEX) {
+            GetUserIndexModel mGetMyUserIndexModel = mGson.fromJson(data, GetUserIndexModel.class);
+            new ShowHeadPopWindow(MyLiveRoomActivity.this, getmWidth(), true
+                    , mGetMyUserIndexModel.getBody().getUserDetailBean(), this);
+        } else if (id == Common.NET_ADD_FOLLOW_ID) {
+
+        } else if (id == Common.NET_CANCEL_BLACKLIST_ID) {
+        } else if (id == Common.NET_ADD_BLACKLIST) {
         }
     }
 
@@ -667,6 +675,10 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_GIFTLIST);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_NUM_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_STATUS_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERINDEX);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_FOLLOW_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_BLACKLIST_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BLACKLIST);
     }
 
     private void closeLive() {
@@ -998,7 +1010,10 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     public void onItem(View v, int position) {
         switch (v.getId()) {
             case R.id.item_p2pchat_text_headleft_iv:
-                startActivity(OtherPersonalActivity.buildIntent(mContext, Long.valueOf(mAdapter.getItem(position).getUserId())));
+                OkHttpUtils.get().url(Common.Url_Get_UserIndex + "/" + mAdapter.getItem(position).getUserId())
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .tag(Common.NET_GET_USERINDEX).id(Common.NET_GET_USERINDEX).build()
+                        .execute(new MyStringCallback(mContext, this, true));
                 break;
             case R.id.item_p2pchat_image_left_iv:
             case R.id.item_p2pchat_image_right_iv:
@@ -1073,5 +1088,70 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                 positionAudio = position;
                 break;
         }
+    }
+
+    @Override
+    public void onAddFriend(long userId) {
+        Map<String, Long> p = new HashMap<>();
+        p.put("follow_user_id", userId);
+        OkHttpUtils.postString().url(Common.Url_Add_Follow).content(mGson.toJson(p))
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .mediaType(Common.JSON).tag(Common.NET_ADD_FOLLOW_ID)
+                .id(Common.NET_ADD_FOLLOW_ID).build()
+                .execute(new MyStringCallback(mContext, this, true));
+    }
+
+    @Override
+    public void onGag(long userId) {
+
+    }
+
+    @Override
+    public void onMore(long userId) {
+        showBottomImg(userId);
+    }
+
+    private boolean mIsBalck = false;
+    private void showBottomImg(final long id) {
+        BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
+        String[] str = new String[]{"举报", "把TA加入黑名单"};
+        if (mIsBalck) {
+            str[1] = "从黑名单移除";
+        }
+        builder.setItems(str, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                if (!isLogin()) {
+                    showLogin();
+                    return;
+                }
+                if (which == 0) {//举报
+                    startActivity(ReportActivity.buildIntent(mContext, id, 1));
+                } else if (which == 1) {//把TA加入黑名单
+                    if (mIsBalck) {
+                        OkHttpUtils.postString()
+                                .url(Common.Url_Cancel_BlackList + id)
+                                .tag(Common.NET_CANCEL_BLACKLIST_ID).id(Common.NET_CANCEL_BLACKLIST_ID)
+                                .content(mGson.toJson(""))
+                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                                .build().execute(new MyStringCallback(mContext, MyLiveRoomActivity.this, true));
+                    } else {
+                        OkHttpUtils.postString().url(Common.Url_Add_BlackList)
+                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                                .content("{\"black_user_id\":" + id + "}")
+                                .mediaType(Common.JSON).id(Common.NET_ADD_BLACKLIST).tag(Common.NET_ADD_BLACKLIST)
+                                .build().execute(new MyStringCallback(mContext, MyLiveRoomActivity.this, true));
+                    }
+                }
+            }
+        });
+        builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }

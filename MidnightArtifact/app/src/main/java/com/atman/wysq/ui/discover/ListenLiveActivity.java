@@ -32,20 +32,21 @@ import android.widget.TextView;
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.ChatRoomAdapter;
 import com.atman.wysq.model.bean.ImMessage;
-import com.atman.wysq.model.event.GiftEvent;
 import com.atman.wysq.model.response.ChatRoomMessageModel;
 import com.atman.wysq.model.response.GetLiveHallModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
+import com.atman.wysq.model.response.GetUserIndexModel;
 import com.atman.wysq.model.response.ListenLiveRoomInfoModel;
 import com.atman.wysq.model.response.MyLiveInfoModel;
 import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
-import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
+import com.atman.wysq.ui.community.ReportActivity;
 import com.atman.wysq.ui.yunxinfriend.SelectGiftActivity;
 import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.UiHelper;
+import com.atman.wysq.widget.ShowHeadPopWindow;
 import com.atman.wysq.widget.face.FaceRelativeLayout;
 import com.atman.wysq.yunxin.model.ChatRoomTypeInter;
 import com.base.baselibs.iimp.EditCheckBack;
@@ -83,9 +84,6 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.tbl.okhttputils.OkHttpUtils;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -104,7 +102,7 @@ import okhttp3.Response;
 
 public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandler
         , ChatRoomAdapter.RoomAdapterInter, EditCheckBack, IAudioRecordCallback
-        , FaceRelativeLayout.onEditListener {
+        , FaceRelativeLayout.onEditListener, ShowHeadPopWindow.onHeadPopClickListenner {
 
     @Bind(R.id.listenlive_bg_iv)
     SimpleDraweeView listenliveBgIv;
@@ -187,8 +185,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     private boolean isToLimit = false;
     private boolean mIsBalck = false;
     private File mFile;
-    private String mUuid;
-    private String mText;
     private String giftId;
 
     private ListenLiveRoomInfoModel mListenLiveRoomInfoModel;
@@ -347,16 +343,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         layoutPlayAudio.setVisibility(View.VISIBLE);
         timer.setBase(SystemClock.elapsedRealtime());
         timer.start();
-        timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-//                if ("01:00".equals(chronometer.getText().toString())) {
-//                    Message message = new Message();
-//                    message.what = 1;
-//                    hand.sendMessage(message);
-//                }
-            }
-        });
     }
 
     /**
@@ -431,25 +417,21 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         mAdapter = new ChatRoomAdapter(mContext, getmWidth(), chatroomLv, false, handler, runnable, this);
         chatroomLv.setAdapter(mAdapter);
 
-        LogUtils.e(">>>chatRoomId:" + chatRoomId);
         EnterChatRoomData data = new EnterChatRoomData(chatRoomId + "");
         NIMClient.getService(ChatRoomService.class).enterChatRoom(data)
                 .setCallback(new RequestCallback<EnterChatRoomResultData>() {
                     @Override
                     public void onSuccess(EnterChatRoomResultData enterChatRoomResultData) {
-                        LogUtils.e(">>>>onSuccess:");
                         getLiveNum();
                     }
 
                     @Override
                     public void onFailed(int i) {
-                        LogUtils.e(">>>>onFailed:" + i);
                         showWraning("消息服务器连接失败，请稍后再试，或者重新登录！");
                     }
 
                     @Override
                     public void onException(Throwable throwable) {
-                        LogUtils.e(">>>>onException:" + throwable.toString());
                         showWraning("消息服务器连接失败，请稍后再试，或者重新登录！");
                     }
                 });
@@ -459,16 +441,12 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             @Override
             public void onEvent(List<ChatRoomMessage> messages) {
                 // 处理新收到的消息
-                LogUtils.e(">>>>>messages:" + messages.size());
-                LogUtils.e(">>>>>messages:" + messages.get(0).getContent());
-                LogUtils.e(">>>>>messages:" + messages.get(0).getMsgType());
                 for (int i = 0; i < messages.size(); i++) {
                     ChatRoomMessageModel temp = null;
                     if (messages.get(i).getContent() != null) {
                         temp = mGson.fromJson(messages.get(i).getContent().toString()
                                 , ChatRoomMessageModel.class);
                     } else {
-                        LogUtils.e(">>>>>>>>:" + messages.get(i).getRemoteExtension());
                         if (messages.get(i).getRemoteExtension() != null) {
                             temp = mGson.fromJson(mGson.toJson(messages.get(i).getRemoteExtension())
                                     , ChatRoomMessageModel.class);
@@ -708,6 +686,14 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         } else if (id == Common.NET_LIVE_NUM_ID) {
             MyLiveInfoModel mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
             setLiveNum(mMyLiveInfoModel.getBody().getMember_count()+"");
+        } else if (id == Common.NET_GET_USERINDEX) {
+            GetUserIndexModel mGetMyUserIndexModel = mGson.fromJson(data, GetUserIndexModel.class);
+            new ShowHeadPopWindow(ListenLiveActivity.this, getmWidth(), false
+                    , mGetMyUserIndexModel.getBody().getUserDetailBean(), this);
+        } else if (id == Common.NET_ADD_FOLLOW_ID) {
+
+        } else if (id == Common.NET_CANCEL_BLACKLIST_ID) {
+        } else if (id == Common.NET_ADD_BLACKLIST) {
         }
     }
 
@@ -728,6 +714,10 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_USERLOG_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_MONEY_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_NUM_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERINDEX);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_FOLLOW_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_BLACKLIST_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BLACKLIST);
     }
 
     @Override
@@ -753,10 +743,10 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 handlerTime.removeCallbacks(runnableTime);
-//                String str = "【"+temp.getNick_name()+"】离开了电台";
-//                ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
-//                        String.valueOf(chatRoomId), str);
-//                seedMessge(message, ChatRoomTypeInter.ChatRoomTypeSystemCMD, "", str, "0");
+                String str = "【"+temp.getNick_name()+"】离开了电台";
+                ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
+                        String.valueOf(chatRoomId), str);
+                seedMessge(message, ChatRoomTypeInter.ChatRoomTypeSystemCMD, "", str, "0");
                 receiveRegister(false);
                 mMediaPlayer.release();
                 finish();
@@ -912,26 +902,22 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                LogUtils.e("onAnimationStart");
                 listenliveDisplayGiftIv.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                LogUtils.e("onAnimationEnd");
                 listenliveDisplayGiftIv.clearAnimation();
                 listenliveDisplayGiftIv.setVisibility(View.GONE);
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
             }
         });
         ImageLoader.getInstance().displayImage(url, listenliveDisplayGiftIv, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String s, View view) {
-
             }
 
             @Override
@@ -945,7 +931,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
             @Override
             public void onLoadingCancelled(String s, View view) {
-
             }
         });
     }
@@ -958,7 +943,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         }
         if (requestCode == Common.toSelectGift) {
             giftId = String.valueOf(data.getIntExtra("giftId", 0));
-
             String str = "【"+temp.getNick_name()+"】赠送主播礼物："+data.getStringExtra("name");
             String url = Common.ImageUrl+data.getStringExtra("url");
             GiftAnimation(url);
@@ -996,7 +980,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
     private void seedMessge(ChatRoomMessage me, int type, String url, String text, String giftId) {
         // 创建消息
-
         Map<String, Object> mUserMap = new HashMap<>();
         mUserMap.put("verify_status", temp.getVerify_status());
         mUserMap.put("nickName", temp.getNick_name());
@@ -1094,7 +1077,10 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     public void onItem(View v, int position) {
         switch (v.getId()) {
             case R.id.item_p2pchat_text_headleft_iv:
-                startActivity(OtherPersonalActivity.buildIntent(mContext, Long.valueOf(mAdapter.getItem(position).getUserId())));
+                OkHttpUtils.get().url(Common.Url_Get_UserIndex + "/" + mAdapter.getItem(position).getUserId())
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .tag(Common.NET_GET_USERINDEX).id(Common.NET_GET_USERINDEX).build()
+                        .execute(new MyStringCallback(mContext, this, true));
                 break;
             case R.id.item_p2pchat_root_Rl:
                 if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
@@ -1146,7 +1132,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                     player.setOnPlayListener(new OnPlayListener() {
                         @Override
                         public void onPrepared() {
-
                         }
 
                         @Override
@@ -1187,7 +1172,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
     @Override
     public void handleMessage(int i, Object o) {
-
     }
 
     @Override
@@ -1203,7 +1187,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
     @Override
     public void onRecordReady() {
-
     }
 
     @Override
@@ -1220,12 +1203,10 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
     @Override
     public void onRecordFail() {
-
     }
 
     @Override
     public void onRecordCancel() {
-
     }
 
     @Override
@@ -1255,5 +1236,69 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     @Override
     public void onEditClick() {
         blogdetailAddemolIv.setImageResource(R.mipmap.chat_face_ic);
+    }
+
+    @Override
+    public void onAddFriend(long userId) {
+        Map<String, Long> p = new HashMap<>();
+        p.put("follow_user_id", userId);
+        OkHttpUtils.postString().url(Common.Url_Add_Follow).content(mGson.toJson(p))
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .mediaType(Common.JSON).tag(Common.NET_ADD_FOLLOW_ID)
+                .id(Common.NET_ADD_FOLLOW_ID).build()
+                .execute(new MyStringCallback(mContext, this, true));
+    }
+
+    @Override
+    public void onGag(long userId) {
+
+    }
+
+    @Override
+    public void onMore(long userId) {
+        showBottomImg(userId);
+    }
+
+    private void showBottomImg(final long id) {
+        BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
+        String[] str = new String[]{"举报", "把TA加入黑名单"};
+        if (mIsBalck) {
+            str[1] = "从黑名单移除";
+        }
+        builder.setItems(str, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                if (!isLogin()) {
+                    showLogin();
+                    return;
+                }
+                if (which == 0) {//举报
+                    startActivity(ReportActivity.buildIntent(mContext, id, 1));
+                } else if (which == 1) {//把TA加入黑名单
+                    if (mIsBalck) {
+                        OkHttpUtils.postString()
+                                .url(Common.Url_Cancel_BlackList + id)
+                                .tag(Common.NET_CANCEL_BLACKLIST_ID).id(Common.NET_CANCEL_BLACKLIST_ID)
+                                .content(mGson.toJson(""))
+                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                                .build().execute(new MyStringCallback(mContext, ListenLiveActivity.this, true));
+                    } else {
+                        OkHttpUtils.postString().url(Common.Url_Add_BlackList)
+                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                                .content("{\"black_user_id\":" + id + "}")
+                                .mediaType(Common.JSON).id(Common.NET_ADD_BLACKLIST).tag(Common.NET_ADD_BLACKLIST)
+                                .build().execute(new MyStringCallback(mContext, ListenLiveActivity.this, true));
+                    }
+                }
+            }
+        });
+        builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }
