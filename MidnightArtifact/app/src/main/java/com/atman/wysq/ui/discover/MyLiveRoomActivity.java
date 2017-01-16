@@ -266,13 +266,11 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
                     @Override
                     public void onFailed(int i) {
-                        LogUtils.e(">>>>onFailed:" + i);
                         showWraning("消息服务器连接失败，请稍后再试，或者重新登录！");
                     }
 
                     @Override
                     public void onException(Throwable throwable) {
-                        LogUtils.e(">>>>onException:" + throwable.toString());
                         showWraning("消息服务器连接失败，请稍后再试，或者重新登录！");
                     }
                 });
@@ -282,19 +280,12 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             @Override
             public void onEvent(List<ChatRoomMessage> messages) {
                 // 处理新收到的消息
-                LogUtils.e(">>>>>messages.size():" + messages.size());
-                LogUtils.e(">>>>>messages.get(0).getContent():" + messages.get(0).getContent());
-                LogUtils.e(">>>>>messages.get(0).getMsgType():" + messages.get(0).getMsgType());
                 for (int i = 0; i < messages.size(); i++) {
                     ChatRoomMessageModel temp = null;
                     if (messages.get(i).getContent() != null) {
                         temp = mGson.fromJson(messages.get(i).getContent().toString()
                                 , ChatRoomMessageModel.class);
-                        LogUtils.e("temp.getGiftName():"+temp.getGiftName());
-                        LogUtils.e("temp.getGiftMessage():"+temp.getGiftMessage());
-                        LogUtils.e("temp.getContent():"+temp.getContent());
                     } else {
-                        LogUtils.e(">>>>>>>>:"+messages.get(i).getRemoteExtension());
                         if (messages.get(i).getRemoteExtension()!=null) {
                             temp = mGson.fromJson(mGson.toJson(messages.get(i).getRemoteExtension())
                                     , ChatRoomMessageModel.class);
@@ -389,13 +380,11 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                LogUtils.e("onAnimationStart");
                 myliveroomGiftIv.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                LogUtils.e("onAnimationEnd");
                 myliveroomGiftIv.clearAnimation();
                 myliveroomGiftIv.setVisibility(View.GONE);
             }
@@ -443,13 +432,11 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         animationGold.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                LogUtils.e("onAnimationStart");
                 myliveroomGoldTv.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                LogUtils.e("onAnimationEnd");
                 new Handler().postDelayed(new Runnable(){
 
                     public void run() {
@@ -546,11 +533,8 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     @Override
     public void onError(Call call, Exception e, int code, int id) {
         if (id == Common.NET_LIVE_ENTER_ID) {
-
         } else if (id == Common.NET_LIVE_USERLOG_ID) {
-
         } else if (id == Common.NET_LIVE_STATUS_ID) {
-
         } else {
             super.onError(call, e, code, id);
         }
@@ -572,9 +556,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_LIVE_ENTER_ID) {
-
         } else if (id == Common.NET_LIVE_USERLOG_ID) {
-
         } else if (id == Common.NET_LIVE_STATUS_ID) {
             MyLiveStatusModel mMyLiveStatusModel = mGson.fromJson(data, MyLiveStatusModel.class);
             if (mMyLiveStatusModel.getBody().getStatus() == 1) {
@@ -597,7 +579,6 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             new ShowHeadPopWindow(MyLiveRoomActivity.this, getmWidth(), true
                     , mGetMyUserIndexModel.getBody().getUserDetailBean(), this);
         } else if (id == Common.NET_ADD_FOLLOW_ID) {
-
         } else if (id == Common.NET_CANCEL_BLACKLIST_ID) {
         } else if (id == Common.NET_ADD_BLACKLIST) {
         }
@@ -932,10 +913,8 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             case MSG_URL_IS_EMPTY://推流url为空
                 //LogUtils.e("test: in handleMessage, MSG_URL_IS_EMPTY");
                 break;
-
             default:
                 break;
-
         }
     }
 

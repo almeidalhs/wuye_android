@@ -230,6 +230,7 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
+        discoverFindRv.setFocusable(false);
     }
 
     private void initTop3D() {
@@ -281,6 +282,10 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .tag(Common.NET_GET_FINDLIKE_ID).id(Common.NET_GET_FINDLIKE_ID).build()
                         .execute(new MyStringCallback(getActivity(), this, true));
+            }
+        } else {
+            if (discoverFindRv!=null) {
+                discoverFindRv.setFocusable(false);
             }
         }
     }
