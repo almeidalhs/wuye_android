@@ -90,6 +90,7 @@ public class FaceRelativeLayout extends RelativeLayout implements
      * 当前表情页
      */
     private int current = 0;
+    private onEditListener mOnEditListener;
 
     public FaceRelativeLayout(Context context) {
         super(context);
@@ -163,9 +164,16 @@ public class FaceRelativeLayout extends RelativeLayout implements
                 if (view2!=null) {
                     view2.setVisibility(View.GONE);
                 }
+                if (mOnEditListener!=null) {
+                    mOnEditListener.onEditClick();
+                }
                 break;
 
         }
+    }
+
+    public void setmOnEditListener(onEditListener mOnEditListener) {
+        this.mOnEditListener = mOnEditListener;
     }
 
     private boolean isIMOpen() {
@@ -374,5 +382,9 @@ public class FaceRelativeLayout extends RelativeLayout implements
             et.delete(selection-1, selection);
         }
         et_sendmessage.invalidate();
+    }
+
+    public interface onEditListener {
+        void onEditClick();
     }
 }

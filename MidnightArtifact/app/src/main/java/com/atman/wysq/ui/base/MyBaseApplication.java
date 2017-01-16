@@ -85,6 +85,7 @@ public class MyBaseApplication extends BaseApplication {
     private String mUserToken = "";
     private String mUserId = "";
 
+    public static String mLiveStatue = "0";//0是正常，1是主播，2是听众
     public static String mDeviceToken = "";
     public static String mVersionName = "";
     public static String mChannel = "";

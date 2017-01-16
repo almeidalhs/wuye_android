@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.atman.wysq.model.bean.ImMessage;
 import com.atman.wysq.model.bean.ImSession;
 import com.atman.wysq.model.bean.TouChuanOtherNotice;
+import com.atman.wysq.model.event.GiftEvent;
 import com.atman.wysq.model.event.YunXinAddFriendEvent;
 import com.atman.wysq.model.event.YunXinMessageEvent;
 import com.atman.wysq.model.greendao.gen.ImSessionDao;
@@ -92,7 +93,29 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                             }
                         }
                         if (!content.contains("您发送了一条私信")) {
-                            Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
+                            LogUtils.e(">>>>content:"+content);
+                            if (MyBaseApplication.getApplication().mLiveStatue.equals("2") && mGiftMessageModel.getType()==1) {
+                                if (content.contains(",")) {
+                                    Toast.makeText(context, content.split(",")[1], Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            //直播间处理
+                            switch (mGiftMessageModel.getType()) {
+                                case 11:
+                                    EventBus.getDefault().post(new GiftEvent(mGiftMessageModel.getType()
+                                            ,0, mGiftMessageModel.getAdd_money()));
+                                    break;
+                                case 1:
+                                    EventBus.getDefault().post(new GiftEvent(mGiftMessageModel.getType()
+                                            , mGiftMessageModel.getGiftId(), 0));
+                                    break;
+                                default:
+                                    if (content.contains("您在直播间消耗")) {
+                                        return;
+                                    }
+                                    Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
                         }
                         return;
                     } else {

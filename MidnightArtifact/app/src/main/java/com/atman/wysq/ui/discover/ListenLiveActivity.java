@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -17,6 +18,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -29,6 +32,7 @@ import android.widget.TextView;
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.ChatRoomAdapter;
 import com.atman.wysq.model.bean.ImMessage;
+import com.atman.wysq.model.event.GiftEvent;
 import com.atman.wysq.model.response.ChatRoomMessageModel;
 import com.atman.wysq.model.response.GetLiveHallModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
@@ -42,6 +46,7 @@ import com.atman.wysq.ui.yunxinfriend.SelectGiftActivity;
 import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.UiHelper;
+import com.atman.wysq.widget.face.FaceRelativeLayout;
 import com.atman.wysq.yunxin.model.ChatRoomTypeInter;
 import com.base.baselibs.iimp.EditCheckBack;
 import com.base.baselibs.iimp.MyTextWatcherTwo;
@@ -72,10 +77,14 @@ import com.netease.nimlib.sdk.media.record.IAudioRecordCallback;
 import com.netease.nimlib.sdk.media.record.RecordType;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
-import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -94,7 +103,8 @@ import okhttp3.Response;
  */
 
 public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandler
-        , ChatRoomAdapter.RoomAdapterInter, EditCheckBack, IAudioRecordCallback {
+        , ChatRoomAdapter.RoomAdapterInter, EditCheckBack, IAudioRecordCallback
+        , FaceRelativeLayout.onEditListener {
 
     @Bind(R.id.listenlive_bg_iv)
     SimpleDraweeView listenliveBgIv;
@@ -140,6 +150,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     ImageView blogdetailAddemolIv;
     @Bind(R.id.p2pchat_pic_iv)
     ImageView p2pchatPicIv;
+    @Bind(R.id.listenlive_display_gift_iv)
+    ImageView listenliveDisplayGiftIv;
     @Bind(R.id.p2pchat_send_bt)
     Button p2pchatSendBt;
     @Bind(R.id.ll1)
@@ -151,7 +163,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     @Bind(R.id.ll_facechoose)
     RelativeLayout llFacechoose;
     @Bind(R.id.FaceRelativeLayout)
-    com.atman.wysq.widget.face.FaceRelativeLayout FaceRelativeLayout;
+    FaceRelativeLayout FaceRelativeLayout;
 
     private Context mContext = ListenLiveActivity.this;
     private GetMyUserIndexModel.BodyBean.UserDetailBeanBean.UserExtBean temp;
@@ -204,6 +216,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     @Override
     protected void onResume() {
         super.onResume();
+        MyBaseApplication.getApplication().mLiveStatue = "2";
     }
 
     @Override
@@ -219,6 +232,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         Pic_url = mBodyBean.getPic_url();
         mliveStreamingURL = mBodyBean.getCurrentRecord().getRtmpPullUrl();
         title = mBodyBean.getRoom_name();
+
+        FaceRelativeLayout.setmOnEditListener(this);
 
         temp = MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt();
 
@@ -602,7 +617,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     NELivePlayer.OnPreparedListener mPreparedListener = new NELivePlayer.OnPreparedListener() {
         public void onPrepared(NELivePlayer mp) {
             mMediaPlayer.start();
-            showToast("收听中");
             String str = "【"+temp.getNick_name()+"】进入了电台";
             ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
                     String.valueOf(chatRoomId), str);
@@ -648,12 +662,24 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
     private void payListenMoney() {
         //扣金币接口，每分钟调用一下
+        LogUtils.e("Money:"+(Common.Url_Live_Money + roomId + "/" + listenTime));
         OkHttpUtils.postString().url(Common.Url_Live_Money + roomId + "/" + listenTime)
                 .id(Common.NET_LIVE_MONEY_ID).content(mGson.toJson(""))
                 .mediaType(Common.JSON).tag(Common.NET_LIVE_MONEY_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
                 .execute(new MyStringCallback(mContext, this, false));
     }
+
+    private long TIME = 60000L;
+    Handler handlerTime = new Handler();
+    Runnable runnableTime = new Runnable() {
+
+        @Override
+        public void run() {
+            listenTime=1;
+            payListenMoney();
+        }
+    };
 
     @Override
     public void onError(Call call, Exception e, int code, int id) {
@@ -678,7 +704,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         } else if (id == Common.NET_LIVE_USERLOG_ID) {
 
         } else if (id == Common.NET_LIVE_MONEY_ID) {
-
+            handlerTime.postDelayed(runnableTime, TIME); //3s后执行
         } else if (id == Common.NET_LIVE_NUM_ID) {
             MyLiveInfoModel mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
             setLiveNum(mMyLiveInfoModel.getBody().getMember_count()+"");
@@ -692,6 +718,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     @Override
     protected void onPause() {
         super.onPause();
+        MyBaseApplication.getApplication().mLiveStatue = "0";
     }
 
     @Override
@@ -725,10 +752,11 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                String str = "【"+temp.getNick_name()+"】离开了电台";
-                ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
-                        String.valueOf(chatRoomId), str);
-                seedMessge(message, ChatRoomTypeInter.ChatRoomTypeSystemCMD, "", str, "0");
+                handlerTime.removeCallbacks(runnableTime);
+//                String str = "【"+temp.getNick_name()+"】离开了电台";
+//                ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
+//                        String.valueOf(chatRoomId), str);
+//                seedMessge(message, ChatRoomTypeInter.ChatRoomTypeSystemCMD, "", str, "0");
                 receiveRegister(false);
                 mMediaPlayer.release();
                 finish();
@@ -875,6 +903,53 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         overridePendingTransition(com.base.baselibs.R.anim.activity_bottom_in, com.base.baselibs.R.anim.activity_bottom_out);
     }
 
+    private Animation animation = null;
+    private void GiftAnimation(String url) {
+        if (animation==null) {
+            animation = AnimationUtils.loadAnimation(mContext, R.anim.gift_anim);
+        }
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                LogUtils.e("onAnimationStart");
+                listenliveDisplayGiftIv.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                LogUtils.e("onAnimationEnd");
+                listenliveDisplayGiftIv.clearAnimation();
+                listenliveDisplayGiftIv.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        ImageLoader.getInstance().displayImage(url, listenliveDisplayGiftIv, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String s, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String s, View view, FailReason failReason) {
+            }
+
+            @Override
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                listenliveDisplayGiftIv.startAnimation(animation);
+            }
+
+            @Override
+            public void onLoadingCancelled(String s, View view) {
+
+            }
+        });
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -882,16 +957,11 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             return;
         }
         if (requestCode == Common.toSelectGift) {
-//            mText = data.getStringExtra("text");
-//            String name = data.getStringExtra("name");
             giftId = String.valueOf(data.getIntExtra("giftId", 0));
-//            File file = ImageLoader.getInstance().getDiskCache().get(Common.ImageUrl+data.getStringExtra("url"));
-//            ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomImageMessage(
-//                    String.valueOf(chatRoomId), file, "");
-//            seedMessge(message, ChatRoomTypeInter.ChatRoomTypeImage, file.getPath(), "", giftId);
-//            mUuid = message.getUuid();
 
             String str = "【"+temp.getNick_name()+"】赠送主播礼物："+data.getStringExtra("name");
+            String url = Common.ImageUrl+data.getStringExtra("url");
+            GiftAnimation(url);
             ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
                     String.valueOf(chatRoomId), str);
             seedMessge(message, ChatRoomTypeInter.ChatRoomTypeText, "", str, giftId);
@@ -1017,8 +1087,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 me.setRemoteExtension(mMap);
                 break;
         }
-        LogUtils.e(">>>>:"+me.getRemoteExtension().toString());
-        LogUtils.e(">>>>:"+me.getMsgType());
         NIMClient.getService(ChatRoomService.class).sendMessage(me, true);
     }
 
@@ -1183,4 +1251,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         }
 
     };
+
+    @Override
+    public void onEditClick() {
+        blogdetailAddemolIv.setImageResource(R.mipmap.chat_face_ic);
+    }
 }

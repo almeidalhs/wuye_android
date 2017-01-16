@@ -22,6 +22,8 @@ public class GiftMessageModel {
     private String WYNotice;
     private boolean enter_center;
     private int type;
+    private int giftId;
+    private int add_money;
     private String push_content;
     private String center_content;
     private long center_user_id;
@@ -29,6 +31,22 @@ public class GiftMessageModel {
     private String center_user_avatar;
     private long center_time;
     private List<String> addvalue;
+
+    public int getAdd_money() {
+        return add_money;
+    }
+
+    public void setAdd_money(int add_money) {
+        this.add_money = add_money;
+    }
+
+    public int getGiftId() {
+        return giftId;
+    }
+
+    public void setGiftId(int giftId) {
+        this.giftId = giftId;
+    }
 
     public String getWYNotice() {
         return WYNotice;

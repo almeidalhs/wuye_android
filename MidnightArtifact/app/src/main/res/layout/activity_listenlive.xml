@@ -20,7 +20,7 @@
         android:id="@+id/listenlive_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_dp_100"
+        android:layout_marginTop="@dimen/dimen_dp_170"
         android:background="@color/color_88000000"
         android:orientation="vertical">
 
@@ -347,7 +347,7 @@
                     android:id="@+id/p2pchat_pic_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/chat_add_ic" />
+                    android:src="@mipmap/chat_ic_pic" />
 
                 <Button
                     android:id="@+id/p2pchat_send_bt"
@@ -385,5 +385,12 @@
                 android:orientation="horizontal"></LinearLayout>
         </RelativeLayout>
     </com.atman.wysq.widget.face.FaceRelativeLayout>
+
+    <ImageView
+        android:id="@+id/listenlive_display_gift_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/FaceRelativeLayout"
+        android:visibility="gone" />
 
 </RelativeLayout>

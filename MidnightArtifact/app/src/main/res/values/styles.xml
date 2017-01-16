@@ -114,5 +114,9 @@
         <item name="android:windowExitAnimation">@anim/pop_exit_anim</item>
     </style>
 
+    <style name="take_gift_anim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/gift_anim</item>
+    </style>
+
 </resources>
 

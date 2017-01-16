@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -11,17 +12,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.ChatRoomAdapter;
 import com.atman.wysq.model.bean.ImMessage;
+import com.atman.wysq.model.event.GiftEvent;
 import com.atman.wysq.model.response.ChatRoomMessageModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
+import com.atman.wysq.model.response.GiftListModel;
 import com.atman.wysq.model.response.MyLiveInfoModel;
 import com.atman.wysq.model.response.MyLiveStatusModel;
 import com.atman.wysq.ui.PictureBrowsingActivity;
@@ -32,6 +38,7 @@ import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.MyTools;
 import com.atman.wysq.utils.UiHelper;
+import com.atman.wysq.widget.GiftPopWindow;
 import com.atman.wysq.yunxin.model.ChatRoomTypeInter;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
@@ -57,10 +64,17 @@ import com.netease.nimlib.sdk.media.player.OnPlayListener;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,10 +112,14 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     ImageView myliveroomSvipIv;
     @Bind(R.id.myliveroom_anim_iv)
     ImageView myliveroomAnimIv;
+    @Bind(R.id.myliveroom_gift_iv)
+    ImageView myliveroomGiftIv;
     @Bind(R.id.chatroom_lv)
     PullToRefreshListView chatroomLv;
     @Bind(R.id.myliveroom_num_tv)
     TextView myliveroomNumTv;
+    @Bind(R.id.myliveroom_gold_tv)
+    TextView myliveroomGoldTv;
 
     private Context mContext = MyLiveRoomActivity.this;
     private long roomId;
@@ -110,6 +128,8 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     private String Pic_url;
     private String title;
     private AnimationDrawable animationDrawable;
+    private List<GiftListModel.BodyEntity> mGiftList = new ArrayList<>();
+    private GiftListModel mGiftListModel;
 
     private MyLiveInfoModel mMyLiveInfoModel;
     private long startTime;
@@ -286,6 +306,8 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                                 || temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
                             if (temp.getGiftId()<=0) {
                                 getLiveNum();
+                            } else {
+                                GiftAnimation(temp.getGiftId());
                             }
                             mImMessage = new ImMessage(null, messages.get(i).getUuid()
                                     , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
@@ -345,7 +367,9 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                                         , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration/1000, 0, false, 1);
                             }
                         }
-                        mAdapter.addImMessageDao(mImMessage);
+                        if (temp.getType() != ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
+                            mAdapter.addImMessageDao(mImMessage);
+                        }
                     } else {
                         LogUtils.e("temp is null");
                     }
@@ -354,6 +378,95 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         };
 
         receiveRegister(true);
+    }
+
+    private Animation animation = null;
+    private void GiftAnimation(int giftID) {
+        if (animation==null) {
+            animation = AnimationUtils.loadAnimation(mContext, R.anim.gift_anim);
+        }
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                LogUtils.e("onAnimationStart");
+                myliveroomGiftIv.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                LogUtils.e("onAnimationEnd");
+                myliveroomGiftIv.clearAnimation();
+                myliveroomGiftIv.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        String url = "";
+        for (int i=0;i<mGiftList.size();i++) {
+            if (giftID==mGiftList.get(i).getGift_id()) {
+                url = Common.ImageUrl+mGiftList.get(i).getPic_url();
+                break;
+            }
+        }
+        ImageLoader.getInstance().displayImage(url, myliveroomGiftIv, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String s, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String s, View view, FailReason failReason) {
+            }
+
+            @Override
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                myliveroomGiftIv.startAnimation(animation);
+            }
+
+            @Override
+            public void onLoadingCancelled(String s, View view) {
+
+            }
+        });
+    }
+
+    private Animation animationGold = null;
+    private void GoldAnimation(int add_money) {
+        if (animationGold==null) {
+            animationGold = AnimationUtils.loadAnimation(mContext, R.anim.gold_anim);
+        }
+        animationGold.setFillAfter(true);
+        animationGold.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                LogUtils.e("onAnimationStart");
+                myliveroomGoldTv.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                LogUtils.e("onAnimationEnd");
+                new Handler().postDelayed(new Runnable(){
+
+                    public void run() {
+                        myliveroomGoldTv.clearAnimation();
+                        myliveroomGoldTv.setVisibility(View.GONE);
+                    }
+
+                }, 1000);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        myliveroomGoldTv.setText(" +"+add_money);
+        myliveroomGoldTv.startAnimation(animationGold);
     }
 
     private void getLiveNum() {
@@ -418,6 +531,10 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                 .content(mGson.toJson("")).mediaType(Common.JSON).tag(Common.NET_LIVE_USERLOG_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
                 .execute(new MyStringCallback(mContext, this, false));
+
+        OkHttpUtils.get().url(Common.Url_Get_GiftList).id(Common.NET_GET_GIFTLIST)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .tag(Common.NET_GET_GIFTLIST).build().execute(new MyStringCallback(mContext, this, true));
     }
 
     @Override
@@ -448,6 +565,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                 mLSMediaCapture.resumeAudioEncode();
             }
         }
+        MyBaseApplication.getApplication().mLiveStatue = "1";
     }
 
     @Override
@@ -471,6 +589,9 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         } else if (id == Common.NET_LIVE_NUM_ID) {
             MyLiveInfoModel mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
             myliveroomNumTv.setText(mMyLiveInfoModel.getBody().getMember_count()+"");
+        } else if (id == Common.NET_GET_GIFTLIST) {
+            mGiftListModel = mGson.fromJson(data, GiftListModel.class);
+            mGiftList = mGiftListModel.getBody();
         }
     }
 
@@ -519,6 +640,16 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         if (player!=null) {
             player.stop();
         }
+        MyBaseApplication.getApplication().mLiveStatue = "0";
+    }
+
+    //在注册了的Activity中,声明处理事件的方法
+    @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
+    public void onUserEvent(GiftEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
+        LogUtils.e("event.TypeId:"+event.TypeId);
+        if (event.TypeId == 11) {
+            GoldAnimation(event.add_money);
+        }
     }
 
     @Override
@@ -533,6 +664,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_ENTER_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_USERLOG_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_GIFTLIST);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_NUM_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_STATUS_ID);
     }
