@@ -58,7 +58,7 @@ public class ShowHeadPopWindow extends PopupWindow {
         return v;
     }
 
-    public ShowHeadPopWindow(Activity context, int width, boolean isMyLive
+    public ShowHeadPopWindow(Activity context, int width, boolean isMyLive, final int userFelation
             , GetUserIndexModel.BodyBean.UserDetailBeanBean mBodyBean, final onHeadPopClickListenner onClick){
         super(context);
         this.mContext = context;
@@ -81,6 +81,8 @@ public class ShowHeadPopWindow extends PopupWindow {
         partliveheadAddTx = (TextView) view.findViewById(R.id.part_livehead_add_tx);
         partLivepopGagTx = (TextView) view.findViewById(R.id.part_livepop_gag_tx);
         partLivepopMoreTx = (TextView) view.findViewById(R.id.part_livepop_more_tx);
+
+        setViewFelation(userFelation);
 
         if (isMyLive) {
             partLivepopGagTx.setVisibility(View.VISIBLE);
@@ -123,6 +125,7 @@ public class ShowHeadPopWindow extends PopupWindow {
         partLivepopGagTx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dismiss();
                 showGagDialog(mContext, userNick);
             }
         });
@@ -131,7 +134,11 @@ public class ShowHeadPopWindow extends PopupWindow {
             @Override
             public void onClick(View v) {
                 dismiss();
-                onClick.onAddFriend(userId);
+                if (userFelation==2) {
+                    onClick.onAddFriend(userId);
+                } else {
+                    onClick.onDeleteFriend(userId);
+                }
             }
         });
 
@@ -199,7 +206,8 @@ public class ShowHeadPopWindow extends PopupWindow {
 
     public interface onHeadPopClickListenner {
         void onAddFriend(long id);
-        void onGag(long id);
+        void onDeleteFriend(long id);
+        void onGag(long id, String nick);
         void onMore(long id);
     }
 
@@ -217,9 +225,19 @@ public class ShowHeadPopWindow extends PopupWindow {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                onClick.onGag(userId);
+                onClick.onGag(userId, userNick);
             }
         });
         builder.show();
+    }
+
+    private void setViewFelation(int userFelation) {
+        if (userFelation==1) {//已关注
+            partliveheadAddTx.setText("取消关注");
+        } else if (userFelation==3) {//互相关注
+            partliveheadAddTx.setText("取消关注");
+        }else if (userFelation==2) {//未关注
+            partliveheadAddTx.setText("+加关注");
+        }
     }
 }

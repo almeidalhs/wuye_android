@@ -30,7 +30,7 @@ public class ChatRoomMessageModel {
     private double sendTime;
     private int isAnchorImage;
     private int cmdType;
-    private int banChatUserId;
+    private long banChatUserId;
 
     public String getGiftName() {
         return giftName;
@@ -120,11 +120,11 @@ public class ChatRoomMessageModel {
         this.cmdType = cmdType;
     }
 
-    public int getBanChatUserId() {
+    public long getBanChatUserId() {
         return banChatUserId;
     }
 
-    public void setBanChatUserId(int banChatUserId) {
+    public void setBanChatUserId(long banChatUserId) {
         this.banChatUserId = banChatUserId;
     }
 

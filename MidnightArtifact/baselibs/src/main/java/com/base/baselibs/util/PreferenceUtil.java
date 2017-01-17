@@ -24,6 +24,7 @@ public class PreferenceUtil {
 	public static final String PARM_ISOPEN_GESTURE = "IsOpen_Gesture";
 	public static final String PARM_GESTURE_ERROR = "Gesture_error";
 	public static final String PARM_ISOUT = "isout";
+	public static final String PARM_GAG_TIME = "gag_time";
 
 	/**
 	 * a method to save global data

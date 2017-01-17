@@ -576,22 +576,28 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             mGiftList = mGiftListModel.getBody();
         } else if (id == Common.NET_GET_USERINDEX) {
             GetUserIndexModel mGetMyUserIndexModel = mGson.fromJson(data, GetUserIndexModel.class);
+            if (mGetMyUserIndexModel.getBody().getIsBlack()==1) {
+                mIsBalck = true;
+            } else {
+                mIsBalck = false;
+            }
             new ShowHeadPopWindow(MyLiveRoomActivity.this, getmWidth(), true
+                    , mGetMyUserIndexModel.getBody().getUserFelation()
                     , mGetMyUserIndexModel.getBody().getUserDetailBean(), this);
         } else if (id == Common.NET_ADD_FOLLOW_ID) {
         } else if (id == Common.NET_CANCEL_BLACKLIST_ID) {
+            mIsBalck = false;
         } else if (id == Common.NET_ADD_BLACKLIST) {
+            mIsBalck = true;
+        } else if (id == Common.NET_CANCEL_MYCONCERNLIST_ID) {
+
         }
     }
 
-    private void seedMessge() {
+    private void seedMessge(ChatRoomMessage message, int type, String url, String text, long banChatUserId) {
         // 创建文本消息
         GetMyUserIndexModel.BodyBean.UserDetailBeanBean.UserExtBean temp = null;
         temp = MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt();
-
-        String url = resulturl;
-        ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomImageMessage(String.valueOf(chatRoomId)
-                , new File(url), "");
 
         Map<String, Object> mUserMap = new HashMap<>();
         mUserMap.put("verify_status", temp.getVerify_status());
@@ -604,21 +610,43 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         mMap.put("isAnchorImage",1);
         mMap.put("user",mUserMap);
         mMap.put("sendTime",message.getTime());
-        mMap.put("type",1);
+        mMap.put("banChatUserId",banChatUserId);
+        mMap.put("type",type);
         mMap.put("id",chatRoomId);
         message.setRemoteExtension(mMap);
         // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
-        ImMessage mImMessage = new ImMessage(null, message.getUuid()
-                , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
-                , message.getSessionId()
-                , message.getFromAccount()
-                , temp.getNick_name()
-                , temp.getIcon()
-                , temp.getSex()
-                , temp.getVerify_status()
-                , true, message.getTime()
-                , ChatRoomTypeInter.ChatRoomTypeImage
-                , "[图片]", url, url, url, "", "", "", "", "", 0, 0, false, 1);
+        ImMessage mImMessage = null;
+        switch (type) {
+            case ChatRoomTypeInter.ChatRoomTypeSystemCMD:
+                message.setContent(mGson.toJson(mMap).toString());
+            case ChatRoomTypeInter.ChatRoomTypeText:
+
+                mImMessage = new ImMessage(null, message.getUuid()
+                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                        , message.getSessionId()
+                        , message.getFromAccount()
+                        , temp.getNick_name()
+                        , temp.getIcon()
+                        , temp.getSex()
+                        , temp.getVerify_status()
+                        , false, System.currentTimeMillis()
+                        , ChatRoomTypeInter.ChatRoomTypeText
+                        , text, "", "", "", "", "", "", "", "", 0, 0, true, 1);
+                break;
+            case ChatRoomTypeInter.ChatRoomTypeImage:
+                mImMessage = new ImMessage(null, message.getUuid()
+                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                        , message.getSessionId()
+                        , message.getFromAccount()
+                        , temp.getNick_name()
+                        , temp.getIcon()
+                        , temp.getSex()
+                        , temp.getVerify_status()
+                        , true, message.getTime()
+                        , ChatRoomTypeInter.ChatRoomTypeImage
+                        , "[图片]", url, url, url, "", "", "", "", "", 0, 0, false, 1);
+                break;
+        }
         mAdapter.addImMessageDao(mImMessage);
         NIMClient.getService(ChatRoomService.class).sendMessage(message, false);
     }
@@ -660,6 +688,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_FOLLOW_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_BLACKLIST_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BLACKLIST);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_MYCONCERNLIST_ID);
     }
 
     private void closeLive() {
@@ -749,7 +778,11 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                     }
                     resulturl = temp.getPath();
                     myliveroomBgIv.setImageURI(imageUri);
-                    seedMessge();
+
+                    String url = resulturl;
+                    ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomImageMessage(String.valueOf(chatRoomId)
+                            , new File(url), "");
+                    seedMessge(message, ChatRoomTypeInter.ChatRoomTypeImage, url, "", 0);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -837,10 +870,10 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                 break;
             case MSG_RTMP_URL_ERROR://断网消息
                 LogUtils.e("test: in handleMessage, MSG_RTMP_URL_ERROR");
-                showToast("MSG_RTMP_URL_ERROR，推流已停止");
+                showToast("网络已断开，推流已停止");
                 break;
             case MSG_URL_NOT_AUTH://直播URL非法，URL格式不符合视频云要求
-                showToast("MSG_URL_NOT_AUTH  直播地址不合法");
+                showToast("直播地址不合法");
                 break;
             case MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR://音频采集参数不支持
                 LogUtils.e("test: in handleMessage, MSG_AUDIO_SAMPLE_RATE_NOT_SUPPORT_ERROR");
@@ -908,7 +941,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                 break;
             case MSG_URL_FORMAT_NOT_RIGHT://推流url格式不正确
                 //LogUtils.e("test: in handleMessage, MSG_URL_FORMAT_NOT_RIGHT");
-                LogUtils.e("MSG_URL_FORMAT_NOT_RIGHT");
+                LogUtils.e("推流url格式不正确");
                 break;
             case MSG_URL_IS_EMPTY://推流url为空
                 //LogUtils.e("test: in handleMessage, MSG_URL_IS_EMPTY");
@@ -1081,8 +1114,21 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     @Override
-    public void onGag(long userId) {
+    public void onDeleteFriend(long id) {
+        OkHttpUtils.postString()
+                .url(Common.Url_Cancel_MyConcernList + id)
+                .tag(Common.NET_CANCEL_MYCONCERNLIST_ID).id(Common.NET_CANCEL_MYCONCERNLIST_ID)
+                .content(mGson.toJson(""))
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .build().execute(new MyStringCallback(mContext, MyLiveRoomActivity.this, true));
+    }
 
+    @Override
+    public void onGag(long userId, String nick) {
+        String str = "你禁言【"+nick+"】15分钟";
+        ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
+                String.valueOf(chatRoomId), str);
+        seedMessge(message, ChatRoomTypeInter.ChatRoomTypeSystemCMD, "", str, userId);
     }
 
     @Override

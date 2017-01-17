@@ -63,6 +63,12 @@ public class MyTools {
         return sdf.format(date);
     }
 
+    public static String convertTimeOr(long unixTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(unixTime);
+        return sdf.format(date);
+    }
+
     public static String convertTime(long unixTime, String str) {
         SimpleDateFormat sdf = new SimpleDateFormat(str);
         Date date = new Date(unixTime);
@@ -251,6 +257,47 @@ public class MyTools {
         long min = 0;
         long sec = 0;
         long diff = endDate - startDate;
+
+        String reStr = "";
+
+        day = diff / (24 * 60 * 60 * 1000);
+        hour = (diff / (60 * 60 * 1000) - day * 24);
+        min = ((diff / (60 * 1000)) - day * 24 * 60 - hour * 60);
+        sec = (diff/1000-day*24*60*60-hour*60*60-min*60);
+
+        if (day>0) {
+            reStr += day + "天";
+        }
+
+        if (reStr.isEmpty()) {
+            if (hour>0) {
+                reStr += hour + "小时";
+            }
+        } else {
+            reStr += hour + "小时";
+        }
+
+        if (reStr.isEmpty()) {
+            if (min>0) {
+                reStr += min + "分";
+            }
+        } else {
+            reStr += min + "分";
+        }
+
+        reStr += sec + "秒";
+        return reStr;
+    }
+
+    public static String getTwoTime15Count(long startDate, long endDate) {
+        long day = 0;
+        long hour = 0;
+        long min = 0;
+        long sec = 0;
+        long diff = endDate - startDate;
+        long str15 = 1000 * 60 * 15;
+
+        diff = str15-diff;
 
         String reStr = "";
 
