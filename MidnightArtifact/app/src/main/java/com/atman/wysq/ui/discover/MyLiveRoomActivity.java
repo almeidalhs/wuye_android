@@ -358,7 +358,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                                         , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration/1000, 0, false, 1);
                             }
                         }
-                        if (temp.getType() != ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
+                        if (mImMessage!=null && temp.getType() != ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
                             mAdapter.addImMessageDao(mImMessage);
                         }
                     } else {

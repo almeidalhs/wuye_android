@@ -451,16 +451,12 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             public void onEvent(List<ChatRoomMessage> messages) {
                 // 处理新收到的消息
                 for (int i = 0; i < messages.size(); i++) {
-                    LogUtils.e(">>>>>messages:" + messages.size());
-                    LogUtils.e(">>>>>messages>>getContent:" + messages.get(0).getContent());
-                    LogUtils.e(">>>>>messages>>getMsgType:" + messages.get(0).getMsgType());
                     ChatRoomMessageModel temp = null;
                     if (messages.get(i).getContent() != null) {
                         temp = mGson.fromJson(messages.get(i).getContent().toString()
                                 , ChatRoomMessageModel.class);
                     } else {
                         if (messages.get(i).getRemoteExtension() != null) {
-                            LogUtils.e(">>>>>messages>>getRemoteExtension:" + messages.get(0).getRemoteExtension());
                             temp = mGson.fromJson(mGson.toJson(messages.get(i).getRemoteExtension())
                                     , ChatRoomMessageModel.class);
                         }
@@ -473,7 +469,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                                 getLiveNum();
                             }
                             if (temp.getBanChatUserId()==mMyUserInfo.getUser_id()) {
-                                showToast("被禁言："+ MyTools.convertTimeOr((long)temp.getSendTime()));
                                 mImMessage = new ImMessage(null, messages.get(i).getUuid()
                                         , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
                                         , messages.get(i).getSessionId()
@@ -537,7 +532,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                                         , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration / 1000, 0, false, 1);
                             }
                         }
-                        mAdapter.addImMessageDao(mImMessage);
+                        if (mImMessage!=null) {
+                            mAdapter.addImMessageDao(mImMessage);
+                        }
                     }
                 }
             }
