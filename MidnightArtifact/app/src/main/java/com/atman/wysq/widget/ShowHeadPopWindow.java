@@ -145,7 +145,7 @@ public class ShowHeadPopWindow extends PopupWindow {
         partLivepopMoreTx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClick.onMore(userId);
+                onClick.onMore(userId, ShowHeadPopWindow.this);
             }
         });
 
@@ -208,7 +208,7 @@ public class ShowHeadPopWindow extends PopupWindow {
         void onAddFriend(long id);
         void onDeleteFriend(long id);
         void onGag(long id, String nick);
-        void onMore(long id);
+        void onMore(long id, PopupWindow ob);
     }
 
     private void showGagDialog(Activity context, String name) {

@@ -46,6 +46,7 @@
                 android:gravity="center_vertical"
                 android:hint="请输入主题描述"
                 android:singleLine="true"
+                android:maxLength="20"
                 android:textColor="@color/color_2B2B2B"
                 android:textSize="@dimen/dimen_sp_13" />
 

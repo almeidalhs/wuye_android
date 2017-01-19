@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
@@ -1037,6 +1038,13 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         switch (v.getId()) {
             case R.id.item_p2pchat_noti_tx:
             case R.id.item_p2pchat_text_headleft_iv:
+                LogUtils.e("mAdapter.getItem(position).getUserId():"+mAdapter.getItem(position).getUserId());
+                LogUtils.e("my:"+MyBaseApplication.getApplication()
+                        .mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUser_id());
+                if (Long.parseLong(mAdapter.getItem(position).getUserId())==MyBaseApplication.getApplication()
+                        .mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUser_id()) {
+                    return;
+                }
                 OkHttpUtils.get().url(Common.Url_Get_UserIndex + "/" + mAdapter.getItem(position).getUserId())
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .tag(Common.NET_GET_USERINDEX).id(Common.NET_GET_USERINDEX).build()
@@ -1148,12 +1156,12 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     @Override
-    public void onMore(long userId) {
-        showBottomImg(userId);
+    public void onMore(long userId, PopupWindow ob) {
+        showBottomImg(userId, ob);
     }
 
     private boolean mIsBalck = false;
-    private void showBottomImg(final long id) {
+    private void showBottomImg(final long id, final PopupWindow ob) {
         BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
         String[] str = new String[]{"举报", "把TA加入黑名单"};
         if (mIsBalck) {
@@ -1170,6 +1178,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                 if (which == 0) {//举报
                     startActivity(ReportActivity.buildIntent(mContext, id, 1));
                 } else if (which == 1) {//把TA加入黑名单
+                    ob.dismiss();
                     if (mIsBalck) {
                         OkHttpUtils.postString()
                                 .url(Common.Url_Cancel_BlackList + id)

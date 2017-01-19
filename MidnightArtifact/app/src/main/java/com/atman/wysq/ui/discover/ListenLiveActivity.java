@@ -26,6 +26,7 @@ import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -1152,7 +1153,12 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     @Override
     public void onItem(View v, int position) {
         switch (v.getId()) {
+            case R.id.item_p2pchat_noti_tx:
             case R.id.item_p2pchat_text_headleft_iv:
+                if (Long.parseLong(mAdapter.getItem(position).getUserId())==MyBaseApplication.getApplication()
+                        .mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUser_id()) {
+                    return;
+                }
                 OkHttpUtils.get().url(Common.Url_Get_UserIndex + "/" + mAdapter.getItem(position).getUserId())
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .tag(Common.NET_GET_USERINDEX).id(Common.NET_GET_USERINDEX).build()
@@ -1339,11 +1345,11 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     @Override
-    public void onMore(long userId) {
-        showBottomImg(userId);
+    public void onMore(long userId, PopupWindow ob) {
+        showBottomImg(userId, ob);
     }
 
-    private void showBottomImg(final long id) {
+    private void showBottomImg(final long id, final PopupWindow ob) {
         BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
         String[] str = new String[]{"举报", "把TA加入黑名单"};
         if (mIsBalck) {
@@ -1360,6 +1366,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 if (which == 0) {//举报
                     startActivity(ReportActivity.buildIntent(mContext, id, 1));
                 } else if (which == 1) {//把TA加入黑名单
+                    ob.dismiss();
                     if (mIsBalck) {
                         OkHttpUtils.postString()
                                 .url(Common.Url_Cancel_BlackList + id)
@@ -1392,6 +1399,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         long startTime = PreferenceUtil.getLongPreferences(mContext, PreferenceUtil.PARM_GAG_TIME);
         long endTime = System.currentTimeMillis();
         diTime = MyTools.getTwoTime15Count(startTime, endTime);
+        LogUtils.e("MyTools.getGapCountM(startTime, endTime):"+MyTools.getGapCountM(startTime, endTime));
         if (startTime==0 || MyTools.getGapCountM(startTime, endTime)>15) {
             iscan = true;
         }

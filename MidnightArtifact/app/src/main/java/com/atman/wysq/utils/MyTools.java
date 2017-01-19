@@ -245,6 +245,12 @@ public class MyTools {
      * @return
      */
     public static long getGapCountM(long startDate, long endDate) {
+        if (String.valueOf(startDate).length()>13) {
+            startDate = Long.parseLong(String.valueOf(startDate).substring(0,13));
+        }
+        if (String.valueOf(endDate).length()>13) {
+            endDate = Long.parseLong(String.valueOf(endDate).substring(0,13));
+        }
         return (endDate - startDate) / (1000 * 60);
     }
     /**
@@ -290,6 +296,16 @@ public class MyTools {
     }
 
     public static String getTwoTime15Count(long startDate, long endDate) {
+        if (String.valueOf(startDate).length()>13) {
+            startDate = Long.parseLong(String.valueOf(startDate).substring(0,13));
+        }
+        if (String.valueOf(endDate).length()>13) {
+            endDate = Long.parseLong(String.valueOf(endDate).substring(0,13));
+        }
+
+        LogUtils.e("startDate:"+startDate);
+        LogUtils.e("endDate:"+endDate);
+
         long day = 0;
         long hour = 0;
         long min = 0;

@@ -136,8 +136,9 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
         pullToRefreshGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int CostGolden = MyBaseApplication.mGetGoldenRoleModel.getBody().get("4").getCost_golden();
                 if (MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
-                        .getUserDetailBean().getUserExt().getGold_coin()>0){
+                        .getUserDetailBean().getUserExt().getGold_coin()>=CostGolden){
                     startActivity(ListenLiveActivity.buildIntent(mContext, mAdapter.getItem(position)));
                 } else {
                     PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
