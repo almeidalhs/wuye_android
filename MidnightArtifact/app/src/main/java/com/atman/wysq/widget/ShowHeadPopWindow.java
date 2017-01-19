@@ -134,7 +134,7 @@ public class ShowHeadPopWindow extends PopupWindow {
             @Override
             public void onClick(View v) {
                 dismiss();
-                if (userFelation==2) {
+                if (userFelation==2 || userFelation==0) {
                     onClick.onAddFriend(userId);
                 } else {
                     onClick.onDeleteFriend(userId);
@@ -236,7 +236,9 @@ public class ShowHeadPopWindow extends PopupWindow {
             partliveheadAddTx.setText("取消关注");
         } else if (userFelation==3) {//互相关注
             partliveheadAddTx.setText("取消关注");
-        }else if (userFelation==2) {//未关注
+        } else if (userFelation==2) {//未关注
+            partliveheadAddTx.setText("+加关注");
+        } else {
             partliveheadAddTx.setText("+加关注");
         }
     }

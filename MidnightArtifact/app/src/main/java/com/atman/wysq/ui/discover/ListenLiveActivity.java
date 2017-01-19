@@ -450,90 +450,100 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             @Override
             public void onEvent(List<ChatRoomMessage> messages) {
                 // 处理新收到的消息
+                LogUtils.e(">>>>>messages.size():" + messages.size());
+                LogUtils.e(">>>>>messages.get(0).getContent():" + messages.get(0).getContent());
+                LogUtils.e(">>>>>messages.get(0).getMsgType():" + messages.get(0).getMsgType());
+                LogUtils.e(">>>>>messages.get(0).getRemoteExtension:" + messages.get(0).getRemoteExtension());
                 for (int i = 0; i < messages.size(); i++) {
-                    ChatRoomMessageModel temp = null;
-                    if (messages.get(i).getContent() != null) {
-                        temp = mGson.fromJson(messages.get(i).getContent().toString()
-                                , ChatRoomMessageModel.class);
-                    } else {
-                        if (messages.get(i).getRemoteExtension() != null) {
-                            temp = mGson.fromJson(mGson.toJson(messages.get(i).getRemoteExtension())
+                    if (String.valueOf(chatRoomId).equals(messages.get(0).getSessionId())) {
+                        ChatRoomMessageModel temp = null;
+                        if (messages.get(i).getContent() != null) {
+                            temp = mGson.fromJson(messages.get(i).getContent().toString()
                                     , ChatRoomMessageModel.class);
-                        }
-                    }
-                    ImMessage mImMessage = null;
-                    if (temp != null) {
-                        if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystem
-                                || temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
-                            if (temp.getGiftId()<=0) {
-                                getLiveNum();
-                            }
-                            if (temp.getBanChatUserId()==mMyUserInfo.getUser_id()) {
-                                mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
-                                        , messages.get(i).getSessionId()
-                                        , messages.get(i).getFromAccount()
-                                        , temp.getUser().getNickName()
-                                        , temp.getUser().getIcon()
-                                        , temp.getUser().getSex()
-                                        , temp.getUser().getVerify_status()
-                                        , false, System.currentTimeMillis()
-                                        , ChatRoomTypeInter.ChatRoomTypeText
-                                        , "主播请你15分钟后再发言", "", "", "", "", "", "", "", "", 0, 0, true, 1);
-                                PreferenceUtil.saveLongPreference(mContext, PreferenceUtil.PARM_GAG_TIME, (long)temp.getSendTime() * 1000);
-                            }
                         } else {
-                            if (messages.get(i).getMsgType() == MsgTypeEnum.text) {
-                                mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
-                                        , messages.get(i).getSessionId()
-                                        , messages.get(i).getFromAccount()
-                                        , temp.getUser().getNickName()
-                                        , temp.getUser().getIcon()
-                                        , temp.getUser().getSex()
-                                        , temp.getUser().getVerify_status()
-                                        , false, System.currentTimeMillis()
-                                        , ChatRoomTypeInter.ChatRoomTypeText
-                                        , temp.getContent(), "", "", "", "", "", "", "", "", 0, 0, false, 1);
-                            } else if (messages.get(i).getMsgType() == MsgTypeEnum.image) {
-                                String url = ((FileAttachment) messages.get(i).getAttachment()).getUrl();
-                                String urlThumb = ((FileAttachment) messages.get(i).getAttachment()).getThumbPathForSave();
-                                mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
-                                        , messages.get(i).getSessionId()
-                                        , messages.get(i).getFromAccount()
-                                        , temp.getUser().getNickName()
-                                        , temp.getUser().getIcon()
-                                        , temp.getUser().getSex()
-                                        , temp.getUser().getVerify_status()
-                                        , false, System.currentTimeMillis()
-                                        , ChatRoomTypeInter.ChatRoomTypeImage
-                                        , "[图片]", url, url, urlThumb, "", "", "", "", "", 0, 0, false, 1);
-                                if (temp.getIsAnchorImage() == 1) {
-                                    listenliveBgIv.setImageURI(url);
-                                }
-                            } else if (messages.get(i).getMsgType() == MsgTypeEnum.audio) {
-                                String urlAudio = ((AudioAttachment) messages.get(i).getAttachment()).getUrl();
-                                String pathAudio = ((AudioAttachment) messages.get(i).getAttachment()).getPathForSave();
-                                long Duration = ((AudioAttachment) messages.get(i).getAttachment()).getDuration();
-                                LogUtils.e("urlAudio:" + urlAudio);
-                                LogUtils.e("pathAudio:" + pathAudio);
-                                LogUtils.e("Duration:" + Duration);
-                                mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
-                                        , messages.get(i).getSessionId()
-                                        , messages.get(i).getFromAccount()
-                                        , temp.getUser().getNickName()
-                                        , temp.getUser().getIcon()
-                                        , temp.getUser().getSex()
-                                        , temp.getUser().getVerify_status()
-                                        , false, System.currentTimeMillis()
-                                        , ChatRoomTypeInter.ChatRoomTypeAudio
-                                        , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration / 1000, 0, false, 1);
+                            if (messages.get(i).getRemoteExtension() != null) {
+                                temp = mGson.fromJson(mGson.toJson(messages.get(i).getRemoteExtension())
+                                        , ChatRoomMessageModel.class);
                             }
                         }
-                        if (mImMessage!=null) {
-                            mAdapter.addImMessageDao(mImMessage);
+                        ImMessage mImMessage = null;
+                        if (temp != null) {
+                            if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystem
+                                    || temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
+                                if (temp.getGiftId()<=0) {
+                                    getLiveNum();
+                                }
+                                String noStr = temp.getContent();
+                                if (temp.getBanChatUserId()==mMyUserInfo.getUser_id()) {
+                                    noStr = "主播请你15分钟后再发言";
+                                    PreferenceUtil.saveLongPreference(mContext, PreferenceUtil.PARM_GAG_TIME, (long)temp.getSendTime() * 1000);
+                                }
+                                if (noStr!=null && !noStr.isEmpty()) {
+                                    mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                            , messages.get(i).getSessionId()
+                                            , messages.get(i).getFromAccount()
+                                            , temp.getUser().getNickName()
+                                            , temp.getUser().getIcon()
+                                            , temp.getUser().getSex()
+                                            , temp.getUser().getVerify_status()
+                                            , false, System.currentTimeMillis()
+                                            , ChatRoomTypeInter.ChatRoomTypeText
+                                            , noStr, "", "", "", "", "", "", "", "", 0, 0, true, 1);
+                                }
+                            } else {
+                                if (messages.get(i).getMsgType() == MsgTypeEnum.text) {
+                                    mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                            , messages.get(i).getSessionId()
+                                            , messages.get(i).getFromAccount()
+                                            , temp.getUser().getNickName()
+                                            , temp.getUser().getIcon()
+                                            , temp.getUser().getSex()
+                                            , temp.getUser().getVerify_status()
+                                            , false, System.currentTimeMillis()
+                                            , ChatRoomTypeInter.ChatRoomTypeText
+                                            , temp.getContent(), "", "", "", "", "", "", "", "", 0, 0, false, 1);
+                                } else if (messages.get(i).getMsgType() == MsgTypeEnum.image) {
+                                    String url = ((FileAttachment) messages.get(i).getAttachment()).getUrl();
+                                    String urlThumb = ((FileAttachment) messages.get(i).getAttachment()).getThumbPathForSave();
+                                    mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                            , messages.get(i).getSessionId()
+                                            , messages.get(i).getFromAccount()
+                                            , temp.getUser().getNickName()
+                                            , temp.getUser().getIcon()
+                                            , temp.getUser().getSex()
+                                            , temp.getUser().getVerify_status()
+                                            , false, System.currentTimeMillis()
+                                            , ChatRoomTypeInter.ChatRoomTypeImage
+                                            , "[图片]", url, url, urlThumb, "", "", "", "", "", 0, 0, false, 1);
+                                    if (temp.getIsAnchorImage() == 1) {
+                                        listenliveBgIv.setImageURI(url);
+                                    }
+                                } else if (messages.get(i).getMsgType() == MsgTypeEnum.audio) {
+                                    String urlAudio = ((AudioAttachment) messages.get(i).getAttachment()).getUrl();
+                                    String pathAudio = ((AudioAttachment) messages.get(i).getAttachment()).getPathForSave();
+                                    long Duration = ((AudioAttachment) messages.get(i).getAttachment()).getDuration();
+                                    LogUtils.e("urlAudio:" + urlAudio);
+                                    LogUtils.e("pathAudio:" + pathAudio);
+                                    LogUtils.e("Duration:" + Duration);
+                                    mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                            , messages.get(i).getSessionId()
+                                            , messages.get(i).getFromAccount()
+                                            , temp.getUser().getNickName()
+                                            , temp.getUser().getIcon()
+                                            , temp.getUser().getSex()
+                                            , temp.getUser().getVerify_status()
+                                            , false, System.currentTimeMillis()
+                                            , ChatRoomTypeInter.ChatRoomTypeAudio
+                                            , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration / 1000, 0, false, 1);
+                                }
+                            }
+                            if (mImMessage!=null) {
+                                mAdapter.addImMessageDao(mImMessage);
+                            }
                         }
                     }
                 }
@@ -660,7 +670,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 .content(mGson.toJson("")).mediaType(Common.JSON).tag(Common.NET_LIVE_USERLOG_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
                 .execute(new MyStringCallback(mContext, this, false));
-        payListenMoney();
+        handlerTime.postDelayed(runnableTime, 0); //3s后执行
     }
 
     private void payListenMoney() {
@@ -671,6 +681,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 .mediaType(Common.JSON).tag(Common.NET_LIVE_MONEY_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
                 .execute(new MyStringCallback(mContext, this, false));
+        if (listenTime!=1) {
+            listenTime=1;
+        }
     }
 
     private long TIME = 60000L;
@@ -679,8 +692,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
         @Override
         public void run() {
-            listenTime=1;
             payListenMoney();
+            handlerTime.postDelayed(runnableTime, TIME); //3s后执行
         }
     };
 
@@ -707,7 +720,18 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         } else if (id == Common.NET_LIVE_USERLOG_ID) {
 
         } else if (id == Common.NET_LIVE_MONEY_ID) {
-            handlerTime.postDelayed(runnableTime, TIME); //3s后执行
+//            LivePayMoneyModel mLivePayMoneyModel = mGson.fromJson(data, LivePayMoneyModel.class);
+//            if (mLivePayMoneyModel.getBody()==0) {
+//                PromptDialog.Builder builder = new PromptDialog.Builder(this);
+//                builder.setMessage("");
+//                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//                builder.show();
+//            }
         } else if (id == Common.NET_LIVE_NUM_ID) {
             MyLiveInfoModel mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
             setLiveNum(mMyLiveInfoModel.getBody().getMember_count()+"");
@@ -767,7 +791,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
     private void showWarnExit() {
         PromptDialog.Builder builder = new PromptDialog.Builder(ListenLiveActivity.this);
-        builder.setMessage("确定要离开本店台吗？");
+        builder.setMessage("确定要离开本电台吗？");
         builder.setPositiveButton("不走", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -800,8 +824,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                     return;
                 }
                 if (isIMOpen()) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+                    cancelIM(view);
                 }
                 blogdetailAddemolIv.setImageResource(R.mipmap.chat_face_ic);
                 p2pchatRecordIv.setImageResource(R.mipmap.chat_record_ic);
@@ -828,8 +851,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 }
                 if (blogdetailAddcommentEt.getVisibility() == View.VISIBLE) {
                     if (isIMOpen()) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+                        cancelIM(view);
                     }
                     blogdetailAddcommentEt.setVisibility(View.GONE);
                     p2pchatRecordBt.setVisibility(View.VISIBLE);
@@ -850,8 +872,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 }
                 if (llFacechoose.getVisibility() == View.GONE) {
                     if (isIMOpen()) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+                        cancelIM(view);
                     }
                     llFacechoose.setVisibility(View.VISIBLE);
                     blogdetailAddemolIv.setImageResource(R.mipmap.chat_key_ic);
@@ -898,6 +919,10 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                         String.valueOf(chatRoomId), text);
                 seedMessge(message, ChatRoomTypeInter.ChatRoomTypeText, "", text, "0");
                 blogdetailAddcommentEt.setText("");
+                if (isIMOpen()) {
+                    cancelIM(view);
+                }
+                llFacechoose.setVisibility(View.GONE);
                 break;
         }
     }
@@ -940,7 +965,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     private Animation animation = null;
     private void GiftAnimation(String url) {
         if (animation==null) {
-            animation = AnimationUtils.loadAnimation(mContext, R.anim.gift_anim);
+            animation = AnimationUtils.loadAnimation(mContext, R.anim.gift_anim_right);
         }
         animation.setFillAfter(true);
         animation.setAnimationListener(new Animation.AnimationListener() {
@@ -1035,7 +1060,10 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         mMap.put("isAnchorImage",0);
         mMap.put("user",mUserMap);
         mMap.put("sendTime",me.getTime());
-        if (Integer.parseInt(giftId)>0 || type>3) {
+        if (type==4) {
+            mMap.put("cmdType",1);
+        }
+        if (Integer.parseInt(giftId)>0) {
             mMap.put("type",3);
         } else {
             mMap.put("type",type);
@@ -1109,6 +1137,10 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                         , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration/1000, 0, false, 1);
                 mAdapter.addImMessageDao(mImMessage);
                 break;
+//            case ChatRoomTypeInter.ChatRoomTypeSystem:
+//                me.setContent(text);
+//                me.setRemoteExtension(mMap);
+//                break;
             default:
                 me.setContent(mGson.toJson(mMap));
                 me.setRemoteExtension(mMap);
@@ -1131,8 +1163,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                     return;
                 }
                 if (isIMOpen()) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0); //强制隐藏键盘
+                    cancelIM(v);
                 }
                 blogdetailAddemolIv.setImageResource(R.mipmap.chat_face_ic);
                 p2pchatRecordIv.setImageResource(R.mipmap.chat_record_ic);

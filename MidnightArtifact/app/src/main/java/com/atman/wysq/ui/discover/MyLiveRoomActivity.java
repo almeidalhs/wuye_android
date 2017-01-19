@@ -280,39 +280,39 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             @Override
             public void onEvent(List<ChatRoomMessage> messages) {
                 // 处理新收到的消息
+                LogUtils.e(">>>>>messages.size():" + messages.size());
+                LogUtils.e(">>>>>messages.get(0).getSessionId():" + messages.get(0).getSessionId());
+                LogUtils.e(">>>>>chatRoomId:" + chatRoomId);
+                LogUtils.e(">>>>>messages.get(0).getContent():" + messages.get(0).getContent());
+                LogUtils.e(">>>>>messages.get(0).getMsgType():" + messages.get(0).getMsgType());
+                LogUtils.e(">>>>>messages.get(0).getRemoteExtension:" + messages.get(0).getRemoteExtension());
                 for (int i = 0; i < messages.size(); i++) {
-                    ChatRoomMessageModel temp = null;
-                    if (messages.get(i).getContent() != null) {
-                        temp = mGson.fromJson(messages.get(i).getContent().toString()
-                                , ChatRoomMessageModel.class);
-                    } else {
-                        if (messages.get(i).getRemoteExtension()!=null) {
-                            temp = mGson.fromJson(mGson.toJson(messages.get(i).getRemoteExtension())
-                                    , ChatRoomMessageModel.class);
-                        }
-                    }
-                    ImMessage mImMessage = null;
-                    if (temp!=null) {
-                        if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystem
-                                || temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
-                            if (temp.getGiftId()<=0) {
-                                getLiveNum();
-                            } else {
-                                GiftAnimation(temp.getGiftId());
+                    if (String.valueOf(chatRoomId).equals(messages.get(0).getSessionId())) {
+
+                        ChatRoomMessageModel temp = null;
+                        if (messages.get(i).getContent() != null) {
+                            try {
+                                temp = mGson.fromJson(messages.get(i).getContent().toString()
+                                        , ChatRoomMessageModel.class);
+                            } catch (IllegalStateException e) {
+                                temp = mGson.fromJson(mGson.toJson(messages.get(i).getRemoteExtension())
+                                        , ChatRoomMessageModel.class);
                             }
-                            mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                    , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
-                                    , messages.get(i).getSessionId()
-                                    , messages.get(i).getFromAccount()
-                                    , temp.getUser().getNickName()
-                                    , temp.getUser().getIcon()
-                                    , temp.getUser().getSex()
-                                    , temp.getUser().getVerify_status()
-                                    , false, System.currentTimeMillis()
-                                    , ChatRoomTypeInter.ChatRoomTypeText
-                                    , temp.getContent(), "", "", "", "", "", "", "", "", 0, 0, true, 1);
                         } else {
-                            if (messages.get(i).getMsgType() == MsgTypeEnum.text) {
+                            if (messages.get(i).getRemoteExtension()!=null) {
+                                temp = mGson.fromJson(mGson.toJson(messages.get(i).getRemoteExtension())
+                                        , ChatRoomMessageModel.class);
+                            }
+                        }
+                        ImMessage mImMessage = null;
+                        if (temp!=null) {
+                            if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystem
+                                    || temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
+                                if (temp.getGiftId()<=0) {
+                                    getLiveNum();
+                                } else {
+                                    GiftAnimation(temp.getGiftId());
+                                }
                                 mImMessage = new ImMessage(null, messages.get(i).getUuid()
                                         , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
                                         , messages.get(i).getSessionId()
@@ -323,46 +323,60 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                                         , temp.getUser().getVerify_status()
                                         , false, System.currentTimeMillis()
                                         , ChatRoomTypeInter.ChatRoomTypeText
-                                        , temp.getContent(), "", "", "", "", "", "", "", "", 0, 0, false, 1);
-                            } else if (messages.get(i).getMsgType() == MsgTypeEnum.image) {
-                                String url = ((FileAttachment)messages.get(i).getAttachment()).getUrl();
-                                String urlThumb = ((FileAttachment)messages.get(i).getAttachment()).getThumbPathForSave();
-                                mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
-                                        , messages.get(i).getSessionId()
-                                        , messages.get(i).getFromAccount()
-                                        , temp.getUser().getNickName()
-                                        , temp.getUser().getIcon()
-                                        , temp.getUser().getSex()
-                                        , temp.getUser().getVerify_status()
-                                        , false, System.currentTimeMillis()
-                                        , ChatRoomTypeInter.ChatRoomTypeImage
-                                        , "[图片]", url, url, urlThumb, "", "", "", "", "", 0, 0, false, 1);
-                            } else if (messages.get(i).getMsgType() == MsgTypeEnum.audio) {
-                                String urlAudio = ((AudioAttachment)messages.get(i).getAttachment()).getUrl();
-                                String pathAudio = ((AudioAttachment)messages.get(i).getAttachment()).getPathForSave();
-                                long Duration = ((AudioAttachment)messages.get(i).getAttachment()).getDuration();
-                                LogUtils.e("urlAudio:"+urlAudio);
-                                LogUtils.e("pathAudio:"+pathAudio);
-                                LogUtils.e("Duration:"+Duration);
-                                mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
-                                        , messages.get(i).getSessionId()
-                                        , messages.get(i).getFromAccount()
-                                        , temp.getUser().getNickName()
-                                        , temp.getUser().getIcon()
-                                        , temp.getUser().getSex()
-                                        , temp.getUser().getVerify_status()
-                                        , false, System.currentTimeMillis()
-                                        , ChatRoomTypeInter.ChatRoomTypeAudio
-                                        , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration/1000, 0, false, 1);
+                                        , temp.getContent(), "", "", "", "", "", "", "", "", 0, 0, true, 1);
+                            } else {
+                                if (messages.get(i).getMsgType() == MsgTypeEnum.text) {
+                                    mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                            , messages.get(i).getSessionId()
+                                            , messages.get(i).getFromAccount()
+                                            , temp.getUser().getNickName()
+                                            , temp.getUser().getIcon()
+                                            , temp.getUser().getSex()
+                                            , temp.getUser().getVerify_status()
+                                            , false, System.currentTimeMillis()
+                                            , ChatRoomTypeInter.ChatRoomTypeText
+                                            , temp.getContent(), "", "", "", "", "", "", "", "", 0, 0, false, 1);
+                                } else if (messages.get(i).getMsgType() == MsgTypeEnum.image) {
+                                    String url = ((FileAttachment)messages.get(i).getAttachment()).getUrl();
+                                    String urlThumb = ((FileAttachment)messages.get(i).getAttachment()).getThumbPathForSave();
+                                    mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                            , messages.get(i).getSessionId()
+                                            , messages.get(i).getFromAccount()
+                                            , temp.getUser().getNickName()
+                                            , temp.getUser().getIcon()
+                                            , temp.getUser().getSex()
+                                            , temp.getUser().getVerify_status()
+                                            , false, System.currentTimeMillis()
+                                            , ChatRoomTypeInter.ChatRoomTypeImage
+                                            , "[图片]", url, url, urlThumb, "", "", "", "", "", 0, 0, false, 1);
+                                } else if (messages.get(i).getMsgType() == MsgTypeEnum.audio) {
+                                    String urlAudio = ((AudioAttachment)messages.get(i).getAttachment()).getUrl();
+                                    String pathAudio = ((AudioAttachment)messages.get(i).getAttachment()).getPathForSave();
+                                    long Duration = ((AudioAttachment)messages.get(i).getAttachment()).getDuration();
+                                    LogUtils.e("urlAudio:"+urlAudio);
+                                    LogUtils.e("pathAudio:"+pathAudio);
+                                    LogUtils.e("Duration:"+Duration);
+                                    mImMessage = new ImMessage(null, messages.get(i).getUuid()
+                                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                            , messages.get(i).getSessionId()
+                                            , messages.get(i).getFromAccount()
+                                            , temp.getUser().getNickName()
+                                            , temp.getUser().getIcon()
+                                            , temp.getUser().getSex()
+                                            , temp.getUser().getVerify_status()
+                                            , false, System.currentTimeMillis()
+                                            , ChatRoomTypeInter.ChatRoomTypeAudio
+                                            , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration/1000, 0, false, 1);
+                                }
                             }
+                            if (mImMessage!=null && temp.getType() != ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
+                                mAdapter.addImMessageDao(mImMessage);
+                            }
+                        } else {
+                            LogUtils.e("temp is null");
                         }
-                        if (mImMessage!=null && temp.getType() != ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
-                            mAdapter.addImMessageDao(mImMessage);
-                        }
-                    } else {
-                        LogUtils.e("temp is null");
                     }
                 }
             }
@@ -777,7 +791,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                         return;
                     }
                     resulturl = temp.getPath();
-                    myliveroomBgIv.setImageURI(imageUri);
+                    myliveroomBgIv.setImageURI("file:///"+resulturl);
 
                     String url = resulturl;
                     ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomImageMessage(String.valueOf(chatRoomId)
@@ -1021,6 +1035,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     @Override
     public void onItem(View v, int position) {
         switch (v.getId()) {
+            case R.id.item_p2pchat_noti_tx:
             case R.id.item_p2pchat_text_headleft_iv:
                 OkHttpUtils.get().url(Common.Url_Get_UserIndex + "/" + mAdapter.getItem(position).getUserId())
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
@@ -1106,6 +1121,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     public void onAddFriend(long userId) {
         Map<String, Long> p = new HashMap<>();
         p.put("follow_user_id", userId);
+        LogUtils.e("userId:"+userId);
         OkHttpUtils.postString().url(Common.Url_Add_Follow).content(mGson.toJson(p))
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .mediaType(Common.JSON).tag(Common.NET_ADD_FOLLOW_ID)

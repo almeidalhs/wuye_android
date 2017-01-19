@@ -396,7 +396,12 @@ public class DiscoverFragment extends MyBaseFragment implements SpAdapterInterfa
                 if (!isLogin()) {
                     showLogin();
                 } else {
-                    getActivity().startActivity(new Intent(getActivity(), LiveHallActivity.class));
+                    if (MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                            .getUserDetailBean().getUserExt().getUserLevel()>=2){
+                        getActivity().startActivity(new Intent(getActivity(), LiveHallActivity.class));
+                    } else {
+                        showWraning("很抱歉，该功能仅对2级及以上等级用户开放！");
+                    }
                 }
                 break;
             case R.id.discover_find_rl:

@@ -313,6 +313,14 @@ public class ChatRoomAdapter extends BaseAdapter {
             }
         });
 
+        holderText.itemP2pchatNotiTx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (temp.getContentType() != ContentTypeInter.contentTypeImageSmall) {
+                    mRoomAdapterInter.onItem(v, position);
+                }
+            }
+        });
         holderText.itemP2pchatImageRightIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -23,6 +23,8 @@ import com.atman.wysq.model.response.MyLiveInfoModel;
 import com.atman.wysq.model.response.ToLiveEorrModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.personal.RechargeActivity;
+import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.widget.ShowLivePopWindow;
@@ -31,12 +33,14 @@ import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.DensityUtil;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.BottomDialog;
+import com.base.baselibs.widget.PromptDialog;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -132,7 +136,29 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
         pullToRefreshGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(ListenLiveActivity.buildIntent(mContext, mAdapter.getItem(position)));
+                if (MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                        .getUserDetailBean().getUserExt().getGold_coin()>0){
+                    startActivity(ListenLiveActivity.buildIntent(mContext, mAdapter.getItem(position)));
+                } else {
+                    PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
+                    builder.setMessage("金币不足，请先获取足够金币");
+                    builder.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setNeutralButton("购买金币", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            startActivity(RechargeActivity.buildIntent(mContext
+                                    , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin()
+                                    , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin()));
+                        }
+                    });
+                    builder.show();
+                }
             }
         });
     }
@@ -263,7 +289,7 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
                     return;
                 }
                 if ((mMyLiveInfoModel.getBody()==null || mMyLiveInfoModel.getBody().getPic_url()==null)
-                        && imageUri == null) {
+                        && resulturl == null) {
                     showWraning("封面图片不能为空");
                     return;
                 }
@@ -275,11 +301,11 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
                     upLiveData(mMyLiveInfoModel.getBody().getPic_url(), pop.getTitlle());
                 } else {
                     if (myRoomPicInfoSta) {
-                        if (imageUri != null) {
+                        if (resulturl != null) {
                             OkHttpUtils.post().url(Common.Url_Reset_Head)
                                     .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-                                    .addFile("files0_name", StringUtils.getFileName(imageUri.getPath()),
-                                            new File(imageUri.getPath())).id(Common.NET_RESET_HEAD)
+                                    .addFile("files0_name", StringUtils.getFileName(resulturl),
+                                            new File(resulturl)).id(Common.NET_RESET_HEAD)
                                     .tag(Common.NET_RESET_HEAD).build().execute(new MyStringCallback(mContext, this, true));
                         }
                     } else {
@@ -291,6 +317,7 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
     }
 
     private Uri imageUri;//The Uri to store the big bitmap
+    private String resulturl;//The Uri to store the big bitmap
     private final int CHOOSE_BIG_PICTURE = 444;
     private final int TAKE_BIG_PICTURE = 555;
     private String path = "";
@@ -331,7 +358,18 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
         }
         if (imageUri != null) {
             myRoomPicInfoSta = true;
-            popSimpleDraweeView.setImageURI(imageUri);
+            File temp = null;
+            try {
+                temp = BitmapTools.revitionImage(mContext, imageUri);
+                if (temp==null) {
+                    showToast("发送失败");
+                    return;
+                }
+                resulturl = temp.getPath();
+                popSimpleDraweeView.setImageURI("file:///" +resulturl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -46,7 +46,11 @@ public class ShowLivePopWindow extends PopupWindow {
 
     public String getTitlle () {
         if (partLivepopTitleEt!=null) {
-            return partLivepopTitleEt.getText().toString();
+            String s = partLivepopTitleEt.getText().toString();
+            if (s.length()>20) {
+                s = s.substring(0, 20);
+            }
+            return s;
         } else {
             return "";
         }
