@@ -209,6 +209,8 @@ public class Common {
     public static String Url_Live_Money = hostUrl + "rest/live/money/";
     //聊天室在线人数
     public static String Url_Live_Num = hostUrl + "rest/live/";
+    //添加创建聊天室
+    public static String Url_Add_Live = hostUrl + "rest/live/add";
     /**************************http访问路径*****************************/
 
 
@@ -396,6 +398,8 @@ public class Common {
     public static int NET_LIVE_MONEY_ID = 90;
     //聊天室在线人数
     public static int NET_LIVE_NUM_ID = 91;
+    //添加创建聊天室
+    public static int NET_ADD_LIVE_ID = 92;
     /**************************http访问回应识别码*****************************/
 
 

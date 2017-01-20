@@ -47,7 +47,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         this.mAdapterInterface = mAdapterInterface;
         layoutParams = new LinearLayout.LayoutParams(DensityUtil.dp2px(context, 80)
                 , DensityUtil.dp2px(context, 120));
-        layoutParams2 = new LinearLayout.LayoutParams(DensityUtil.dp2px(context, 80)
+        layoutParams2 = new LinearLayout.LayoutParams(DensityUtil.dp2px(context, 93)
                 , DensityUtil.dp2px(context, 140));
     }
 

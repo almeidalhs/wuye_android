@@ -481,7 +481,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                                 }
                                 if (noStr!=null && !noStr.isEmpty()) {
                                     mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                            , String.valueOf(mMyUserInfo.getUser_id())
                                             , messages.get(i).getSessionId()
                                             , messages.get(i).getFromAccount()
                                             , temp.getUser().getNickName()
@@ -495,7 +495,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                             } else {
                                 if (messages.get(i).getMsgType() == MsgTypeEnum.text) {
                                     mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                            , String.valueOf(mMyUserInfo.getUser_id())
                                             , messages.get(i).getSessionId()
                                             , messages.get(i).getFromAccount()
                                             , temp.getUser().getNickName()
@@ -509,7 +509,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                                     String url = ((FileAttachment) messages.get(i).getAttachment()).getUrl();
                                     String urlThumb = ((FileAttachment) messages.get(i).getAttachment()).getThumbPathForSave();
                                     mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                            , String.valueOf(mMyUserInfo.getUser_id())
                                             , messages.get(i).getSessionId()
                                             , messages.get(i).getFromAccount()
                                             , temp.getUser().getNickName()
@@ -530,7 +530,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                                     LogUtils.e("pathAudio:" + pathAudio);
                                     LogUtils.e("Duration:" + Duration);
                                     mImMessage = new ImMessage(null, messages.get(i).getUuid()
-                                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                                            , String.valueOf(mMyUserInfo.getUser_id())
                                             , messages.get(i).getSessionId()
                                             , messages.get(i).getFromAccount()
                                             , temp.getUser().getNickName()
@@ -743,7 +743,12 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             } else {
                 mIsBalck = false;
             }
-            new ShowHeadPopWindow(ListenLiveActivity.this, getmWidth(), false
+            boolean isAnchor = false;
+//            if (mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUser_id()
+//                    ==mBodyBean.getUser_id()) {
+//                isAnchor = true;
+//            }
+            new ShowHeadPopWindow(ListenLiveActivity.this, getmWidth(), isAnchor
                     , mGetMyUserIndexModel.getBody().getUserFelation()
                     , mGetMyUserIndexModel.getBody().getUserDetailBean(), this);
         } else if (id == Common.NET_ADD_FOLLOW_ID) {
@@ -817,9 +822,15 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     @OnClick({R.id.listenlive_bg_iv, R.id.listenlive_gift_iv, R.id.p2pchat_record_iv, R.id.blogdetail_addemol_iv
-            , R.id.p2pchat_pic_iv, R.id.p2pchat_send_bt, R.id.listenlive_back_iv})
+            , R.id.p2pchat_pic_iv, R.id.p2pchat_send_bt, R.id.listenlive_back_iv, R.id.listenlive_head_iv})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.listenlive_head_iv:
+                OkHttpUtils.get().url(Common.Url_Get_UserIndex + "/" + mBodyBean.getUser_id())
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .tag(Common.NET_GET_USERINDEX).id(Common.NET_GET_USERINDEX).build()
+                        .execute(new MyStringCallback(mContext, this, true));
+                break;
             case R.id.listenlive_bg_iv:
                 if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
                     return;
@@ -1080,7 +1091,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 me.setContent(mGson.toJson(mMap));
                 if (Integer.parseInt(giftId)>0) {
                     mImMessage = new ImMessage(null, me.getUuid()
-                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                            , String.valueOf(mMyUserInfo.getUser_id())
                             , me.getSessionId()
                             , me.getFromAccount()
                             , mMyUserInfo.getNick_name()
@@ -1092,7 +1103,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                             , text, "", "", "", "", "", "", "", "", 0, 0, true, 1);
                 } else {
                     mImMessage = new ImMessage(null, me.getUuid()
-                            , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                            , String.valueOf(mMyUserInfo.getUser_id())
                             , me.getSessionId()
                             , me.getFromAccount()
                             , mMyUserInfo.getNick_name()
@@ -1108,7 +1119,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             case ChatRoomTypeInter.ChatRoomTypeImage:
                 me.setRemoteExtension(mMap);
                 mImMessage = new ImMessage(null, me.getUuid()
-                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                        , String.valueOf(mMyUserInfo.getUser_id())
                         , me.getSessionId()
                         , me.getFromAccount()
                         , mMyUserInfo.getNick_name()
@@ -1126,7 +1137,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 String pathAudio = ((AudioAttachment)me.getAttachment()).getPathForSave();
                 long Duration = ((AudioAttachment)me.getAttachment()).getDuration();
                 mImMessage = new ImMessage(null, me.getUuid()
-                        , String.valueOf(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId())
+                        , String.valueOf(mMyUserInfo.getUser_id())
                         , me.getSessionId()
                         , me.getFromAccount()
                         , mMyUserInfo.getNick_name()

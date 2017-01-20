@@ -135,11 +135,20 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
         pullToRefreshGridView.setAdapter(mAdapter);
         pullToRefreshGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 int CostGolden = MyBaseApplication.mGetGoldenRoleModel.getBody().get("4").getCost_golden();
                 if (MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
                         .getUserDetailBean().getUserExt().getGold_coin()>=CostGolden){
-                    startActivity(ListenLiveActivity.buildIntent(mContext, mAdapter.getItem(position)));
+                    PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
+                    builder.setMessage("请确保收听过程中，保持APP可见");
+                    builder.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            startActivity(ListenLiveActivity.buildIntent(mContext, mAdapter.getItem(position)));
+                        }
+                    });
+                    builder.show();
                 } else {
                     PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
                     builder.setMessage("金币不足，请先获取足够金币");
@@ -206,10 +215,14 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
                     showToast("封面图片修改失败");
                 } else {
                     HeadImgSuccessModel mHeadImgSuccessModel = mGson.fromJson(data, HeadImgSuccessModel.class);
-                    upLiveData(mHeadImgSuccessModel.getFiles().get(0).getUrl(), pop.getTitlle());
+                    if (mMyLiveInfoModel.getBody().getLive_room_id()==0) {
+                        addLiveData(mHeadImgSuccessModel.getFiles().get(0).getUrl(), pop.getTitlle());
+                    } else {
+                        upLiveData(mHeadImgSuccessModel.getFiles().get(0).getUrl(), pop.getTitlle());
+                    }
                 }
             }
-        } else if (id == Common.NET_UPDATA_MYLIVEINFO_ID) {
+        } else if (id == Common.NET_UPDATA_MYLIVEINFO_ID || id == Common.NET_ADD_LIVE_ID) {
             mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
             if (mMyLiveInfoModel.getBody()==null) {
                 ToLiveEorrModel mToLiveEorrModel = mGson.fromJson(data, ToLiveEorrModel.class);
@@ -231,6 +244,17 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
         p.put("description", titlle);
         OkHttpUtils.postString().url(Common.Url_UpData_MyLiveInfo).id(Common.NET_UPDATA_MYLIVEINFO_ID)
                 .content(mGson.toJson(p)).mediaType(Common.JSON).tag(Common.NET_UPDATA_MYLIVEINFO_ID)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
+                .execute(new MyStringCallback(mContext, this, true));
+    }
+
+    private void addLiveData(String url, String titlle) {
+        Map<String, String> p = new HashMap<>();
+        p.put("pic_url", url);
+        p.put("room_name", titlle);
+        p.put("description", titlle);
+        OkHttpUtils.postString().url(Common.Url_Add_Live).id(Common.NET_ADD_LIVE_ID)
+                .content(mGson.toJson(p)).mediaType(Common.JSON).tag(Common.NET_ADD_LIVE_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
                 .execute(new MyStringCallback(mContext, this, true));
     }
@@ -295,25 +319,33 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
                     return;
                 }
                 pop.dismiss();
-                if (!pop.getTitlle().equals(mMyLiveInfoModel.getBody().getRoom_name())) {
-                    myRoomTitleInfoSta = true;
-                }
-                if (myRoomTitleInfoSta && !myRoomPicInfoSta) {
-                    upLiveData(mMyLiveInfoModel.getBody().getPic_url(), pop.getTitlle());
+                if (mMyLiveInfoModel.getBody().getLive_room_id()==0) {
+                    upPicToService();
                 } else {
-                    if (myRoomPicInfoSta) {
-                        if (resulturl != null) {
-                            OkHttpUtils.post().url(Common.Url_Reset_Head)
-                                    .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
-                                    .addFile("files0_name", StringUtils.getFileName(resulturl),
-                                            new File(resulturl)).id(Common.NET_RESET_HEAD)
-                                    .tag(Common.NET_RESET_HEAD).build().execute(new MyStringCallback(mContext, this, true));
-                        }
+                    if (!pop.getTitlle().equals(mMyLiveInfoModel.getBody().getRoom_name())) {
+                        myRoomTitleInfoSta = true;
+                    }
+                    if (myRoomTitleInfoSta && !myRoomPicInfoSta) {
+                        upLiveData(mMyLiveInfoModel.getBody().getPic_url(), pop.getTitlle());
                     } else {
-                        toMyLive(mMyLiveInfoModel);
+                        if (myRoomPicInfoSta) {
+                            upPicToService();
+                        } else {
+                            toMyLive(mMyLiveInfoModel);
+                        }
                     }
                 }
                 break;
+        }
+    }
+
+    private void upPicToService() {
+        if (resulturl != null) {
+            OkHttpUtils.post().url(Common.Url_Reset_Head)
+                    .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                    .addFile("files0_name", StringUtils.getFileName(resulturl),
+                            new File(resulturl)).id(Common.NET_RESET_HEAD)
+                    .tag(Common.NET_RESET_HEAD).build().execute(new MyStringCallback(mContext, this, true));
         }
     }
 

@@ -96,7 +96,10 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                             LogUtils.e(">>>>content:"+content);
                             if (MyBaseApplication.getApplication().mLiveStatue.equals("2") && mGiftMessageModel.getType()==1) {
                                 if (content.contains(",")) {
-                                    Toast.makeText(context, content.split(",")[1], Toast.LENGTH_SHORT).show();
+                                    if (isAppOnFreground(context)
+                                            && !isApplicationBroughtToBackgroundByTask(context)) {//不在后台
+                                        Toast.makeText(context, content.split(",")[1], Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                             //直播间处理
@@ -113,7 +116,10 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                                     if (content.contains("您在直播间消耗")) {
                                         content = content.replace("您在直播间消耗","-");
                                     }
-                                    Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
+                                    if (isAppOnFreground(context)
+                                            && !isApplicationBroughtToBackgroundByTask(context)) {//不在后台
+                                        Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
+                                    }
                                     break;
                             }
                         }
