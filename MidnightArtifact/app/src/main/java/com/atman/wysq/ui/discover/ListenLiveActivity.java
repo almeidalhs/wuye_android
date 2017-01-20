@@ -935,6 +935,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                     cancelIM(view);
                 }
                 llFacechoose.setVisibility(View.GONE);
+                blogdetailAddemolIv.setImageResource(R.mipmap.chat_face_ic);
                 break;
         }
     }
@@ -1149,10 +1150,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                         , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration/1000, 0, false, 1);
                 mAdapter.addImMessageDao(mImMessage);
                 break;
-//            case ChatRoomTypeInter.ChatRoomTypeSystem:
-//                me.setContent(text);
-//                me.setRemoteExtension(mMap);
-//                break;
             default:
                 me.setContent(mGson.toJson(mMap));
                 me.setRemoteExtension(mMap);

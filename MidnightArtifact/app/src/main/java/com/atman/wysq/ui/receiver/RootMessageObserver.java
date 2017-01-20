@@ -128,9 +128,6 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                         content = mGiftMessageModel.getCenter_user_name() +":" + mGiftMessageModel.getCenter_content();
                     }
                 }
-                if (content.contains("我正在直播中")){
-                    return;
-                }
                 nick = "午夜神器";
                 if (mGiftMessageModel!=null && mGiftMessageModel.getType()==1) {//礼物通知
                     if (mGiftMessageModel.getCenter_user_name()==null || String.valueOf(mGiftMessageModel.getCenter_user_id())
@@ -349,7 +346,7 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
         LogUtils.e("content:"+content);
         LogUtils.e("nick:"+nick);
         if (content.isEmpty() || content.equals("") || content.contains("null")
-                || content.contains("我正在直播中") || content.contains("您发送了一条私信")) {
+                || content.contains("您发送了一条私信")) {
             return;
         }
         if (isScreenOn(context)) {//屏幕亮的

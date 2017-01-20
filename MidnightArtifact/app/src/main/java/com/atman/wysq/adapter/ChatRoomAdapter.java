@@ -302,14 +302,14 @@ public class ChatRoomAdapter extends BaseAdapter {
         holderText.itemP2pchatAudioRightLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRoomAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderText.itemP2pchatAudioRightIv.getDrawable());
+                mRoomAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderText.itemP2pchatAudioRightIv.getBackground());
             }
         });
 
         holderText.itemP2pchatAudioLeftLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRoomAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderText.itemP2pchatAudioLeftIv.getDrawable());
+                mRoomAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderText.itemP2pchatAudioLeftIv.getBackground());
             }
         });
 

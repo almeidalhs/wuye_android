@@ -315,14 +315,14 @@ public class P2PChatAdapter extends BaseAdapter {
         holderText.itemP2pchatAudioRightLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderText.itemP2pchatAudioRightIv.getDrawable());
+                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderText.itemP2pchatAudioRightIv.getBackground());
             }
         });
 
         holderText.itemP2pchatAudioLeftLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderText.itemP2pchatAudioLeftIv.getDrawable());
+                mP2PAdapterInter.onItemAudio(v, position, (AnimationDrawable) finalHolderText.itemP2pchatAudioLeftIv.getBackground());
             }
         });
 
