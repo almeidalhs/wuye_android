@@ -16,6 +16,7 @@ import com.atman.wysq.model.bean.AddFriendRecord;
 import com.atman.wysq.model.bean.TouChuanGiftNotice;
 import com.atman.wysq.model.event.YunXinAddFriendEvent;
 import com.atman.wysq.model.greendao.gen.AddFriendRecordDao;
+import com.atman.wysq.model.response.GetChatTokenModel;
 import com.atman.wysq.model.response.GetUserIndexModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
@@ -214,6 +215,17 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
             otherpersonalRelationshipBt.setText("关注");
             otherpersonalRelationshipTv.setText("陌生人");
             MyBaseApplication.getApplication().getDaoSession().getAddFriendRecordDao().deleteAll();
+        } else if (id == Common.NET_ISTABALCK_ID) {
+            GetChatTokenModel mGetChatTokenModel = mGson.fromJson(data, GetChatTokenModel.class);
+            if (mGetChatTokenModel.getBody().equals("1")) {
+                showToast("你已被对方加入黑名单");
+                return;
+            }
+            startActivity(P2PChatActivity.buildIntent(mContext, String.valueOf(id)
+                    , mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName()
+                    , mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getSex()
+                    , mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon()
+                    , mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getVerify_status()));
         } else if (id == Common.NET_CANCEL_BLACKLIST_ID) {
             mGetMyUserIndexModel.getBody().setIsBlack(0);
             showToast("已从黑名单移除");
@@ -409,6 +421,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERINDEX);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BLACKLIST);
         OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_BLACKLIST_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ISTABALCK_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_DLELTE_FRIEND);
         OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_MYCONCERNLIST_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_FOLLOW_ID);
@@ -595,15 +608,10 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
                     showWraning("亲，这是你自己哦！");
                     return;
                 }
-                if (mGetMyUserIndexModel.getBody().getIsBlack()==1) {
-                    showToast("你已被对方加入黑名单");
-                    return;
-                }
-                startActivity(P2PChatActivity.buildIntent(mContext, String.valueOf(id)
-                        , mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName()
-                        , mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getSex()
-                        , mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon()
-                        , mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getVerify_status()));
+                OkHttpUtils.get().url(Common.Url_IsTaBalck + "/" + id)
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .tag(Common.NET_ISTABALCK_ID).id(Common.NET_ISTABALCK_ID).build()
+                        .execute(new MyStringCallback(mContext, this, true));
                 break;
         }
     }
