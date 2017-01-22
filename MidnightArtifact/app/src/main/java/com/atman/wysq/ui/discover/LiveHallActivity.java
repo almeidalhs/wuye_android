@@ -136,39 +136,50 @@ public class LiveHallActivity extends MyBaseActivity implements AdapterInterface
         pullToRefreshGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                int CostGolden = MyBaseApplication.mGetGoldenRoleModel.getBody().get("4").getCost_golden();
-                if (MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
-                        .getUserDetailBean().getUserExt().getGold_coin()>=CostGolden){
-                    PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
-                    builder.setMessage("请确保收听过程中，保持APP可见");
-                    builder.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            startActivity(ListenLiveActivity.buildIntent(mContext, mAdapter.getItem(position)));
-                        }
-                    });
-                    builder.show();
+
+                if (mAdapter.getItem(position).getUser_id()
+                        ==MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId()) {
+                    pop = new ShowLivePopWindow(LiveHallActivity.this, view, getmWidth());
+                    OkHttpUtils.get().url(Common.Url_GetMyLiveInfo)
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .tag(Common.NET_GETMYLIVEINFO_ID).id(Common.NET_GETMYLIVEINFO_ID).build()
+                            .execute(new MyStringCallback(mContext, LiveHallActivity.this, true));
                 } else {
-                    PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
-                    builder.setMessage("金币不足，请先获取足够金币");
-                    builder.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.setNeutralButton("购买金币", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            startActivity(RechargeActivity.buildIntent(mContext
-                                    , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin()
-                                    , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin()));
-                        }
-                    });
-                    builder.show();
+                    int CostGolden = MyBaseApplication.mGetGoldenRoleModel.getBody().get("4").getCost_golden();
+                    if (MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                            .getUserDetailBean().getUserExt().getGold_coin()>=CostGolden){
+                        PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
+                        builder.setMessage("请确保收听过程中，保持APP可见");
+                        builder.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                startActivity(ListenLiveActivity.buildIntent(mContext, mAdapter.getItem(position)));
+                            }
+                        });
+                        builder.show();
+                    } else {
+                        PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
+                        builder.setMessage("金币不足，请先获取足够金币");
+                        builder.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builder.setNeutralButton("购买金币", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                startActivity(RechargeActivity.buildIntent(mContext
+                                        , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin()
+                                        , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin()));
+                            }
+                        });
+                        builder.show();
+                    }
                 }
+
             }
         });
     }
