@@ -221,7 +221,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
                 showToast("你已被对方加入黑名单");
                 return;
             }
-            startActivity(P2PChatActivity.buildIntent(mContext, String.valueOf(id)
+            startActivity(P2PChatActivity.buildIntent(mContext, String.valueOf(this.id)
                     , mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName()
                     , mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getSex()
                     , mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon()

@@ -940,7 +940,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                 //LogUtils.e("test: in handleMessage, MSG_SERVER_COMMAND_STOP_LIVESTREAMING");
                 break;
             case MSG_BAD_NETWORK_DETECT://如果连续一段时间（10s）实际推流数据为0，会反馈这个错误消息
-                showToast("MSG_BAD_NETWORK_DETECT");
+                showToast("网络错误或者主播已下线，请稍后再试");
                 //LogUtils.e("test: in handleMessage, MSG_BAD_NETWORK_DETECT");
                 break;
             case MSG_SCREENSHOT_FINISHED://视频截图完成后的消息反馈
