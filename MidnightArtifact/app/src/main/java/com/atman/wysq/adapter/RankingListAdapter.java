@@ -7,17 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.AllRankingModel;
-import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
-import com.base.baselibs.iimp.AdapterInterface;
-import com.base.baselibs.util.DensityUtil;
-import com.base.baselibs.widget.CustomImageView;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,8 +112,7 @@ public class RankingListAdapter extends BaseAdapter {
         holder.itemRankingNumTv.setText(""+(position+4));
         holder.itemRankingLevelTx.setText("Lv." + mBodyEntity.getUserLevel());
 
-        ImageLoader.getInstance().displayImage(Common.ImageUrl + mBodyEntity.getIcon(),
-                holder.itemRankingHeadIv, MyBaseApplication.getApplication().getOptionsNot());
+        holder.itemRankingHeadIv.setImageURI(Common.ImageUrl + mBodyEntity.getIcon());
 
         if (mBodyEntity.getVip_level()>=4) {
             holder.itemRankingVipTx.setVisibility(View.GONE);
@@ -159,7 +153,7 @@ public class RankingListAdapter extends BaseAdapter {
 
     static class ViewHolder {
         @Bind(R.id.item_ranking_head_iv)
-        CustomImageView itemRankingHeadIv;
+        SimpleDraweeView itemRankingHeadIv;
         @Bind(R.id.item_ranking_gender_iv)
         ImageView itemRankingGenderIv;
         @Bind(R.id.item_ranking_verify_iv)

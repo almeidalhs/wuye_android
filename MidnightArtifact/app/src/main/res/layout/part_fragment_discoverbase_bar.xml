@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_dp_48"
+    android:background="@mipmap/top_wave">
+
+    <ImageView
+        android:id="@+id/part_newdiscover_topleft_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_myfans" />
+
+    <RadioGroup
+        android:id="@+id/part_newdiscover_tabs_rg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/part_newdiscover_topleft_iv"
+        android:layout_toLeftOf="@+id/part_newdiscover_topright_iv"
+        android:dividerPadding="@dimen/dimen_dp_6"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <RadioButton
+            android:id="@+id/part_newdiscover_tab_find"
+            android:layout_width="@dimen/dimen_dp_70"
+            android:layout_height="match_parent"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingTop="@dimen/dimen_dp_5"
+            android:checked="true"
+            android:text="发现"
+            android:textColor="@color/tab_text_selector"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <RadioButton
+            android:id="@+id/part_newdiscover_tab_charmlist"
+            android:layout_width="@dimen/dimen_dp_70"
+            android:layout_height="match_parent"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingTop="@dimen/dimen_dp_5"
+            android:text="魅力榜"
+            android:textColor="@color/tab_text_selector"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <RadioButton
+            android:id="@+id/part_newdiscover_tab_fortunelist"
+            android:layout_width="@dimen/dimen_dp_70"
+            android:layout_height="match_parent"
+            android:background="@drawable/main_center_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingTop="@dimen/dimen_dp_5"
+            android:text="财富榜"
+            android:textColor="@color/tab_text_selector"
+            android:textSize="@dimen/dimen_sp_16" />
+
+    </RadioGroup>
+
+    <ImageView
+        android:id="@+id/part_newdiscover_topright_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/ic_myfans" />
+
+</RelativeLayout>

@@ -20,9 +20,8 @@ import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.DensityUtil;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.base.baselibs.widget.MyListView;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.Call;
 import okhttp3.Response;
 
 /**
@@ -40,7 +38,7 @@ import okhttp3.Response;
 public class RankingListFragment extends MyBaseFragment implements View.OnClickListener {
 
     @Bind(R.id.pullToRefreshListView)
-    PullToRefreshListView pullToRefreshListView;
+    MyListView pullToRefreshListView;
     @Bind(R.id.postings_totop_iv)
     ImageView postingsTotopIv;
     @Bind(R.id.fragment_ranking_empty_tx)
@@ -58,7 +56,7 @@ public class RankingListFragment extends MyBaseFragment implements View.OnClickL
 
     private View mTopView;
     private LinearLayout mTopOneLl, mTopTwoLl, mTopThreeLl;
-    private ImageView mTopOneHeadIv, mTopTwoHeadIv, mTopThreeHeadIv;
+    private SimpleDraweeView mTopOneHeadIv, mTopTwoHeadIv, mTopThreeHeadIv;
     private TextView mTopOneNametTv, mTopTwoNametTv, mTopThreeNametTv;
 
     @Override
@@ -85,7 +83,6 @@ public class RankingListFragment extends MyBaseFragment implements View.OnClickL
     }
 
     private void initListView() {
-        initRefreshView(PullToRefreshBase.Mode.PULL_FROM_START, pullToRefreshListView);
 
         mTopView = LayoutInflater.from(getActivity()).inflate(R.layout.part_allranking_top_view, null);
         mTopOneLl = (LinearLayout) mTopView.findViewById(R.id.part_ranking_one_top_ll);
@@ -110,15 +107,15 @@ public class RankingListFragment extends MyBaseFragment implements View.OnClickL
         paramsRight.topMargin = DensityUtil.dp2px(getActivity(), 15);
         mTopThreeLl.setLayoutParams(paramsRight);
 
-        mTopOneHeadIv = (ImageView) mTopView.findViewById(R.id.part_ranking_one_top_head_iv);
-        mTopTwoHeadIv = (ImageView) mTopView.findViewById(R.id.part_ranking_two_top_head_iv);
-        mTopThreeHeadIv = (ImageView) mTopView.findViewById(R.id.part_ranking_three_top_head_iv);
+        mTopOneHeadIv = (SimpleDraweeView) mTopView.findViewById(R.id.part_ranking_one_top_head_iv);
+        mTopTwoHeadIv = (SimpleDraweeView) mTopView.findViewById(R.id.part_ranking_two_top_head_iv);
+        mTopThreeHeadIv = (SimpleDraweeView) mTopView.findViewById(R.id.part_ranking_three_top_head_iv);
         mTopOneNametTv = (TextView) mTopView.findViewById(R.id.part_ranking_one_top_name_iv);
         mTopTwoNametTv = (TextView) mTopView.findViewById(R.id.part_ranking_two_top_name_iv);
         mTopThreeNametTv = (TextView) mTopView.findViewById(R.id.part_ranking_three_top_name_iv);
 
         mAdapter = new RankingListAdapter(getActivity());
-        pullToRefreshListView.getRefreshableView().addHeaderView(mTopView);
+        pullToRefreshListView.addHeaderView(mTopView);
         pullToRefreshListView.setAdapter(mAdapter);
         pullToRefreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -126,7 +123,7 @@ public class RankingListFragment extends MyBaseFragment implements View.OnClickL
                 toOtherPersonal(mAdapter.getItem(position - 2).getUser_id());
             }
         });
-        pullToRefreshListView.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+        pullToRefreshListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -177,11 +174,9 @@ public class RankingListFragment extends MyBaseFragment implements View.OnClickL
                 }
                 fragmentRankingEmptyTx.setVisibility(View.VISIBLE);
                 fragmentRankingRl.setVisibility(View.GONE);
-                onLoad(PullToRefreshBase.Mode.PULL_FROM_START, pullToRefreshListView);
             } else {
                 fragmentRankingEmptyTx.setVisibility(View.GONE);
                 fragmentRankingRl.setVisibility(View.VISIBLE);
-                onLoad(PullToRefreshBase.Mode.PULL_FROM_START, pullToRefreshListView);
 
                 int n = Math.min(3, mAllRankingModel.getBody().size());
                 topRankingList.clear();
@@ -197,31 +192,12 @@ public class RankingListFragment extends MyBaseFragment implements View.OnClickL
     }
 
     private void UpdataView() {
-        ImageView[] images = {mTopOneHeadIv, mTopTwoHeadIv, mTopThreeHeadIv};
+        SimpleDraweeView[] images = {mTopOneHeadIv, mTopTwoHeadIv, mTopThreeHeadIv};
         TextView[] names = {mTopOneNametTv, mTopTwoNametTv, mTopThreeNametTv};
         for (int i = 0; i < topRankingList.size(); i++) {
-            ImageLoader.getInstance().displayImage(Common.ImageUrl + topRankingList.get(i).getIcon()
-                    , images[i], MyBaseApplication.getApplication().getOptionsHead());
+            images[i].setImageURI(Common.ImageUrl + topRankingList.get(i).getIcon());
             names[i].setText(topRankingList.get(i).getNick_name());
         }
-    }
-
-    @Override
-    public void onError(Call call, Exception e, int code, int id) {
-        super.onError(call, e, code, id);
-        onLoad(PullToRefreshBase.Mode.PULL_FROM_START, pullToRefreshListView);
-    }
-
-    @Override
-    public void onPullUpToRefresh(PullToRefreshBase refreshView) {
-        super.onPullUpToRefresh(refreshView);
-        dohttp(false);
-    }
-
-    @Override
-    public void onPullDownToRefresh(PullToRefreshBase refreshView) {
-        super.onPullDownToRefresh(refreshView);
-        dohttp(false);
     }
 
     private void dohttp(boolean b) {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_dp_48"
+    android:background="@mipmap/top_wave">
+
+    <ImageView
+        android:id="@+id/part_newdiscover_topleft_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_myfans"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/part_newdiscover_topleft_iv"
+        android:layout_toLeftOf="@+id/part_newdiscover_topright_iv"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/part_newdiscover_find_tv"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:src="@mipmap/top_discover_ic"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/part_newdiscover_topright_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/ic_myfans"/>
+
+</RelativeLayout>

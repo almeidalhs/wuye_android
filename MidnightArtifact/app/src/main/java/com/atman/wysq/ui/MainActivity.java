@@ -29,7 +29,7 @@ import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.base.WebPageActivity;
 import com.atman.wysq.ui.community.CommunityFragment;
 import com.atman.wysq.ui.community.PostingsDetailActivity;
-import com.atman.wysq.ui.discover.DiscoverFragment;
+import com.atman.wysq.ui.discover.DiscoverNewFragment;
 import com.atman.wysq.ui.mall.GoodsDetailActivity;
 import com.atman.wysq.ui.mall.MallFragment;
 import com.atman.wysq.ui.mall.TwoLevelCategoryListActivity;
@@ -264,7 +264,7 @@ public class MainActivity extends MyBaseActivity {
         adapter = new MyFragmentAdapter(getSupportFragmentManager());
         adapter.addFragment(new MessageFragment(), MESSAGE_TAG);
         adapter.addFragment(new CommunityFragment(), COMMUNITY_TAG);
-        adapter.addFragment(new DiscoverFragment(), DISCOVER_TAG);
+        adapter.addFragment(new DiscoverNewFragment(), DISCOVER_TAG);
         adapter.addFragment(new MallFragment(), MALL_TAG);
         adapter.addFragment(new PersonalFragment(), PERSONAL_TAG);
         viewpager.setOffscreenPageLimit(5);

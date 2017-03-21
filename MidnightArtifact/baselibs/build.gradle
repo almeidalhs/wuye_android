@@ -35,5 +35,4 @@ dependencies {
     compile project(':choicepicture_library')
     compile project(':picturebrowsing_library')
     compile project(':pic3d_lib')
-    compile files('libs/fastjson-1.1.34.android.jar')
 }
