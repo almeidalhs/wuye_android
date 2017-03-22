@@ -10,33 +10,26 @@
         android:layout_marginTop="@dimen/dimen_dp_f5"
         android:orientation="vertical">
 
-        <!--顶部tab标签容器-->
-        <android.support.design.widget.TabLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/tab_layout"
+        <!--发现-->
+        <LinearLayout
+            android:id="@+id/discover_new_find_ll"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_dp_40"
-            android:background="@color/color_white"
-            app:tabIndicatorColor="#ED9E95"
-            app:tabSelectedTextColor="#ED9E95"
-            app:tabTextColor="@color/color_black" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <com.handmark.pulltorefresh.library.PullToRefreshScrollView
-            xmlns:ptr="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/pullToRefreshScrollView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:scrollbars="none"
-            ptr:ptrAnimationStyle="flip"
-            ptr:ptrMode="both">
+            <include layout="@layout/part_findlist_view" />
+        </LinearLayout>
 
-            <com.base.baselibs.widget.MyTwoViewPager
-                android:id="@+id/info_viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+        <!--魅力榜 & 财富榜-->
+        <LinearLayout
+            android:id="@+id/discover_new_ranking_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:orientation="vertical">
 
-
-        </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+            <include layout="@layout/part_ranking_view" />
+        </LinearLayout>
 
     </LinearLayout>
 

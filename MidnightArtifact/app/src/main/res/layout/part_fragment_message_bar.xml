@@ -5,11 +5,12 @@
     android:background="@mipmap/top_wave">
 
     <LinearLayout
-        android:id="@+id/part_newdiscover_topleft_ll"
+        android:id="@+id/part_message_topleft_ll"
         android:layout_width="@dimen/dimen_dp_48"
         android:layout_height="@dimen/dimen_dp_48"
         android:clickable="true"
         android:gravity="center"
+        android:visibility="invisible"
         android:orientation="vertical">
 
         <ImageView
@@ -41,42 +42,53 @@
         android:showDividers="middle">
 
         <RadioButton
-            android:id="@+id/tab_find"
+            android:id="@+id/tab_privateletter"
             android:layout_width="@dimen/dimen_dp_55"
             android:layout_height="match_parent"
             android:background="@drawable/discovernew_top_selector"
             android:button="@null"
             android:checked="true"
-            android:text="发现"
+            android:text="私信"
             android:textColor="@color/color_black"
             android:textSize="@dimen/dimen_sp_18" />
 
         <RadioButton
-            android:id="@+id/tab_charmlist"
+            android:id="@+id/tab_follow"
             android:layout_marginLeft="@dimen/dimen_dp_10"
             android:layout_width="@dimen/dimen_dp_55"
             android:layout_height="match_parent"
             android:background="@drawable/discovernew_top_selector"
             android:button="@null"
-            android:text="魅力榜"
+            android:text="关注"
             android:textColor="@color/color_black"
             android:textSize="@dimen/dimen_sp_18" />
 
         <RadioButton
-            android:id="@+id/tab_fortunelist"
+            android:id="@+id/tab_fans"
             android:layout_marginLeft="@dimen/dimen_dp_10"
             android:layout_width="@dimen/dimen_dp_55"
             android:layout_height="match_parent"
             android:background="@drawable/discovernew_top_selector"
             android:button="@null"
-            android:text="财富榜"
+            android:text="粉丝"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/dimen_sp_18" />
+
+        <RadioButton
+            android:id="@+id/tab_blacklist"
+            android:layout_marginLeft="@dimen/dimen_dp_10"
+            android:layout_width="@dimen/dimen_dp_55"
+            android:layout_height="match_parent"
+            android:background="@drawable/discovernew_top_selector"
+            android:button="@null"
+            android:text="黑名单"
             android:textColor="@color/color_black"
             android:textSize="@dimen/dimen_sp_18" />
 
     </RadioGroup>
 
     <LinearLayout
-        android:id="@+id/part_newdiscover_topright_ll"
+        android:id="@+id/part_message_topright_ll"
         android:layout_width="@dimen/dimen_dp_48"
         android:layout_height="@dimen/dimen_dp_48"
         android:clickable="true"
@@ -87,13 +99,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/discover_top_right" />
+            android:src="@mipmap/message_top_right_ic" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/color_555354"
             android:textSize="@dimen/dimen_sp_9"
+            android:visibility="gone"
             android:layout_marginTop="@dimen/dimen_dp_1"
             android:text="+声音"/>
     </LinearLayout>

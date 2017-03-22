@@ -3,20 +3,107 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/message_listview"
-        android:divider="@color/color_line"
-        android:dividerHeight="@dimen/dimen_dp_1"
+    <LinearLayout
+        android:id="@+id/message_ll"
         android:layout_below="@+id/mall_top_title_ll"
         android:layout_marginTop="@dimen/dimen_dp_f3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/message_listview"
+            android:divider="@color/color_line"
+            android:dividerHeight="@dimen/dimen_dp_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/message_follow_ll"
+        android:layout_below="@+id/mall_top_title_ll"
+        android:layout_marginTop="@dimen/dimen_dp_f3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/myconcern_empty_tx"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textSize="@dimen/dimen_sp_18"
+            android:textColor="@color/color_black"
+            android:text="您还未关注任何人"/>
+
+        <com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/pull_follow_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#DCE0E3"
+            ptr:ptrMode="both" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/message_fans_ll"
+        android:layout_below="@+id/mall_top_title_ll"
+        android:layout_marginTop="@dimen/dimen_dp_f3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/pullToRefreshListView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:divider="@color/color_line"
+            android:dividerHeight="1px"
+            android:scrollbars="none"
+            ptr:ptrAnimationStyle="flip"
+            ptr:ptrMode="disabled"
+            ptr:ptrScrollingWhileRefreshingEnabled="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/message_blacklist_ll"
+        android:layout_below="@+id/mall_top_title_ll"
+        android:layout_marginTop="@dimen/dimen_dp_f3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/black_empty_tx"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textSize="@dimen/dimen_sp_18"
+            android:textColor="@color/color_black"
+            android:text="暂无黑名单"/>
+
+        <com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/pull_blacklist_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#DCE0E3"
+            ptr:ptrMode="both" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/mall_top_title_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/part_fragment_top_bar" />
+        <include layout="@layout/part_fragment_message_bar" />
     </LinearLayout>
 </RelativeLayout>

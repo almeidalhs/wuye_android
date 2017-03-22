@@ -33,14 +33,14 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.MyVi
     private Context context;
     private int widht;
 
-    private IonSlidingViewClickListener mIDeleteBtnClickListener;
+    private onBalckSlidingViewClickListener mIDeleteBtnClickListener;
 
     private List<GetFansListModel.BodyBean> mList;
 
     private SlidingButtonView mMenu = null;
     private String state;
 
-    public BlackListAdapter(Context context, int widht, String state, IonSlidingViewClickListener mListener) {
+    public BlackListAdapter(Context context, int widht, String state, onBalckSlidingViewClickListener mListener) {
         this.widht = widht;
         this.context = context;
         this.mIDeleteBtnClickListener = mListener;
@@ -105,7 +105,7 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.MyVi
                     closeMenu();//关闭菜单
                 } else {
                     int n = holder.getLayoutPosition();
-                    mIDeleteBtnClickListener.onItemClick(v, n);
+                    mIDeleteBtnClickListener.onBlackItemClick(v, n);
                 }
 
             }
@@ -115,7 +115,7 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.MyVi
             @Override
             public void onClick(View v) {
                 int n = holder.getLayoutPosition();
-                mIDeleteBtnClickListener.onDeleteBtnCilck(v, n);
+                mIDeleteBtnClickListener.onBlackDeleteBtnCilck(v, n);
             }
         });
 
@@ -230,9 +230,9 @@ public class BlackListAdapter extends RecyclerView.Adapter<BlackListAdapter.MyVi
         return false;
     }
 
-    public interface IonSlidingViewClickListener {
-        void onItemClick(View view, int position);
-        void onDeleteBtnCilck(View view, int position);
+    public interface onBalckSlidingViewClickListener {
+        void onBlackItemClick(View view, int position);
+        void onBlackDeleteBtnCilck(View view, int position);
     }
 }
 

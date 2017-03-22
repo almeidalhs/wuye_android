@@ -33,14 +33,14 @@ public class MyConcernListAdapter extends RecyclerView.Adapter<MyConcernListAdap
     private Context context;
     private int widht;
 
-    private IonSlidingViewClickListener mIDeleteBtnClickListener;
+    private onFollowSlidingViewClickListener mIDeleteBtnClickListener;
 
     private List<GetFansListModel.BodyBean> mList;
 
     private SlidingButtonView mMenu = null;
     private String state;
 
-    public MyConcernListAdapter(Context context, int widht, String state, IonSlidingViewClickListener mListener) {
+    public MyConcernListAdapter(Context context, int widht, String state, onFollowSlidingViewClickListener mListener) {
         this.widht = widht;
         this.context = context;
         this.mIDeleteBtnClickListener = mListener;
@@ -105,7 +105,7 @@ public class MyConcernListAdapter extends RecyclerView.Adapter<MyConcernListAdap
                     closeMenu();//关闭菜单
                 } else {
                     int n = holder.getLayoutPosition();
-                    mIDeleteBtnClickListener.onItemClick(v, n);
+                    mIDeleteBtnClickListener.onFollowItemClick(v, n);
                 }
 
             }
@@ -115,7 +115,7 @@ public class MyConcernListAdapter extends RecyclerView.Adapter<MyConcernListAdap
             @Override
             public void onClick(View v) {
                 int n = holder.getLayoutPosition();
-                mIDeleteBtnClickListener.onDeleteBtnCilck(v, n);
+                mIDeleteBtnClickListener.onFollowDeleteBtnCilck(v, n);
             }
         });
 
@@ -230,9 +230,9 @@ public class MyConcernListAdapter extends RecyclerView.Adapter<MyConcernListAdap
         return false;
     }
 
-    public interface IonSlidingViewClickListener {
-        void onItemClick(View view, int position);
-        void onDeleteBtnCilck(View view, int position);
+    public interface onFollowSlidingViewClickListener {
+        void onFollowItemClick(View view, int position);
+        void onFollowDeleteBtnCilck(View view, int position);
     }
 }
 

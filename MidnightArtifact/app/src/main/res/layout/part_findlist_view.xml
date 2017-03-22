@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioGroup
+        android:id="@+id/discovernew_find_tabs_rg"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:background="@color/color_white"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <RadioButton
+            android:id="@+id/discovernew_find_tab_recommend"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:checked="true"
+            android:background="@drawable/discovernew_find_top_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingTop="@dimen/dimen_dp_5"
+            android:text="推荐"
+            android:textColor="@drawable/tab_discovernew_text_selector"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <RadioButton
+            android:id="@+id/discovernew_find_tab_popularity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/discovernew_find_top_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingTop="@dimen/dimen_dp_5"
+            android:text="人气"
+            android:textColor="@drawable/tab_discovernew_text_selector"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <RadioButton
+            android:id="@+id/discovernew_find_tab_new"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/discovernew_find_top_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingTop="@dimen/dimen_dp_5"
+            android:text="新人"
+            android:textColor="@drawable/tab_discovernew_text_selector"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <RadioButton
+            android:id="@+id/discovernew_find_tab_man"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/discovernew_find_top_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingTop="@dimen/dimen_dp_5"
+            android:text="男神"
+            android:textColor="@drawable/tab_discovernew_text_selector"
+            android:textSize="@dimen/dimen_sp_16" />
+
+    </RadioGroup>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/discovernew_find_empty_tx"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="暂无数据"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/dimen_sp_18"
+            android:visibility="gone" />
+
+        <com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/discovernew_find_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            ptr:ptrMode="both" />
+    </RelativeLayout>
+
+
+</merge>

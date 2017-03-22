@@ -22,6 +22,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_dp_25"
+            android:paddingLeft="@dimen/dimen_dp_5"
+            android:paddingRight="@dimen/dimen_dp_5"
             android:background="@color/color_88000000"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
@@ -31,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:singleLine="true"
                 android:textColor="@color/color_white"
                 android:gravity="center_vertical"
                 android:text="名字"/>
@@ -39,10 +42,11 @@
                 android:id="@+id/item_discovernew_num_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:textColor="@color/color_white"
                 android:gravity="center_vertical"
-                android:text="110"/>
+                android:layout_marginLeft="@dimen/dimen_dp_5"
+                android:drawableLeft="@mipmap/discovernew_num_ic"
+                android:text=" 110"/>
         </LinearLayout>
     </RelativeLayout>
 
