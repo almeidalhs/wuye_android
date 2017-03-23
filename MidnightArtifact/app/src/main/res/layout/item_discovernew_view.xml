@@ -24,7 +24,7 @@
             android:layout_height="@dimen/dimen_dp_25"
             android:paddingLeft="@dimen/dimen_dp_5"
             android:paddingRight="@dimen/dimen_dp_5"
-            android:background="@color/color_88000000"
+            android:background="@color/color_44000000"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 

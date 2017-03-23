@@ -19,15 +19,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
+import com.atman.wysq.model.bean.TouChuanOtherNotice;
+import com.atman.wysq.model.event.YunXinAddFriendEvent;
+import com.atman.wysq.model.event.YunXinMessageEvent;
+import com.atman.wysq.model.greendao.gen.TouChuanOtherNoticeDao;
 import com.atman.wysq.model.request.LoginRequestModel;
-import com.atman.wysq.ui.MainActivity;
-import com.base.baselibs.net.YunXinAuthOutEvent;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.model.response.GetTaskAllModel;
 import com.atman.wysq.model.response.HeadImgResultModel;
 import com.atman.wysq.model.response.HeadImgSuccessModel;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.base.MyBaseFragment;
+import com.atman.wysq.ui.community.MySecretListActivity;
+import com.atman.wysq.ui.community.MycollectionActivity;
+import com.atman.wysq.ui.community.ReplyListActivity;
 import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.ui.mall.TwoLevelCategoryListActivity;
 import com.atman.wysq.ui.mall.order.MyOrderListActivity;
@@ -36,16 +41,15 @@ import com.atman.wysq.ui.yunxinfriend.HisVisitorActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.net.YunXinAuthOutEvent;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.BottomDialog;
-import com.base.baselibs.widget.CustomImageView;
 import com.base.baselibs.widget.PromptDialog;
-import com.base.baselibs.widget.RoundImageView;
 import com.base.baselibs.widget.pullzoom.PullZoomScrollVIew;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -76,7 +80,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     private ImageView personalSettingIv;
     private ImageView personalGenderIv;
     private ImageView personalTaskIv;
-    private CustomImageView personalHeadIv;
+    private SimpleDraweeView personalHeadIv;
     private ImageView personalHeadVerifyImg;
     private TextView personalNameTx;
     private TextView personalGendercertificationTv;
@@ -94,14 +98,21 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
 
     private TextView personalVisitorNumTx;
     private TextView personalVipTx;
-    private ImageView personalSVipIv;
+    private TextView personalSVipTv;
     private TextView personalMycoinTv;
     private TextView personalMyvipstatusTv;
-    private RoundImageView personalVisitorOneIv, personalVisitorTwoIv, personalVisitorThreeIv;
-    private ImageView personalGiftOneIv, personalGiftTwoIv, personalGiftThreeIv, personalGiftFourIv, personalGiftFiveIv;
-    private RoundImageView personalGuardianOneIv, personalGuardianTwoIv, personalGuardianThreeIv;
+    private SimpleDraweeView personalVisitorOneIv, personalVisitorTwoIv, personalVisitorThreeIv;
+    private SimpleDraweeView personalGiftOneIv, personalGiftTwoIv, personalGiftThreeIv, personalGiftFourIv, personalGiftFiveIv;
+    private SimpleDraweeView personalGuardianOneIv, personalGuardianTwoIv, personalGuardianThreeIv;
     private ImageView personalGuardianTopOneIv, personalGuardianTopTwoIv, personalGuardianTopThreeIv;
     private RelativeLayout personalGuardianOneRl,personalGuardianTwoRl,personalGuardianThreeRl;
+    private SimpleDraweeView personalTopBgIv;
+
+    private LinearLayout personalMysecretLl, personalMycollectionLl;
+    private RelativeLayout personalSecretreplyRl;
+    private ImageView personalSecretreplyWranIv;
+    private TouChuanOtherNoticeDao mOtherNoticeDao;
+    private List<TouChuanOtherNotice> mTouChuanOtherNotice;
 
     private String mHeadImgUrl;
     private boolean isHead = false;
@@ -130,19 +141,22 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     public void initWidget(View... v) {
         super.initWidget(v);
 
+        mOtherNoticeDao = MyBaseApplication.getApplication().getDaoSession().getTouChuanOtherNoticeDao();
+
         DisplayMetrics localDisplayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
         int mScreenHeight = localDisplayMetrics.heightPixels;
         int mScreenWidth = localDisplayMetrics.widthPixels;
-        LinearLayout.LayoutParams localObject = new LinearLayout.LayoutParams(mScreenWidth, (int) (9.0F * (mScreenWidth / 19.0F)));
+        LinearLayout.LayoutParams localObject = new LinearLayout.LayoutParams(mScreenWidth, (int) (9.0F * (mScreenWidth / 12.0F)));
         personalScrollview.setHeaderLayoutParams(localObject);
 
+        personalTopBgIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_top_bg_iv);
         personalSettingIv = (ImageView) personalScrollview.findViewById(R.id.personal_setting_iv);
         personalGenderIv = (ImageView) personalScrollview.findViewById(R.id.personal_gender_iv);
         personalTaskIv = (ImageView) personalScrollview.findViewById(R.id.personal_task_iv);
         personalNameTx = (TextView) personalScrollview.findViewById(R.id.personal_name_tx);
         personalGendercertificationTv = (TextView) personalScrollview.findViewById(R.id.personal_gendercertification_tv);
-        personalHeadIv = (CustomImageView) personalScrollview.findViewById(R.id.personal_head_iv);
+        personalHeadIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_head_iv);
         personalHeadVerifyImg = (ImageView) personalScrollview.findViewById(R.id.personal_head_verify_img);
         personalMaillistLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_maillist_ll);
         personalServiceLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_service_ll);
@@ -155,25 +169,30 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         personalMycoinTv = (TextView) personalScrollview.findViewById(R.id.personal_mycoin_tv);
         personalMyvipstatusTv = (TextView) personalScrollview.findViewById(R.id.personal_myvipstatus_tv);
         personalVipTx = (TextView) personalScrollview.findViewById(R.id.personal_vip_tx);
-        personalSVipIv = (ImageView) personalScrollview.findViewById(R.id.personal_svip_iv);
+        personalSVipTv = (TextView) personalScrollview.findViewById(R.id.personal_svip_tv);
+
+        personalMysecretLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_mysecret_ll);
+        personalMycollectionLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_mycollection_ll);
+        personalSecretreplyRl = (RelativeLayout) personalScrollview.findViewById(R.id.personal_secretreply_rl);
+        personalSecretreplyWranIv = (ImageView) personalScrollview.findViewById(R.id.personal_secretreply_wran_iv);
 
         personalVisitorLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_visitor_ll);
         personalVisitorLl.setOnClickListener(this);
-        personalVisitorOneIv = (RoundImageView) personalScrollview.findViewById(R.id.personal_visitor_one_iv);
-        personalVisitorTwoIv = (RoundImageView) personalScrollview.findViewById(R.id.personal_visitor_two_iv);
-        personalVisitorThreeIv = (RoundImageView) personalScrollview.findViewById(R.id.personal_visitor_three_iv);
+        personalVisitorOneIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_visitor_one_iv);
+        personalVisitorTwoIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_visitor_two_iv);
+        personalVisitorThreeIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_visitor_three_iv);
 
-        personalGiftOneIv = (ImageView) personalScrollview.findViewById(R.id.personal_gift_one_iv);
-        personalGiftTwoIv = (ImageView) personalScrollview.findViewById(R.id.personal_gift_two_iv);
-        personalGiftThreeIv = (ImageView) personalScrollview.findViewById(R.id.personal_gift_three_iv);
-        personalGiftFourIv = (ImageView) personalScrollview.findViewById(R.id.personal_gift_four_iv);
-        personalGiftFiveIv = (ImageView) personalScrollview.findViewById(R.id.personal_gift_five_iv);
+        personalGiftOneIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_gift_one_iv);
+        personalGiftTwoIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_gift_two_iv);
+        personalGiftThreeIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_gift_three_iv);
+        personalGiftFourIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_gift_four_iv);
+        personalGiftFiveIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_gift_five_iv);
 
         personalFriendsLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_friends_ll);
         personalFriendsLl.setOnClickListener(this);
-        personalGuardianOneIv = (RoundImageView) personalScrollview.findViewById(R.id.personal_guardian_one_iv);
-        personalGuardianTwoIv = (RoundImageView) personalScrollview.findViewById(R.id.personal_guardian_two_iv);
-        personalGuardianThreeIv = (RoundImageView) personalScrollview.findViewById(R.id.personal_guardian_three_iv);
+        personalGuardianOneIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_guardian_one_iv);
+        personalGuardianTwoIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_guardian_two_iv);
+        personalGuardianThreeIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_guardian_three_iv);
         personalGuardianTopOneIv = (ImageView) personalScrollview.findViewById(R.id.personal_guardian_top_one_iv);
         personalGuardianTopTwoIv = (ImageView) personalScrollview.findViewById(R.id.personal_guardian_top_two_iv);
         personalGuardianTopThreeIv = (ImageView) personalScrollview.findViewById(R.id.personal_guardian_top_three_iv);
@@ -181,6 +200,9 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         personalGuardianTwoRl = (RelativeLayout) personalScrollview.findViewById(R.id.personal_guardian_two_rl);
         personalGuardianThreeRl = (RelativeLayout) personalScrollview.findViewById(R.id.personal_guardian_three_rl);
 
+        personalMysecretLl.setOnClickListener(this);
+        personalMycollectionLl.setOnClickListener(this);
+        personalSecretreplyRl.setOnClickListener(this);
         personalSettingIv.setOnClickListener(this);
         personalHeadIv.setOnClickListener(this);
         personalNameTx.setOnClickListener(this);
@@ -227,7 +249,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         personalHeadVerifyImg.setVisibility(View.INVISIBLE);
         personalNameTx.setText("请点击登录");
         personalMyvipstatusTv.setText("");
-        personalNameTx.setTextColor(getResources().getColor(R.color.color_7F2505));
+        personalNameTx.setTextColor(getResources().getColor(R.color.color_white));
         personalGuardianOneRl.setVisibility(View.GONE);
         personalVisitorNumTx.setVisibility(View.GONE);
         personalGuardianTwoRl.setVisibility(View.GONE);
@@ -246,7 +268,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         personalMycoinTv.setVisibility(View.GONE);
 
         personalVipTx.setVisibility(View.GONE);
-        personalSVipIv.setVisibility(View.GONE);
+        personalSVipTv.setVisibility(View.GONE);
     }
 
     @Override
@@ -343,8 +365,8 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             MyBaseApplication.getApplication().setFilterLock(false);
             showToast("头像修改成功");
             MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().setIcon(mHeadImgUrl);
-            ImageLoader.getInstance().displayImage(Common.ImageUrl + mHeadImgUrl
-                    , personalHeadIv, MyBaseApplication.getApplication().getOptions());
+            personalTopBgIv.setImageURI(Common.ImageUrl + mHeadImgUrl);
+            personalHeadIv.setImageURI(Common.ImageUrl + mHeadImgUrl);
         } else if (id == Common.NET_VERIFY) {
             showToast("提交成功，请等待审核！");
         } else if (id == Common.NET_GET_RASK) {
@@ -391,9 +413,9 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
 
         if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>=4) {
             personalVipTx.setVisibility(View.GONE);
-            personalSVipIv.setVisibility(View.VISIBLE);
+            personalSVipTv.setVisibility(View.VISIBLE);
         } else {
-            personalSVipIv.setVisibility(View.GONE);
+            personalSVipTv.setVisibility(View.GONE);
             if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()==0) {
                 personalVipTx.setVisibility(View.GONE);
             } else {
@@ -405,7 +427,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>=3) {
             personalNameTx.setTextColor(getResources().getColor(R.color.color_red));
         } else {
-            personalNameTx.setTextColor(getResources().getColor(R.color.color_7F2505));
+            personalNameTx.setTextColor(getResources().getColor(R.color.color_white));
         }
         if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getSex().equals("M")) {
             personalGenderIv.setImageResource(R.mipmap.personal_man_ic);
@@ -426,155 +448,46 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             personalGendercertificationTv.setVisibility(View.GONE);
             personalHeadVerifyImg.setVisibility(View.GONE);
         }
-        ImageLoader.getInstance().displayImage(Common.ImageUrl + mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon()
-                , personalHeadIv, MyBaseApplication.getApplication().getOptions());
+        personalTopBgIv.setImageURI(Common.ImageUrl + mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
+        personalHeadIv.setImageURI(Common.ImageUrl + mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
 
         initVisitorIV();
 
         initguardianIV();
 
         personalMycoinTv.setVisibility(View.VISIBLE);
-        personalMycoinTv.setText(mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin()+"｜更多");
+        personalMycoinTv.setText(" "+mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin());
         if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()==0) {
             personalMyvipstatusTv.setText("去开通");
         } else {
             personalMyvipstatusTv.setText("剩余时间：" + mGetUserIndexModel.getBody().getRemainingTime()/(24*60*60*1000)+"天");
         }
 
+        if (MyBaseApplication.isReportUnRead) {
+            personalSecretreplyWranIv.setVisibility(View.VISIBLE);
+        } else {
+            personalSecretreplyWranIv.setVisibility(View.INVISIBLE);
+        }
+
         initGiftIv();
     }
 
     private void initGiftIv() {
+        SimpleDraweeView[] GiftIvList = {personalGiftOneIv, personalGiftTwoIv, personalGiftThreeIv
+                , personalGiftFourIv, personalGiftFiveIv};
+        int size = GiftIvList.length;
         int num = mGetUserIndexModel.getBody().getGiftList().size();
-        personalGiftOneIv.setVisibility(View.GONE);
-        personalGiftTwoIv.setVisibility(View.GONE);
-        personalGiftThreeIv.setVisibility(View.GONE);
-        personalGiftFourIv.setVisibility(View.GONE);
-        personalGiftFiveIv.setVisibility(View.GONE);
-        if (num==1) {
-            personalGiftFiveIv.setVisibility(View.VISIBLE);
-            if (mGetUserIndexModel.getBody().getGiftList().get(0).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(0).getPic_url()
-                        ,personalGiftFiveIv,MyBaseApplication.getApplication().getOptionsNot());
+
+        for (int i=0;i<GiftIvList.length;i++) {
+            GiftIvList[i].setVisibility(View.GONE);
+        }
+        for (int i=0;i<num;i++) {
+            int m = size-num+i;
+            GiftIvList[m].setVisibility(View.VISIBLE);
+            if (mGetUserIndexModel.getBody().getGiftList().get(i).getType()==1) {
+                GiftIvList[m].setImageURI(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(i).getPic_url());
             } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(0).getGray_pic_url()
-                        ,personalGiftFiveIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-        } else if (num==2) {
-            personalGiftFourIv.setVisibility(View.VISIBLE);
-            personalGiftFiveIv.setVisibility(View.VISIBLE);
-            if (mGetUserIndexModel.getBody().getGiftList().get(0).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(0).getPic_url()
-                        ,personalGiftFourIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(0).getGray_pic_url()
-                        ,personalGiftFourIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-            if (mGetUserIndexModel.getBody().getGiftList().get(1).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(1).getPic_url()
-                        ,personalGiftFiveIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(1).getGray_pic_url()
-                        ,personalGiftFiveIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-        } else if (num==3) {
-            personalGiftThreeIv.setVisibility(View.VISIBLE);
-            personalGiftFourIv.setVisibility(View.VISIBLE);
-            personalGiftFiveIv.setVisibility(View.VISIBLE);
-            if (mGetUserIndexModel.getBody().getGiftList().get(0).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(0).getPic_url()
-                        ,personalGiftThreeIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(0).getGray_pic_url()
-                        ,personalGiftThreeIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-            if (mGetUserIndexModel.getBody().getGiftList().get(1).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(1).getPic_url()
-                        ,personalGiftFourIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(1).getGray_pic_url()
-                        ,personalGiftFourIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-            if (mGetUserIndexModel.getBody().getGiftList().get(2).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(2).getPic_url()
-                        ,personalGiftFiveIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(2).getGray_pic_url()
-                        ,personalGiftFiveIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-        } else if (num==4) {
-            personalGiftTwoIv.setVisibility(View.VISIBLE);
-            personalGiftThreeIv.setVisibility(View.VISIBLE);
-            personalGiftFourIv.setVisibility(View.VISIBLE);
-            personalGiftFiveIv.setVisibility(View.VISIBLE);
-            if (mGetUserIndexModel.getBody().getGiftList().get(0).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(0).getPic_url()
-                        ,personalGiftTwoIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(0).getGray_pic_url()
-                        ,personalGiftTwoIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-            if (mGetUserIndexModel.getBody().getGiftList().get(1).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(1).getPic_url()
-                        ,personalGiftThreeIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(1).getGray_pic_url()
-                        ,personalGiftThreeIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-            if (mGetUserIndexModel.getBody().getGiftList().get(2).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(2).getPic_url()
-                        ,personalGiftFourIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(2).getGray_pic_url()
-                        ,personalGiftFourIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-            if (mGetUserIndexModel.getBody().getGiftList().get(3).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(3).getPic_url()
-                        ,personalGiftFiveIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(3).getGray_pic_url()
-                        ,personalGiftFiveIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-        } else if (num>=5) {
-            personalGiftOneIv.setVisibility(View.VISIBLE);
-            personalGiftTwoIv.setVisibility(View.VISIBLE);
-            personalGiftThreeIv.setVisibility(View.VISIBLE);
-            personalGiftFourIv.setVisibility(View.VISIBLE);
-            personalGiftFiveIv.setVisibility(View.VISIBLE);
-            if (mGetUserIndexModel.getBody().getGiftList().get(0).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(0).getPic_url()
-                        ,personalGiftOneIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(0).getGray_pic_url()
-                        ,personalGiftOneIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-            if (mGetUserIndexModel.getBody().getGiftList().get(1).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(1).getPic_url()
-                        ,personalGiftTwoIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(1).getGray_pic_url()
-                        ,personalGiftTwoIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-            if (mGetUserIndexModel.getBody().getGiftList().get(2).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(2).getPic_url()
-                        ,personalGiftThreeIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(2).getGray_pic_url()
-                        ,personalGiftThreeIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-            if (mGetUserIndexModel.getBody().getGiftList().get(3).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(3).getPic_url()
-                        ,personalGiftFourIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(3).getGray_pic_url()
-                        ,personalGiftFourIv,MyBaseApplication.getApplication().getOptionsNot());
-            }
-            if (mGetUserIndexModel.getBody().getGiftList().get(4).getType()==1) {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(4).getPic_url()
-                        ,personalGiftFiveIv,MyBaseApplication.getApplication().getOptionsNot());
-            } else {
-                ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(4).getGray_pic_url()
-                        ,personalGiftFiveIv,MyBaseApplication.getApplication().getOptionsNot());
+                GiftIvList[m].setImageURI(Common.ImageUrl+mGetUserIndexModel.getBody().getGiftList().get(i).getGray_pic_url());
             }
         }
     }
@@ -586,31 +499,25 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             personalGuardianTwoRl.setVisibility(View.GONE);
             personalGuardianThreeRl.setVisibility(View.VISIBLE);
             personalGuardianTopThreeIv.setImageResource(R.mipmap.other_guard_one);
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(0).getIcon()
-                    ,personalGuardianThreeIv,MyBaseApplication.getApplication().getOptionsNot());
+            personalGuardianThreeIv.setImageURI(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(0).getIcon());
         } else if (num==2) {
             personalGuardianOneRl.setVisibility(View.GONE);
             personalGuardianTwoRl.setVisibility(View.VISIBLE);
             personalGuardianThreeRl.setVisibility(View.VISIBLE);
             personalGuardianTopTwoIv.setImageResource(R.mipmap.other_guard_one);
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(0).getIcon()
-                    ,personalGuardianTwoIv,MyBaseApplication.getApplication().getOptionsNot());
+            personalGuardianTwoIv.setImageURI(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(0).getIcon());
             personalGuardianTopThreeIv.setImageResource(R.mipmap.other_guard_two);
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(1).getIcon()
-                    ,personalGuardianThreeIv,MyBaseApplication.getApplication().getOptionsNot());
+            personalGuardianThreeIv.setImageURI(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(1).getIcon());
         } else if (num>=3) {
             personalGuardianOneRl.setVisibility(View.VISIBLE);
             personalGuardianTwoRl.setVisibility(View.VISIBLE);
             personalGuardianThreeRl.setVisibility(View.VISIBLE);
             personalGuardianTopOneIv.setImageResource(R.mipmap.other_guard_one);
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(0).getIcon()
-                    ,personalGuardianOneIv,MyBaseApplication.getApplication().getOptionsNot());
+            personalGuardianOneIv.setImageURI(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(0).getIcon());
             personalGuardianTopTwoIv.setImageResource(R.mipmap.other_guard_two);
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(1).getIcon()
-                    ,personalGuardianTwoIv,MyBaseApplication.getApplication().getOptionsNot());
+            personalGuardianTwoIv.setImageURI(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(1).getIcon());
             personalGuardianTopThreeIv.setImageResource(R.mipmap.other_guard_three);
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(2).getIcon()
-                    ,personalGuardianThreeIv,MyBaseApplication.getApplication().getOptionsNot());
+            personalGuardianThreeIv.setImageURI(Common.ImageUrl+mGetUserIndexModel.getBody().getGuardlist().get(2).getIcon());
         }
     }
 
@@ -633,26 +540,20 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             personalVisitorOneIv.setVisibility(View.GONE);
             personalVisitorTwoIv.setVisibility(View.GONE);
             personalVisitorThreeIv.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+dataList.get(0).getIcon()
-                    ,personalVisitorThreeIv,MyBaseApplication.getApplication().getOptionsNot());
+            personalVisitorThreeIv.setImageURI(Common.ImageUrl+dataList.get(0).getIcon());
         } else if (num==2) {
             personalVisitorOneIv.setVisibility(View.GONE);
             personalVisitorTwoIv.setVisibility(View.VISIBLE);
             personalVisitorThreeIv.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+dataList.get(0).getIcon()
-                    ,personalVisitorTwoIv,MyBaseApplication.getApplication().getOptionsNot());
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+dataList.get(1).getIcon()
-                    ,personalVisitorThreeIv,MyBaseApplication.getApplication().getOptionsNot());
+            personalVisitorTwoIv.setImageURI(Common.ImageUrl+dataList.get(0).getIcon());
+            personalVisitorThreeIv.setImageURI(Common.ImageUrl+dataList.get(1).getIcon());
         } else if (num>=3) {
             personalVisitorOneIv.setVisibility(View.VISIBLE);
             personalVisitorTwoIv.setVisibility(View.VISIBLE);
             personalVisitorThreeIv.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+dataList.get(0).getIcon()
-                    ,personalVisitorOneIv,MyBaseApplication.getApplication().getOptionsNot());
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+dataList.get(1).getIcon()
-                    ,personalVisitorTwoIv,MyBaseApplication.getApplication().getOptionsNot());
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+dataList.get(2).getIcon()
-                    ,personalVisitorThreeIv,MyBaseApplication.getApplication().getOptionsNot());
+            personalVisitorOneIv.setImageURI(Common.ImageUrl+dataList.get(0).getIcon());
+            personalVisitorTwoIv.setImageURI(Common.ImageUrl+dataList.get(1).getIcon());
+            personalVisitorThreeIv.setImageURI(Common.ImageUrl+dataList.get(2).getIcon());
         }
     }
 
@@ -669,9 +570,57 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         ButterKnife.unbind(this);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(YunXinAddFriendEvent event) {
+        setTuBiao();
+    }
+
+    private void setTuBiao() {
+        mTouChuanOtherNotice = mOtherNoticeDao.queryBuilder().where(TouChuanOtherNoticeDao.Properties.NoticeType.eq(4)
+                , TouChuanOtherNoticeDao.Properties.IsRead.eq(0)).build().list();
+        if (mTouChuanOtherNotice!=null && mTouChuanOtherNotice.size()>0) {
+            MyBaseApplication.isReportUnRead=true;
+        } else {
+            MyBaseApplication.isReportUnRead=false;
+        }
+        if (MyBaseApplication.isReportUnRead) {
+            personalSecretreplyWranIv.setVisibility(View.VISIBLE);
+        } else {
+            personalSecretreplyWranIv.setVisibility(View.INVISIBLE);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.personal_mysecret_ll://发布
+                if (!isLogin()) {
+                    showLogin();
+                } else {
+                    startActivity(new Intent(getActivity(), MySecretListActivity.class));
+                }
+                break;
+            case R.id.personal_secretreply_rl://回复
+                if (!isLogin()) {
+                    showLogin();
+                } else {
+                    if (mTouChuanOtherNotice!=null) {
+                        for(int i=0;i<mTouChuanOtherNotice.size();i++) {
+                            mTouChuanOtherNotice.get(i).setIsRead(1);
+                            mOtherNoticeDao.update(mTouChuanOtherNotice.get(i));
+                        }
+                        EventBus.getDefault().post(new YunXinMessageEvent());
+                    }
+                    startActivity(new Intent(getActivity(), ReplyListActivity.class));
+                }
+                break;
+            case R.id.personal_mycollection_ll://收藏
+                if (!isLogin()) {
+                    showLogin();
+                } else {
+                    startActivity(new Intent(getActivity(), MycollectionActivity.class));
+                }
+                break;
             case R.id.personal_friends_ll:
                 if (!isLogin()) {
                     showLogin();

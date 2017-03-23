@@ -242,7 +242,7 @@ public class PostingListAdapter extends BaseAdapter {
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         holder.itemBloglistCommentimgTx.setCompoundDrawables(drawable, null, null, null);
 
-        if (mBodyEntity.getSex().equals("M")) {
+        if (mBodyEntity.getSex()!=null && mBodyEntity.getSex().equals("M")) {
             holder.itemBloglistGenderImg.setImageResource(R.mipmap.personal_man_ic);
         } else {
             holder.itemBloglistGenderImg.setImageResource(R.mipmap.personal_weman_ic);

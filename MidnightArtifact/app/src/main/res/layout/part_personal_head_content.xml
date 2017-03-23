@@ -1,8 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_50"
+        android:background="@color/color_white"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/personal_mysecret_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/plaza_icon_more_create" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:gravity="center"
+                android:text="发布"
+                android:textColor="@color/personal_item_tx"
+                android:textSize="@dimen/dimen_sp_16" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/dimen_dp_5"
+            android:layout_marginTop="@dimen/dimen_dp_5"
+            android:src="@color/color_line" />
+
+        <RelativeLayout
+            android:id="@+id/personal_secretreply_rl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/personal_secretreply_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/plaza_icon_more_reply" />
+
+            <TextView
+                android:id="@+id/personal_secretreply_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:layout_toRightOf="@+id/personal_secretreply_iv"
+                android:gravity="center"
+                android:text="回复"
+                android:textColor="@color/personal_item_tx"
+                android:textSize="@dimen/dimen_sp_16" />
+
+            <ImageView
+                android:id="@+id/personal_secretreply_wran_iv"
+                android:layout_width="@dimen/dimen_dp_7"
+                android:layout_height="@dimen/dimen_dp_7"
+                android:layout_toRightOf="@+id/personal_secretreply_tv"
+                android:src="@mipmap/dote_pressed"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/dimen_dp_5"
+            android:layout_marginTop="@dimen/dimen_dp_5"
+            android:src="@color/color_line" />
+
+        <LinearLayout
+            android:id="@+id/personal_mycollection_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/plaza_icon_more_store" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:gravity="center"
+                android:text="收藏"
+                android:textColor="@color/personal_item_tx"
+                android:textSize="@dimen/dimen_sp_16" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="@dimen/dimen_dp_15"
+        android:background="@color/color_line" />
 
     <LinearLayout
         android:id="@+id/personal_visitor_ll"
@@ -44,28 +160,34 @@
             android:gravity="center_vertical|right"
             android:orientation="horizontal">
 
-            <com.base.baselibs.widget.RoundImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/personal_visitor_one_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
-                android:src="@mipmap/ic_launcher"
-                android:visibility="gone" />
+                android:visibility="gone"
+                fresco:failureImage="@mipmap/ic_launcher"
+                fresco:placeholderImage="@mipmap/ic_launcher"
+                fresco:roundAsCircle="true" />
 
-            <com.base.baselibs.widget.RoundImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/personal_visitor_two_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
-                android:src="@mipmap/ic_launcher"
-                android:visibility="gone" />
+                android:visibility="gone"
+                fresco:failureImage="@mipmap/ic_launcher"
+                fresco:placeholderImage="@mipmap/ic_launcher"
+                fresco:roundAsCircle="true" />
 
-            <com.base.baselibs.widget.RoundImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/personal_visitor_three_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
-                android:src="@mipmap/ic_launcher"
-                android:visibility="gone" />
+                android:visibility="gone"
+                fresco:failureImage="@mipmap/ic_launcher"
+                fresco:placeholderImage="@mipmap/ic_launcher"
+                fresco:roundAsCircle="true" />
         </LinearLayout>
 
     </LinearLayout>
@@ -125,12 +247,14 @@
                     android:layout_centerHorizontal="true"
                     android:src="@mipmap/other_guard_one" />
 
-                <com.base.baselibs.widget.RoundImageView
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/personal_guardian_one_iv"
                     android:layout_width="@dimen/dimen_dp_30"
                     android:layout_height="@dimen/dimen_dp_30"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher" />
+                    fresco:failureImage="@mipmap/ic_launcher"
+                    fresco:placeholderImage="@mipmap/ic_launcher"
+                    fresco:roundAsCircle="true" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -147,12 +271,14 @@
                     android:layout_centerHorizontal="true"
                     android:src="@mipmap/other_guard_one" />
 
-                <com.base.baselibs.widget.RoundImageView
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/personal_guardian_two_iv"
                     android:layout_width="@dimen/dimen_dp_30"
                     android:layout_height="@dimen/dimen_dp_30"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher" />
+                    fresco:failureImage="@mipmap/ic_launcher"
+                    fresco:placeholderImage="@mipmap/ic_launcher"
+                    fresco:roundAsCircle="true" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -169,12 +295,14 @@
                     android:layout_centerHorizontal="true"
                     android:src="@mipmap/other_guard_one" />
 
-                <com.base.baselibs.widget.RoundImageView
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/personal_guardian_three_iv"
                     android:layout_width="@dimen/dimen_dp_30"
                     android:layout_height="@dimen/dimen_dp_30"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher" />
+                    fresco:failureImage="@mipmap/ic_launcher"
+                    fresco:placeholderImage="@mipmap/ic_launcher"
+                    fresco:roundAsCircle="true" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -213,7 +341,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dimen_dp_15"
             android:layout_weight="1"
-            android:text="@string/personal_recharge_str"
+            android:text="钱    包"
             android:textColor="@color/personal_item_tx"
             android:textSize="@dimen/dimen_sp_16" />
 
@@ -222,15 +350,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dimen_dp_15"
+            android:drawableLeft="@mipmap/coin_ic"
             android:text=""
             android:textColor="#fe939e"
             android:textSize="@dimen/dimen_sp_13" />
 
         <ImageView
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="@dimen/dimen_dp_15"
-            android:src="@mipmap/right_arrow" />
+            android:src="@mipmap/right_arrow"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
@@ -272,9 +401,9 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="@dimen/dimen_dp_15"
-            android:src="@mipmap/right_arrow" />
+            android:src="@mipmap/right_arrow"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
@@ -325,9 +454,9 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="@dimen/dimen_dp_15"
-            android:src="@mipmap/right_arrow" />
+            android:src="@mipmap/right_arrow"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
@@ -362,7 +491,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dimen_dp_15"
-            android:text="@string/personal_mygift_str"
+            android:text="礼    物"
             android:textColor="@color/personal_item_tx"
             android:textSize="@dimen/dimen_sp_16" />
 
@@ -373,43 +502,38 @@
             android:gravity="center_vertical|right"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/personal_gift_one_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
-                android:src="@mipmap/ic_launcher"
                 android:visibility="gone" />
 
-            <ImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/personal_gift_two_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
-                android:src="@mipmap/ic_launcher"
                 android:visibility="gone" />
 
-            <ImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/personal_gift_three_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
-                android:src="@mipmap/ic_launcher"
                 android:visibility="gone" />
 
-            <ImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/personal_gift_four_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
-                android:src="@mipmap/ic_launcher"
                 android:visibility="gone" />
 
-            <ImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/personal_gift_five_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
-                android:src="@mipmap/ic_launcher"
                 android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
@@ -449,9 +573,9 @@
                 android:id="@+id/personal_task_iv"
                 android:layout_width="@dimen/dimen_dp_5"
                 android:layout_height="@dimen/dimen_dp_5"
-                android:visibility="invisible"
                 android:layout_alignParentRight="true"
-                android:src="@mipmap/dote_pressed" />
+                android:src="@mipmap/dote_pressed"
+                android:visibility="invisible" />
         </RelativeLayout>
 
         <TextView
@@ -473,16 +597,16 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="@dimen/dimen_dp_15"
-            android:src="@mipmap/right_arrow" />
+            android:src="@mipmap/right_arrow"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:background="@color/color_white">
+        android:background="@color/color_white"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="match_parent"
@@ -495,13 +619,13 @@
         android:id="@+id/personal_maillist_ll"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_dp_50"
-        android:visibility="gone"
         android:background="@drawable/white_hollow_selector"
         android:clickable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dimen_dp_15"
-        android:paddingRight="@dimen/dimen_dp_15">
+        android:paddingRight="@dimen/dimen_dp_15"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="@dimen/dimen_dp_30"
@@ -574,6 +698,7 @@
             android:layout_height="@dimen/dimen_dp_15"
             android:src="@mipmap/right_arrow" />
     </LinearLayout>
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1px"
