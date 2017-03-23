@@ -70,6 +70,7 @@
         <activity android:name=".ui.discover.LiveHallActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.discover.MyLiveRoomActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.discover.ListenLiveActivity" android:launchMode="singleTask"/>
+        <activity android:name=".ui.discover.EditSceneActivity" android:launchMode="singleTask"/>
         <activity android:name=".widget.yunlive.NEVideoPlayerActivity" android:launchMode="singleTask"/>
 
         <activity android:name="com.choicepicture_library.ImageGridActivity"/>

@@ -213,6 +213,8 @@ public class Common {
     public static String Url_Add_Live = hostUrl + "rest/live/add";
     //发现新接口 type: 0-推荐、1-人气、2-新人、3-声音控、4-男神
     public static String Url_Find_New = hostUrl + "rest/user/find/";
+    //获取场景信息
+    public static String Url_Get_SceneInfo = hostUrl + "rest/chat/background/";
     /**************************http访问路径*****************************/
 
 
@@ -404,6 +406,8 @@ public class Common {
     public static int NET_ADD_LIVE_ID = 92;
     //发现新接口
     public static int NET_FIND_NEW_ID = 93;
+    //获取场景信息
+    public static int NET_GET_SCENEINFO_ID = 94;
     /**************************http访问回应识别码*****************************/
 
 

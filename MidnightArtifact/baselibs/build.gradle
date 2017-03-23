@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22.+'
     compile 'com.android.support:design:22.+'
@@ -35,4 +35,5 @@ dependencies {
     compile project(':choicepicture_library')
     compile project(':picturebrowsing_library')
     compile project(':pic3d_lib')
+    compile files('libs/fastjson-1.1.34.android.jar')
 }

@@ -26,7 +26,6 @@
             android:text="+场景"/>
     </LinearLayout>
 
-
     <RadioGroup
         android:id="@+id/tabs_rg"
         android:layout_width="match_parent"
@@ -81,6 +80,7 @@
         android:layout_height="@dimen/dimen_dp_48"
         android:clickable="true"
         android:layout_alignParentRight="true"
+        android:visibility="invisible"
         android:gravity="center"
         android:orientation="vertical">
 

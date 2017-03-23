@@ -92,7 +92,7 @@ public class DiscoverNewFindAdapter extends RecyclerView.Adapter<DiscoverNewFind
 
         holder.itemDiscovernewNumTv.setText(" "+listData.get(position).getView_count()+"");
         holder.itemDiscovernewNameTv.setText(listData.get(position).getNick_name());
-        holder.itemDiscovernewIv.setImageURI(Common.ImageUrl+listData.get(position).getIcon());
+        holder.itemDiscovernewIv.setImageURI(Common.ImageUrl+listData.get(position).getPic_url1());
 
         holder.itemDiscovernewIv.setOnClickListener(new View.OnClickListener() {
             @Override

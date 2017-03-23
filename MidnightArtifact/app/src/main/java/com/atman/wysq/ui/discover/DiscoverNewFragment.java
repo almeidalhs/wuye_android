@@ -1,5 +1,6 @@
 package com.atman.wysq.ui.discover;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -135,7 +136,7 @@ public class DiscoverNewFragment extends MyBaseFragment implements AdapterInterf
         mDiscoverNewFindAdapter = new DiscoverNewFindAdapter(getActivity(), getmWidth(), this);
 
         mRecyclerView = discovernewFindRecycler.getRefreshableView();
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));//这里用线性显示 类似于listview
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         mRecyclerView.setAdapter(mDiscoverNewFindAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -352,10 +353,18 @@ public class DiscoverNewFragment extends MyBaseFragment implements AdapterInterf
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.part_newdiscover_topleft_ll://场景
-                showToast("场景");
+                if (!isLogin()) {
+                    showLogin();
+                } else {
+                    startActivity(new Intent(getActivity(), EditSceneActivity.class));
+                }
                 break;
             case R.id.part_newdiscover_topright_ll://声音
-                showToast("声音");
+                if (!isLogin()) {
+                    showLogin();
+                } else {
+                    showToast("声音");
+                }
                 break;
             case R.id.discovernew_find_tab_recommend://发现——推荐
                 mTpyeId = 0;
