@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dimen_dp_10"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingTop="@dimen/dimen_dp_10"
+        android:text="设置"
+        android:textColor="@color/color_666666"
+        android:textSize="@dimen/dimen_sp_14" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
+
+    <LinearLayout
+        android:id="@+id/walletsetting_reset_pw_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_50"
+        android:background="@drawable/white_hollow_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="设置|重置支付密码"
+            android:textColor="@color/personal_item_tx"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dimen_dp_15"
+            android:background="@color/color_line" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/walletsetting_modify_pw_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_50"
+        android:background="@drawable/white_hollow_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="修改支付密码"
+            android:textColor="@color/personal_item_tx"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dimen_dp_15"
+            android:background="@color/color_line" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/walletsetting_bind_alipay_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_50"
+        android:background="@drawable/white_hollow_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="绑定支付宝"
+            android:textColor="@color/personal_item_tx"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dimen_dp_10"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingTop="@dimen/dimen_dp_10"
+        android:text="关于"
+        android:textColor="@color/color_666666"
+        android:textSize="@dimen/dimen_sp_14" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
+
+    <LinearLayout
+        android:id="@+id/walletsetting_about_cion_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_50"
+        android:background="@drawable/white_hollow_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="关于金币"
+            android:textColor="@color/personal_item_tx"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/dimen_dp_15"
+            android:background="@color/color_line" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/walletsetting_about_diamonds_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_50"
+        android:background="@drawable/white_hollow_selector"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="关于钻石"
+            android:textColor="@color/personal_item_tx"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_15"
+            android:src="@mipmap/right_arrow" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line" />
+
+</LinearLayout>

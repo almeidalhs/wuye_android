@@ -43,8 +43,9 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
 
     private TextView rechargeTotalcoinTv;
     private TextView rechargeCanoutcoinTv;
-    private TextView rechargeMygoldshopOneTv;
-    private TextView rechargeMygoldshopTwoTv;
+    private TextView rechargeDiamondstocionTv;
+    private TextView rechargeWithdrawalsTv;
+    private TextView rechargeDiamondsshopTv;
 
     private Context mContext = RechargeActivity.this;
     private int whatPay = 0;
@@ -79,13 +80,22 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
         goldCoin = getIntent().getIntExtra("goldCoin", 0);
         convertCoin = getIntent().getIntExtra("convertCoin", 0);
 
+        setBarRightIv(R.mipmap.rechage_top_right_ic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, WalletSettingsActivity.class));
+            }
+        });
+
         headView = LayoutInflater.from(mContext).inflate(R.layout.part_recharge_head_view, null);
         rechargeTotalcoinTv = (TextView) headView.findViewById(R.id.recharge_totalcoin_tv);
         rechargeCanoutcoinTv = (TextView) headView.findViewById(R.id.recharge_canoutcoin_tv);
-        rechargeMygoldshopOneTv = (TextView) headView.findViewById(R.id.recharge_mygoldshop_one_tv);
-        rechargeMygoldshopOneTv.setOnClickListener(this);
-        rechargeMygoldshopTwoTv = (TextView) headView.findViewById(R.id.recharge_mygoldshop_two_tv);
-        rechargeMygoldshopTwoTv.setOnClickListener(this);
+        rechargeDiamondstocionTv = (TextView) headView.findViewById(R.id.recharge_diamondstocion_tv);
+        rechargeDiamondstocionTv.setOnClickListener(this);
+        rechargeWithdrawalsTv = (TextView) headView.findViewById(R.id.recharge_withdrawals_tv);
+        rechargeWithdrawalsTv.setOnClickListener(this);
+        rechargeDiamondsshopTv = (TextView) headView.findViewById(R.id.recharge_diamondsshop_tv);
+        rechargeDiamondsshopTv.setOnClickListener(this);
 
         rechargeTotalcoinTv.setText("" + goldCoin);
         rechargeCanoutcoinTv.setText("" + convertCoin);
@@ -183,10 +193,11 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.recharge_mygoldshop_one_tv:
-                startActivity(new Intent(mContext, CoinAgreementActivity.class));
+            case R.id.recharge_diamondstocion_tv:
                 break;
-            case R.id.recharge_mygoldshop_two_tv:
+            case R.id.recharge_withdrawals_tv:
+                break;
+            case R.id.recharge_diamondsshop_tv:
                 startActivity(new Intent(mContext, GoldMallActivity.class));
                 break;
         }
