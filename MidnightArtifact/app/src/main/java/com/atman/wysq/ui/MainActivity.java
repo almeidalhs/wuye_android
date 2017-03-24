@@ -27,7 +27,6 @@ import com.atman.wysq.model.response.CheckVersionModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.base.WebPageActivity;
-import com.atman.wysq.ui.community.CommunityFragment;
 import com.atman.wysq.ui.community.CommunityNewFragment;
 import com.atman.wysq.ui.community.PostingsDetailActivity;
 import com.atman.wysq.ui.discover.DiscoverNewFragment;

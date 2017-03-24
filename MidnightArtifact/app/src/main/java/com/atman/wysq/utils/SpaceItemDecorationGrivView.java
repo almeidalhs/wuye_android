@@ -18,16 +18,28 @@ public class SpaceItemDecorationGrivView extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view,
                                RecyclerView parent, RecyclerView.State state) {
-        if (parent.getChildPosition(view) %2 == 0) {
+        if (parent.getChildPosition(view)==0) {
             outRect.left = space*2;
             outRect.right = space;
             outRect.bottom = space;
-            outRect.top = space;
-        } else {
+            outRect.top = space*3;
+        } else if (parent.getChildPosition(view)==1) {
             outRect.right = space*2;
             outRect.left = space;
             outRect.bottom = space;
-            outRect.top = space;
+            outRect.top = space*3;
+        } else {
+            if (parent.getChildPosition(view) %2 == 0) {
+                outRect.left = space*2;
+                outRect.right = space;
+                outRect.bottom = space;
+                outRect.top = space;
+            } else {
+                outRect.right = space*2;
+                outRect.left = space;
+                outRect.bottom = space;
+                outRect.top = space;
+            }
         }
     }
 }

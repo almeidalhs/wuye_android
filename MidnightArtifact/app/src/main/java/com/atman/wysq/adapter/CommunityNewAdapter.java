@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.CommunityNewModel;
-import com.atman.wysq.model.response.DiscoverNewModel.BodyBean;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
@@ -24,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by tangbingliang on 17/2/22.
+ * Created by tangbingliang on 17*4/5*4/52.
  */
 
 public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapter.ViewHolder> {
@@ -42,7 +41,7 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
         this.mItemClick = mItemClick;
         this.mInflater = LayoutInflater.from(context);
 
-        int w = (mWight - DensityUtil.dp2px(context, 30))/2;
+        int w = (mWight - DensityUtil.dp2px(context, 30))*4/5;
         params = new RelativeLayout.LayoutParams(w, w * 190 / 340);
     }
 
@@ -98,26 +97,31 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
 
         holder.itemCommunitynewBgIv.setLayoutParams(params);
         String imgUrl = listData.get(position).getImg();
-        if (!imgUrl.startsWith("/")) {
+        if (imgUrl!=null && !imgUrl.startsWith("/")) {
             imgUrl = "/" + imgUrl;
         }
         holder.itemCommunitynewBgIv.setImageURI(Common.ImageUrl+imgUrl);
         holder.itemCommunitynewTitleTv.setText(listData.get(position).getTitle());
         imgUrl = listData.get(position).getIcon();
-        if (!imgUrl.startsWith("/")) {
+        if (imgUrl!=null && !imgUrl.startsWith("/")) {
             imgUrl = "/" + imgUrl;
         }
         holder.itemCommunitynewHeadIv.setImageURI(Common.ImageUrl+imgUrl);
+        Drawable drawable = null;
+        drawable = mContext.getResources().getDrawable(R.mipmap.ic_eye);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth()*4/5, drawable.getMinimumHeight()*4/5);
         if (listData.get(position).getCategory()==4) {
             holder.itemCommunitynewLivetagIv.setVisibility(View.VISIBLE);
             holder.itemCommunitynewLiveLl.setVisibility(View.VISIBLE);
             holder.itemCommunitynewNotliveLl.setVisibility(View.GONE);
             holder.itemCommunitynewLiveNumTv.setText(" "+listData.get(position).getLike_num());
+            holder.itemCommunitynewLiveNumTv.setCompoundDrawables(drawable, null, null, null);
         } else {
             holder.itemCommunitynewLivetagIv.setVisibility(View.GONE);
             holder.itemCommunitynewLiveLl.setVisibility(View.GONE);
             holder.itemCommunitynewNotliveLl.setVisibility(View.VISIBLE);
             holder.itemCommunitynewNotliveNumTv.setText(" "+listData.get(position).getView_count());
+            holder.itemCommunitynewNotliveNumTv.setCompoundDrawables(drawable, null, null, null);
 
             if (listData.get(position).getCategory()==1) {
                 holder.itemCommunitynewNotliveIv.setBackgroundResource(R.mipmap.ic_normal);
@@ -127,7 +131,6 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
                 holder.itemCommunitynewNotliveIv.setBackgroundResource(R.mipmap.ic_video);
             }
 
-            Drawable drawable = null;
             if (listData.get(position).getFavorite_count() > 0) {
                 drawable = mContext.getResources().getDrawable(R.mipmap.square_like_press);
                 holder.itemCommunitynewNotliveHeartTv.setTextColor(mContext.getResources().getColor(R.color.color_fda7a7));
@@ -136,7 +139,7 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
                 holder.itemCommunitynewNotliveHeartTv.setTextColor(mContext.getResources().getColor(R.color.color_bfbfbf));
             }
             /// 这一步必须要做,否则不会显示.
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            drawable.setBounds(0, 0, drawable.getMinimumWidth()*4/5, drawable.getMinimumHeight()*4/5);
             holder.itemCommunitynewNotliveHeartTv.setCompoundDrawables(drawable, null, null, null);
             holder.itemCommunitynewNotliveHeartTv.setText(" "+listData.get(position).getFavorite_count());
 
@@ -148,7 +151,7 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
                 holder.itemCommunitynewNotliveMessageTv.setTextColor(mContext.getResources().getColor(R.color.color_bfbfbf));
             }
             /// 这一步必须要做,否则不会显示.
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            drawable.setBounds(0, 0, drawable.getMinimumWidth()*4/5, drawable.getMinimumHeight()*4/5);
             holder.itemCommunitynewNotliveMessageTv.setCompoundDrawables(drawable, null, null, null);
             holder.itemCommunitynewNotliveMessageTv.setText(" "+listData.get(position).getComment_count());
         }

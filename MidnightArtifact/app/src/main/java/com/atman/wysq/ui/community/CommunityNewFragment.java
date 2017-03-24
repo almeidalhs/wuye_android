@@ -1,28 +1,50 @@
 package com.atman.wysq.ui.community;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.CommunityNewAdapter;
 import com.atman.wysq.model.response.CommunityNewModel;
+import com.atman.wysq.model.response.HeadImgResultModel;
+import com.atman.wysq.model.response.HeadImgSuccessModel;
+import com.atman.wysq.model.response.MyLiveInfoModel;
+import com.atman.wysq.model.response.ToLiveEorrModel;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.base.MyBaseFragment;
+import com.atman.wysq.ui.discover.MyLiveRoomActivity;
+import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.SpaceItemDecorationGrivView;
+import com.atman.wysq.utils.UiHelper;
+import com.atman.wysq.widget.ShowLivePopWindow;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.StringUtils;
+import com.base.baselibs.widget.BottomDialog;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,7 +56,7 @@ import okhttp3.Response;
  * Created by tangbingliang on 17/3/24.
  */
 
-public class CommunityNewFragment extends MyBaseFragment implements AdapterInterface {
+public class CommunityNewFragment extends MyBaseFragment implements AdapterInterface, View.OnClickListener {
 
     @Bind(R.id.community_empty_tx)
     TextView communityEmptyTx;
@@ -48,6 +70,8 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
     RadioButton communityTabVideo;
     @Bind(R.id.community_tab_hot)
     RadioButton communityTabHot;
+    @Bind(R.id.part_community_topleft_ll)
+    LinearLayout partCommunityTopleftLl;
 
     private CommunityNewAdapter mCommunityNewAdapter;
     private RecyclerView mRecyclerView;
@@ -56,6 +80,13 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
     private int mPage = 1;
     private int mTpyeId = 1;
     private boolean isError = true;
+
+    private ShowLivePopWindow pop;
+    private MyLiveInfoModel mMyLiveInfoModel;
+    private SimpleDraweeView popSimpleDraweeView;
+    private TextView partLivepopGoliveTx;
+    private boolean myRoomTitleInfoSta = false;
+    private boolean myRoomPicInfoSta = false;
 
     @Nullable
     @Override
@@ -86,7 +117,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState==0) {//滑动停止
+                if (newState == 0) {//滑动停止
                     Fresco.getImagePipeline().resume();//开启图片加载
                 } else {
                     Fresco.getImagePipeline().pause();//暂停图片加载
@@ -111,6 +142,12 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
         if (isVisibleToUser && getActivity() != null) {
             if (isError) {
                 isError = false;
+                if (MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                        .getUserDetailBean().getUserExt().getCan_live_room() == 1) {
+                    partCommunityTopleftLl.setVisibility(View.VISIBLE);
+                } else {
+                    partCommunityTopleftLl.setVisibility(View.INVISIBLE);
+                }
                 doHttp(true);
             }
         }
@@ -118,8 +155,8 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
 
     private void doHttp(boolean b) {
         String url = "";
-        if (mPage==1) {
-            if (mTpyeId==4) {
+        if (mPage == 1) {
+            if (mTpyeId == 4) {
                 showToast("开发中");
                 return;
             } else {
@@ -167,12 +204,42 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
                 mCommunityNewAdapter.addData(mCommunityNewModel.getBody());
             }
 
-            if (mCommunityNewAdapter!=null && mCommunityNewAdapter.getItemCount()>0) {
+            if (mCommunityNewAdapter != null && mCommunityNewAdapter.getItemCount() > 0) {
                 communityEmptyTx.setVisibility(View.GONE);
                 communityRecycler.setVisibility(View.VISIBLE);
             } else {
                 communityEmptyTx.setVisibility(View.VISIBLE);
                 communityRecycler.setVisibility(View.GONE);
+            }
+        } else if (id == Common.NET_GETMYLIVEINFO_ID) {
+            mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
+            pop.showAtLocation(pop.getV(), Gravity.CENTER, 0, 0);
+            pop.setTitle(mMyLiveInfoModel.getBody().getRoom_name());
+            popSimpleDraweeView = pop.setBg(Common.ImageUrl + mMyLiveInfoModel.getBody().getPic_url());
+            popSimpleDraweeView.setOnClickListener(this);
+            partLivepopGoliveTx = pop.getPartLivepopGoliveTx();
+            partLivepopGoliveTx.setOnClickListener(this);
+        } else if (id == Common.NET_UPDATA_MYLIVEINFO_ID || id == Common.NET_ADD_LIVE_ID) {
+            mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
+            if (mMyLiveInfoModel.getBody()==null) {
+                ToLiveEorrModel mToLiveEorrModel = mGson.fromJson(data, ToLiveEorrModel.class);
+                showWraning(mToLiveEorrModel.getResult());
+            } else {
+                toMyLive(mMyLiveInfoModel);
+            }
+        } else if (id == Common.NET_RESET_HEAD) {
+            HeadImgResultModel mHeadImgResultModel = mGson.fromJson(data, HeadImgResultModel.class);
+            if (mHeadImgResultModel!=null && mHeadImgResultModel.getFiles().size()>0 ) {
+                if (!mHeadImgResultModel.getFiles().get(0).isSuccessful()) {
+                    showToast("封面图片修改失败");
+                } else {
+                    HeadImgSuccessModel mHeadImgSuccessModel = mGson.fromJson(data, HeadImgSuccessModel.class);
+                    if (mMyLiveInfoModel.getBody().getLive_room_id()==0) {
+                        addLiveData(mHeadImgSuccessModel.getFiles().get(0).getUrl(), pop.getTitlle());
+                    } else {
+                        upLiveData(mHeadImgSuccessModel.getFiles().get(0).getUrl(), pop.getTitlle());
+                    }
+                }
             }
         }
     }
@@ -203,12 +270,30 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
         ButterKnife.unbind(this);
 
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_COMMUNITY_FIRST_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GETMYLIVEINFO_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_UPDATA_MYLIVEINFO_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_LIVE_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_RESET_HEAD);
     }
 
     @OnClick({R.id.part_community_topleft_ll, R.id.community_tab_dynamic, R.id.community_tab_voice, R.id.community_tab_video, R.id.community_tab_hot, R.id.part_community_topright_ll})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.part_community_topleft_ll:
+                if (!isLogin()) {
+                    showLogin();
+                } else {
+                    if (MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                            .getUserDetailBean().getUserExt().getUserLevel() >= 2) {
+                        pop = new ShowLivePopWindow(getActivity(), view, getmWidth());
+                        OkHttpUtils.get().url(Common.Url_GetMyLiveInfo)
+                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                                .tag(Common.NET_GETMYLIVEINFO_ID).id(Common.NET_GETMYLIVEINFO_ID).build()
+                                .execute(new MyStringCallback(getActivity(), CommunityNewFragment.this, true));
+                    } else {
+                        showWraning("很抱歉，该功能仅对2级及以上等级用户开放！");
+                    }
+                }
                 break;
             case R.id.community_tab_dynamic:
                 mTpyeId = 1;
@@ -236,6 +321,130 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
                 break;
             case R.id.part_community_topright_ll:
                 break;
+            case R.id.part_livepop_bg_iv:
+                showHeadImg(view);
+                break;
+            case R.id.part_livepop_golive_tx:
+                if (pop.getTitlle()==null || pop.getTitlle().trim().isEmpty()) {
+                    showWraning("主题描述不能为空");
+                    return;
+                }
+                if ((mMyLiveInfoModel.getBody()==null || mMyLiveInfoModel.getBody().getPic_url()==null)
+                        && resulturl == null) {
+                    showWraning("封面图片不能为空");
+                    return;
+                }
+                pop.dismiss();
+                if (mMyLiveInfoModel.getBody().getLive_room_id()==0) {
+                    upPicToService();
+                } else {
+                    if (!pop.getTitlle().equals(mMyLiveInfoModel.getBody().getRoom_name())) {
+                        myRoomTitleInfoSta = true;
+                    }
+                    if (myRoomTitleInfoSta && !myRoomPicInfoSta) {
+                        upLiveData(mMyLiveInfoModel.getBody().getPic_url(), pop.getTitlle());
+                    } else {
+                        if (myRoomPicInfoSta) {
+                            upPicToService();
+                        } else {
+                            toMyLive(mMyLiveInfoModel);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void toMyLive(MyLiveInfoModel temp) {
+        startActivity(MyLiveRoomActivity.buildIntent(getActivity(), temp));
+    }
+
+    private void upLiveData(String url, String titlle) {
+        Map<String, String> p = new HashMap<>();
+        p.put("pic_url", url);
+        p.put("room_name", titlle);
+        p.put("description", titlle);
+        OkHttpUtils.postString().url(Common.Url_UpData_MyLiveInfo).id(Common.NET_UPDATA_MYLIVEINFO_ID)
+                .content(mGson.toJson(p)).mediaType(Common.JSON).tag(Common.NET_UPDATA_MYLIVEINFO_ID)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
+                .execute(new MyStringCallback(getActivity(), this, true));
+    }
+
+    private void addLiveData(String url, String titlle) {
+        Map<String, String> p = new HashMap<>();
+        p.put("pic_url", url);
+        p.put("room_name", titlle);
+        p.put("description", titlle);
+        OkHttpUtils.postString().url(Common.Url_Add_Live).id(Common.NET_ADD_LIVE_ID)
+                .content(mGson.toJson(p)).mediaType(Common.JSON).tag(Common.NET_ADD_LIVE_ID)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
+                .execute(new MyStringCallback(getActivity(), this, true));
+    }
+
+    private void upPicToService() {
+        if (resulturl != null) {
+            OkHttpUtils.post().url(Common.Url_Reset_Head)
+                    .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                    .addFile("files0_name", StringUtils.getFileName(resulturl),
+                            new File(resulturl)).id(Common.NET_RESET_HEAD)
+                    .tag(Common.NET_RESET_HEAD).build().execute(new MyStringCallback(getActivity(), this, true));
+        }
+    }
+
+    private Uri imageUri;//The Uri to store the big bitmap
+    private String resulturl;//The Uri to store the big bitmap
+    private final int CHOOSE_BIG_PICTURE = 444;
+    private final int TAKE_BIG_PICTURE = 555;
+    private String path = "";
+    private void showHeadImg(View view) {
+        BottomDialog.Builder builder = new BottomDialog.Builder(getActivity());
+        builder.setItems(new String[]{"拍照", "相册选取"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (which == 0) {//拍照
+                    path = UiHelper.photo(getActivity(), path, TAKE_BIG_PICTURE);
+                } else {//选择照片
+                    Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
+                    getAlbum.setType("image/*");
+                    startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
+                }
+                MyBaseApplication.getApplication().setFilterLock(true);
+            }
+        });
+        builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
+            imageUri = data.getData();
+        } else if (requestCode == TAKE_BIG_PICTURE) {
+            imageUri = Uri.parse("file:///" + path);
+        }
+        if (imageUri != null) {
+            myRoomPicInfoSta = true;
+            File temp = null;
+            try {
+                temp = BitmapTools.revitionImage(getActivity(), imageUri);
+                if (temp==null) {
+                    showToast("发送失败");
+                    return;
+                }
+                resulturl = temp.getPath();
+                popSimpleDraweeView.setImageURI("file:///" +resulturl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

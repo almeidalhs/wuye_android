@@ -10,6 +10,7 @@
         android:layout_height="@dimen/dimen_dp_48"
         android:clickable="true"
         android:gravity="center"
+        android:visibility="invisible"
         android:orientation="vertical">
 
         <ImageView
@@ -25,8 +26,8 @@
         android:paddingTop="@dimen/dimen_dp_3"
         android:paddingBottom="@dimen/dimen_dp_3"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/part_newdiscover_topright_ll"
-        android:layout_toRightOf="@+id/part_newdiscover_topleft_ll"
+        android:layout_toLeftOf="@+id/part_community_topright_ll"
+        android:layout_toRightOf="@+id/part_community_topleft_ll"
         android:gravity="center"
         android:orientation="horizontal"
         android:showDividers="middle">
