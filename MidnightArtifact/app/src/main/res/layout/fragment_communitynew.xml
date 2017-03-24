@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/community_top"
+        android:layout_marginTop="@dimen/dimen_dp_f5" >
+
+        <TextView
+            android:id="@+id/community_empty_tx"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="暂无数据"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/dimen_sp_18"
+            android:visibility="gone" />
+
+        <com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/community_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            ptr:ptrMode="both" />
+
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/community_top"
+        layout="@layout/part_fragment_community_bar" />
+
+</RelativeLayout>

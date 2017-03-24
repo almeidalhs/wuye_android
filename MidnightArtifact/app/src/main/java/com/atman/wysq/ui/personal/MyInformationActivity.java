@@ -22,6 +22,7 @@ import com.atman.wysq.model.response.HeadImgResultModel;
 import com.atman.wysq.model.response.HeadImgSuccessModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.mall.address.AddressManageActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.net.MyStringCallback;
@@ -99,7 +100,7 @@ public class MyInformationActivity extends MyBaseActivity {
         }
         if (isLogin()) {
             OkHttpUtils.get().url(Common.Url_GetUserInfo + MyBaseApplication.getApplication().getmUserId())
-                    .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                    .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                     .tag(Common.NET_GETUSERINFO).id(Common.NET_GETUSERINFO).build()
                     .execute(new MyStringCallback(mContext, this, true));
         }
@@ -143,14 +144,14 @@ public class MyInformationActivity extends MyBaseActivity {
             UpDateUI();
         } else if (id == Common.NET_RESET_HEAD) {
             HeadImgResultModel mHeadImgResultModel = mGson.fromJson(data, HeadImgResultModel.class);
-            if (mHeadImgResultModel!=null && mHeadImgResultModel.getFiles().size()>0 ) {
+            if (mHeadImgResultModel != null && mHeadImgResultModel.getFiles().size() > 0) {
                 if (!mHeadImgResultModel.getFiles().get(0).isSuccessful()) {
                     showToast("头像修改失败");
                 } else {
                     HeadImgSuccessModel mHeadImgSuccessModel = mGson.fromJson(data, HeadImgSuccessModel.class);
                     mHeadImgUrl = mHeadImgSuccessModel.getFiles().get(0).getUrl();
                     OkHttpUtils.postString().url(Common.Url_Modify_Head).id(Common.NET_MODIFY_HEAD)
-                            .content("{\"icon\":\""+ mHeadImgUrl +"\"}")
+                            .content("{\"icon\":\"" + mHeadImgUrl + "\"}")
                             .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                             .tag(Common.NET_MODIFY_HEAD).build().execute(new MyStringCallback(mContext, this, true));
                 }
@@ -165,7 +166,7 @@ public class MyInformationActivity extends MyBaseActivity {
             logout();
         } else if (id == Common.NET_GET_VERSION) {
             final CheckVersionModel mCheckVersionModel = mGson.fromJson(data, CheckVersionModel.class);
-            if (mCheckVersionModel.getResult().equals("1") && mCheckVersionModel.getBody()!=null) {
+            if (mCheckVersionModel.getResult().equals("1") && mCheckVersionModel.getBody() != null) {
                 PromptDialog.Builder builder = new PromptDialog.Builder(MyInformationActivity.this);
                 builder.setMessage(mCheckVersionModel.getBody().getWarn());
                 builder.setPositiveButton("升级", new DialogInterface.OnClickListener() {
@@ -237,7 +238,7 @@ public class MyInformationActivity extends MyBaseActivity {
 
     @OnClick({R.id.myinfo_reset_pw_ll, R.id.myinfo_nick_ll, R.id.myinfo_head_iv, R.id.myinfo_head_ll
             , R.id.myinfo_privacy_ll, R.id.myinfo_gesturelock_ll, R.id.myinfo_cache_ll
-            , R.id.myinfo_version_ll, R.id.myinfo_logout_bt})
+            , R.id.myinfo_version_ll, R.id.myinfo_logout_bt, R.id.myinfo_reset_addr_ll})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.myinfo_reset_pw_ll:
@@ -261,12 +262,15 @@ public class MyInformationActivity extends MyBaseActivity {
                 break;
             case R.id.myinfo_version_ll:
                 showToast("检查更新版本...");
-                OkHttpUtils.get().url(Common.Url_Get_Version+"?version="+MyBaseApplication.mVersionName.replace("v",""))
-                        .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                OkHttpUtils.get().url(Common.Url_Get_Version + "?version=" + MyBaseApplication.mVersionName.replace("v", ""))
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .id(Common.NET_GET_VERSION).tag(Common.NET_GET_VERSION).build().execute(new MyStringCallback(mContext, this, false));
                 break;
             case R.id.myinfo_logout_bt:
                 showExit();
+                break;
+            case R.id.myinfo_reset_addr_ll:
+                startActivity(AddressManageActivity.buildInTent(mContext, -1));
                 break;
         }
     }
@@ -365,9 +369,9 @@ public class MyInformationActivity extends MyBaseActivity {
         } else if (requestCode == CROP_BIG_PICTURE) {
             if (imageUri != null) {
                 OkHttpUtils.post().url(Common.Url_Reset_Head)
-                        .addParams("uploadType", "img").addHeader("cookie",MyBaseApplication.getApplication().getCookie())
+                        .addParams("uploadType", "img").addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .addFile("files0_name", StringUtils.getFileName(imageUri.getPath()),
-                        new File(imageUri.getPath())).id(Common.NET_RESET_HEAD)
+                                new File(imageUri.getPath())).id(Common.NET_RESET_HEAD)
                         .tag(Common.NET_RESET_HEAD).build().execute(new MyStringCallback(mContext, this, true));
             }
         }

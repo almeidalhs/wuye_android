@@ -592,130 +592,77 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        if (!isLogin() && v.getId()!=R.id.personal_gendercertification_tv) {
+            if (v.getId()==R.id.personal_name_tx) {
+                toLogin();
+            } else {
+                showLogin();
+            }
+            return;
+        }
         switch (v.getId()) {
             case R.id.personal_mysecret_ll://发布
-                if (!isLogin()) {
-                    showLogin();
-                } else {
-                    startActivity(new Intent(getActivity(), MySecretListActivity.class));
-                }
+                startActivity(new Intent(getActivity(), MySecretListActivity.class));
                 break;
             case R.id.personal_secretreply_rl://回复
-                if (!isLogin()) {
-                    showLogin();
-                } else {
-                    if (mTouChuanOtherNotice!=null) {
-                        for(int i=0;i<mTouChuanOtherNotice.size();i++) {
-                            mTouChuanOtherNotice.get(i).setIsRead(1);
-                            mOtherNoticeDao.update(mTouChuanOtherNotice.get(i));
-                        }
-                        EventBus.getDefault().post(new YunXinMessageEvent());
+                if (mTouChuanOtherNotice!=null) {
+                    for(int i=0;i<mTouChuanOtherNotice.size();i++) {
+                        mTouChuanOtherNotice.get(i).setIsRead(1);
+                        mOtherNoticeDao.update(mTouChuanOtherNotice.get(i));
                     }
-                    startActivity(new Intent(getActivity(), ReplyListActivity.class));
+                    EventBus.getDefault().post(new YunXinMessageEvent());
                 }
+                startActivity(new Intent(getActivity(), ReplyListActivity.class));
                 break;
             case R.id.personal_mycollection_ll://收藏
-                if (!isLogin()) {
-                    showLogin();
-                } else {
-                    startActivity(new Intent(getActivity(), MycollectionActivity.class));
-                }
+                startActivity(new Intent(getActivity(), MycollectionActivity.class));
                 break;
             case R.id.personal_friends_ll:
-                if (!isLogin()) {
-                    showLogin();
-                    return;
-                }
                 startActivity(HisGuardianActivity.buildIntent(getActivity()
                         , mGetUserIndexModel.getBody().getUserDetailBean().getUserId(), "我的守护者"));
                 break;
             case R.id.personal_visitor_ll:
-                if (!isLogin()) {
-                    showLogin();
-                    return;
-                }
                 startActivity(HisVisitorActivity.buildIntent(getActivity()
                         , mGetUserIndexModel.getBody().getUserDetailBean().getUserId(), "我的访客", num));
                 break;
             case R.id.personal_vip_ll:
-                if (!isLogin()) {
-                    showLogin();
-                } else {
-                    startActivity(TwoLevelCategoryListActivity.buildIntent(getActivity(),
-                            Integer.parseInt(MyBaseApplication.mWEB_ID), "VIP", true));
-                }
+                startActivity(TwoLevelCategoryListActivity.buildIntent(getActivity(),
+                        Integer.parseInt(MyBaseApplication.mWEB_ID), "VIP", true));
                 break;
             case R.id.personal_mygift_ll:
-                if (!isLogin()) {
-                    showLogin();
-                } else {
-                    getActivity().startActivity(MyGiftActivity.buildIntent(getActivity()));
-                }
+                getActivity().startActivity(MyGiftActivity.buildIntent(getActivity()));
                 break;
             case R.id.personal_myorder_ll:
-                if (!isLogin()) {
-                    showLogin();
-                } else {
-                    startActivity(new Intent(getActivity(), MyOrderListActivity.class));
-                }
+                startActivity(new Intent(getActivity(), MyOrderListActivity.class));
                 break;
             case R.id.personal_gendercertification_tv:
                 MyBaseApplication.getApplication().setFilterLock(true);
                 path = UiHelper.photoBefor(getActivity(), path, PICK_FROM_CAMERA);
                 break;
             case R.id.personal_setting_iv:
-                if (!isLogin()) {
-                    showLogin();
-                } else {
-                    getActivity().startActivityForResult(new Intent(getActivity()
-                            , MyInformationActivity.class), Common.toMyInfo);
-                }
+                getActivity().startActivityForResult(new Intent(getActivity()
+                        , MyInformationActivity.class), Common.toMyInfo);
                 break;
             case R.id.personal_head_iv:
-                if (!isLogin()) {
-                    toLogin();
-                } else {
-                    showHeadImg(v);
-                }
-                break;
-            case R.id.personal_name_tx:
-                if (!isLogin()) {
-                    toLogin();
-                }
+                showHeadImg(v);
                 break;
             case R.id.personal_maillist_ll:
-                if (!isLogin()) {
-                    showLogin();
+                if (!UiHelper.isTabletDevice(getActivity())) {
+                    getActivity().startActivity(new Intent(getActivity(), AddressListInvitationActivity.class));
                 } else {
-                    if (!UiHelper.isTabletDevice(getActivity())) {
-                        getActivity().startActivity(new Intent(getActivity(), AddressListInvitationActivity.class));
-                    } else {
-                        showToast("你的设备暂不支持通讯录功能。");
-                    }
+                    showToast("你的设备暂不支持通讯录功能。");
                 }
                 break;
             case R.id.personal_service_ll:
-                if (!isLogin()) {
-                    showLogin();
-                } else {
-                    showWran(getResources().getString(R.string.personal_service_phone_str));
-                }
+                showWran(getResources().getString(R.string.personal_service_phone_str));
                 break;
             case R.id.personal_task_ll:
-                if (!isLogin()) {
-                    showLogin();
-                } else {
-                    getActivity().startActivity(new Intent(getActivity(), TaskListActivity.class));
-                }
+                getActivity().startActivity(new Intent(getActivity(), TaskListActivity.class));
                 break;
             case R.id.personal_recharge_ll:
-                if (!isLogin()) {
-                    showLogin();
-                } else {
-                    getActivity().startActivity(RechargeActivity.buildIntent(getActivity()
-                            , mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin()
-                            , mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin()));
-                }
+                getActivity().startActivity(RechargeActivity.buildIntent(getActivity()
+                        , mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin()
+                        , mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin()));
                 break;
         }
     }

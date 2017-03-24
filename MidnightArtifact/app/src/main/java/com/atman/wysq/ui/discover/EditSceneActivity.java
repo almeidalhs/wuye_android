@@ -16,6 +16,7 @@ import com.atman.wysq.model.response.GetSceneInfoModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.SpaceItemDecoration;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.DensityUtil;
@@ -146,21 +147,5 @@ public class EditSceneActivity extends MyBaseActivity implements AdapterInterfac
     @Override
     public void onItemClick(View view, int position) {
 
-    }
-
-    public class SpaceItemDecoration extends RecyclerView.ItemDecoration{
-
-        private int space;
-
-        public SpaceItemDecoration(int space) {
-            this.space = space;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-
-            if(parent.getChildPosition(view) != 0)
-                outRect.left = space;
-        }
     }
 }

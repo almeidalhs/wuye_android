@@ -281,6 +281,43 @@
                     android:textSize="@dimen/dimen_sp_16" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_white">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="@dimen/dimen_dp_15"
+                    android:background="@color/color_line" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/myinfo_reset_addr_ll"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_dp_50"
+                android:background="@drawable/white_hollow_selector"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dimen_dp_15"
+                android:paddingRight="@dimen/dimen_dp_15">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="我的地址"
+                    android:textColor="@color/personal_item_tx"
+                    android:textSize="@dimen/dimen_sp_16" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dimen_dp_15"
+                    android:src="@mipmap/right_arrow" />
+            </LinearLayout>
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1px"
