@@ -142,7 +142,8 @@ public class SplashActivity extends MyBaseActivity implements TimeCountInterface
                     MyBaseApplication.mWEB_TYPE = mConfigModel.getKStartUpAdType();
                     MyBaseApplication.mShop = mConfigModel.getShop();
                     MyBaseApplication.mDownLoad_URL = mConfigModel.getWuyeandroid();
-                    MyBaseApplication.kPrivateChatCost = mConfigModel.getkPrivateChatCost();
+                    MyBaseApplication.kPrivateChatCost = mConfigModel.getKPrivateChatCost();
+                    MyBaseApplication.KDiamondChargeCoin = mConfigModel.getKDiamondChargeCoin();
                 }
             }
         });

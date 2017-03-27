@@ -78,7 +78,7 @@
         android:textSize="@dimen/dimen_sp_16" />
 
     <Button
-        android:id="@+id/dismondstocoin__bt"
+        android:id="@+id/dismondstocoin_ok_bt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_dp_40"
         android:layout_marginLeft="@dimen/dimen_dp_20"

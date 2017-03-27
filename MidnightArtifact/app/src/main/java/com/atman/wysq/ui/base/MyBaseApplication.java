@@ -93,6 +93,7 @@ public class MyBaseApplication extends BaseApplication {
     public static String mPhoneMac = "";
     public static String mPhoneDeviceId = "";
     public static String mWEB_URL = "";
+    public static String KDiamondChargeCoin = "";
     public static String mWEB_TYPE = "";
     public static String mWEB_ID = "";
     public static String mDownLoad_URL = "";
@@ -101,7 +102,7 @@ public class MyBaseApplication extends BaseApplication {
     public static String mLocationID = "0";
     public int mLOGIN_STATUS = 0;//0:登录中，1：登录成功，2：登录失败
     public static int mUserCion = 0;
-    public static List<ConfigModel.ShopEntity> mShop ;
+    public static List<ConfigModel.ShopBean> mShop ;
     public static GetGoldenRoleModel mGetGoldenRoleModel ;
     public static GetMyUserIndexModel mGetMyUserIndexModel ;
     public boolean isLock = true;

@@ -29,10 +29,10 @@ public class RechargeListAdapter extends BaseAdapter {
     private Context context;
     private ViewHolder holder;
     protected LayoutInflater layoutInflater;
-    private List<ConfigModel.ShopEntity> shop;
+    private List<ConfigModel.ShopBean> shop;
     private AdapterInterface mAdapterInterface;
 
-    public RechargeListAdapter(Context context, List<ConfigModel.ShopEntity> shop, AdapterInterface mAdapterInterface) {
+    public RechargeListAdapter(Context context, List<ConfigModel.ShopBean> shop, AdapterInterface mAdapterInterface) {
         this.context = context;
         this.mAdapterInterface = mAdapterInterface;
         layoutInflater = LayoutInflater.from(context);
@@ -49,7 +49,7 @@ public class RechargeListAdapter extends BaseAdapter {
     }
 
     @Override
-    public ConfigModel.ShopEntity getItem(int position) {
+    public ConfigModel.ShopBean getItem(int position) {
         return shop.get(position);
     }
 
