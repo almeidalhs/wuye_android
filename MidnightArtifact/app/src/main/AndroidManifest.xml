@@ -40,6 +40,10 @@
         <activity android:name=".ui.personal.GiftDetailedListActivity"/>
         <activity android:name=".ui.personal.GoldMallActivity"/>
         <activity android:name=".ui.personal.WalletSettingsActivity"/>
+        <activity android:name=".ui.personal.AliPayAccountsBindActivity"/>
+        <activity android:name=".ui.personal.SettingPayPWActivity"/>
+        <activity android:name=".ui.personal.SettingPayPWForCodeActivity"/>
+        <activity android:name=".ui.personal.ModifyPayPWActivity"/>
         <activity android:name=".ui.base.BaseGestureLockActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.base.WebPageActivity"/>
         <activity android:name=".ui.mall.TwoLevelCategoryListActivity"/>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:paddingBottom="@dimen/dimen_dp_25"
+    android:paddingLeft="@dimen/dimen_dp_20"
+    android:paddingRight="@dimen/dimen_dp_20"
+    android:paddingTop="@dimen/dimen_dp_25">
+
+    <com.base.baselibs.widget.MyCleanEditText
+        android:id="@+id/alipay_accounts_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_45"
+        android:background="@drawable/edit_not_radius_bg"
+        android:gravity="center_vertical"
+        android:hint="请输入你要提现的支付宝账号"
+        android:maxLength="50"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:paddingRight="@dimen/dimen_dp_10"
+        android:singleLine="true"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/dimen_sp_16" />
+
+    <Button
+        android:id="@+id/alipay_accounts_sumbit_bt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:layout_below="@+id/alipay_accounts_et"
+        android:layout_marginTop="@dimen/dimen_dp_25"
+        android:background="@drawable/bt_red_selector"
+        android:text="绑  定"
+        android:textColor="@drawable/bt_red_text_selector"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@drawable/text_red_radius_bg"
+        android:padding="@dimen/dimen_dp_10"
+        android:text="注：此账号用于提现账户转账使用，绑定时，请务必确保您所提供支付宝帐号的有效性及正确性！因账户绑定错误而造成提现失败，午夜神器不做任何补偿！"
+        android:textColor="@color/color_e9d6de"
+        android:textSize="@dimen/dimen_sp_16" />
+
+</RelativeLayout>

@@ -223,6 +223,10 @@ public class Common {
     public static String Url_Get_Community_Audio = hostUrl + "rest/blog/list/audios/";
     //获取社区-视频,page从2开始 rest/blog/list/videos/{page}
     public static String Url_Get_Community_Video = hostUrl + "rest/blog/list/videos/";
+    //获取提现帐号列表 rest/wallet/list
+    public static String Url_Get_Withdrawals_List = hostUrl + "rest/wallet/list";
+    //添加提现帐号列表 rest/wallet/add
+    public static String Url_Add_Withdrawals_Account = hostUrl + "rest/wallet/add";
     /**************************http访问路径*****************************/
 
 
@@ -416,14 +420,18 @@ public class Common {
     public static int NET_FIND_NEW_ID = 93;
     //获取场景信息
     public static int NET_GET_SCENEINFO_ID = 94;
-    //获取社区（动态，语音，视频）第一页数据 /rest/blog/index/{category}
+    //获取社区（动态，语音，视频）第一页数据
     public static int NET_GET_COMMUNITY_FIRST_ID = 95;
-    //获取社区-动态,page从2开始 rest/blog/list/allBlogs/{page}
+    //获取社区-动态,page从2开始
     public static int NET_GET_COMMUNITY_DYNAMIC_ID = 96;
-    //获取社区-语音,page从2开始 rest/blog/list/audios/{page}
+    //获取社区-语音,page从2开始
     public static int NET_GET_COMMUNITY_AUDIO_ID = 97;
-    //获取社区-视频,page从2开始 rest/blog/list/videos/{page}
+    //获取社区-视频,page从2开始
     public static int NET_GET_COMMUNITY_VIDEO_ID = 98;
+    //获取支付帐号列表
+    public static int NET_GET_WITHDRAEALS_LIST_ID = 99;
+    //添加支付帐号
+    public static int NET_ADD_WITHDRAEALS_ACCOUNT_ID = 100;
     /**************************http访问回应识别码*****************************/
 
 

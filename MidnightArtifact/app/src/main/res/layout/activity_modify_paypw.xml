@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dimen_dp_25"
+    android:paddingLeft="@dimen/dimen_dp_20"
+    android:paddingRight="@dimen/dimen_dp_20"
+    android:paddingTop="@dimen/dimen_dp_25">
+
+    <com.base.baselibs.widget.MyCleanEditText
+        android:id="@+id/modify_paypw_old_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_45"
+        android:background="@drawable/edit_not_radius_bg"
+        android:gravity="center_vertical"
+        android:hint="请输入原密码"
+        android:maxLength="16"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:paddingRight="@dimen/dimen_dp_10"
+        android:password="true"
+        android:singleLine="true"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/dimen_sp_16" />
+
+    <com.base.baselibs.widget.MyCleanEditText
+        android:id="@+id/modify_paypw_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_45"
+        android:layout_marginTop="@dimen/dimen_dp_20"
+        android:background="@drawable/edit_not_radius_bg"
+        android:gravity="center_vertical"
+        android:hint="请输入新密码"
+        android:maxLength="16"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:paddingRight="@dimen/dimen_dp_10"
+        android:password="true"
+        android:singleLine="true"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/dimen_sp_16" />
+
+    <com.base.baselibs.widget.MyCleanEditText
+        android:id="@+id/modify_paypw_again_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_45"
+        android:layout_marginTop="@dimen/dimen_dp_20"
+        android:background="@drawable/edit_not_radius_bg"
+        android:gravity="center_vertical"
+        android:hint="再次输入新密码"
+        android:maxLength="16"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:paddingRight="@dimen/dimen_dp_10"
+        android:password="true"
+        android:singleLine="true"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/dimen_sp_16" />
+
+    <TextView
+        android:id="@+id/modify_paypw_forgot_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="@dimen/dimen_dp_5"
+        android:padding="@dimen/dimen_dp_10"
+        android:text="忘记密码？"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/dimen_sp_13" />
+
+    <Button
+        android:id="@+id/setting_paypw_next_bt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:layout_below="@+id/alipay_accounts_et"
+        android:layout_marginTop="@dimen/dimen_dp_20"
+        android:background="@drawable/bt_red_selector"
+        android:text="保  存"
+        android:textColor="@drawable/bt_red_text_selector"
+        android:textSize="16sp" />
+
+</LinearLayout>
