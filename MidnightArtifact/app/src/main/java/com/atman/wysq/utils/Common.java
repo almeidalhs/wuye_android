@@ -227,6 +227,12 @@ public class Common {
     public static String Url_Get_Withdrawals_List = hostUrl + "rest/wallet/list";
     //添加提现帐号列表 rest/wallet/add
     public static String Url_Add_Withdrawals_Account = hostUrl + "rest/wallet/add";
+    //获取兑换记录 rest/user/chargerecord/1
+    public static String Url_Get_Exchange_Record_List = hostUrl + "rest/user/chargerecord/";
+    //获取提现记录 rest/user/cashrecord/1
+    public static String Url_Get_Cash_Record_List = hostUrl + "rest/user/cashrecord/";
+    //修改提现账号 rest/wallet/update/{wallet_channel_id}
+    public static String Url_Modify_Account_List = hostUrl + "rest/wallet/update/";
     /**************************http访问路径*****************************/
 
 
@@ -432,6 +438,12 @@ public class Common {
     public static int NET_GET_WITHDRAEALS_LIST_ID = 99;
     //添加支付帐号
     public static int NET_ADD_WITHDRAEALS_ACCOUNT_ID = 100;
+    //获取兑换记录
+    public static int NET_GET_EXCHANGE_RECORD_ID = 101;
+    //获取提现记录
+    public static int NET_GET_CASH_RECORD_ID = 102;
+    //修改提现账号
+    public static int NET_MODIFY_ACCOUNT_ID = 103;
     /**************************http访问回应识别码*****************************/
 
 

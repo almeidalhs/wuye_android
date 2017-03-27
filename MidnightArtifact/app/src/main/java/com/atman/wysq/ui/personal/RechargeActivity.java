@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
     private TextView rechargeDiamondstocionTv;
     private TextView rechargeWithdrawalsTv;
     private TextView rechargeDiamondsshopTv;
+    private LinearLayout rechargeMydiamondsLl;
 
     private Context mContext = RechargeActivity.this;
     private int whatPay = 0;
@@ -96,6 +98,8 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
         rechargeWithdrawalsTv.setOnClickListener(this);
         rechargeDiamondsshopTv = (TextView) headView.findViewById(R.id.recharge_diamondsshop_tv);
         rechargeDiamondsshopTv.setOnClickListener(this);
+        rechargeMydiamondsLl = (LinearLayout) headView.findViewById(R.id.recharge_mydiamonds_ll);
+        rechargeMydiamondsLl.setOnClickListener(this);
 
         rechargeTotalcoinTv.setText("" + goldCoin);
         rechargeCanoutcoinTv.setText("" + convertCoin);
@@ -193,6 +197,9 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.recharge_mydiamonds_ll:
+                startActivity(new Intent(mContext, MyDiamondsActivity.class));
+                break;
             case R.id.recharge_diamondstocion_tv:
                 break;
             case R.id.recharge_withdrawals_tv:

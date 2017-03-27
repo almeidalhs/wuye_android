@@ -82,8 +82,10 @@ public class AliPayAccountsBindActivity extends MyBaseActivity {
             }
         } else if (id == Common.NET_ADD_WITHDRAEALS_ACCOUNT_ID) {
             showToast("添加成功");
-        } else if (id == Common.NET_ADD_WITHDRAEALS_ACCOUNT_ID) {
+            finish();
+        } else if (id == Common.NET_MODIFY_ACCOUNT_ID) {
             showToast("修改成功");
+            finish();
         }
     }
 
@@ -93,6 +95,7 @@ public class AliPayAccountsBindActivity extends MyBaseActivity {
 
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_WITHDRAEALS_LIST_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_WITHDRAEALS_ACCOUNT_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_MODIFY_ACCOUNT_ID);
     }
 
     @OnClick({R.id.alipay_accounts_sumbit_bt})
@@ -113,6 +116,15 @@ public class AliPayAccountsBindActivity extends MyBaseActivity {
                     OkHttpUtils.postString().url(Common.Url_Add_Withdrawals_Account)
                             .tag(Common.NET_ADD_WITHDRAEALS_ACCOUNT_ID).content(mGson.toJson(map))
                             .mediaType(Common.JSON).id(Common.NET_ADD_WITHDRAEALS_ACCOUNT_ID)
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .build().execute(new MyStringCallback(mContext, AliPayAccountsBindActivity.this, true));
+                } else {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("account", account);
+                    map.put("account_name", "支付宝update");
+                    OkHttpUtils.postString().url(Common.Url_Modify_Account_List+mGetWithdrawalsListModel.getBody().get(0).getWallet_channel_id())
+                            .tag(Common.NET_MODIFY_ACCOUNT_ID).content(mGson.toJson(map))
+                            .mediaType(Common.JSON).id(Common.NET_MODIFY_ACCOUNT_ID)
                             .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                             .build().execute(new MyStringCallback(mContext, AliPayAccountsBindActivity.this, true));
                 }
