@@ -48,7 +48,7 @@ public class TimeCount extends CountDownTimer {
         if (btn!=null) {
             btn.setClickable(false);
             btn.setEnabled(false);
-            btn.setText(millisUntilFinished / 1000 + "秒后可以重发");
+            btn.setText(millisUntilFinished / 1000 + "s后可以重发");
         }
         for (MyCleanEditText view:mMyCleanEditTextList) {
             if (view!=null){
@@ -64,7 +64,7 @@ public class TimeCount extends CountDownTimer {
             mTimeCountInterface.onTimeOut();
         }
         if (btn!=null) {
-            btn.setText("获取验证码");
+            btn.setText("重新获取验证码");
             btn.setClickable(true);
             btn.setEnabled(true);
         }

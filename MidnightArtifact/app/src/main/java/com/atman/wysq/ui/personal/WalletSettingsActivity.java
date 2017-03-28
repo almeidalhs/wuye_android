@@ -54,7 +54,7 @@ public class WalletSettingsActivity extends MyBaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.walletsetting_reset_pw_ll:
-                startActivity(new Intent(mContext, SettingPayPWForCodeActivity.class));
+                startActivity(SettingPayPWForCodeActivity.buildIntent(mContext, 1));
                 break;
             case R.id.walletsetting_modify_pw_ll:
                 startActivity(new Intent(mContext, ModifyPayPWActivity.class));

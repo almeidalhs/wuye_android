@@ -77,6 +77,7 @@ public class MyDiamondsActivity extends MyBaseActivity implements View.OnClickLi
         mydiamondsPresentationRecordRl = (RelativeLayout) headView.findViewById(R.id.mydiamonds_presentation_record_rl);
 
         mydiamondsTocionTv.setOnClickListener(this);
+        rmydiamondsWithdrawalsTv.setOnClickListener(this);
         mydiamondsExchangeRecordRl.setOnClickListener(this);
         mydiamondsPresentationRecordRl.setOnClickListener(this);
 

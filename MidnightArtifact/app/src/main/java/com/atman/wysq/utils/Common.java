@@ -235,6 +235,14 @@ public class Common {
     public static String Url_Modify_Account_List = hostUrl + "rest/wallet/update/";
     //钻石兑换金币 rest/user/charge/{diamond}
     public static String Url_DiamondsToCoin = hostUrl + "rest/user/charge/";
+    //设置支付密码发送短信验证码 rest/wallet/message/{mobile}/{type}  type（1：设置密码 2：忘记重置密码）
+    public static String Url_SeedPayMessage = hostUrl + "rest/wallet/message/";
+    //设置支付密码 rest/wallet/setPayPassword
+    public static String Url_SetPay_PW = hostUrl + "rest/wallet/setPayPassword";
+    //忘记密码设置支付密码 rest/wallet/forgotAndChangePwd
+    public static String Url_SetPay_PW_Forgot = hostUrl + "rest/wallet/forgotAndChangePwd";
+    //修改支付密码 rest/wallet/password
+    public static String Url_ResetPay_PW = hostUrl + "rest/wallet/password";
     /**************************http访问路径*****************************/
 
 
@@ -448,6 +456,14 @@ public class Common {
     public static int NET_MODIFY_ACCOUNT_ID = 103;
     //钻石兑换金币
     public static int NET_DIAMONDS_TO_COIN_ID = 104;
+    //设置支付密码发送短信验证码
+    public static int NET_SEED_PAY_MEESAGE_ID = 105;
+    //设置支付密码
+    public static int NET_SET_PAY_PW_ID = 106;
+    //忘记密码设置支付密码
+    public static int NET_SET_PAY_PW_FOEGOT_ID = 107;
+    //修改支付密码
+    public static int NET_RESET_PAY_PW_ID = 108;
     /**************************http访问回应识别码*****************************/
 
 
