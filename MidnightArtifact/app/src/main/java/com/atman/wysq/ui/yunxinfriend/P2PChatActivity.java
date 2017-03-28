@@ -958,8 +958,8 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
 
 
     @Override
-    public void isNull() {
-        if (TextUtils.isEmpty(blogdetailAddcommentEt.getText().toString())) {
+    public void isNull(boolean b) {
+        if (b) {
             p2pchatSendBt.setVisibility(View.GONE);
             p2pchatAddIv.setVisibility(View.VISIBLE);
         } else {

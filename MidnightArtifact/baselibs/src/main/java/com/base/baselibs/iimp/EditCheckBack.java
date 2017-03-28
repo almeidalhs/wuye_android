@@ -8,5 +8,5 @@ package com.base.baselibs.iimp;
  * 电话 18578909061
  */
 public interface EditCheckBack {
-    void isNull();
+    void isNull(boolean isNull);
 }

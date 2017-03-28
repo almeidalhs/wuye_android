@@ -60,7 +60,7 @@ public class WalletSettingsActivity extends MyBaseActivity {
                 startActivity(new Intent(mContext, ModifyPayPWActivity.class));
                 break;
             case R.id.walletsetting_bind_alipay_ll:
-                startActivity(AliPayAccountsBindActivity.buildIntent(mContext, ""));
+                startActivity(AliPayAccountsBindActivity.buildIntent(mContext, 0));
                 break;
             case R.id.walletsetting_about_cion_ll:
                 startActivity(CoinAgreementActivity.buildIntent(mContext, 0));

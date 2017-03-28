@@ -104,7 +104,7 @@ public class ModifyPasswordActivity extends MyBaseActivity implements EditCheckB
     }
 
     @Override
-    public void isNull() {
+    public void isNull(boolean b) {
         if (resetOldpasswordEt.getText().toString().trim().isEmpty()
                 || resetNewpasswordEt.getText().toString().trim().isEmpty()
                 || resetRepasswordEt.getText().toString().trim().isEmpty()) {

@@ -129,8 +129,8 @@ public class ModifyNickAcitvity extends MyBaseActivity implements EditCheckBack 
     }
 
     @Override
-    public void isNull() {
-        if (modifynickNewEt.getText().toString().trim().isEmpty()) {
+    public void isNull(boolean b) {
+        if (b) {
             modifynickOkBt.setEnabled(false);
         } else {
             modifynickOkBt.setEnabled(true);

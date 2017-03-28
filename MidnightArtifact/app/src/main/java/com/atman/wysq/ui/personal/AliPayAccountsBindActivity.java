@@ -31,9 +31,11 @@ public class AliPayAccountsBindActivity extends MyBaseActivity {
 
     @Bind(R.id.alipay_accounts_et)
     MyCleanEditText alipayAccountsEt;
+    @Bind(R.id.alipay_accounts_sumbit_bt)
+    Button alipayAccountsSumbitBt;
 
     private Context mContext = AliPayAccountsBindActivity.this;
-    private String alipayAccount = "";
+    private int alipayid;
     private GetWithdrawalsListModel mGetWithdrawalsListModel;
 
     @Override
@@ -43,9 +45,9 @@ public class AliPayAccountsBindActivity extends MyBaseActivity {
         ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent(Context context, String alipayAccount) {
+    public static Intent buildIntent(Context context, int alipayid) {
         Intent intent = new Intent(context, AliPayAccountsBindActivity.class);
-        intent.putExtra("alipayAccount", alipayAccount);
+        intent.putExtra("alipayid", alipayid);
         return intent;
     }
 
@@ -54,8 +56,11 @@ public class AliPayAccountsBindActivity extends MyBaseActivity {
         super.initWidget(v);
         setBarTitleTx("支付宝帐号");
 
-        alipayAccount = getIntent().getStringExtra("alipayAccount");
-        alipayAccountsEt.setText(alipayAccount);
+        alipayid = getIntent().getIntExtra("alipayid", 0);
+        if (alipayid != 0) {
+            setBarTitleTx("修改支付宝帐号");
+            alipayAccountsSumbitBt.setText("修  改");
+        }
     }
 
     @Override
@@ -122,7 +127,7 @@ public class AliPayAccountsBindActivity extends MyBaseActivity {
                     Map<String, Object> map = new HashMap<>();
                     map.put("account", account);
                     map.put("account_name", "支付宝update");
-                    OkHttpUtils.postString().url(Common.Url_Modify_Account_List+mGetWithdrawalsListModel.getBody().get(0).getWallet_channel_id())
+                    OkHttpUtils.postString().url(Common.Url_Modify_Account_List + mGetWithdrawalsListModel.getBody().get(0).getWallet_channel_id())
                             .tag(Common.NET_MODIFY_ACCOUNT_ID).content(mGson.toJson(map))
                             .mediaType(Common.JSON).id(Common.NET_MODIFY_ACCOUNT_ID)
                             .addHeader("cookie", MyBaseApplication.getApplication().getCookie())

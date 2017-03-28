@@ -239,7 +239,7 @@ public class GoodsDetailActivity extends MyBaseActivity implements ScrollViewLis
             partGoodsdetailTopBfToolLl.setVisibility(View.GONE);
             partGoodsdetailTopBfCoinTx.setVisibility(View.GONE);
             partGoodsdetailTopBfOriginalpriceTx.setVisibility(View.GONE);
-            Drawable drawable = getResources().getDrawable(R.mipmap.icon_gold);
+            Drawable drawable = getResources().getDrawable(R.mipmap.diamonds_red);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             partGoodsdetailTopBfPriceTx.setCompoundDrawables(drawable, null, null, null);
             partGoodsdetailTopBfPriceTx.setText(" " + mGoodsDetailsResponseModel.getBody().getGold_coin_price());

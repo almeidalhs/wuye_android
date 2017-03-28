@@ -202,7 +202,7 @@ public class RegisterActivity extends MyBaseActivity implements EditCheckBack {
     }
 
     @Override
-    public void isNull() {
+    public void isNull(boolean b) {
         if (registerUsernameEt.getText().toString().trim().isEmpty()
                 || registerPasswordEt.getText().toString().trim().isEmpty()
                 || registerCodeEt.getText().toString().trim().isEmpty()) {

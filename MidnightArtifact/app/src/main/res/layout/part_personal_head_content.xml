@@ -506,6 +506,7 @@
                 android:id="@+id/personal_gift_one_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
+                fresco:actualImageScaleType="centerInside"
                 android:visibility="gone" />
 
             <com.facebook.drawee.view.SimpleDraweeView
@@ -513,6 +514,7 @@
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
+                fresco:actualImageScaleType="centerInside"
                 android:visibility="gone" />
 
             <com.facebook.drawee.view.SimpleDraweeView
@@ -520,6 +522,7 @@
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
+                fresco:actualImageScaleType="centerInside"
                 android:visibility="gone" />
 
             <com.facebook.drawee.view.SimpleDraweeView
@@ -527,6 +530,7 @@
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
+                fresco:actualImageScaleType="centerInside"
                 android:visibility="gone" />
 
             <com.facebook.drawee.view.SimpleDraweeView
@@ -534,6 +538,7 @@
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
+                fresco:actualImageScaleType="centerInside"
                 android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>

@@ -63,7 +63,7 @@ public class MyTextWatcher implements TextWatcher {
     public void afterTextChanged(Editable s) {
         String content = s == null ? null : s.toString();
         if (s == null || s.length() == 0) {
-            mcheckBack.isNull();
+            mcheckBack.isNull(true);
             return;
         }
         if (content.contains(".")) {
@@ -111,6 +111,6 @@ public class MyTextWatcher implements TextWatcher {
                 s.delete(size - 1, size);
             }
         }
-        mcheckBack.isNull();
+        mcheckBack.isNull(false);
     }
 }

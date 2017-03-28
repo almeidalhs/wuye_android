@@ -27,6 +27,7 @@ import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.base.MyBaseFragment;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.SpaceItemDecorationThreeGrivView;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.DensityUtil;
@@ -136,6 +137,8 @@ public class DiscoverNewFragment extends MyBaseFragment implements AdapterInterf
         mDiscoverNewFindAdapter = new DiscoverNewFindAdapter(getActivity(), getmWidth(), this);
 
         mRecyclerView = discovernewFindRecycler.getRefreshableView();
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.dimen_dp_1);
+        mRecyclerView.addItemDecoration(new SpaceItemDecorationThreeGrivView(spacingInPixels));
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         mRecyclerView.setAdapter(mDiscoverNewFindAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

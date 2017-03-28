@@ -155,7 +155,7 @@ public class NewPassWordActivity extends MyBaseActivity implements EditCheckBack
     }
 
     @Override
-    public void isNull() {
+    public void isNull(boolean b) {
         if (newpasswordUsernameEt.getText().toString().trim().isEmpty()
                 || newpasswordNewpasswordEt.getText().toString().trim().isEmpty()
                 || newpasswordCodeEt.getText().toString().trim().isEmpty()) {

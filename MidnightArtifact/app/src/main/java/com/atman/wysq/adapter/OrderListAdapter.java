@@ -116,7 +116,7 @@ public class OrderListAdapter extends BaseAdapter {
             holder.itemOrderlistNameTx.setText(shop.get(position).getItems().get(0).getGoods_title());
             holder.itemOrderlistNumTx.setText("数量：" + shop.get(position).getItems().get(0).getAmount());
             if (shop.get(position).getOrder_type()==21) {
-                holder.itemOrderlistPriceTx.setText("单价： " + (int)shop.get(position).getItems().get(0).getPrice()+"金币");
+                holder.itemOrderlistPriceTx.setText("单价： " + (int)shop.get(position).getItems().get(0).getPrice()+"钻石");
             } else {
                 holder.itemOrderlistPriceTx.setText("单价：¥ " + shop.get(position).getItems().get(0).getPrice());
             }
@@ -124,7 +124,7 @@ public class OrderListAdapter extends BaseAdapter {
         if (shop.get(position).getOrder_type()==21) {
             holder.itemOrderlistGoldIv.setVisibility(View.VISIBLE);
             holder.itemOrderlistGoldIv.setBackgroundResource(R.mipmap.order_type_gold);
-            holder.itemOrderlistTotalpriceTx.setText("总金币： " + (int)shop.get(position).getTotal_price());
+            holder.itemOrderlistTotalpriceTx.setText("总金额： " + (int)shop.get(position).getTotal_price()+"钻石");
         } else if (shop.get(position).getOrder_type()==51) {
             holder.itemOrderlistGoldIv.setVisibility(View.VISIBLE);
             holder.itemOrderlistGoldIv.setBackgroundResource(R.mipmap.order_type_recharge);

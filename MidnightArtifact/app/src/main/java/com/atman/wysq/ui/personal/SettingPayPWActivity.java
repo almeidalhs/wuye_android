@@ -97,10 +97,10 @@ public class SettingPayPWActivity extends MyBaseActivity {
                 oldPW = settingPaypwEt.getText().toString().toString();
                 againPW = settingPaypwAgainEt.getText().toString().toString();
                 if ((oldPW.isEmpty() || oldPW.length()<6)) {
-                    showToast("密码长度为 6-16位");
+                    showToast("密码为6位数字");
                     return;
                 } else if ((againPW.isEmpty() || againPW.length()<6)) {
-                    showToast("密码长度为 6-16位");
+                    showToast("密码为6位数字");
                     return;
                 } else if (!oldPW.equals(againPW)) {
                     showToast("两次密码输入不一致");

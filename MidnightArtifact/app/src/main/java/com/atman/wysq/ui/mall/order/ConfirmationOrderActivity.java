@@ -146,8 +146,8 @@ public class ConfirmationOrderActivity extends MyBaseActivity implements PayDial
             confirmationorderAlipayRl.setVisibility(View.GONE);
             payLine.setVisibility(View.GONE);
             confirmationorderWeixinpayRl.setVisibility(View.GONE);
-            confirmationorderGoodspeiceTv.setText(MyTools.formatfloat(Float.parseFloat(goodsCoinPrice)) + "金币");
-            confirmationorderOrderpriceTx.setText(MyTools.formatfloat(Float.parseFloat(goodsCoinPrice)) + "金币");
+            confirmationorderGoodspeiceTv.setText(MyTools.formatfloat(Float.parseFloat(goodsCoinPrice)) + "钻石");
+            confirmationorderOrderpriceTx.setText(MyTools.formatfloat(Float.parseFloat(goodsCoinPrice)) + "钻石");
         } else {
             confirmationorderGoodspeiceTv.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice)));
             confirmationorderOrderpriceTx.setText("¥ " + MyTools.formatfloat(Float.parseFloat(GoodsPrice)));

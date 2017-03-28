@@ -253,7 +253,7 @@ public class LoginActivity extends MyBaseActivity implements EditCheckBack {
     }
 
     @Override
-    public void isNull() {
+    public void isNull(boolean b) {
         if (loginUsernameEt.getText().toString().trim().isEmpty()
                 || loginPasswordEt.getText().toString().trim().isEmpty()) {
             loginSumbitBt.setEnabled(false);

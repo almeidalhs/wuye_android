@@ -85,13 +85,13 @@ public class ModifyPayPWActivity extends MyBaseActivity {
                 twoPW = modifyPaypwEt.getText().toString().trim();
                 threePW = modifyPaypwAgainEt.getText().toString().trim();
                 if ((onePW.isEmpty() || onePW.length()<6)) {
-                    showToast("密码长度为 6-16位");
+                    showToast("密码为6位数字");
                     return;
                 } else if ((twoPW.isEmpty() || twoPW.length()<6)) {
-                    showToast("密码长度为 6-16位");
+                    showToast("密码为6位数字");
                     return;
                 } else if ((threePW.isEmpty() || threePW.length()<6)) {
-                    showToast("密码长度为 6-16位");
+                    showToast("密码为6位数字");
                     return;
                 } else if (!twoPW.equals(threePW)) {
                     showToast("两次密码输入不一致");
