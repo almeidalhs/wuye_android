@@ -1,4 +1,4 @@
-package com.atman.wysq.ui.personal;
+package com.atman.wysq.ui.personal.wallet;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.view.View;
 import com.atman.wysq.R;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.login.CoinAgreementActivity;
+import com.atman.wysq.ui.personal.AliPayAccountsBindActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

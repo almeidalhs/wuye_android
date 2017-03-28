@@ -20,7 +20,7 @@ import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.model.response.GiftListModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
-import com.atman.wysq.ui.personal.RechargeActivity;
+import com.atman.wysq.ui.personal.wallet.RechargeActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.SortComparator;
 import com.base.baselibs.net.MyStringCallback;

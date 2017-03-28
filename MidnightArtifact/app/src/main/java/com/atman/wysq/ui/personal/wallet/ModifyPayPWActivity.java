@@ -1,4 +1,4 @@
-package com.atman.wysq.ui.personal;
+package com.atman.wysq.ui.personal.wallet;
 
 import android.content.Context;
 import android.os.Bundle;

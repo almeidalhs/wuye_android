@@ -1,4 +1,4 @@
-package com.atman.wysq.ui.personal;
+package com.atman.wysq.ui.personal.wallet;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import com.atman.wysq.model.response.RechargeAddOrderModel;
 import com.atman.wysq.model.response.WeiXinPayResponseModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.personal.DiamondsMallActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.widget.pay.PayDialog;
 import com.base.baselibs.iimp.AdapterInterface;

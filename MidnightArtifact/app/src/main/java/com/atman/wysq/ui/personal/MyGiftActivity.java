@@ -14,6 +14,7 @@ import com.atman.wysq.adapter.MyGiftGridViewAdapter;
 import com.atman.wysq.model.response.MyGiftListModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.personal.wallet.RechargeActivity;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.widget.MyGridView;

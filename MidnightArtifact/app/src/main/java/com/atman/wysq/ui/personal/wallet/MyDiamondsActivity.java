@@ -1,4 +1,4 @@
-package com.atman.wysq.ui.personal;
+package com.atman.wysq.ui.personal.wallet;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.MyDiamondsAdapter;
-import com.atman.wysq.model.response.AllRankingModel;
-import com.atman.wysq.model.response.GetChildrenCommentModel;
 import com.atman.wysq.model.response.MyDiamondsRecordModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;

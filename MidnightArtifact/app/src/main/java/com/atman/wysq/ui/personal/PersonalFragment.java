@@ -36,6 +36,7 @@ import com.atman.wysq.ui.community.ReplyListActivity;
 import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.ui.mall.TwoLevelCategoryListActivity;
 import com.atman.wysq.ui.mall.order.MyOrderListActivity;
+import com.atman.wysq.ui.personal.wallet.RechargeActivity;
 import com.atman.wysq.ui.yunxinfriend.HisGuardianActivity;
 import com.atman.wysq.ui.yunxinfriend.HisVisitorActivity;
 import com.atman.wysq.utils.Common;

@@ -1,4 +1,4 @@
-package com.atman.wysq.ui.personal;
+package com.atman.wysq.ui.personal.wallet;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,12 +12,18 @@ import com.atman.wysq.R;
 import com.atman.wysq.model.response.GetWithdrawalsListModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.personal.AliPayAccountsBindActivity;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.widget.PayPassWordDialog;
 import com.base.baselibs.iimp.EditCheckBack;
 import com.base.baselibs.iimp.MyTextWatcherTwo;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.MD5Util;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,7 +34,7 @@ import okhttp3.Response;
  * Created by tangbingliang on 17/3/28.
  */
 
-public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBack {
+public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBack, PayPassWordDialog.onPayPassWordListener {
 
     @Bind(R.id.withdraw_dismonds_num_tv)
     TextView withdrawDismondsNumTv;
@@ -52,6 +58,7 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
     private long consumeDiamonds = 0;
     private long inputMoney = 0;
     private boolean isnull = true;
+    private long walletId = 0;
 
     private GetWithdrawalsListModel mGetWithdrawalsListModel;
 
@@ -73,6 +80,10 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
         ownDiamonds = MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean()
                 .getUserExt().getConvert_coin();
 
+        initThisView();
+    }
+
+    private void initThisView() {
         setConsumeText();
 
         //钻石转换小于50元的不让输入
@@ -127,15 +138,36 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
         if (id == Common.NET_GET_WITHDRAEALS_LIST_ID) {
             mGetWithdrawalsListModel = mGson.fromJson(data, GetWithdrawalsListModel.class);
             if (mGetWithdrawalsListModel.getBody().size() > 0) {
+                walletId = mGetWithdrawalsListModel.getBody().get(0).getWallet_channel_id();
                 withdrawAccountMonifyTv.setText("去修改");
                 withdrawAccountTv.setText("提现到账号：" + mGetWithdrawalsListModel.getBody().get(0).getAccount());
+                withdrawNumEt.setInputType(InputType.TYPE_CLASS_NUMBER);
+                withdrawSumbitBt.setClickable(true);
+                withdrawSumbitBt.setEnabled(true);
+            } else {
+                withdrawNumEt.setInputType(InputType.TYPE_NULL);
+                withdrawSumbitBt.setClickable(false);
+                withdrawSumbitBt.setEnabled(false);
+                setConsumeText();
             }
+        } else if (id == Common.NET_CASH_ID) {
+            showWraning("您的提现申请已提交，请耐心等候！");
+            ownDiamonds = MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean()
+                    .getUserExt().getConvert_coin();
+            MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean()
+                    .getUserExt().setConvert_coin((int) (ownDiamonds - consumeDiamonds));
+            withdrawDismondsNumTv.setText("" + (ownDiamonds - consumeDiamonds));
+            withdrawNumEt.setText("");
+            initThisView();
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_WITHDRAEALS_LIST_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_CASH_ID);
     }
 
     @OnClick({R.id.withdraw_account_monify_tv, R.id.withdraw_sumbit_bt})
@@ -153,7 +185,7 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
                     showToast("请输入提现金额");
                     return;
                 }
-
+                new PayPassWordDialog(mContext, this).show();
                 break;
         }
     }
@@ -174,5 +206,27 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
             }
             withdrawNumEt.setSelection((String.valueOf(inputMoney)).length());
         }
+    }
+
+    @Override
+    public void inputFinish(String pw) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("diamond", consumeDiamonds);
+        map.put("wallet_id", walletId);
+//        map.put("password", MD5Util.getMD5(pw));
+        OkHttpUtils.postString().url(Common.Url_Cash_PW).content(mGson.toJson(map))
+                .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .tag(Common.NET_CASH_ID).id(Common.NET_CASH_ID).build()
+                .execute(new MyStringCallback(mContext, this, true));
+    }
+
+    @Override
+    public void cancelDialog() {
+
+    }
+
+    @Override
+    public void forgetPassWord() {
+        startActivity(SettingPayPWForCodeActivity.buildIntent(mContext, 2));
     }
 }

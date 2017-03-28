@@ -243,6 +243,8 @@ public class Common {
     public static String Url_SetPay_PW_Forgot = hostUrl + "rest/wallet/forgotAndChangePwd";
     //修改支付密码 rest/wallet/password
     public static String Url_ResetPay_PW = hostUrl + "rest/wallet/password";
+    //提现 rest/user/cash
+    public static String Url_Cash_PW = hostUrl + "rest/user/cash";
     /**************************http访问路径*****************************/
 
 
@@ -464,6 +466,8 @@ public class Common {
     public static int NET_SET_PAY_PW_FOEGOT_ID = 107;
     //修改支付密码
     public static int NET_RESET_PAY_PW_ID = 108;
+    //提现
+    public static int NET_CASH_ID = 109;
     /**************************http访问回应识别码*****************************/
 
 
