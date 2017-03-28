@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * 邮箱 bltang@atman.com
  * 电话 18578909061
  */
-public class GoldMallAdapter extends BaseAdapter {
+public class DiamondsMallAdapter extends BaseAdapter {
 
     private Context context;
     private ViewHolder holder;
@@ -39,7 +39,7 @@ public class GoldMallAdapter extends BaseAdapter {
     private LinearLayout.LayoutParams params;
     private ImageLoader mImageLoader;
 
-    public GoldMallAdapter(Context context, int wight) {
+    public DiamondsMallAdapter(Context context, int wight) {
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
         this.wight = (wight - DensityUtil.dp2px(context, 6)) / 2;

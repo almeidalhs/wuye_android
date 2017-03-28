@@ -171,6 +171,7 @@ public class MyDiamondsActivity extends MyBaseActivity implements View.OnClickLi
                 startActivity(new Intent(mContext, DiamondsToCoinActivity.class));
                 break;
             case R.id.rmydiamonds_withdrawals_tv://提现
+                startActivity(new Intent(mContext, WithdrawCashActivity.class));
                 break;
             case R.id.mydiamonds_exchange_record_rl://兑换记录
                 mydiamondsPresentationRecordTv.setTextColor(getResources().getColor(R.color.color_black));

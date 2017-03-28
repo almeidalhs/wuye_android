@@ -1,0 +1,119 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_80"
+        android:background="@color/color_17c7eb"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/withdraw_dismonds_num_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="130"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/dimen_sp_30" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@mipmap/diamonds_red"
+            android:text="钻石 "
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/dimen_sp_14" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/dimen_dp_25"
+        android:paddingLeft="@dimen/dimen_dp_20"
+        android:paddingRight="@dimen/dimen_dp_20"
+        android:paddingTop="@dimen/dimen_dp_25">
+
+        <LinearLayout
+            android:id="@+id/withdraw_account_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/withdraw_account_tv"
+                android:text="提现到账号："
+                android:textSize="@dimen/dimen_sp_16"
+                android:textColor="@color/color_black"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/withdraw_account_monify_tv"
+                android:text="去修改"
+                android:padding="@dimen/dimen_dp_5"
+                android:textSize="@dimen/dimen_sp_16"
+                android:textColor="@color/color_17c7eb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/withdraw_consume_tv"
+            android:layout_marginTop="@dimen/dimen_dp_10"
+            android:layout_below="@+id/withdraw_account_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dimen_sp_16"
+            android:textColor="@color/color_787878"
+            android:text="本次兑换将消耗您10钻石"/>
+
+        <com.base.baselibs.widget.MyCleanEditText
+            android:id="@+id/withdraw_num_et"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_dp_45"
+            android:layout_marginTop="@dimen/dimen_dp_10"
+            android:layout_below="@+id/withdraw_consume_tv"
+            android:background="@drawable/edit_not_radius_bg"
+            android:gravity="center_vertical"
+            android:hint="请输入您提现的金额，如：10"
+            android:maxLength="20"
+            android:inputType="number"
+            android:paddingLeft="@dimen/dimen_dp_10"
+            android:paddingRight="@dimen/dimen_dp_10"
+            android:singleLine="true"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <Button
+            android:id="@+id/withdraw_sumbit_bt"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_dp_40"
+            android:layout_below="@+id/withdraw_num_et"
+            android:layout_marginTop="@dimen/dimen_dp_25"
+            android:background="@drawable/bt_red_selector"
+            android:text="确认提现"
+            android:textColor="@drawable/bt_red_text_selector"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/withdraw_wran_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="@drawable/text_red_radius_bg"
+            android:padding="@dimen/dimen_dp_10"
+            android:text="提示：单次提现最低金额50元，不满200元将收取3元手续费，提现转账需1-3个工作日。"
+            android:textColor="@color/color_e9d6de"
+            android:textSize="@dimen/dimen_sp_16" />
+    </RelativeLayout>
+
+
+</LinearLayout>

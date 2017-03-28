@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.MyDiamondsRecordModel;
+import com.atman.wysq.utils.MyTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +86,10 @@ public class MyDiamondsAdapter extends BaseAdapter {
             if (typeID == 0) {//兑换记录
                 holder.itemMydiamondsExchangeLl.setVisibility(View.VISIBLE);
                 holder.itemMydiamondsPresentationLl.setVisibility(View.GONE);
+
+                holder.itemMydiamondsExchangeTv.setText("消耗"+mBodyEntity.getConsume_convert_coin()
+                        +"钻石，兑换"+mBodyEntity.getChange_count()+"金币");
+                holder.itemMydiamondsExchangeTimeTv.setText(MyTools.convertTime(mBodyEntity.getUpdate_time(), "yyyy-MM-dd"));
             } else {//提现记录
                 holder.itemMydiamondsExchangeLl.setVisibility(View.VISIBLE);
                 holder.itemMydiamondsPresentationLl.setVisibility(View.GONE);

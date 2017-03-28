@@ -8,9 +8,8 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.adapter.GoldMallAdapter;
+import com.atman.wysq.adapter.DiamondsMallAdapter;
 import com.atman.wysq.model.response.GetGoldMallModel;
-import com.atman.wysq.model.response.TwoLevelCategoryListResponseModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.mall.GoodsDetailActivity;
@@ -29,16 +28,16 @@ import okhttp3.Response;
  * Created by tangbingliang on 16/12/7.
  */
 
-public class GoldMallActivity extends MyBaseActivity {
+public class DiamondsMallActivity extends MyBaseActivity {
 
     @Bind(R.id.pullToRefreshGridView)
     PullToRefreshGridView pullToRefreshGridView;
 
-    private Context mContext = GoldMallActivity.this;
+    private Context mContext = DiamondsMallActivity.this;
 
     private View mEmpty;
     private TextView mEmptyTX;
-    private GoldMallAdapter mAdapter;
+    private DiamondsMallAdapter mAdapter;
     private int page = 1;
     private GetGoldMallModel mGetGoldMallModel;
 
@@ -58,7 +57,7 @@ public class GoldMallActivity extends MyBaseActivity {
     public void initWidget(View... v) {
         super.initWidget(v);
 
-        setBarTitleTx("金币兑换商城");
+        setBarTitleTx("钻石兑换商城");
 
         initGridView();
     }
@@ -70,7 +69,7 @@ public class GoldMallActivity extends MyBaseActivity {
         mEmptyTX = (TextView) mEmpty.findViewById(R.id.empty_list_tx);
         mEmptyTX.setText("暂无可以兑换商品");
 
-        mAdapter = new GoldMallAdapter(mContext, getmWidth());
+        mAdapter = new DiamondsMallAdapter(mContext, getmWidth());
         pullToRefreshGridView.setEmptyView(mEmpty);
         pullToRefreshGridView.setAdapter(mAdapter);
         pullToRefreshGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

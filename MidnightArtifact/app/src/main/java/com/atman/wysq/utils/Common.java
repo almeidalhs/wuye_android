@@ -233,6 +233,8 @@ public class Common {
     public static String Url_Get_Cash_Record_List = hostUrl + "rest/user/cashrecord/";
     //修改提现账号 rest/wallet/update/{wallet_channel_id}
     public static String Url_Modify_Account_List = hostUrl + "rest/wallet/update/";
+    //钻石兑换金币 rest/user/charge/{diamond}
+    public static String Url_DiamondsToCoin = hostUrl + "rest/user/charge/";
     /**************************http访问路径*****************************/
 
 
@@ -444,6 +446,8 @@ public class Common {
     public static int NET_GET_CASH_RECORD_ID = 102;
     //修改提现账号
     public static int NET_MODIFY_ACCOUNT_ID = 103;
+    //钻石兑换金币
+    public static int NET_DIAMONDS_TO_COIN_ID = 104;
     /**************************http访问回应识别码*****************************/
 
 

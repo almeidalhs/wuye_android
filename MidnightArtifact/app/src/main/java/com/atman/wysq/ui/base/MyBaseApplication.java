@@ -94,6 +94,8 @@ public class MyBaseApplication extends BaseApplication {
     public static String mPhoneDeviceId = "";
     public static String mWEB_URL = "";
     public static String KDiamondChargeCoin = "";
+    public static String KDiamondCashStart = "";
+    public static String KDiamondCash = "";
     public static String mWEB_TYPE = "";
     public static String mWEB_ID = "";
     public static String mDownLoad_URL = "";

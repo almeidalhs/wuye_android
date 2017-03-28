@@ -35,7 +35,7 @@
             android:paddingBottom="@dimen/dimen_dp_2"
             android:paddingTop="@dimen/dimen_dp_2"
             android:singleLine="true"
-            android:drawableLeft="@mipmap/icon_gold"
+            android:drawableLeft="@mipmap/diamonds_red"
             android:text="  660.00"
             android:textColor="@color/color_2B2B2B"
             android:textSize="@dimen/dimen_sp_13" />

@@ -38,7 +38,7 @@
         <activity android:name=".ui.personal.RechargeActivity"/>
         <activity android:name=".ui.personal.MyGiftActivity"/>
         <activity android:name=".ui.personal.GiftDetailedListActivity"/>
-        <activity android:name=".ui.personal.GoldMallActivity"/>
+        <activity android:name=".ui.personal.DiamondsMallActivity"/>
         <activity android:name=".ui.personal.WalletSettingsActivity"/>
         <activity android:name=".ui.personal.AliPayAccountsBindActivity"/>
         <activity android:name=".ui.personal.SettingPayPWActivity"/>
@@ -46,6 +46,7 @@
         <activity android:name=".ui.personal.ModifyPayPWActivity"/>
         <activity android:name=".ui.personal.MyDiamondsActivity"/>
         <activity android:name=".ui.personal.DiamondsToCoinActivity"/>
+        <activity android:name=".ui.personal.WithdrawCashActivity"/>
         <activity android:name=".ui.base.BaseGestureLockActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.base.WebPageActivity"/>
         <activity android:name=".ui.mall.TwoLevelCategoryListActivity"/>

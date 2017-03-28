@@ -16,7 +16,6 @@ import com.atman.wysq.model.response.RechargeAddOrderModel;
 import com.atman.wysq.model.response.WeiXinPayResponseModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
-import com.atman.wysq.ui.login.CoinAgreementActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.widget.pay.PayDialog;
 import com.base.baselibs.iimp.AdapterInterface;
@@ -26,7 +25,6 @@ import com.tbl.okhttputils.OkHttpUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import okhttp3.Response;
 
 /**
@@ -101,9 +99,6 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
         rechargeMydiamondsLl = (LinearLayout) headView.findViewById(R.id.recharge_mydiamonds_ll);
         rechargeMydiamondsLl.setOnClickListener(this);
 
-        rechargeTotalcoinTv.setText("" + goldCoin);
-        rechargeCanoutcoinTv.setText("" + convertCoin);
-
         initListView();
     }
 
@@ -121,6 +116,10 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
     @Override
     protected void onResume() {
         super.onResume();
+        rechargeTotalcoinTv.setText("" + MyBaseApplication.mGetMyUserIndexModel.getBody()
+                .getUserDetailBean().getUserExt().getGold_coin());
+        rechargeCanoutcoinTv.setText("" + MyBaseApplication.mGetMyUserIndexModel.getBody()
+                .getUserDetailBean().getUserExt().getConvert_coin());
     }
 
     @Override
@@ -201,11 +200,13 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
                 startActivity(new Intent(mContext, MyDiamondsActivity.class));
                 break;
             case R.id.recharge_diamondstocion_tv:
+                startActivity(new Intent(mContext, DiamondsToCoinActivity.class));
                 break;
             case R.id.recharge_withdrawals_tv:
+                startActivity(new Intent(mContext, WithdrawCashActivity.class));
                 break;
             case R.id.recharge_diamondsshop_tv:
-                startActivity(new Intent(mContext, GoldMallActivity.class));
+                startActivity(new Intent(mContext, DiamondsMallActivity.class));
                 break;
         }
     }
