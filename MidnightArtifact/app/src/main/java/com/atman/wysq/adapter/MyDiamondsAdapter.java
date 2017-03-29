@@ -100,6 +100,12 @@ public class MyDiamondsAdapter extends BaseAdapter {
                 holder.itemMydiamondsPresentationTimeTv.setText(MyTools.convertTime(mBodyEntity.getUpdate_time(), "yyyy-MM-dd"));
                 if (mBodyEntity.getStatus()==1) {
                     holder.itemMydiamondsPresentationStateTv.setText("处理中");
+                } else if (mBodyEntity.getStatus()==2) {
+                    holder.itemMydiamondsPresentationStateTv.setText("已完成");
+                } else if (mBodyEntity.getStatus()==3) {
+                    holder.itemMydiamondsPresentationStateTv.setText("取消");
+                } else if (mBodyEntity.getStatus()==4) {
+                    holder.itemMydiamondsPresentationStateTv.setText("管理员取消");
                 }
             }
         } else {

@@ -13,9 +13,9 @@ import com.atman.wysq.R;
 import com.atman.wysq.model.request.ScenePicList;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
-import com.base.baselibs.util.DensityUtil;
 import com.base.baselibs.util.LogUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,8 +48,49 @@ public class EditScenePicAdapter extends RecyclerView.Adapter<EditScenePicAdapte
 
     public void addData(List<ScenePicList> mList) {
         this.listData.addAll(mList);
-
         notifyDataSetChanged();
+    }
+
+    public void selectById (int id) {
+        if (listData.get(id).isUped()) {
+            listData.get(id).setSelect(true);
+        } else {
+            listData.get(id).setSelect(false);
+        }
+        notifyItemChanged(id);
+    }
+
+    public void deleteById (int id) {
+        listData.remove(id);
+        if (listData.size()<5 && !listData.get(listData.size()-1).getUrl().equals("-1")) {
+            listData.add(new ScenePicList("-1", true));
+        }
+        notifyDataSetChanged();
+    }
+
+    public void addData(ScenePicList mList) {
+        this.listData.add(listData.size()-1,mList);
+        notifyDataSetChanged();
+    }
+
+    public List<ScenePicList> getNotUp () {
+        List<ScenePicList> temp = new ArrayList<>();
+        for (int i=0;i<listData.size();i++) {
+            if (!listData.get(i).isUped() && !listData.get(i).getUrl().equals("-1")) {
+                temp.add(listData.get(i));
+            }
+        }
+        return temp;
+    }
+
+    public List<ScenePicList> getUped () {
+        List<ScenePicList> temp = new ArrayList<>();
+        for (int i=0;i<listData.size();i++) {
+            if (listData.get(i).isUped() && !listData.get(i).getUrl().equals("-1")) {
+                temp.add(listData.get(i));
+            }
+        }
+        return temp;
     }
 
     public List<ScenePicList> getListData() {
@@ -82,14 +123,21 @@ public class EditScenePicAdapter extends RecyclerView.Adapter<EditScenePicAdapte
     public void onBindViewHolder(EditScenePicAdapter.ViewHolder holder, final int position) {
 
         holder.itemEditscenepicIv.setLayoutParams(params);
-        holder.itemEditscenepicSelectIv.setVisibility(View.GONE);
+        if (listData.get(position).isSelect()) {
+            holder.itemEditscenepicSelectIv.setVisibility(View.VISIBLE);
+        } else {
+            holder.itemEditscenepicSelectIv.setVisibility(View.GONE);
+        }
 
         if (listData.get(position).getUrl().equals("-1")) {
             Uri uri = Uri.parse("res:///" + R.mipmap.bt_create_addimg);
             holder.itemEditscenepicIv.setImageURI(uri);
         } else {
-            holder.itemEditscenepicIv.setImageURI(Common.ImageUrl+listData.get(position).getUrl());
-            LogUtils.e(">>>>>:"+(Common.ImageUrl+listData.get(position).getUrl()));
+            if (listData.get(position).isUped()) {
+                holder.itemEditscenepicIv.setImageURI(Common.ImageUrl+listData.get(position).getUrl());
+            } else {
+                ImageLoader.getInstance().displayImage("file://" + listData.get(position).getUrl(), holder.itemEditscenepicIv);
+            }
         }
 
         holder.itemEditscenepicIv.setOnClickListener(new View.OnClickListener() {

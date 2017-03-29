@@ -225,7 +225,11 @@ public class DiscoverNewFragment extends MyBaseFragment implements AdapterInterf
     }
 
     private void doHttp(boolean b) {
-        OkHttpUtils.get().url(Common.Url_Find_New + mTpyeId +"/"+mPage)
+        int islogin = 0;
+        if (isLogin()) {
+            islogin = 1;
+        }
+        OkHttpUtils.get().url(Common.Url_Find_New + islogin +"/"+mTpyeId +"/"+mPage)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_FIND_NEW_ID).id(Common.NET_FIND_NEW_ID).build()
                 .execute(new MyStringCallback(getActivity(), this, b));

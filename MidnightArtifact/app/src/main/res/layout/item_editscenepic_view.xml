@@ -9,8 +9,10 @@
         android:id="@+id/item_editscenepic_iv"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:scaleType="centerCrop"
         fresco:failureImage="@mipmap/icon_goodsdetail_business"
         fresco:failureImageScaleType="centerInside"
+        fresco:actualImageScaleType="centerCrop"
         fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />
 
     <ImageView

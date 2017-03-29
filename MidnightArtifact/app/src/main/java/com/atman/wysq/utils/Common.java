@@ -245,6 +245,8 @@ public class Common {
     public static String Url_ResetPay_PW = hostUrl + "rest/wallet/password";
     //提现 rest/user/cash
     public static String Url_Cash_PW = hostUrl + "rest/user/cash";
+    //添加魔聊背景 rest/chat/background/add
+    public static String Url_Add_Chat_Background = hostUrl + "rest/chat/background/add";
     /**************************http访问路径*****************************/
 
 
@@ -468,6 +470,8 @@ public class Common {
     public static int NET_RESET_PAY_PW_ID = 108;
     //提现
     public static int NET_CASH_ID = 109;
+    //添加魔聊背景
+    public static int NET_ADD_CHAT_BACKGROUNG_ID = 110;
     /**************************http访问回应识别码*****************************/
 
 

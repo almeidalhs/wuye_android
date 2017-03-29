@@ -166,15 +166,6 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
     }
 
     @Override
-    public void onError(Call call, Exception e, int code, int id) {
-        cancelLoading();
-        if (id == Common.NET_CASH_ID
-                && e.toString().contains("参数错误，请参考API文档")) {
-            showWraning("密码错误，提现失败！");
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
 

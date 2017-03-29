@@ -109,15 +109,7 @@ public class DiamondsToCoinActivity extends MyBaseActivity implements EditCheckB
                     .setGold_coin((int) (MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean()
                             .getUserExt().getGold_coin() + inputCoinNum));
             setTextStr();
-        }
-    }
-
-    @Override
-    public void onError(Call call, Exception e, int code, int id) {
-        cancelLoading();
-        if (id == Common.NET_DIAMONDS_TO_COIN_ID
-                && e.toString().contains("参数错误，请参考API文档")) {
-            showWraning("密码错误，兑换失败！");
+            dismondstocoinNumEt.setText("");
         }
     }
 

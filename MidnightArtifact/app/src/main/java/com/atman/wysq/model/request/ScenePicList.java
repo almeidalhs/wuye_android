@@ -7,11 +7,21 @@ package com.atman.wysq.model.request;
 public class ScenePicList {
 
     private String url;
+    private boolean isUped;
     private boolean isSelect;
 
-    public ScenePicList(String url) {
+    public ScenePicList(String url, boolean isUped) {
         this.url = url;
+        this.isUped = isUped;
         this.isSelect = false;
+    }
+
+    public boolean isUped() {
+        return isUped;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 
     public String getUrl() {
