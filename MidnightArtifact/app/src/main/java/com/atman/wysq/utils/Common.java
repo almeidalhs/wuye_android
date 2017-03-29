@@ -234,7 +234,7 @@ public class Common {
     //修改提现账号 rest/wallet/update/{wallet_channel_id}
     public static String Url_Modify_Account_List = hostUrl + "rest/wallet/update/";
     //钻石兑换金币 rest/user/charge/{diamond}
-    public static String Url_DiamondsToCoin = hostUrl + "rest/user/charge/";
+    public static String Url_DiamondsToCoin = hostUrl + "rest/user/charge";
     //设置支付密码发送短信验证码 rest/wallet/message/{mobile}/{type}  type（1：设置密码 2：忘记重置密码）
     public static String Url_SeedPayMessage = hostUrl + "rest/wallet/message/";
     //设置支付密码 rest/wallet/setPayPassword

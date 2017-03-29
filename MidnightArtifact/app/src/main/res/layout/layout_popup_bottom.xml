@@ -17,13 +17,20 @@
 
             <!-- 取消按钮 -->
 
-            <ImageView
+            <LinearLayout
                 android:id="@+id/img_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dimen_dp_10"
-                android:background="@mipmap/post_create_delete" />
+                android:gravity="center"
+                android:clickable="true"
+                android:layout_width="@dimen/dimen_dp_40"
+                android:layout_height="@dimen/dimen_dp_40">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/pw_dialog_close" />
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="wrap_content"

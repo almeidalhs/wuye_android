@@ -41,6 +41,7 @@ public class MyDiamondsAdapter extends BaseAdapter {
 
     public void setTypeID(int typeID) {
         this.typeID = typeID;
+        notifyDataSetChanged();
     }
 
     public void addBody(List<MyDiamondsRecordModel.BodyBean> body) {
@@ -91,8 +92,15 @@ public class MyDiamondsAdapter extends BaseAdapter {
                         +"钻石，兑换"+mBodyEntity.getChange_count()+"金币");
                 holder.itemMydiamondsExchangeTimeTv.setText(MyTools.convertTime(mBodyEntity.getUpdate_time(), "yyyy-MM-dd"));
             } else {//提现记录
-                holder.itemMydiamondsExchangeLl.setVisibility(View.VISIBLE);
-                holder.itemMydiamondsPresentationLl.setVisibility(View.GONE);
+                holder.itemMydiamondsExchangeLl.setVisibility(View.GONE);
+                holder.itemMydiamondsPresentationLl.setVisibility(View.VISIBLE);
+
+                holder.itemMydiamondsPresentationAccountTv.setText("提现到支付宝：");
+                holder.itemMydiamondsPresentationNumTv.setText("-"+mBodyEntity.getPay_num());
+                holder.itemMydiamondsPresentationTimeTv.setText(MyTools.convertTime(mBodyEntity.getUpdate_time(), "yyyy-MM-dd"));
+                if (mBodyEntity.getStatus()==1) {
+                    holder.itemMydiamondsPresentationStateTv.setText("处理中");
+                }
             }
         } else {
             holder.itemMydiamondsEmptyLl.setVisibility(View.VISIBLE);

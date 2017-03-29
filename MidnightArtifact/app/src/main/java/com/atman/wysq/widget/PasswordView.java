@@ -1,6 +1,7 @@
 package com.atman.wysq.widget;
 
 import android.content.Context;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,7 +36,7 @@ public class PasswordView extends RelativeLayout implements View.OnClickListener
     private ArrayList<Map<String, String>> valueList; // 有人可能有疑问，为何这里不用数组了？
     // 因为要用Adapter中适配，用数组不能往adapter中填充
 
-    private ImageView imgCancel;
+    private LinearLayout imgCancel;
     private TextView tvForget;
     private int currentIndex = -1; // 用于记录当前输入密码格位置
 
@@ -50,7 +52,7 @@ public class PasswordView extends RelativeLayout implements View.OnClickListener
         valueList = new ArrayList<Map<String, String>>();
         tvList = new TextView[6];
 
-        imgCancel = (ImageView) view.findViewById(R.id.img_cancel);
+        imgCancel = (LinearLayout) view.findViewById(R.id.img_cancel);
         imgCancel.setOnClickListener(this);
 
         tvForget = (TextView) view.findViewById(R.id.tv_forgetPwd);
@@ -89,7 +91,7 @@ public class PasswordView extends RelativeLayout implements View.OnClickListener
             } else if (i == 10) {
                 map.put("name", "");
             } else if (i == 12) {
-                map.put("name", "<<-");
+                map.put("name", "");
             } else if (i == 11) {
                 map.put("name", String.valueOf(0));
             }
@@ -134,12 +136,20 @@ public class PasswordView extends RelativeLayout implements View.OnClickListener
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 if (s.toString().length() == 1) {
-                    strPassword = ""; // 每次触发都要先将strPassword置空，再重新获取，避免由于输入删除再输入造成混乱
-                    for (int i = 0; i < 6; i++) {
-                        strPassword += tvList[i].getText().toString().trim();
-                    }
-                    pass.inputFinish(); // 接口中要实现的方法，完成密码输入完成后的响应逻辑
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            strPassword = ""; // 每次触发都要先将strPassword置空，再重新获取，避免由于输入删除再输入造成混乱
+                            for (int i = 0; i < 6; i++) {
+                                strPassword += tvList[i].getText().toString().trim();
+                                tvList[i].setText("");
+                            }
+                            currentIndex = -1;
+                            pass.inputFinish(); // 接口中要实现的方法，完成密码输入完成后的响应逻辑
+                        }
+                    }, 500);
                 }
             }
         });
@@ -151,7 +161,7 @@ public class PasswordView extends RelativeLayout implements View.OnClickListener
     }
 
     /* 暴露取消支付的按钮，可以灵活改变响应 */
-    public ImageView getCancelImageView() {
+    public LinearLayout getCancelImageView() {
         return imgCancel;
     }
 
@@ -183,8 +193,8 @@ public class PasswordView extends RelativeLayout implements View.OnClickListener
             if (convertView == null) {
                 convertView = View.inflate(context, R.layout.item_gride, null);
                 viewHolder = new ViewHolder();
-                viewHolder.btnKey = (TextView) convertView
-                        .findViewById(R.id.btn_keys);
+                viewHolder.btnKey = (TextView) convertView.findViewById(R.id.btn_keys);
+                viewHolder.btnKeysIv = (ImageView) convertView.findViewById(R.id.btn_keys_iv);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -198,6 +208,9 @@ public class PasswordView extends RelativeLayout implements View.OnClickListener
             if (position == 11) {
                 viewHolder.btnKey
                         .setBackgroundResource(R.drawable.selector_key_del);
+                viewHolder.btnKeysIv.setVisibility(VISIBLE);
+            } else {
+                viewHolder.btnKeysIv.setVisibility(GONE);
             }
 
             return convertView;
@@ -209,6 +222,7 @@ public class PasswordView extends RelativeLayout implements View.OnClickListener
      */
     public final class ViewHolder {
         public TextView btnKey;
+        public ImageView btnKeysIv;
     }
 
     /**

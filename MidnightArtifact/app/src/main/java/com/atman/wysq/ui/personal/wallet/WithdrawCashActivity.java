@@ -28,13 +28,15 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 import okhttp3.Response;
 
 /**
  * Created by tangbingliang on 17/3/28.
  */
 
-public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBack, PayPassWordDialog.onPayPassWordListener {
+public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBack
+        , PayPassWordDialog.onPayPassWordListener {
 
     @Bind(R.id.withdraw_dismonds_num_tv)
     TextView withdrawDismondsNumTv;
@@ -93,6 +95,9 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
             withdrawSumbitBt.setEnabled(false);
         } else {
             withdrawNumEt.addTextChangedListener(new MyTextWatcherTwo(this));
+            withdrawNumEt.setInputType(InputType.TYPE_CLASS_NUMBER);
+            withdrawSumbitBt.setClickable(true);
+            withdrawSumbitBt.setEnabled(true);
         }
     }
 
@@ -141,9 +146,7 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
                 walletId = mGetWithdrawalsListModel.getBody().get(0).getWallet_channel_id();
                 withdrawAccountMonifyTv.setText("去修改");
                 withdrawAccountTv.setText("提现到账号：" + mGetWithdrawalsListModel.getBody().get(0).getAccount());
-                withdrawNumEt.setInputType(InputType.TYPE_CLASS_NUMBER);
-                withdrawSumbitBt.setClickable(true);
-                withdrawSumbitBt.setEnabled(true);
+                initThisView();
             } else {
                 withdrawNumEt.setInputType(InputType.TYPE_NULL);
                 withdrawSumbitBt.setClickable(false);
@@ -159,6 +162,15 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
             withdrawDismondsNumTv.setText("" + (ownDiamonds - consumeDiamonds));
             withdrawNumEt.setText("");
             initThisView();
+        }
+    }
+
+    @Override
+    public void onError(Call call, Exception e, int code, int id) {
+        cancelLoading();
+        if (id == Common.NET_CASH_ID
+                && e.toString().contains("参数错误，请参考API文档")) {
+            showWraning("密码错误，提现失败！");
         }
     }
 
@@ -202,7 +214,7 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
             if (consumeDiamonds > ownDiamonds) {
                 withdrawNumEt.setText("" + countToCash(ownDiamonds));
             } else {
-                withdrawConsumeTv.setText("本次兑换将消耗您" + consumeDiamonds + "钻石");
+                withdrawConsumeTv.setText("本次提现将消耗您" + consumeDiamonds + "钻石");
             }
             withdrawNumEt.setSelection((String.valueOf(inputMoney)).length());
         }
@@ -213,7 +225,7 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
         Map<String, Object> map = new HashMap<>();
         map.put("diamond", consumeDiamonds);
         map.put("wallet_id", walletId);
-//        map.put("password", MD5Util.getMD5(pw));
+        map.put("wallet_ps", MD5Util.getMD5(pw));
         OkHttpUtils.postString().url(Common.Url_Cash_PW).content(mGson.toJson(map))
                 .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_CASH_ID).id(Common.NET_CASH_ID).build()

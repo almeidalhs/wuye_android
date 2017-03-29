@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/dimen_sp_16"
             android:textColor="@color/color_787878"
-            android:text="本次兑换将消耗您0钻石"/>
+            android:text="本次提现将消耗您0钻石"/>
 
         <com.base.baselibs.widget.MyCleanEditText
             android:id="@+id/withdraw_num_et"

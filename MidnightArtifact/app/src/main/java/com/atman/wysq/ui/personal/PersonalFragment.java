@@ -243,6 +243,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     public void hitSetring() {
         LogUtils.e("hitSetring");
         personalHeadIv.setImageResource(R.mipmap.ic_launcher);
+        personalTopBgIv.setImageURI(Uri.parse("res:///" + R.mipmap.personal_head_bg));
         personalSettingIv.setVisibility(View.INVISIBLE);
         personalGenderIv.setVisibility(View.INVISIBLE);
         personalGendercertificationTv.setVisibility(View.INVISIBLE);

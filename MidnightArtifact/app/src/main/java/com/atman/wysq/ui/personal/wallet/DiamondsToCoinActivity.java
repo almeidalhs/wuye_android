@@ -10,21 +10,30 @@ import com.atman.wysq.R;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.widget.PayPassWordDialog;
+import com.base.baselibs.iimp.EditCheckBack;
+import com.base.baselibs.iimp.MyTextWatcherTwo;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.MD5Util;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.PromptDialog;
 import com.tbl.okhttputils.OkHttpUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 import okhttp3.Response;
 
 /**
  * Created by tangbingliang on 17/3/27.
  */
 
-public class DiamondsToCoinActivity extends MyBaseActivity {
+public class DiamondsToCoinActivity extends MyBaseActivity implements EditCheckBack
+        , PayPassWordDialog.onPayPassWordListener {
 
     @Bind(R.id.dismondstocoin_dismonds_num_tv)
     TextView dismondstocoinDismondsNumTv;
@@ -32,13 +41,15 @@ public class DiamondsToCoinActivity extends MyBaseActivity {
     TextView dismondstocoinCoinNumTv;
     @Bind(R.id.dismondstocoin_num_et)
     MyCleanEditText dismondstocoinNumEt;
+    @Bind(R.id.dismondstocoin_consume_tv)
+    TextView dismondstocoinConsumeTv;
 
     private Context mContext = DiamondsToCoinActivity.this;
     private long diamondNum;
     private long toCoinNum;
+    private long inputCoinNum;
+    private long consumeDiamondNum;
     private String[] str;
-    private long exchangeDiamonds = 0;
-    private long getCoin = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,19 +65,29 @@ public class DiamondsToCoinActivity extends MyBaseActivity {
         diamondNum = MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin();
         toCoinNum = countToCoin(diamondNum);
 
+        dismondstocoinNumEt.addTextChangedListener(new MyTextWatcherTwo(this));
         setTextStr();
     }
 
     private void setTextStr() {
-        dismondstocoinDismondsNumTv.setText(""+diamondNum);
-        dismondstocoinCoinNumTv.setText(""+toCoinNum);
+        dismondstocoinDismondsNumTv.setText("" + diamondNum);
+        dismondstocoinCoinNumTv.setText("" + toCoinNum);
     }
 
     private long countToCoin(long diamondNum) {
         long Num = 0;
         str = MyBaseApplication.KDiamondChargeCoin.split(":");
-        if (str.length==2 && diamondNum>0) {
-            Num = diamondNum*Integer.valueOf(str[1])/Integer.valueOf(str[0]);
+        if (str.length == 2 && diamondNum > 0) {
+            Num = diamondNum * Integer.valueOf(str[1]) / Integer.valueOf(str[0]);
+        }
+        return Num;
+    }
+
+    private long countToDiamonds(long coinNum) {
+        long Num = 0;
+        str = MyBaseApplication.KDiamondChargeCoin.split(":");
+        if (str.length == 2 && coinNum > 0) {
+            Num = coinNum * Integer.valueOf(str[0]) / Integer.valueOf(str[1]);
         }
         return Num;
     }
@@ -81,13 +102,22 @@ public class DiamondsToCoinActivity extends MyBaseActivity {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_DIAMONDS_TO_COIN_ID) {
             showToast("兑换成功");
-            diamondNum = diamondNum - exchangeDiamonds;
-            toCoinNum = toCoinNum + getCoin;
+            diamondNum = diamondNum - consumeDiamondNum;
+            toCoinNum = toCoinNum + inputCoinNum;
             MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().setConvert_coin((int) diamondNum);
             MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt()
                     .setGold_coin((int) (MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean()
-                    .getUserExt().getGold_coin() + getCoin));
+                            .getUserExt().getGold_coin() + inputCoinNum));
             setTextStr();
+        }
+    }
+
+    @Override
+    public void onError(Call call, Exception e, int code, int id) {
+        cancelLoading();
+        if (id == Common.NET_DIAMONDS_TO_COIN_ID
+                && e.toString().contains("参数错误，请参考API文档")) {
+            showWraning("密码错误，兑换失败！");
         }
     }
 
@@ -104,40 +134,57 @@ public class DiamondsToCoinActivity extends MyBaseActivity {
             case R.id.dismondstocoin_ok_bt:
                 final String str = dismondstocoinNumEt.getText().toString().trim();
                 if (str.isEmpty()) {
-                    showToast("请输入要兑换的钻石数");
+                    showToast("请输入要兑换的金币数");
                     return;
-                } else if (Integer.valueOf(str)==0) {
-                    showToast("请输入的钻石数不能为0");
-                    return;
-                }
-                exchangeDiamonds = Integer.valueOf(str);
-                getCoin = countToCoin(exchangeDiamonds);
-                if (exchangeDiamonds > diamondNum) {
-                    showWraning("兑换的钻石数大于拥有的钻石数（目前拥有钻石数："+diamondNum+")");
+                } else if (Integer.valueOf(str) == 0) {
+                    showToast("请输入的金币数不能为0");
                     return;
                 }
-                PromptDialog.Builder builder = new PromptDialog.Builder(DiamondsToCoinActivity.this);
-                builder.setTitle("提示");
-                builder.setMessage("您确定要花"+exchangeDiamonds+"个钻石兑换"+getCoin+"金币吗？");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        OkHttpUtils.postString().url(Common.Url_DiamondsToCoin+str)
-                                .tag(Common.NET_DIAMONDS_TO_COIN_ID).content("{}")
-                                .mediaType(Common.JSON).id(Common.NET_DIAMONDS_TO_COIN_ID)
-                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                                .build().execute(new MyStringCallback(mContext, DiamondsToCoinActivity.this, true));
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
+
+                new PayPassWordDialog(mContext, this).show();
                 break;
+        }
+    }
+
+    @Override
+    public void inputFinish(String pw) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("diamond", consumeDiamondNum);
+        map.put("wallet_ps", MD5Util.getMD5(pw));
+        OkHttpUtils.postString().url(Common.Url_DiamondsToCoin)
+                .tag(Common.NET_DIAMONDS_TO_COIN_ID).content(mGson.toJson(map))
+                .mediaType(Common.JSON).id(Common.NET_DIAMONDS_TO_COIN_ID)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .build().execute(new MyStringCallback(mContext, DiamondsToCoinActivity.this, true));
+    }
+
+    @Override
+    public void cancelDialog() {
+
+    }
+
+    @Override
+    public void forgetPassWord() {
+        startActivity(SettingPayPWForCodeActivity.buildIntent(mContext, 2));
+    }
+
+    @Override
+    public void isNull(boolean isNull) {
+        if (isNull) {
+            dismondstocoinConsumeTv.setVisibility(View.INVISIBLE);
+        } else {
+            dismondstocoinConsumeTv.setVisibility(View.VISIBLE);
+
+            inputCoinNum = Long.parseLong(dismondstocoinNumEt.getText().toString().trim());
+            consumeDiamondNum = countToDiamonds(inputCoinNum);
+
+            if (consumeDiamondNum > diamondNum) {
+                dismondstocoinNumEt.setText(""+toCoinNum);
+                return;
+            }
+
+            dismondstocoinConsumeTv.setText("本次兑换将消耗您"+consumeDiamondNum+"钻石");
+            dismondstocoinNumEt.setSelection((String.valueOf(inputCoinNum)).length());
         }
     }
 }
