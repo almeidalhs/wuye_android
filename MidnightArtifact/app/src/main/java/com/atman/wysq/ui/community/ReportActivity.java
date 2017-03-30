@@ -44,9 +44,9 @@ public class ReportActivity extends MyBaseActivity {
 
     private Context mContext = ReportActivity.this;
 
-    private long id;
+    private long bolgId;
     private String str = "";
-    private int reportId;
+    private int typeId;
 
     Handler handler = new Handler(){
         public void handleMessage(Message msg) {
@@ -67,10 +67,10 @@ public class ReportActivity extends MyBaseActivity {
         ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent(Context context, long id, int reportId) {
+    public static Intent buildIntent(Context context, long bolgId, int typeId) {
         Intent intent = new Intent(context, ReportActivity.class);
-        intent.putExtra("id", id);
-        intent.putExtra("reportId", reportId);
+        intent.putExtra("bolgId", bolgId);
+        intent.putExtra("typeId", typeId);
         return intent;
     }
 
@@ -78,8 +78,8 @@ public class ReportActivity extends MyBaseActivity {
     public void initWidget(View... v) {
         super.initWidget(v);
 
-        id = getIntent().getLongExtra("id", -1);
-        reportId = getIntent().getIntExtra("reportId", 1);
+        bolgId = getIntent().getLongExtra("bolgId", -1);
+        typeId = getIntent().getIntExtra("typeId", 1);
 
         setBarTitleTx("举报");
         setBarRightIv(R.mipmap.bt_create_ok);
@@ -108,7 +108,7 @@ public class ReportActivity extends MyBaseActivity {
             }
         }, 2000);
         mRelativeLayout.setClickable(false);
-        ReportModel mReportModel = new ReportModel(str, reportId, id);
+        ReportModel mReportModel = new ReportModel(str, typeId, bolgId);
         OkHttpUtils.postString().url(Common.Url_RePort).mediaType(Common.JSON)
                 .content(mGson.toJson(mReportModel))
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())

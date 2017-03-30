@@ -68,7 +68,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
     private int level;
     private int vipLevel;
     private int page = 1;
-    private int blog_id;
+    private long blog_id;
     private int isReplay = 0;
     private boolean isLast = false;
     private String headUrl;
@@ -107,7 +107,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    public static Intent buildIntent(Context context, int blog_id, int id, String headUrl, int verifyState, String name
+    public static Intent buildIntent(Context context, long blog_id, int id, String headUrl, int verifyState, String name
             , String sex, int level, long time, long ueseID, String content, long blogUserId, boolean isAnonymity
             , String anonymityImg, int isReplay, int vipLevel) {
         Intent intent = new Intent(context, CommentChildrenListActivity.class);

@@ -36,7 +36,6 @@ import com.atman.wysq.ui.yunxinfriend.P2PChatActivity;
 import com.atman.wysq.ui.yunxinfriend.SelectGiftActivity;
 import com.atman.wysq.utils.ScreenObserver;
 import com.atman.wysq.utils.UiHelper;
-import com.atman.wysq.yunxin.utils.SystemUtil;
 import com.base.baselibs.base.BaseAppCompatActivity;
 import com.base.baselibs.net.YunXinAuthOutEvent;
 import com.base.baselibs.util.DensityUtil;
@@ -91,6 +90,8 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     ImageView barTitleIv;
     @Bind(R.id.base_login_status_tx)
     TextView baseLoginStatusTx;
+    @Bind(R.id.bar_right_two_iv)
+    ImageView barRightTwoIv;
 
     private boolean mShouldLogin = true;
     private static long lastClickTime = 0;
@@ -125,10 +126,10 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     }
 
     public void checkLoginStatus() {
-        if (MyBaseApplication.getApplication().getmLOGIN_STATUS()==0) {
+        if (MyBaseApplication.getApplication().getmLOGIN_STATUS() == 0) {
             baseLoginStatusTx.setVisibility(View.VISIBLE);
         } else {
-            if (MyBaseApplication.getApplication().getmLOGIN_STATUS()==2) {
+            if (MyBaseApplication.getApplication().getmLOGIN_STATUS() == 2) {
                 clearData();
             }
             baseLoginStatusTx.setVisibility(View.GONE);
@@ -161,6 +162,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
 
         barRightTx = (TextView) findViewById(R.id.bar_right_tx);
         barRightIv = (ImageView) findViewById(R.id.bar_right_iv);
+        barRightTwoIv = (ImageView) findViewById(R.id.bar_right_two_iv);
         barRightRl = (RelativeLayout) findViewById(R.id.bar_right_rl);
 
         rootContentLl = (LinearLayout) findViewById(R.id.root_content_ll);
@@ -258,6 +260,11 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         barRightIv.setBackgroundResource(id);
         return barRightIv;
     }
+    protected ImageView setBarRightTwoIv(int id) {
+        barRightTwoIv.setVisibility(View.VISIBLE);
+        barRightTwoIv.setBackgroundResource(id);
+        return barRightTwoIv;
+    }
 
     protected ImageView setBarRightIv(int id, boolean isDis) {
         if (isDis) {
@@ -344,7 +351,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
 //        }
         Intent intent = new Intent();
         intent.setAction(StartReciverSeriver.ACTION_END);
-        this.sendOrderedBroadcast(intent,null);
+        this.sendOrderedBroadcast(intent, null);
 
         if (mShouldLogin) {
             if (!isLogin()) {
@@ -369,7 +376,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         super.onPause();
         Intent intent = new Intent();
         intent.setAction(StartReciverSeriver.ACTION_START);
-        this.sendOrderedBroadcast(intent,null);
+        this.sendOrderedBroadcast(intent, null);
     }
 
     @Override
@@ -483,14 +490,15 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN) //第2步:注册一个在后台线程执行的方法,用于接收事件
     public void onUserEvent(YunXinAuthOutEvent event) {//参数必须是ClassEvent类型, 否则不会调用此方法
         if (!getTopActivity(mAty).equals("") && getTopActivity(mAty).contains(mAty.getLocalClassName())) {
-            LogUtils.e("mAty.getClass().getName():"+mAty.getClass().getName());
+            LogUtils.e("mAty.getClass().getName():" + mAty.getClass().getName());
             LogoutWarn();
         }
     }
 
     PromptDialog mPromptDialog;
+
     public void LogoutWarn() {
-        if (mPromptDialog!=null && mPromptDialog.isShowing()) {
+        if (mPromptDialog != null && mPromptDialog.isShowing()) {
             return;
         }
         PromptDialog.Builder builder = new PromptDialog.Builder(mAty);

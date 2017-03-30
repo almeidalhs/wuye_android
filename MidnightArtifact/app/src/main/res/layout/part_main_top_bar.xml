@@ -9,6 +9,8 @@
         android:id="@+id/bar_title_rl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/bar_back_ll"
+        android:layout_toLeftOf="@+id/bar_right_two_iv"
         android:layout_centerVertical="true"
         android:paddingTop="@dimen/dimen_dp_5"
         android:paddingBottom="@dimen/dimen_dp_5"
@@ -53,6 +55,17 @@
             android:scaleType="centerInside"
             android:src="@mipmap/main_bar_back" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/bar_right_two_iv"
+        android:layout_toLeftOf="@+id/bar_right_rl"
+        android:maxWidth="@dimen/dimen_dp_48"
+        android:layout_width="wrap_content"
+        android:minWidth="@dimen/dimen_dp_1"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside"
+        android:visibility="invisible" />
 
     <RelativeLayout
         android:id="@+id/bar_right_rl"

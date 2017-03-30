@@ -48,6 +48,11 @@ public class RewardGridViewAdapter extends BaseAdapter {
         }
     }
 
+    public void addData (GetRewardListModel.BodyEntity temp) {
+        shop.add(0, temp);
+        notifyDataSetChanged();
+    }
+
     @Override
     public GetRewardListModel.BodyEntity getItem(int position) {
         return shop.get(position);

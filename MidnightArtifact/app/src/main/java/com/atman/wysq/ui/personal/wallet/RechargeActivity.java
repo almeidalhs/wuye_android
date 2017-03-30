@@ -118,7 +118,7 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
     protected void onResume() {
         super.onResume();
         rechargeTotalcoinTv.setText("" + MyBaseApplication.mGetMyUserIndexModel.getBody()
-                .getUserDetailBean().getUserExt().getGold_coin());
+                .getUserDetailBean().getUserExt().getLeft_coin());
         rechargeCanoutcoinTv.setText("" + MyBaseApplication.mGetMyUserIndexModel.getBody()
                 .getUserDetailBean().getUserExt().getConvert_coin());
     }

@@ -89,7 +89,7 @@ public class MyGiftActivity extends MyBaseActivity {
                     showLogin();
                 } else {
                     startActivity(RechargeActivity.buildIntent(mContext
-                            , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin()
+                            , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getLeft_coin()
                             , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin()));
                 }
             }

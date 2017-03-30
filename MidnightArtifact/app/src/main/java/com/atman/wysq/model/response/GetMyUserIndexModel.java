@@ -310,6 +310,7 @@ public class GetMyUserIndexModel {
                 private String user_token;
                 private int can_live_room;
                 private int gold_coin;
+                private int left_coin;
                 private int charm;
                 private int can_chat;
                 private int can_shake;
@@ -319,6 +320,14 @@ public class GetMyUserIndexModel {
                 private int hotel_id;
                 private int chat_count;
                 private int accrue_coin;
+
+                public int getLeft_coin() {
+                    return left_coin;
+                }
+
+                public void setLeft_coin(int left_coin) {
+                    this.left_coin = left_coin;
+                }
 
                 public long getUser_id() {
                     return user_id;

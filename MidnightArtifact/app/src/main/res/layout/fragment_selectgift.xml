@@ -12,6 +12,6 @@
         android:layout_marginRight="@dimen/dimen_dp_5"
         android:horizontalSpacing="@dimen/dimen_dp_5"
         android:verticalSpacing="@dimen/dimen_dp_5"
-        android:numColumns="2"/>
+        android:numColumns="4"/>
 
 </LinearLayout>

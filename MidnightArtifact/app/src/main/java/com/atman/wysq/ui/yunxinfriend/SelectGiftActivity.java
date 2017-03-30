@@ -69,6 +69,8 @@ public class SelectGiftActivity extends MyBaseActivity {
     private int myCion;
     private String id;
     private boolean isLisenLive;
+    private int fromId; //0:聊天, 1:帖子
+    private int pageSize = 8;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +80,10 @@ public class SelectGiftActivity extends MyBaseActivity {
         setSwipeBackEnable(false);
     }
 
-    public static Intent buildIntent(Context context, String id, boolean isLisenLive) {
+    public static Intent buildIntent(Context context, String id, boolean isLisenLive, int fromId) {
         Intent intent = new Intent(context, SelectGiftActivity.class);
         intent.putExtra("id", id);
+        intent.putExtra("fromId", fromId);
         intent.putExtra("isLisenLive", isLisenLive);
         return intent;
     }
@@ -90,11 +93,12 @@ public class SelectGiftActivity extends MyBaseActivity {
         super.initWidget(v);
 
         id = getIntent().getStringExtra("id");
+        fromId = getIntent().getIntExtra("fromId", 0);
         isLisenLive = getIntent().getBooleanExtra("isLisenLive", false);
 
         hideTitleBar();
         getRootContentLl().setBackgroundResource(R.color.color_gift_all);
-        if (isLisenLive) {
+        if (isLisenLive || fromId!=0) {
             ll1.setVisibility(View.GONE);
         }
     }
@@ -102,8 +106,8 @@ public class SelectGiftActivity extends MyBaseActivity {
     private void initViewpager() {
         mainViewpager.setPagingEnabled(true);//是否支持手势滑动
         int num = mGiftList.size();
-        int n = num / 6;
-        if (num % 6 != 0) {
+        int n = num / pageSize;
+        if (num % pageSize != 0) {
             n = n + 1;
         }
         LogUtils.e("n:" + n);
@@ -113,6 +117,8 @@ public class SelectGiftActivity extends MyBaseActivity {
             Bundle bundle = new Bundle();
             bundle.putString("id", id);
             bundle.putInt("page", i);
+            bundle.putInt("fromId", fromId);
+            bundle.putInt("pageSize", pageSize);
             bundle.putSerializable("data", mGiftListModel);
             fragment.setArguments(bundle);
             adapter.addFragment(fragment, i + "");
@@ -183,7 +189,7 @@ public class SelectGiftActivity extends MyBaseActivity {
     protected void onResume() {
         super.onResume();
         myCion = MyBaseApplication.getApplication().mGetMyUserIndexModel
-                .getBody().getUserDetailBean().getUserExt().getGold_coin();
+                .getBody().getUserDetailBean().getUserExt().getLeft_coin();
         selectgiftMycionTx.setText("金币余额：" + myCion);
     }
 
@@ -231,7 +237,7 @@ public class SelectGiftActivity extends MyBaseActivity {
                     showLogin();
                 } else {
                     startActivity(RechargeActivity.buildIntent(mContext
-                            , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin()
+                            , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getLeft_coin()
                             , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin()));
                 }
                 break;
@@ -241,7 +247,7 @@ public class SelectGiftActivity extends MyBaseActivity {
     public void backResuilt(String url, String text, int price, String name, String giftPic, int giftId) {
         if (myCion - price >= 0) {
             MyBaseApplication.getApplication().mGetMyUserIndexModel
-                    .getBody().getUserDetailBean().getUserExt().setGold_coin(myCion - price);
+                    .getBody().getUserDetailBean().getUserExt().setLeft_coin(myCion - price);
         }
         Intent mIntent = new Intent();
         mIntent.putExtra("giftId", giftId);

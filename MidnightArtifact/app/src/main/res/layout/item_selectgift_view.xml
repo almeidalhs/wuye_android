@@ -1,59 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:padding="@dimen/dimen_dp_5"
-    android:background="@color/color_white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:gravity="center"
+    android:padding="@dimen/dimen_dp_5"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_weight="6"
+    <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/item_selectgift_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:scaleType="centerInside"
+        fresco:actualImageScaleType="centerInside"
+        fresco:failureImage="@mipmap/icon_goodsdetail_business"
+        fresco:failureImageScaleType="centerInside"
+        fresco:placeholderImage="@mipmap/icon_goodsdetail_business"/>
 
-        <ImageView
-            android:id="@+id/item_selectgift_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="centerInside"
-            android:src="@mipmap/ic_launcher"/>
-        <TextView
-            android:id="@+id/item_selectgift_cion_tv"
-            android:layout_marginTop="@dimen/dimen_dp_10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="兑换:10000金币"
-            android:textSize="@dimen/dimen_sp_10"
-            android:textColor="#f67d53"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_weight="4"
-        android:gravity="center"
+    <TextView
+        android:id="@+id/item_selectgift_name_tv"
+        android:layout_marginTop="@dimen/dimen_dp_5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:text="名字"
+        android:textColor="@color/color_787878"
+        android:textSize="@dimen/dimen_sp_13" />
 
-        <TextView
-            android:id="@+id/item_selectgift_name_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/dimen_sp_13"
-            android:text="名字"
-            android:textColor="@color/color_black"/>
-
-        <TextView
-            android:id="@+id/item_selectgift_meili_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_dp_30"
-            android:textSize="@dimen/dimen_sp_10"
-            android:text="魅力值:+10000"
-            android:textColor="#ae1476"/>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/item_selectgift_cion_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="10000金币"
+        android:textColor="@color/color_787878"
+        android:textSize="@dimen/dimen_sp_13" />
 
 
 </LinearLayout>

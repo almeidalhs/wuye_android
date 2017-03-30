@@ -405,7 +405,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     }
 
     private void UpDateUI() {
-        MyBaseApplication.mUserCion = mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin();
+        MyBaseApplication.mUserCion = mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getLeft_coin();
         MyBaseApplication.mHEAD_URL = mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon();
         if (personalSettingIv==null) {
             return;
@@ -458,7 +458,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         initguardianIV();
 
         personalMycoinTv.setVisibility(View.VISIBLE);
-        personalMycoinTv.setText(" "+mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin());
+        personalMycoinTv.setText(" "+mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getLeft_coin());
         if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()==0) {
             personalMyvipstatusTv.setText("去开通");
         } else {
@@ -663,7 +663,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
                 break;
             case R.id.personal_recharge_ll:
                 getActivity().startActivity(RechargeActivity.buildIntent(getActivity()
-                        , mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin()
+                        , mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getLeft_coin()
                         , mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin()));
                 break;
         }

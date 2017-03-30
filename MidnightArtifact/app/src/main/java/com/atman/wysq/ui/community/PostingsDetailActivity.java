@@ -1,6 +1,7 @@
 package com.atman.wysq.ui.community;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,12 +41,14 @@ import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.mall.GoodsDetailActivity;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
+import com.atman.wysq.ui.yunxinfriend.SelectGiftActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.MyTools;
 import com.atman.wysq.utils.ShareHelper;
 import com.atman.wysq.utils.Tools;
 import com.atman.wysq.widget.ShareDialog;
 import com.atman.wysq.widget.face.SmileUtils;
+import com.atman.wysq.yunxin.model.ContentTypeInter;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
@@ -54,10 +57,15 @@ import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.PromptDialog;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.netease.nimlib.sdk.msg.MessageBuilder;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -92,7 +100,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
     private ListView mListView;
 
     private String tilte;
-    private int bolgId;
+    private long bolgId;
     private int page = 1;
     private boolean isLast = false;
     private int mPosition = -1;
@@ -134,6 +142,9 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
     private WebView blogdetailContentWb;
     private LinearLayout blogdetailFlowerLl;
     private GridView blogdetailFlowerGv;
+    private RewardGridViewAdapter mRewardListAdapter;
+
+    private ImageView isHeartIv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +155,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
         ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent(Context context, String tilte, int id, boolean isMy, int vipLevel) {
+    public static Intent buildIntent(Context context, String tilte, long id, boolean isMy, int vipLevel) {
         Intent intent = new Intent(context, PostingsDetailActivity.class);
         intent.putExtra("tilte", tilte);
         intent.putExtra("id", id);
@@ -158,7 +169,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
         super.initWidget(v);
 
         tilte = getIntent().getStringExtra("tilte");
-        bolgId = getIntent().getIntExtra("id", -1);
+        bolgId = getIntent().getLongExtra("id", -1);
         vipLevel = getIntent().getIntExtra("vipLevel", 0);
         isMy = getIntent().getBooleanExtra("isMy", false);
         LogUtils.e("id:" + bolgId + ",isMy:" + isMy);
@@ -216,6 +227,39 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
             }
         });
         blogdetailSendBt.setOnTouchListener(this);
+
+        changeMyHeart();
+
+        isHeartIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isLogin()) {
+                    showLogin();
+                    return;
+                }
+                if (favoriteId > 0) {//已收藏，点击取消收藏
+                    OkHttpUtils.delete().url(Common.Url_Get_BlogCollection_Not + bolgId)
+                            .id(Common.NET_GET_BLOGCOLLECTION_NOT)
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .tag(Common.NET_GET_BLOGCOLLECTION_NOT).build()
+                            .execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
+                } else {//未收藏，点击收藏
+                    OkHttpUtils.postString().url(Common.Url_Get_BlogCollection + bolgId)
+                            .id(Common.NET_GET_BLOGCOLLECTION).content("{}").mediaType(Common.JSON)
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .tag(Common.NET_GET_BLOGCOLLECTION).build()
+                            .execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
+                }
+            }
+        });
+    }
+
+    private void changeMyHeart() {
+        if (favoriteId>0) {//已收藏
+            isHeartIv = setBarRightTwoIv(R.mipmap.ic_heart_red);
+        } else {//未收藏
+            isHeartIv = setBarRightTwoIv(R.mipmap.ic_heart_normal);
+        }
     }
 
     private void sendMessage(View v) {
@@ -305,9 +349,11 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
             }
         } else if (id == Common.NET_GET_BLOGCOLLECTION) {
             favoriteId = 1;
+            changeMyHeart();
             showToast("收藏成功");
         } else if (id == Common.NET_GET_BLOGCOLLECTION_NOT) {
             favoriteId = 0;
+            changeMyHeart();
             showToast("已取消收藏");
         } else if (id == Common.NET_GET_CATEGORY_DETAIL) {
             mGoodsDetailsResponseModel = mGson.fromJson(data, GoodsDetailsResponseModel.class);
@@ -354,13 +400,9 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
             for (int i = 0; i < mGetRewardListModel.getBody().size(); i++) {
                 num += mGetRewardListModel.getBody().get(i).getUser_award_gold_num();
             }
-            if (num == 0) {
-                blogdetailFlowerTv.setText("暂时无人献花");
-            } else {
-                blogdetailFlowerTv.setText(num + "朵鲜花");
-            }
+            blogdetailFlowerTv.setText(num + "");
+            mRewardListAdapter = new RewardGridViewAdapter(mContext, mGetRewardListModel.getBody());
             if (num > 0) {
-                RewardGridViewAdapter mRewardListAdapter = new RewardGridViewAdapter(mContext, mGetRewardListModel.getBody());
                 blogdetailFlowerGv.setAdapter(mRewardListAdapter);
                 blogdetailFlowerGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -451,7 +493,8 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                             == MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId()) {
                         showToast("亲，这是你自己的帖子哦");
                     } else {
-                        showWran();
+                        startActivityForResult(SelectGiftActivity.buildIntent(mContext
+                                , String.valueOf(blogUserId), false, 1), Common.toSelectGift);
                     }
                 }
             }
@@ -462,28 +505,10 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
         blogdetailCommentLv.setAdapter(mAdapter);
     }
 
-    public void showWran() {
-        int CostGolden = MyBaseApplication.mGetGoldenRoleModel.getBody().get("5").getCost_golden();
-        PromptDialog.Builder builder = new PromptDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setMessage("献花一次将花费您" + CostGolden + "个金币哦！");
-        builder.setPositiveButton("继续献花", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                OkHttpUtils.postString().url(Common.Url_Add_Award)
-                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .content("{\"oid\":" + bolgId + "}").mediaType(Common.JSON).id(Common.NET_ADD_AWARD).tag(Common.NET_ADD_AWARD)
-                        .build().execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
-            }
-        });
-        builder.setNegativeButton("取消献花", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode, Bundle options) {
+        super.startActivityForResult(intent, requestCode, options);
+        overridePendingTransition(com.base.baselibs.R.anim.activity_bottom_in, com.base.baselibs.R.anim.activity_bottom_out);
     }
 
     @SuppressLint("JavascriptInterface")
@@ -498,6 +523,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
         isReplay = mBodyEntity.getReplay_flag();
 
         setBarTitleTx(mBodyEntity.getTitle());
+        changeMyHeart();
 
         if (mBodyEntity.getGoods_id() > 0) {//是否事商品贴
             blogdetailHeadRl.setVisibility(View.GONE);
@@ -629,16 +655,11 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
 
     private void showBottomImg(View view) {
         BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
-        if (favoriteId > 0) {
-            favoriteStr = "取消收藏";
-        } else {
-            favoriteStr = "收藏";
-        }
         String[] str;
         if (isMy) {
-            str = new String[]{"分享", favoriteStr, "举报", "把TA加入黑名单", "删除"};
+            str = new String[]{"分享", "举报", "把TA加入黑名单", "删除"};
         } else {
-            str = new String[]{"分享", favoriteStr, "举报", "把TA加入黑名单"};
+            str = new String[]{"分享", "举报", "把TA加入黑名单"};
         }
         builder.setItems(str, new DialogInterface.OnClickListener() {
             @Override
@@ -675,31 +696,13 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                                     , MyBaseApplication.mDownLoad_URL, PostingsDetailActivity.this);
                         }
                     });
-                } else if (which == 1) {//收藏
+                } else if (which == 1) {//举报
                     if (!isLogin()) {
                         showLogin();
                         return;
                     }
-                    if (favoriteId > 0) {//已收藏，点击取消收藏
-                        OkHttpUtils.delete().url(Common.Url_Get_BlogCollection_Not + bolgId)
-                                .id(Common.NET_GET_BLOGCOLLECTION_NOT)
-                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                                .tag(Common.NET_GET_BLOGCOLLECTION_NOT).build()
-                                .execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
-                    } else {//未收藏，点击收藏
-                        OkHttpUtils.postString().url(Common.Url_Get_BlogCollection + bolgId)
-                                .id(Common.NET_GET_BLOGCOLLECTION).content("{}").mediaType(Common.JSON)
-                                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                                .tag(Common.NET_GET_BLOGCOLLECTION).build()
-                                .execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
-                    }
-                } else if (which == 2) {//举报
-                    if (!isLogin()) {
-                        showLogin();
-                        return;
-                    }
-                    startActivity(ReportActivity.buildIntent(mContext, (long) bolgId, 2));
-                } else if (which == 3) {//把TA加入黑名单
+                    startActivity(ReportListActivity.buildIntent(mContext, (long) bolgId, 2));
+                } else if (which == 2) {//把TA加入黑名单
                     if (!isLogin()) {
                         showLogin();
                         return;
@@ -715,7 +718,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                             .content("{\"black_user_id\":" + mGetBlogDetailModel.getBody().get(0).getUser_id() + "}")
                             .mediaType(Common.JSON).id(Common.NET_ADD_BLACKLIST).tag(Common.NET_ADD_BLACKLIST)
                             .build().execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
-                } else if (which == 4) {//删除
+                } else if (which == 3) {//删除
                     if (!isLogin()) {
                         showLogin();
                         return;
@@ -836,6 +839,24 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                 }
                 sendMessage(view);
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == Common.toSelectGift) {
+//            mText = data.getStringExtra("text");
+//            File file = ImageLoader.getInstance().getDiskCache().get(Common.ImageUrl+data.getStringExtra("url"));
+//            IMMessage message = MessageBuilder.createImageMessage(id, SessionTypeEnum.P2P, file, "");
+//            mUuid = message.getUuid();
+//            seedMessage(message, ContentTypeInter.contentTypeImageSmall, file.getPath(), "", true);
+            GetRewardListModel.BodyEntity temp = new GetRewardListModel.BodyEntity();
+            temp.setIcon(MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
+            mRewardListAdapter.addData(temp);
         }
     }
 

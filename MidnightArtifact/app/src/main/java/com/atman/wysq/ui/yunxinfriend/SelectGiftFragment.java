@@ -28,6 +28,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
 import okhttp3.Response;
 
 /**
@@ -51,6 +52,8 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
     private int cionNum;
     private int myPosition;
     private String id;
+    private int fromId;
+    private int pageSize = 8;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,11 +62,13 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
         Bundle b = getArguments();
         page = b.getInt("page");
         id = b.getString("id");
+        fromId = b.getInt("fromId", 0);
+        pageSize = b.getInt("pageSize", 8);
         GiftListModel mGiftListModel = (GiftListModel) b.getSerializable("data");
         mGiftList = mGiftListModel.getBody();
         Comparator comp = new SortComparator();
         Collections.sort(mGiftList, comp);
-        for (int i=(page*6);i<mGiftList.size();i++) {
+        for (int i=(page*pageSize);i<mGiftList.size();i++) {
             data.add(mGiftList.get(i));
         }
         return view;
@@ -77,7 +82,8 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
-        mAdapter = new SelectGiftAdapter(getActivity(), getmWidth(), data, this);
+        mAdapter = new SelectGiftAdapter(getActivity(), getmWidth(), data, pageSize, this);
+        selectGiftGv.setNumColumns(pageSize/2);
         selectGiftGv.setAdapter(mAdapter);
         selectGiftGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -110,9 +116,15 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                OkHttpUtils.postString().url(Common.Url_Pay_GiftList+mAdapter.getItem(po).getGift_id()+"/"+id).content("")
+                String url = Common.Url_Pay_GiftList;
+                int reponseId = Common.NET_PAY_GIFTLIST;
+                if (fromId == 1) {
+                    url = Common.Url_Reward;
+                    reponseId = Common.NET_REWARD_ID;
+                }
+                OkHttpUtils.postString().url(url + mAdapter.getItem(po).getGift_id()+"/"+id).content("")
                         .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .tag(Common.NET_PAY_GIFTLIST).id(Common.NET_PAY_GIFTLIST).build()
+                        .tag(reponseId).id(reponseId).build()
                         .execute(new MyStringCallback(getActivity(), SelectGiftFragment.this, true));
             }
         });
@@ -122,7 +134,8 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
     @Override
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
-        if (id == Common.NET_PAY_GIFTLIST) {
+        if (id == Common.NET_PAY_GIFTLIST
+                || id == Common.NET_REWARD_ID) {
             ((SelectGiftActivity)getActivity()).backResuilt(mAdapter.getItem(myPosition).getPic_url()
                     , mAdapter.getItem(myPosition).getPaopao(), mAdapter.getItem(myPosition).getPrice()
                     , mAdapter.getItem(myPosition).getName(), mAdapter.getItem(myPosition).getPic_url()
@@ -144,7 +157,7 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
     public void onResume() {
         super.onResume();
         cionNum = MyBaseApplication.getApplication().mGetMyUserIndexModel
-                .getBody().getUserDetailBean().getUserExt().getGold_coin();
+                .getBody().getUserDetailBean().getUserExt().getLeft_coin();
         if (mAdapter!=null) {
             mAdapter.setMyCion(cionNum);
         }
@@ -153,6 +166,12 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    @Override
+    public void onError(Call call, Exception e, int code, int id) {
+        super.onError(call, e, code, id);
+        cancelLoading();
     }
 
     @Override

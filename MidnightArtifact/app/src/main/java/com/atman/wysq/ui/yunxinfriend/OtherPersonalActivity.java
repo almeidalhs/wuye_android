@@ -487,7 +487,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
                     showWraning("亲，这是你自己哦！");
                     return;
                 }
-                startActivityForResult(SelectGiftActivity.buildIntent(mContext, String.valueOf(id), false), Common.toSelectGift);
+                startActivityForResult(SelectGiftActivity.buildIntent(mContext, String.valueOf(id), false, 0), Common.toSelectGift);
                 break;
             case R.id.otherpersonal_relationship_bt:
                 if (!isLogin()) {

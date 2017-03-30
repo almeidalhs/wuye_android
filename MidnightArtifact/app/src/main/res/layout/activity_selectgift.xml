@@ -102,10 +102,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="right|center_vertical"
-                        android:text="  金币商店"
-                        android:drawableLeft="@mipmap/icon_person_shop"
+                        android:text="  购买金币"
+                        android:drawableLeft="@mipmap/cion_red"
                         android:textSize="@dimen/dimen_sp_14"
-                        android:textColor="#f67d53"/>
+                        android:textColor="@color/color_ff7b8b"/>
                 </LinearLayout>
 
                 <com.base.baselibs.widget.NoSwipeViewPager

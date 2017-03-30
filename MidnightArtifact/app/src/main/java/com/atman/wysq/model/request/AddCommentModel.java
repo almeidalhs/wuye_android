@@ -8,10 +8,10 @@ package com.atman.wysq.model.request;
  * 电话 18578909061
  */
 public class AddCommentModel {
-    private int blog_id;
+    private long blog_id;
     private String content;
 
-    public AddCommentModel(int blog_id, String content) {
+    public AddCommentModel(long blog_id, String content) {
         this.blog_id = blog_id;
         this.content = content;
     }

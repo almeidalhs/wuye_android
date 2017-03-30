@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:paddingBottom="@dimen/dimen_dp_5">
 
     <RelativeLayout
         android:id="@+id/blogdetail_top_rl"
@@ -147,35 +149,39 @@
         android:id="@+id/blogdetail_flower_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_white"
+        android:background="@color/all_bg"
         android:gravity="center"
         android:clickable="true"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/dimen_dp_10"
-        android:paddingRight="@dimen/dimen_dp_10"
-        android:paddingBottom="@dimen/dimen_dp_15"
-        android:paddingTop="@dimen/dimen_dp_15">
+        android:orientation="horizontal"
+        android:padding="@dimen/dimen_dp_10">
 
-        <ImageView
-            android:id="@+id/blogdetail_flower_iv"
+        <GridView
+            android:id="@+id/blogdetail_flower_gv"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/postingdetails_flower" />
+            android:numColumns="10"/>
 
         <TextView
             android:id="@+id/blogdetail_flower_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_dp_10"
-            android:layout_marginBottom="@dimen/dimen_dp_10"
-            android:text="暂时无人献花"
-            android:textColor="#B7B6BB" />
+            android:layout_margin="@dimen/dimen_dp_5"
+            android:text="0"
+            android:textColor="@color/color_red" />
 
-        <GridView
-            android:id="@+id/blogdetail_flower_gv"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numColumns="10"/>
+            android:padding="@dimen/dimen_dp_5"
+            android:background="@drawable/red_flower_bg">
+
+            <ImageView
+                android:id="@+id/blogdetail_flower_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/postingdetails_flower" />
+        </RelativeLayout>
     </LinearLayout>
 
     <RelativeLayout

@@ -106,8 +106,8 @@ public class DiamondsToCoinActivity extends MyBaseActivity implements EditCheckB
             toCoinNum = toCoinNum + inputCoinNum;
             MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().setConvert_coin((int) diamondNum);
             MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt()
-                    .setGold_coin((int) (MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean()
-                            .getUserExt().getGold_coin() + inputCoinNum));
+                    .setLeft_coin((int) (MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean()
+                            .getUserExt().getLeft_coin() + inputCoinNum));
             setTextStr();
             dismondstocoinNumEt.setText("");
         }

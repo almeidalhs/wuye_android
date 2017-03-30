@@ -142,7 +142,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
         if (isVisibleToUser && getActivity() != null) {
             if (isError) {
                 isError = false;
-                if (MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null && MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
                         .getUserDetailBean().getUserExt().getCan_live_room() == 1) {
                     partCommunityTopleftLl.setVisibility(View.VISIBLE);
                 } else {
@@ -455,7 +455,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
         switch (CategoryId) {
             case 1://图文
                 startActivity(PostingsDetailActivity.buildIntent(getActivity()
-                        , temp.getTitle(), temp.getBlog_board_id(), false, temp.getVip_level()));
+                        , temp.getTitle(), temp.getBlog_id(), false, temp.getVip_level()));
                 break;
             case 2://语音
                 break;

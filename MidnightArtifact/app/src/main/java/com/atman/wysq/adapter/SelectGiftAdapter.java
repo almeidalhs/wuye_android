@@ -1,5 +1,6 @@
 package com.atman.wysq.adapter;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -36,16 +38,19 @@ public class SelectGiftAdapter extends BaseAdapter {
     private AdapterInterface mAdapterInterface;
     protected LayoutInflater layoutInflater;
     private ViewHolder holder;
-    private LinearLayout.LayoutParams params;
+    private LinearLayout.LayoutParams params,params2;
     private int myCion;
+    private int pageSize;
 
-    public SelectGiftAdapter(Context context,int mWight, List<GiftListModel.BodyEntity> data, AdapterInterface mAdapterInterface) {
+    public SelectGiftAdapter(Context context,int mWight, List<GiftListModel.BodyEntity> data, int pageSize, AdapterInterface mAdapterInterface) {
         this.context = context;
         this.data = data;
+        this.pageSize = pageSize;
         this.mAdapterInterface = mAdapterInterface;
         layoutInflater = LayoutInflater.from(context);
-        int w = (mWight - DensityUtil.dp2px(context,15))/2*2/3;
-        params = new LinearLayout.LayoutParams(w, w*272/470);
+        int n = pageSize/2;
+        int w = (mWight - DensityUtil.dp2px(context,5)*(n-1))/n;
+        params = new LinearLayout.LayoutParams(w - DensityUtil.dp2px(context,30), w*330/270);
     }
 
     public void setMyCion(int myCion) {
@@ -55,8 +60,8 @@ public class SelectGiftAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if (data.size()>=6) {
-            return 6;
+        if (data.size()>=pageSize) {
+            return pageSize;
         } else {
             return data.size();
         }
@@ -84,16 +89,13 @@ public class SelectGiftAdapter extends BaseAdapter {
 
         GiftListModel.BodyEntity temp = data.get(position);
 
-        holder.itemSelectgiftCionTv.setText("兑换:"+temp.getPrice()+"金币");
-        holder.itemSelectgiftMeiliTv.setText("魅力值:+"+temp.getCharm());
+        holder.itemSelectgiftCionTv.setText(temp.getPrice()+"金币");
         holder.itemSelectgiftNameTv.setText(temp.getName());
         holder.itemSelectgiftIv.setLayoutParams(params);
         if (temp.getPrice() < myCion) {
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+temp.getPic_url(),holder.itemSelectgiftIv
-                    , MyBaseApplication.getApplication().getOptionsNot());
+            holder.itemSelectgiftIv.setImageURI(Common.ImageUrl+temp.getPic_url());
         } else {
-            ImageLoader.getInstance().displayImage(Common.ImageUrl+temp.getGray_pic_url(),holder.itemSelectgiftIv
-                    , MyBaseApplication.getApplication().getOptionsNot());
+            holder.itemSelectgiftIv.setImageURI(Common.ImageUrl+temp.getGray_pic_url());
         }
 
         return convertView;
@@ -101,13 +103,11 @@ public class SelectGiftAdapter extends BaseAdapter {
 
     static class ViewHolder {
         @Bind(R.id.item_selectgift_iv)
-        ImageView itemSelectgiftIv;
+        SimpleDraweeView itemSelectgiftIv;
         @Bind(R.id.item_selectgift_cion_tv)
         TextView itemSelectgiftCionTv;
         @Bind(R.id.item_selectgift_name_tv)
         TextView itemSelectgiftNameTv;
-        @Bind(R.id.item_selectgift_meili_tv)
-        TextView itemSelectgiftMeiliTv;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

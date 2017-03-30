@@ -4,13 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/bloglist_lv"
-        android:background="@color/color_white"
+    <com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/community_recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@color/color_line"
-        android:transcriptMode="alwaysScroll"
-        android:dividerHeight="1px"/>
+        android:layout_height="match_parent"
+        ptr:ptrMode="both" />
 
 </LinearLayout>

@@ -247,6 +247,10 @@ public class Common {
     public static String Url_Cash_PW = hostUrl + "rest/user/cash";
     //添加魔聊背景 rest/chat/background/add
     public static String Url_Add_Chat_Background = hostUrl + "rest/chat/background/add";
+    //帖子打赏 rest/gift/buytoblog/{gift_id}/{blog_id}
+    public static String Url_Reward = hostUrl + "rest/gift/buytoblog/";
+    //获取举报列表 rest/corruption/reason/{type} 备注：type（1：针对人 2：针对帖子 ； is_other（1：表示为 其他 ）
+    public static String Url_Get_Report_List = hostUrl + "rest/corruption/reason/";
     /**************************http访问路径*****************************/
 
 
@@ -472,6 +476,10 @@ public class Common {
     public static int NET_CASH_ID = 109;
     //添加魔聊背景
     public static int NET_ADD_CHAT_BACKGROUNG_ID = 110;
+    //帖子打赏
+    public static int NET_REWARD_ID = 111;
+    //获取举报列表
+    public static int NET_GET_REPORT_LIST_ID = 112;
     /**************************http访问回应识别码*****************************/
 
 

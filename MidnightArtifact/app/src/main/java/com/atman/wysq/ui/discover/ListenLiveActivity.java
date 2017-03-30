@@ -851,7 +851,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
                     return;
                 }
-                startActivityForResult(SelectGiftActivity.buildIntent(mContext, String.valueOf(mMyUserInfo.getUser_id()), true)
+                startActivityForResult(SelectGiftActivity.buildIntent(mContext, String.valueOf(mMyUserInfo.getUser_id()), true, 0)
                         , Common.toSelectGift);
                 break;
             case R.id.p2pchat_record_iv:

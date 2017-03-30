@@ -622,11 +622,11 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
     private boolean isPay(boolean b) {
         int price = Integer.parseInt(MyBaseApplication.kPrivateChatCost);
         int myCion = MyBaseApplication.getApplication().mGetMyUserIndexModel
-                .getBody().getUserDetailBean().getUserExt().getGold_coin();
+                .getBody().getUserDetailBean().getUserExt().getLeft_coin();
         if (myCion-price>=0) {
             if (b) {
                 MyBaseApplication.getApplication().mGetMyUserIndexModel
-                        .getBody().getUserDetailBean().getUserExt().setGold_coin(myCion-price);
+                        .getBody().getUserDetailBean().getUserExt().setLeft_coin(myCion-price);
             }
             return true;
         } else {
@@ -756,7 +756,7 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
                 if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
                     return;
                 }
-                startActivityForResult(SelectGiftActivity.buildIntent(mContext, id, false), Common.toSelectGift);
+                startActivityForResult(SelectGiftActivity.buildIntent(mContext, id, false, 0), Common.toSelectGift);
                 p2pchatAddLl.setVisibility(View.GONE);
                 break;
             case R.id.p2pchat_add_finger_tv:
@@ -808,7 +808,7 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
                         showLogin();
                     } else {
                         startActivity(RechargeActivity.buildIntent(mContext
-                                , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getGold_coin()
+                                , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getLeft_coin()
                                 , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin()));
                     }
                 }

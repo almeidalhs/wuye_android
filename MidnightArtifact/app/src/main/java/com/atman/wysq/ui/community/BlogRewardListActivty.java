@@ -3,11 +3,12 @@ package com.atman.wysq.ui.community;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ListView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.adapter.RewardListViewAdapter;
+import com.atman.wysq.adapter.AllRewardListAdapter;
 import com.atman.wysq.model.response.GetRewardListModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
@@ -15,6 +16,9 @@ import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import butterknife.Bind;
@@ -30,12 +34,16 @@ import okhttp3.Response;
  */
 public class BlogRewardListActivty extends MyBaseActivity implements AdapterInterface {
 
-    @Bind(R.id.bloglist_lv)
-    ListView bloglistLv;
+    @Bind(R.id.community_recycler)
+    PullToRefreshRecyclerView communityRecycler;
 
     private Context mContext = BlogRewardListActivty.this;
+
     private int blogId = -1;
-    private RewardListViewAdapter mRewardListViewAdapter;
+    private AllRewardListAdapter mAllRewardListAdapter;
+    private int mPage = 1;
+    private RecyclerView mRecyclerView;
+    private GetRewardListModel mGetRewardListModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +65,29 @@ public class BlogRewardListActivty extends MyBaseActivity implements AdapterInte
         blogId = getIntent().getIntExtra("blogId", -1);
 
         setBarTitleTx("所有献花");
+
+        initRecycler();
+    }
+
+    private void initRecycler() {
+        initRefreshView(PullToRefreshBase.Mode.BOTH, communityRecycler);
+
+        mAllRewardListAdapter = new AllRewardListAdapter(mContext, getmWidth(), this);
+
+        mRecyclerView = communityRecycler.getRefreshableView();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        mRecyclerView.setAdapter(mAllRewardListAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == 0) {//滑动停止
+                    Fresco.getImagePipeline().resume();//开启图片加载
+                } else {
+                    Fresco.getImagePipeline().pause();//暂停图片加载
+                }
+            }
+        });
     }
 
     @Override
@@ -76,9 +107,7 @@ public class BlogRewardListActivty extends MyBaseActivity implements AdapterInte
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_GET_AWARDLIST) {
-            GetRewardListModel mGetRewardListModel = mGson.fromJson(data, GetRewardListModel.class);
-            mRewardListViewAdapter = new RewardListViewAdapter(mContext, mGetRewardListModel.getBody(), this);
-            bloglistLv.setAdapter(mRewardListViewAdapter);
+            mGetRewardListModel = mGson.fromJson(data, GetRewardListModel.class);
         }
     }
 
@@ -90,6 +119,6 @@ public class BlogRewardListActivty extends MyBaseActivity implements AdapterInte
 
     @Override
     public void onItemClick(View view, int position) {
-        startActivity(OtherPersonalActivity.buildIntent(mContext, mRewardListViewAdapter.getItem(position).getUser_id()));
+//        startActivity(OtherPersonalActivity.buildIntent(mContext, mRewardListViewAdapter.getItem(position).getUser_id()));
     }
 }

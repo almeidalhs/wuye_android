@@ -5,13 +5,16 @@
     android:padding="@dimen/dimen_dp_10"
     android:background="@color/color_white">
 
-    <com.base.baselibs.widget.CustomImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+    <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:id="@+id/item_rewardlistview_head_img"
         android:layout_width="@dimen/dimen_dp_30"
         android:layout_height="@dimen/dimen_dp_30"
         android:layout_centerVertical="true"
-        android:src="@mipmap/reward_more"
-        img:circle="true" />
+        fresco:roundAsCircle="true"
+        fresco:failureImage="@mipmap/icon_goodsdetail_business"
+        fresco:failureImageScaleType="centerInside"
+        fresco:placeholderImage="@mipmap/icon_goodsdetail_business"/>
 
     <LinearLayout
         android:id="@+id/item_rewardlistview_name_ll"
@@ -56,15 +59,26 @@
         android:textColor="#939393"
         android:textSize="@dimen/dimen_sp_10" />
 
+    <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/item_rewardlistview_gift_img"
+        android:layout_width="@dimen/dimen_dp_30"
+        android:layout_height="@dimen/dimen_dp_30"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/item_rewardlistview_num_tv"
+        fresco:failureImage="@mipmap/icon_goodsdetail_business"
+        fresco:failureImageScaleType="centerInside"
+        fresco:placeholderImage="@mipmap/icon_goodsdetail_business"/>
+
     <TextView
         android:id="@+id/item_rewardlistview_num_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:drawableLeft="@mipmap/postingdetails_flower_null"
+        android:layout_marginLeft="@dimen/dimen_dp_5"
         android:gravity="center_vertical"
-        android:text="  4"
+        android:text="4"
         android:textColor="#2B2B2B" />
 
 </RelativeLayout>

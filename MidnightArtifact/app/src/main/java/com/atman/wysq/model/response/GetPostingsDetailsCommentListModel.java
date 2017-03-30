@@ -55,7 +55,7 @@ public class GetPostingsDetailsCommentListModel {
 
     public static class BodyEntity {
         private int blog_comment_id;
-        private int blog_id;
+        private long blog_id;
         private long user_id;
         private String content;
         private int status;
@@ -99,11 +99,11 @@ public class GetPostingsDetailsCommentListModel {
             this.blog_comment_id = blog_comment_id;
         }
 
-        public int getBlog_id() {
+        public long getBlog_id() {
             return blog_id;
         }
 
-        public void setBlog_id(int blog_id) {
+        public void setBlog_id(long blog_id) {
             this.blog_id = blog_id;
         }
 
