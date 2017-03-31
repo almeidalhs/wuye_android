@@ -10,9 +10,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -276,7 +278,8 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
         OkHttpUtils.getInstance().cancelTag(Common.NET_RESET_HEAD);
     }
 
-    @OnClick({R.id.part_community_topleft_ll, R.id.community_tab_dynamic, R.id.community_tab_voice, R.id.community_tab_video, R.id.community_tab_hot, R.id.part_community_topright_ll})
+    @OnClick({R.id.part_community_topleft_ll, R.id.community_tab_dynamic, R.id.community_tab_voice
+            , R.id.community_tab_video, R.id.community_tab_hot, R.id.part_community_topright_ll})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.part_community_topleft_ll:
@@ -320,6 +323,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
                 doHttp(false);
                 break;
             case R.id.part_community_topright_ll:
+                showPopupWindow(view);
                 break;
             case R.id.part_livepop_bg_iv:
                 showHeadImg(view);
@@ -353,6 +357,33 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
                 }
                 break;
         }
+    }
+
+    private View popView;
+    private PopupWindow popupWindow;
+    private void showPopupWindow(View view) {
+        LayoutInflater inflaterGroup = LayoutInflater.from(getActivity());
+        popView = inflaterGroup.inflate(R.layout.pop_creatpost_view, null);
+        popupWindow = new PopupWindow(popView,
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getActivity().getResources().getDrawable(R.color.color_88000000));
+
+        // 设置好参数之后再show
+        popupWindow.showAsDropDown(view);
     }
 
     private void toMyLive(MyLiveInfoModel temp) {
