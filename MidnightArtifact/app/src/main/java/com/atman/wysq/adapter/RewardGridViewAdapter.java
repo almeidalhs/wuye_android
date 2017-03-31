@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.atman.wysq.R;
+import com.atman.wysq.model.response.GetBlogDetailModel;
 import com.atman.wysq.model.response.GetRewardListModel;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
@@ -31,9 +32,9 @@ public class RewardGridViewAdapter extends BaseAdapter {
     private Context context;
     private ViewHolder holder;
     protected LayoutInflater layoutInflater;
-    private List<GetRewardListModel.BodyEntity> shop;
+    private List<GetBlogDetailModel.BodyEntity.GiftListEntity> shop;
 
-    public RewardGridViewAdapter(Context context, List<GetRewardListModel.BodyEntity> shop) {
+    public RewardGridViewAdapter(Context context, List<GetBlogDetailModel.BodyEntity.GiftListEntity> shop) {
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
         this.shop = shop;
@@ -48,13 +49,13 @@ public class RewardGridViewAdapter extends BaseAdapter {
         }
     }
 
-    public void addData (GetRewardListModel.BodyEntity temp) {
+    public void addData (GetBlogDetailModel.BodyEntity.GiftListEntity temp) {
         shop.add(0, temp);
         notifyDataSetChanged();
     }
 
     @Override
-    public GetRewardListModel.BodyEntity getItem(int position) {
+    public GetBlogDetailModel.BodyEntity.GiftListEntity getItem(int position) {
         return shop.get(position);
     }
 

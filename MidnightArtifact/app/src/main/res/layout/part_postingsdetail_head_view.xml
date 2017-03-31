@@ -152,6 +152,7 @@
         android:background="@color/all_bg"
         android:gravity="center"
         android:clickable="true"
+        android:layout_marginTop="@dimen/dimen_dp_10"
         android:orientation="horizontal"
         android:padding="@dimen/dimen_dp_10">
 

@@ -1,6 +1,7 @@
 package com.atman.wysq.ui.yunxinfriend;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import com.atman.wysq.adapter.SelectGiftAdapter;
 import com.atman.wysq.model.response.GiftListModel;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.base.MyBaseFragment;
+import com.atman.wysq.ui.personal.wallet.DiamondsToCoinActivity;
+import com.atman.wysq.ui.personal.wallet.RechargeActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.SortComparator;
 import com.base.baselibs.iimp.AdapterInterface;
@@ -116,6 +119,11 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                if (mAdapter.getItem(po).getCharm()>MyBaseApplication.getApplication().mGetMyUserIndexModel
+                        .getBody().getUserDetailBean().getUserExt().getLeft_coin()) {
+                    showNotDialog();
+                    return;
+                }
                 String url = Common.Url_Pay_GiftList;
                 int reponseId = Common.NET_PAY_GIFTLIST;
                 if (fromId == 1) {
@@ -126,6 +134,33 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
                         .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .tag(reponseId).id(reponseId).build()
                         .execute(new MyStringCallback(getActivity(), SelectGiftFragment.this, true));
+            }
+        });
+        builder.show();
+    }
+
+    private void showNotDialog() {
+        String str = "钻石"+MyBaseApplication.getApplication().mGetMyUserIndexModel
+                .getBody().getUserDetailBean().getUserExt().getConvert_coin()
+                +"     金币："+MyBaseApplication.getApplication().mGetMyUserIndexModel
+                .getBody().getUserDetailBean().getUserExt().getLeft_coin();
+        PromptDialog.Builder builder = new PromptDialog.Builder(getActivity());
+        builder.setTitle("很抱歉，您的账户余额不足");
+        builder.setMessage(str);
+        builder.setPositiveButton("钻石兑换金币", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                startActivity(new Intent(getActivity(), DiamondsToCoinActivity.class));
+            }
+        });
+        builder.setNegativeButton("前往充值金币", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                startActivity(RechargeActivity.buildIntent(getActivity()
+                        , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getLeft_coin()
+                        , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin()));
             }
         });
         builder.show();

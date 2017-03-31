@@ -251,6 +251,8 @@ public class Common {
     public static String Url_Reward = hostUrl + "rest/gift/buytoblog/";
     //获取举报列表 rest/corruption/reason/{type} 备注：type（1：针对人 2：针对帖子 ； is_other（1：表示为 其他 ）
     public static String Url_Get_Report_List = hostUrl + "rest/corruption/reason/";
+    //获取获得打赏列表 rest/gift/giver/185973/1
+    public static String Url_Get_Reward_List = hostUrl + "rest/gift/giver/";
     /**************************http访问路径*****************************/
 
 
@@ -480,6 +482,8 @@ public class Common {
     public static int NET_REWARD_ID = 111;
     //获取举报列表
     public static int NET_GET_REPORT_LIST_ID = 112;
+    //获取获得打赏列表
+    public static int NET_GET_REPWARD_LIST_ID = 113;
     /**************************http访问回应识别码*****************************/
 
 

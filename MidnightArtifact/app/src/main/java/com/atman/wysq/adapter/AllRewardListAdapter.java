@@ -97,9 +97,10 @@ public class AllRewardListAdapter extends RecyclerView.Adapter<AllRewardListAdap
 
         holder.itemRewardlistviewHeadImg.setImageURI(Common.ImageUrl+listData.get(position).getIcon());
         holder.itemRewardlistviewNameTv.setText(listData.get(position).getUser_name());
-//        holder.itemRewardlistviewLevelTx.setText("Lv "+listData.get(position).get);
+        holder.itemRewardlistviewLevelTx.setText("Lv "+listData.get(position).getUserLevel());
 //        holder.itemRewardlistviewTimeTv.setText(MyTools.convertTimeS(listData.get(position).getCreate_time()));
         holder.itemRewardlistviewNumTv.setText("  "+listData.get(position).getGift_num());
+        holder.itemRewardlistviewGiftImg.setImageURI(Common.ImageUrl+listData.get(position).getPic_url());
 
         holder.itemRewardlistviewHeadImg.setOnClickListener(new View.OnClickListener() {
             @Override

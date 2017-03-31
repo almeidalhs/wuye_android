@@ -100,6 +100,25 @@ public class GetBlogDetailModel {
         private List<?> blogComments;
         private List<String> wysqImglist;
         private int favorite_id;
+        private long flower_num;
+
+        public long getFlower_num() {
+            return flower_num;
+        }
+
+        public void setFlower_num(long flower_num) {
+            this.flower_num = flower_num;
+        }
+
+        public List<GiftListEntity> getGiftList() {
+            return giftList;
+        }
+
+        public void setGiftList(List<GiftListEntity> giftList) {
+            this.giftList = giftList;
+        }
+
+        private List<GiftListEntity> giftList;
 
         public int getFavorite_id() {
             return favorite_id;
@@ -335,6 +354,27 @@ public class GetBlogDetailModel {
 
         public void setWysqImglist(List<String> wysqImglist) {
             this.wysqImglist = wysqImglist;
+        }
+
+        public static class GiftListEntity {
+            private long user_id;
+            private String icon;
+
+            public long getUser_id() {
+                return user_id;
+            }
+
+            public void setUser_id(long user_id) {
+                this.user_id = user_id;
+            }
+
+            public String getIcon() {
+                return icon;
+            }
+
+            public void setIcon(String icon) {
+                this.icon = icon;
+            }
         }
 
         public static class AnonymityUserEntity {

@@ -325,9 +325,18 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
 //                blogdetailTitleTx.setVisibility(View.VISIBLE);
                 blogdetailTopRl.setVisibility(View.VISIBLE);
                 blogdetailFlowerLl.setVisibility(View.VISIBLE);
-                OkHttpUtils.get().url(Common.Url_Get_Award_List + mGetBlogDetailModel.getBody().get(0).getBlog_id()).id(Common.NET_GET_AWARDLIST)
-                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .tag(Common.NET_GET_AWARDLIST).build().execute(new MyStringCallback(mContext, this, true));
+
+                blogdetailFlowerTv.setText(mGetBlogDetailModel.getBody().get(0).getFlower_num() + "");
+                if (mGetBlogDetailModel.getBody().get(0).getFlower_num() > 0) {
+                    mRewardListAdapter = new RewardGridViewAdapter(mContext, mGetBlogDetailModel.getBody().get(0).getGiftList());
+                    blogdetailFlowerGv.setAdapter(mRewardListAdapter);
+                    blogdetailFlowerGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            startActivity(BlogRewardListActivty.buildIntent(mContext, mGetBlogDetailModel.getBody().get(0).getBlog_id()));
+                        }
+                    });
+                }
             }
         } else if (id == Common.NET_GET_BLOGDETAIL_COMMENTLIST) {
             mGetPostingsDetailsCommentListModel = mGson.fromJson(data, GetPostingsDetailsCommentListModel.class);
@@ -388,29 +397,6 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
             mAdapter.setLikeById(mPosition);
         } else if (id == Common.NET_ADD_BLACKLIST) {
             showToast("已成功拉黑");
-        } else if (id == Common.NET_ADD_AWARD) {
-            AddRewardModel AddRewardModelm = mGson.fromJson(data, AddRewardModel.class);
-            showToast("打赏成功");
-            OkHttpUtils.get().url(Common.Url_Get_Award_List + mGetBlogDetailModel.getBody().get(0).getBlog_id()).id(Common.NET_GET_AWARDLIST)
-                    .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                    .tag(Common.NET_GET_AWARDLIST).build().execute(new MyStringCallback(mContext, this, true));
-        } else if (id == Common.NET_GET_AWARDLIST) {
-            GetRewardListModel mGetRewardListModel = mGson.fromJson(data, GetRewardListModel.class);
-            int num = 0;
-            for (int i = 0; i < mGetRewardListModel.getBody().size(); i++) {
-                num += mGetRewardListModel.getBody().get(i).getUser_award_gold_num();
-            }
-            blogdetailFlowerTv.setText(num + "");
-            mRewardListAdapter = new RewardGridViewAdapter(mContext, mGetRewardListModel.getBody());
-            if (num > 0) {
-                blogdetailFlowerGv.setAdapter(mRewardListAdapter);
-                blogdetailFlowerGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        startActivity(BlogRewardListActivty.buildIntent(mContext, mGetBlogDetailModel.getBody().get(0).getBlog_id()));
-                    }
-                });
-            }
         } else if (id == Common.NET_DELETE_POST) {
             Intent mIntent = new Intent();
             mIntent.putExtra("id", id);
@@ -494,7 +480,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                         showToast("亲，这是你自己的帖子哦");
                     } else {
                         startActivityForResult(SelectGiftActivity.buildIntent(mContext
-                                , String.valueOf(blogUserId), false, 1), Common.toSelectGift);
+                                , String.valueOf(bolgId), false, 1), Common.toSelectGift);
                     }
                 }
             }
@@ -795,9 +781,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_CATEGORY_DETAIL);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_COMMENT);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_LIKE);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_AWARDLIST);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BLACKLIST);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_AWARD);
         OkHttpUtils.getInstance().cancelTag(Common.NET_DELETE_POST);
     }
 
@@ -849,12 +833,15 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
             return;
         }
         if (requestCode == Common.toSelectGift) {
-//            mText = data.getStringExtra("text");
-//            File file = ImageLoader.getInstance().getDiskCache().get(Common.ImageUrl+data.getStringExtra("url"));
-//            IMMessage message = MessageBuilder.createImageMessage(id, SessionTypeEnum.P2P, file, "");
-//            mUuid = message.getUuid();
-//            seedMessage(message, ContentTypeInter.contentTypeImageSmall, file.getPath(), "", true);
-            GetRewardListModel.BodyEntity temp = new GetRewardListModel.BodyEntity();
+            int num = data.getIntExtra("price", 0);
+            if (mGetBlogDetailModel.getBody().size()>0) {
+                long n = mGetBlogDetailModel.getBody().get(0).getFlower_num();
+                mGetBlogDetailModel.getBody().get(0).setFlower_num(n+num/2);
+                blogdetailFlowerTv.setText(mGetBlogDetailModel.getBody().get(0).getFlower_num() + "");
+            } else {
+                blogdetailFlowerTv.setText(num/2 + "");
+            }
+            GetBlogDetailModel.BodyEntity.GiftListEntity temp = new GetBlogDetailModel.BodyEntity.GiftListEntity();
             temp.setIcon(MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
             mRewardListAdapter.addData(temp);
         }

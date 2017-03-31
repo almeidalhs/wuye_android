@@ -12,7 +12,7 @@ import java.util.List;
 public class GetRewardListNewModel {
     /**
      * result : 1
-     * body : [{"user_id":450214604,"user_name":"直播间热线","icon":"/imageServer/9C66male.png","sex":"M","gift_num":1,"gift_name":"名表"}]
+     * body : [{"user_id":100003790,"user_name":"夜友-515857","icon":"/imageServer/9C66male.png","sex":"M","userLevel":1,"gift_num":1,"gift_name":"气球","pic_url":"/imageServer/prop/gift/balloon.png"}]
      */
 
     private String result;
@@ -36,20 +36,24 @@ public class GetRewardListNewModel {
 
     public static class BodyBean {
         /**
-         * user_id : 450214604
-         * user_name : 直播间热线
+         * user_id : 100003790
+         * user_name : 夜友-515857
          * icon : /imageServer/9C66male.png
          * sex : M
+         * userLevel : 1
          * gift_num : 1
-         * gift_name : 名表
+         * gift_name : 气球
+         * pic_url : /imageServer/prop/gift/balloon.png
          */
 
         private long user_id;
         private String user_name;
         private String icon;
         private String sex;
+        private int userLevel;
         private int gift_num;
         private String gift_name;
+        private String pic_url;
 
         public long getUser_id() {
             return user_id;
@@ -83,6 +87,14 @@ public class GetRewardListNewModel {
             this.sex = sex;
         }
 
+        public int getUserLevel() {
+            return userLevel;
+        }
+
+        public void setUserLevel(int userLevel) {
+            this.userLevel = userLevel;
+        }
+
         public int getGift_num() {
             return gift_num;
         }
@@ -97,6 +109,14 @@ public class GetRewardListNewModel {
 
         public void setGift_name(String gift_name) {
             this.gift_name = gift_name;
+        }
+
+        public String getPic_url() {
+            return pic_url;
+        }
+
+        public void setPic_url(String pic_url) {
+            this.pic_url = pic_url;
         }
     }
 }

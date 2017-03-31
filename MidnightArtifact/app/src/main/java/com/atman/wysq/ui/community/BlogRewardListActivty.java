@@ -9,11 +9,12 @@ import android.view.View;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.AllRewardListAdapter;
-import com.atman.wysq.model.response.GetRewardListModel;
+import com.atman.wysq.model.response.GetRewardListNewModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
-import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.SpaceItemDecoration;
+import com.atman.wysq.utils.SpaceItemDecorationLinear;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -23,6 +24,7 @@ import com.tbl.okhttputils.OkHttpUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.Call;
 import okhttp3.Response;
 
 /**
@@ -43,7 +45,7 @@ public class BlogRewardListActivty extends MyBaseActivity implements AdapterInte
     private AllRewardListAdapter mAllRewardListAdapter;
     private int mPage = 1;
     private RecyclerView mRecyclerView;
-    private GetRewardListModel mGetRewardListModel;
+    private GetRewardListNewModel mGetRewardListNewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,8 @@ public class BlogRewardListActivty extends MyBaseActivity implements AdapterInte
 
         mRecyclerView = communityRecycler.getRefreshableView();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.dimen_dp_1);
+        mRecyclerView.addItemDecoration(new SpaceItemDecorationLinear(spacingInPixels));
         mRecyclerView.setAdapter(mAllRewardListAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -93,9 +97,15 @@ public class BlogRewardListActivty extends MyBaseActivity implements AdapterInte
     @Override
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
-        OkHttpUtils.get().url(Common.Url_Get_Award_List + blogId).id(Common.NET_GET_AWARDLIST)
+
+        doHttp(true);
+    }
+
+    private void doHttp(boolean b) {
+        OkHttpUtils.get().url(Common.Url_Get_Reward_List + blogId +"/"+mPage)
+                .id(Common.NET_GET_REPWARD_LIST_ID).tag(Common.NET_GET_REPWARD_LIST_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                .tag(Common.NET_GET_AWARDLIST).build().execute(new MyStringCallback(mContext, this, true));
+                .build().execute(new MyStringCallback(mContext, this, b));
     }
 
     @Override
@@ -106,15 +116,48 @@ public class BlogRewardListActivty extends MyBaseActivity implements AdapterInte
     @Override
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
-        if (id == Common.NET_GET_AWARDLIST) {
-            mGetRewardListModel = mGson.fromJson(data, GetRewardListModel.class);
+        if (id == Common.NET_GET_REPWARD_LIST_ID) {
+            mGetRewardListNewModel = mGson.fromJson(data, GetRewardListNewModel.class);
+            if (mGetRewardListNewModel.getBody() == null
+                    || mGetRewardListNewModel.getBody().size() == 0) {
+                if (mAllRewardListAdapter != null && mAllRewardListAdapter.getItemCount() > 0) {
+                    showToast("没有更多");
+                }
+                onLoad(PullToRefreshBase.Mode.PULL_FROM_START, communityRecycler);
+            } else {
+                onLoad(PullToRefreshBase.Mode.BOTH, communityRecycler);
+                if (mPage == 1) {
+                    mAllRewardListAdapter.clearData();
+                }
+                mAllRewardListAdapter.addData(mGetRewardListNewModel.getBody());
+            }
         }
+    }
+
+    @Override
+    public void onPullDownToRefresh(PullToRefreshBase refreshView) {
+        mPage = 1;
+        mAllRewardListAdapter.clearData();
+        doHttp(false);
+    }
+
+    @Override
+    public void onPullUpToRefresh(PullToRefreshBase refreshView) {
+        mPage += 1;
+        doHttp(false);
+    }
+
+    @Override
+    public void onError(Call call, Exception e, int code, int id) {
+        super.onError(call, e, code, id);
+        mPage = 1;
+        onLoad(PullToRefreshBase.Mode.BOTH, communityRecycler);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_AWARDLIST);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_REPWARD_LIST_ID);
     }
 
     @Override
