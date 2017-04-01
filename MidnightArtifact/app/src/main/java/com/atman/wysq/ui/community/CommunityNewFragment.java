@@ -3,6 +3,7 @@ package com.atman.wysq.ui.community;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +11,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -323,7 +323,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
                 doHttp(false);
                 break;
             case R.id.part_community_topright_ll:
-                showPopupWindow(view);
+                showTopPopWin(view);
                 break;
             case R.id.part_livepop_bg_iv:
                 showHeadImg(view);
@@ -359,31 +359,28 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
         }
     }
 
-    private View popView;
-    private PopupWindow popupWindow;
-    private void showPopupWindow(View view) {
-        LayoutInflater inflaterGroup = LayoutInflater.from(getActivity());
-        popView = inflaterGroup.inflate(R.layout.pop_creatpost_view, null);
-        popupWindow = new PopupWindow(popView,
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setTouchable(true);
-        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+    private void showTopPopWin(View v) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.pop_createpost_view, null);
+        final PopupWindow popupWindow = new PopupWindow(view, LinearLayout.LayoutParams.WRAP_CONTENT
+                ,LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                return false;
-                // 这里如果返回true的话，touch事件将被拦截
-                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+        TextView popCreateVideoTx = (TextView) view.findViewById(R.id.pop_create_video_tx);
+        TextView popCreateVoiceTx = (TextView) view.findViewById(R.id.pop_create_voice_tx);
+        TextView popCreatePostTx = (TextView) view.findViewById(R.id.pop_create_post_tx);
+
+        popCreatePostTx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                startActivity(new Intent(getActivity(), CreateImageTextPostActivity.class));
+//                startActivity(PostActivity.buildIntent(getActivity(), 0));
             }
         });
 
-        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-        // 我觉得这里是API的一个bug
-        popupWindow.setBackgroundDrawable(getActivity().getResources().getDrawable(R.color.color_88000000));
-
-        // 设置好参数之后再show
-        popupWindow.showAsDropDown(view);
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.showAsDropDown(v, 0, 0);
     }
 
     private void toMyLive(MyLiveInfoModel temp) {

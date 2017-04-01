@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/item_childone_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_100"
+        android:layout_marginBottom="@dimen/dimen_dp_5"
+        android:layout_marginLeft="@dimen/dimen_dp_10"
+        android:layout_marginRight="@dimen/dimen_dp_10"
+        android:layout_marginTop="@dimen/dimen_dp_5"
+        android:background="#f4f4f4"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3">
+
+            <RelativeLayout
+                android:id="@+id/item_childone_head_rl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/item_childone_head_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:background="#44000000"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/dimen_dp_5"
+                    android:paddingTop="@dimen/dimen_dp_5"
+                    android:text="点击更换图片"
+                    android:textColor="@color/color_white" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/item_childone_head_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="#f4f4f4"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/item_childone_postcontent_tx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="拍摄或者从图库选择"
+                    android:textColor="@color/color_787878"
+                    android:textSize="@dimen/dimen_sp_13" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/item_postcontent_tx"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/item_childone_photograph_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dimen_dp_5"
+                        android:src="@mipmap/bt_takephoto_tabbar" />
+
+                    <ImageView
+                        android:id="@+id/item_childone_album_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_dp_5"
+                        android:src="@mipmap/bt_album_tabbar" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="@dimen/dimen_dp_2"
+            android:layout_height="match_parent"
+            android:background="@color/color_white" />
+
+        <EditText
+            android:id="@+id/item_childone_content_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@null"
+            android:gravity="top"
+            android:hint="输入内容..."
+            android:maxLength="254"
+            android:padding="@dimen/dimen_dp_10"
+            android:textSize="@dimen/dimen_sp_14" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/item_childone_delete_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dimen_dp_5"
+        android:layout_marginTop="@dimen/dimen_dp_5"
+        android:src="@mipmap/post_create_delete" />
+
+    <LinearLayout
+        android:layout_below="@+id/item_childone_ll"
+        android:id="@+id/item_childone_add_ll"
+        android:layout_width="match_parent"
+        android:background="#f4f4f4"
+        android:clickable="true"
+        android:visibility="gone"
+        android:layout_margin="@dimen/dimen_dp_10"
+        android:layout_height="@dimen/dimen_dp_40"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dimen_sp_15"
+            android:text="＋添加图文"
+            android:textColor="@color/color_black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dimen_sp_15"
+            android:text="（最多添加10个）"
+            android:textColor="@color/color_787878"/>
+    </LinearLayout>
+</RelativeLayout>

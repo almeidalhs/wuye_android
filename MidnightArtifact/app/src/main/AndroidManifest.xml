@@ -67,6 +67,8 @@
         <activity android:name=".ui.community.MySecretListActivity"/>
         <activity android:name=".ui.community.ReplyListActivity"/>
         <activity android:name=".ui.community.ReportListActivity"/>
+        <activity android:name=".ui.community.CreateImageTextPostActivity"/>
+        <activity android:name=".ui.community.MallActivity"/>
         <activity android:name=".ui.yunxinfriend.OtherPersonalActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.yunxinfriend.HisDynamicsActivity"/>
         <activity android:name=".ui.yunxinfriend.HisVisitorActivity"/>

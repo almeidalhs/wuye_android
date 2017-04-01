@@ -14,8 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.atman.wysq.R;
-import com.atman.wysq.model.request.PostContentModel;
-import com.atman.wysq.widget.face.FaceNotEditViewRelativeLayout;
+import com.atman.wysq.model.request.AddPostContentModel;
 import com.atman.wysq.widget.face.SmileUtils;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.choicepicture_library.tools.Bimp;
@@ -34,23 +33,16 @@ public class PostContentListAdapter extends BaseAdapter {
 
     private Context context;
     protected LayoutInflater layoutInflater;
-    private List<PostContentModel> shop;
+    private List<AddPostContentModel> shop;
     private AdapterInterface mAdapterInterface;
     private int index = -1;
     private EditText mEditText;
-    private ImageView postFaceIv;
-    private RelativeLayout llFacechoose;
-    private FaceNotEditViewRelativeLayout postFaceRelativeLayout;
 
-    public PostContentListAdapter(Context context, List<PostContentModel> shop, ImageView postFaceIv
-            , RelativeLayout llFacechoose, FaceNotEditViewRelativeLayout postFaceRelativeLayout, AdapterInterface mAdapterInterface) {
+    public PostContentListAdapter(Context context, List<AddPostContentModel> shop, AdapterInterface mAdapterInterface) {
         this.context = context;
         this.mAdapterInterface = mAdapterInterface;
         layoutInflater = LayoutInflater.from(context);
         this.shop = shop;
-        this.postFaceIv = postFaceIv;
-        this.llFacechoose = llFacechoose;
-        this.postFaceRelativeLayout = postFaceRelativeLayout;
     }
 
     public int getIndex() {
@@ -67,7 +59,7 @@ public class PostContentListAdapter extends BaseAdapter {
     }
 
     @Override
-    public PostContentModel getItem(int position) {
+    public AddPostContentModel getItem(int position) {
         return shop.get(position);
     }
 
@@ -122,7 +114,6 @@ public class PostContentListAdapter extends BaseAdapter {
                 if(event.getAction() == MotionEvent.ACTION_UP
                         || event.getAction() == MotionEvent.ACTION_MOVE) {
                     index= position;
-                    llFacechoose.setVisibility(View.GONE);
                     v.getParent().requestDisallowInterceptTouchEvent(false);
                 }
                 return false;
@@ -134,10 +125,7 @@ public class PostContentListAdapter extends BaseAdapter {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     mEditText = itemPostcontentContentEt;
-                    postFaceRelativeLayout.setEt_sendmessage(mEditText);
-                    postFaceIv.setVisibility(View.VISIBLE);
                 } else {
-                    postFaceIv.setVisibility(View.GONE);
                 }
             }
         });
@@ -168,7 +156,6 @@ public class PostContentListAdapter extends BaseAdapter {
         if (num==index) {
             index = -1;
             mEditText = null;
-            llFacechoose.setVisibility(View.GONE);
         }
         shop.remove(num);
         notifyDataSetChanged();
@@ -186,7 +173,7 @@ public class PostContentListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void addItem(PostContentModel mPostContentModel) {
+    public void addItem(AddPostContentModel mPostContentModel) {
         shop.add(mPostContentModel);
         notifyDataSetChanged();
     }

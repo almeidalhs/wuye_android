@@ -253,6 +253,14 @@ public class Common {
     public static String Url_Get_Report_List = hostUrl + "rest/corruption/reason/";
     //获取获得打赏列表 rest/gift/giver/185973/1
     public static String Url_Get_Reward_List = hostUrl + "rest/gift/giver/";
+    //创建图文帖 rest/blog/addImageText
+    public static String Url_Create_ImageText_Post = hostUrl + "rest/blog/addImageText";
+    //获取商城一级分类
+    public static String Url_Get_One_Category = hostUrl + "rest/category/list";
+    //获取热搜关键字
+    public static String Url_Get_Search_Keyword = hostUrl + "rest/goods/searchKeyword";
+    //获取商城二级分类
+    public static String Url_Get_Two_Category = hostUrl + "rest/category/leaflist/";
     /**************************http访问路径*****************************/
 
 
@@ -484,6 +492,14 @@ public class Common {
     public static int NET_GET_REPORT_LIST_ID = 112;
     //获取获得打赏列表
     public static int NET_GET_REPWARD_LIST_ID = 113;
+    //创建图文帖子
+    public static int NET_CREATE_IAMGETEXT_POST_ID = 114;
+    //获取商城一级分类
+    public static int NET_GET_CATEGOYP_ONE_ID = 115;
+    //获取热搜关键字
+    public static int NET_GET_SEARCH_KEYWORD_ID = 116;
+    //获取商城二级分类
+    public static int NET_GET_CATEGOYP_TWO_ID = 117;
     /**************************http访问回应识别码*****************************/
 
 
@@ -503,5 +519,6 @@ public class Common {
     public static int toPostDetail = 1011;
     public static int toSelectGift = 1012;
     public static int toOtherPersonal = 1013;
+    public static int fromCreateImageText = 1014;
     /**************************跳转码*****************************/
 }

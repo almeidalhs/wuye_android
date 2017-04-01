@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_45"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/dimen_dp_5"
+        android:paddingBottom="@dimen/dimen_dp_5"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:paddingRight="@dimen/dimen_dp_10">
+
+        <com.atman.wysq.widget.SearchEditText
+            android:id="@+id/relation_goods_sv"
+            style="@style/editTextStyle" />
+
+        <TextView
+            android:id="@+id/relation_goods_search_cacel_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_dp_30"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="@color/color_blue"
+            android:textSize="@dimen/dimen_sp_14"
+            android:layout_marginLeft="@dimen/dimen_dp_10"
+            android:text="取消"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/relation_goods_search_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_white"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/relation_goods_ll"
+        android:layout_marginTop="@dimen/dimen_dp_5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ListView
+            android:id="@+id/relation_goods_category_lv"
+            android:layout_weight="3"
+            android:divider="@color/all_bg"
+            android:dividerHeight="1px"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+        <ExpandableListView
+            android:id="@+id/relation_goods_goods_lv"
+            android:layout_weight="1"
+            android:dividerHeight="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+</LinearLayout>

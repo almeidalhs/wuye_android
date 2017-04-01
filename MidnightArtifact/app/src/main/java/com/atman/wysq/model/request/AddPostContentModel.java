@@ -9,16 +9,14 @@ import android.graphics.Bitmap;
  * 邮箱 bltang@atman.com
  * 电话 18578909061
  */
-public class PostContentModel {
-    private int id;
+public class AddPostContentModel {
     private String content;
     private String localUrl;
     private String netUrl;
     private Bitmap bitmap;
 
-    public PostContentModel(int id, String localUrl, String netUrl, String content, Bitmap bitmap) {
+    public AddPostContentModel(String localUrl, String netUrl, String content, Bitmap bitmap) {
         this.content = content;
-        this.id = id;
         this.localUrl = localUrl;
         this.netUrl = netUrl;
         this.bitmap = bitmap;
@@ -38,14 +36,6 @@ public class PostContentModel {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getLocalUrl() {

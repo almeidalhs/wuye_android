@@ -4,39 +4,29 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.PostContentListAdapter;
-import com.atman.wysq.model.request.AddPostModel;
-import com.atman.wysq.model.request.PostContentModel;
+import com.atman.wysq.model.request.CreateImageViewPostModel;
+import com.atman.wysq.model.request.AddPostContentModel;
 import com.atman.wysq.model.response.HeadImgResultModel;
 import com.atman.wysq.model.response.HeadImgSuccessModel;
-import com.atman.wysq.ui.MainActivity;
-import com.atman.wysq.ui.base.BaseGestureLockActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
-import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.Tools;
 import com.atman.wysq.utils.UiHelper;
-import com.atman.wysq.widget.face.FaceNotEditViewRelativeLayout;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
@@ -45,7 +35,6 @@ import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.PromptDialog;
 import com.choicepicture_library.ImageGridActivity;
-import com.choicepicture_library.model.SelectImageItem;
 import com.choicepicture_library.tools.Bimp;
 import com.tbl.okhttputils.OkHttpUtils;
 
@@ -56,7 +45,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import okhttp3.Response;
 
 /**
@@ -68,32 +56,18 @@ import okhttp3.Response;
  */
 public class PostActivity extends MyBaseActivity implements AdapterInterface,View.OnTouchListener {
 
-    @Bind(R.id.post_photograph_iv)
-    ImageView postPhotographIv;
-    @Bind(R.id.post_album_iv)
-    ImageView postAlbumIv;
-    @Bind(R.id.post_face_iv)
-    ImageView postFaceIv;
-    @Bind(R.id.post_ll1)
-    LinearLayout postLl1;
-    @Bind(R.id.vp_contains)
-    ViewPager vpContains;
-    @Bind(R.id.iv_image)
-    LinearLayout ivImage;
-    @Bind(R.id.ll_facechoose)
-    RelativeLayout llFacechoose;
-    @Bind(R.id.post_FaceRelativeLayout)
-    FaceNotEditViewRelativeLayout postFaceRelativeLayout;
     @Bind(R.id.post_content_lv)
     ListView postContentLv;
 
     private Context mContext = PostActivity.this;
-    private RelativeLayout barRightRl;
-    private List<PostContentModel> mPostContentModelList = new ArrayList<>();
+    private List<AddPostContentModel> mPostContentModelList = new ArrayList<>();
     private EditText mFocusEditText;
-    private int blogBoardId;
+    private TextView topRightTv;
 
     private View headView;
+    private MyCleanEditText partFootContentEt;
+    private View footView;
+    private LinearLayout partFootRootLl;
     private MyCleanEditText postTitleEt;
     private PostContentListAdapter mAdapter;
     private int mPosition;
@@ -104,7 +78,7 @@ public class PostActivity extends MyBaseActivity implements AdapterInterface,Vie
     private final int TAKE_BIG_PICTURE = 555;
     private boolean isBottom = true;
     private int MaxLen = 10;
-    private List<AddPostModel> mAddPostModelList = new ArrayList<>();
+    private List<CreateImageViewPostModel> mAddPostModelList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,11 +97,10 @@ public class PostActivity extends MyBaseActivity implements AdapterInterface,Vie
     public void initWidget(View... v) {
         super.initWidget(v);
 
-        blogBoardId = getIntent().getIntExtra("blogBoardId", -1);
-        setBarTitleTx("发布秘密");
-        setBarRightIv(R.mipmap.bt_create_ok);
-        barRightRl = getBarRightRl();
-        barRightRl.setOnClickListener(new View.OnClickListener() {
+        setBarTitleTx("创建帖子");
+        topRightTv = setBarRightTx("提交");
+        topRightTv.setTextColor(getResources().getColor(R.color.color_red));
+        topRightTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (postTitleEt.getText().toString().trim().isEmpty()) {
@@ -148,6 +121,7 @@ public class PostActivity extends MyBaseActivity implements AdapterInterface,Vie
                 showWarn();
             }
         });
+
         getBarBackLl().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,6 +132,40 @@ public class PostActivity extends MyBaseActivity implements AdapterInterface,Vie
             @Override
             public void onClick(View v) {
                 showDonot();
+            }
+        });
+
+        initData();
+    }
+
+    private void initData() {
+
+        footView = LayoutInflater.from(mContext).inflate(R.layout.part_post_foot_view, null);
+        partFootContentEt = (MyCleanEditText) footView.findViewById(R.id.part_foot_content_et);
+        partFootRootLl = (LinearLayout) footView.findViewById(R.id.part_foot_root_ll);
+        footView.findViewById(R.id.part_foot_photograph_iv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mAdapter.getCount()>=MaxLen) {
+                    showToast("最多创建10条内容");
+                    return;
+                }
+                MyBaseApplication.getApplication().setFilterLock(true);
+                isBottom = true;
+                path = UiHelper.photo(mContext, path, TAKE_BIG_PICTURE);
+            }
+        });
+        footView.findViewById(R.id.part_foot_album_iv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mAdapter.getCount()>=MaxLen) {
+                    showToast("最多创建10条内容");
+                    return;
+                }
+                isBottom = true;
+                Bimp.max = MaxLen - mAdapter.getCount();
+                clear();
+                startActivityForResult(new Intent(mContext, ImageGridActivity.class), CHOOSE_BIG_PICTURE);
             }
         });
 
@@ -179,19 +187,11 @@ public class PostActivity extends MyBaseActivity implements AdapterInterface,Vie
             }
         });
 
-        initData();
-
-        postPhotographIv.setOnTouchListener(this);
-        postAlbumIv.setOnTouchListener(this);
-        postFaceIv.setOnTouchListener(this);
-        barRightRl.setOnTouchListener(this);
-    }
-
-    private void initData() {
-        PostContentModel mPostContentModel = new PostContentModel(1, "", "", "", null);
+        AddPostContentModel mPostContentModel = new AddPostContentModel("", "", "", null);
         mPostContentModelList.add(mPostContentModel);
-        mAdapter = new PostContentListAdapter(mContext, mPostContentModelList, postFaceIv, llFacechoose, postFaceRelativeLayout, this);
+        mAdapter = new PostContentListAdapter(mContext, mPostContentModelList, this);
         postContentLv.addHeaderView(headView);
+        postContentLv.addFooterView(footView);
         postContentLv.setAdapter(mAdapter);
     }
 
@@ -235,11 +235,11 @@ public class PostActivity extends MyBaseActivity implements AdapterInterface,Vie
                     str += mPostContentModelList.get(i).getContent();
                 }
             }
-            AddPostModel addPostModel = new AddPostModel(blogBoardId, str, postTitleEt.getText().toString().trim(), mAnonymity);
-            mAddPostModelList.add(addPostModel);
-            OkHttpUtils.postString().url(Common.Url_Add_Post).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                    .mediaType(Common.JSON).content(mGson.toJson(mAddPostModelList))
-                    .id(Common.NET_ADD_POST).tag(Common.NET_ADD_POST).build().execute(new MyStringCallback(mContext, this, true));
+//            CreateImageViewPostModel addPostModel = new CreateImageViewPostModel(blogBoardId, str, postTitleEt.getText().toString().trim(), mAnonymity);
+//            mAddPostModelList.add(addPostModel);
+//            OkHttpUtils.postString().url(Common.Url_Add_Post).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+//                    .mediaType(Common.JSON).content(mGson.toJson(mAddPostModelList))
+//                    .id(Common.NET_ADD_POST).tag(Common.NET_ADD_POST).build().execute(new MyStringCallback(mContext, this, true));
             return;
         }
         String data = mAdapter.getItem(inUrl).getLocalUrl();
@@ -277,57 +277,8 @@ public class PostActivity extends MyBaseActivity implements AdapterInterface,Vie
         Bimp.bmp.clear();
     }
 
-    @OnClick({R.id.post_photograph_iv, R.id.post_album_iv, R.id.post_face_iv})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.post_face_iv:
-                if (mFocusEditText != null) {
-                    postFaceRelativeLayout.setEt_sendmessage(mFocusEditText);
-                }
-                if (isIMOpen()) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
-                }
-                // 隐藏表情选择框
-                if (llFacechoose.getVisibility() == View.VISIBLE) {
-                    llFacechoose.setVisibility(View.GONE);
-                } else {
-                    llFacechoose.setVisibility(View.VISIBLE);
-                }
-                break;
-            case R.id.post_photograph_iv:
-                if (mAdapter.getCount()>=MaxLen) {
-                    showToast("最多创建10条内容");
-                    return;
-                }
-                MyBaseApplication.getApplication().setFilterLock(true);
-                isBottom = true;
-                path = UiHelper.photo(mContext, path, TAKE_BIG_PICTURE);
-                break;
-            case R.id.post_album_iv:
-                if (mAdapter.getCount()>=MaxLen) {
-                    showToast("最多创建10条内容");
-                    return;
-                }
-                isBottom = true;
-                Bimp.max = MaxLen - mAdapter.getCount();
-                clear();
-                startActivityForResult(new Intent(mContext, ImageGridActivity.class), CHOOSE_BIG_PICTURE);
-                break;
-        }
-    }
-
     private void setEditFocus(EditText postTitleEt, int i) {
         mFocusEditText = postTitleEt;
-        postFaceRelativeLayout.setEt_sendmessage(postTitleEt);
-        if (llFacechoose.getVisibility() == View.VISIBLE) {
-            llFacechoose.setVisibility(View.GONE);
-        }
-        if (i == 0) {
-            postFaceIv.setVisibility(View.GONE);
-        } else {
-            postFaceIv.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -336,6 +287,7 @@ public class PostActivity extends MyBaseActivity implements AdapterInterface,Vie
         switch (view.getId()) {
             case R.id.item_postcontent_delete_iv:
                 mAdapter.delateItem(position);
+                isHitFoot();
                 break;
             case R.id.item_postcontent_head_rl:
                 showHeadImg();
@@ -424,8 +376,10 @@ public class PostActivity extends MyBaseActivity implements AdapterInterface,Vie
         if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
             if (isBottom) {
                 for (int i=0;i<Bimp.drr.size();i++) {
-                    PostContentModel mPostContentModel = new PostContentModel(1, Bimp.drr.get(i), "", "", null);
+                    AddPostContentModel mPostContentModel = new AddPostContentModel(Bimp.drr.get(i), ""
+                            , partFootContentEt.getText().toString().trim(), null);
                     mPostContentModelList.add(mPostContentModel);
+                    partFootContentEt.setText("");
                 }
             } else {
                 for (int i=0;i<Bimp.drr.size();i++) {
@@ -435,14 +389,17 @@ public class PostActivity extends MyBaseActivity implements AdapterInterface,Vie
         } else if (requestCode == TAKE_BIG_PICTURE) {
             if (!path.isEmpty()) {
                 if (isBottom) {
-                    PostContentModel mPostContentModel = new PostContentModel(1, path, "", "", null);
+                    AddPostContentModel mPostContentModel = new AddPostContentModel(path, ""
+                            , partFootContentEt.getText().toString().trim(), null);
                     mPostContentModelList.add(mPostContentModel);
+                    partFootContentEt.setText("");
                 } else {
                     mAdapter.setLocalUrl(mPosition, path);
                 }
             }
         }
         mAdapter.notifyDataSetChanged();
+        isHitFoot();
     }
 
     @Override
@@ -483,5 +440,13 @@ public class PostActivity extends MyBaseActivity implements AdapterInterface,Vie
             }
         }
         return false;
+    }
+
+    private void isHitFoot() {
+        if (mAdapter.getCount() >= 10) {
+            partFootRootLl.setVisibility(View.GONE);
+        } else {
+            partFootRootLl.setVisibility(View.VISIBLE);
+        }
     }
 }

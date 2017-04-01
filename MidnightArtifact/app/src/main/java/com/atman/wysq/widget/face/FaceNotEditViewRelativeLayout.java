@@ -142,21 +142,21 @@ public class FaceNotEditViewRelativeLayout extends RelativeLayout implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.post_face_iv:
-//                if (et_sendmessage==null) {
-//                    return;
+//            case R.id.post_face_iv:
+////                if (et_sendmessage==null) {
+////                    return;
+////                }
+//                if (isIMOpen()) {
+//                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0); //强制隐藏键盘
 //                }
-                if (isIMOpen()) {
-                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0); //强制隐藏键盘
-                }
-                // 隐藏表情选择框
-                if (view.getVisibility() == View.VISIBLE) {
-                    view.setVisibility(View.GONE);
-                } else {
-                    view.setVisibility(View.VISIBLE);
-                }
-                break;
+//                // 隐藏表情选择框
+//                if (view.getVisibility() == View.VISIBLE) {
+//                    view.setVisibility(View.GONE);
+//                } else {
+//                    view.setVisibility(View.VISIBLE);
+//                }
+//                break;
             case R.id.blogdetail_addcomment_et:
                 // 隐藏表情选择框
                 if (view.getVisibility() == View.VISIBLE) {

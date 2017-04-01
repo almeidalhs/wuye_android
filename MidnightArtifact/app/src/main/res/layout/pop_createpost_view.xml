@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/color_88000000"
+    android:paddingRight="@dimen/dimen_dp_15"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,45 +13,48 @@
 
     <TextView
         android:id="@+id/pop_create_video_tx"
-        android:paddingLeft="@dimen/dimen_dp_10"
-        android:paddingRight="@dimen/dimen_dp_10"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dimen_dp_40"
         android:textSize="@dimen/dimen_sp_15"
+        android:background="@color/color_black"
         android:gravity="center_vertical"
         android:textColor="@color/color_white"
         android:drawableLeft="@mipmap/pop_video_ic"
         android:text="  创建视频"/>
 
-    <view
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/color_white"/>
 
     <TextView
         android:id="@+id/pop_create_voice_tx"
-        android:paddingLeft="@dimen/dimen_dp_10"
-        android:paddingRight="@dimen/dimen_dp_10"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dimen_dp_40"
         android:textSize="@dimen/dimen_sp_15"
+        android:background="@color/color_black"
         android:gravity="center_vertical"
         android:textColor="@color/color_white"
         android:drawableLeft="@mipmap/pop_voice_ic"
         android:text="  创建语音"/>
 
-    <view
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/color_white"/>
 
     <TextView
         android:id="@+id/pop_create_post_tx"
-        android:paddingLeft="@dimen/dimen_dp_10"
-        android:paddingRight="@dimen/dimen_dp_10"
+        android:paddingLeft="@dimen/dimen_dp_15"
+        android:paddingRight="@dimen/dimen_dp_15"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dimen_dp_40"
         android:textSize="@dimen/dimen_sp_15"
+        android:background="@color/color_black"
         android:gravity="center_vertical"
         android:textColor="@color/color_white"
         android:drawableLeft="@mipmap/pop_post_ic"

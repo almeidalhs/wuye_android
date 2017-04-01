@@ -34,7 +34,9 @@
     <color name="color_ff7b8b">#ff7b8b</color>
     <color name="color_17c7eb">#17c7eb</color>
     <color name="color_ffdec9">#ffdec9</color>
+    <color name="color_e1e1e1">#e1e1e1</color>
 
+    <color name="search_edit_gray">#ffcccccc</color>
     <color name="main_title_orange_color">#E55D46</color>
     <color name="activity_default_bg">#efeff4</color>
     <color name="tab_text_selector">#666666</color>
