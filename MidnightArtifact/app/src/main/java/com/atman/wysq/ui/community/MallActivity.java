@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,11 +21,17 @@ import com.atman.wysq.model.response.SearchKeywordModel;
 import com.atman.wysq.model.response.TwoCategoryModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.base.WebPageActivity;
+import com.atman.wysq.ui.mall.SearchListActivity;
+import com.atman.wysq.ui.mall.TwoLevelCategoryListActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.widget.SearchEditText;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,7 +42,8 @@ import okhttp3.Response;
  * Created by tangbingliang on 17/4/1.
  */
 
-public class MallActivity extends MyBaseActivity implements AdapterInterface, SearchEditText.OnIsShowProListener {
+public class MallActivity extends MyBaseActivity implements AdapterInterface, MallGoodsAdapter.OnChildClickListener
+        , SearchEditText.OnIsShowProListener {
 
     @Bind(R.id.relation_goods_sv)
     SearchEditText relationGoodsSv;
@@ -49,6 +57,10 @@ public class MallActivity extends MyBaseActivity implements AdapterInterface, Se
     LinearLayout relationGoodsLl;
     @Bind(R.id.relation_goods_search_cacel_tx)
     TextView relationGoodsSearchCacelTx;
+    @Bind(R.id.relation_goods_bg_iv)
+    ImageView relationGoodsBgIv;
+    @Bind(R.id.relation_goods_bf_iv)
+    ImageView relationGoodsBfIv;
 
     private Context mContext = MallActivity.this;
 
@@ -60,6 +72,8 @@ public class MallActivity extends MyBaseActivity implements AdapterInterface, Se
 
     private MallGoodsAdapter mMallGoodsAdapter;
     private TwoCategoryModel mTwoCategoryModel;
+    private MallCategoryModel.BodyBean AdModelStr;
+    private String imgBgUrl, imgUrl, webUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +95,7 @@ public class MallActivity extends MyBaseActivity implements AdapterInterface, Se
         relationGoodsSv.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction()==MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     relationGoodsSv.setFocusable(true);
                     relationGoodsSv.setFocusableInTouchMode(true);
                 }
@@ -90,15 +104,20 @@ public class MallActivity extends MyBaseActivity implements AdapterInterface, Se
         });
         relationGoodsSv.setIsShowListener(this);
         relationGoodsSv.setCancelTv(relationGoodsSearchCacelTx);
+        relationGoodsSv.setOnSearchClickListener(new SearchEditText.OnSearchClickListener() {
+            @Override
+            public void onSearchClick(View view) {
+                startActivity(SearchListActivity.buildIntent(mContext, relationGoodsSv.getText().toString()));
+            }
+        });
 
-        initExListView();
     }
 
-    private void initExListView() {
-        mMallGoodsAdapter = new MallGoodsAdapter(mContext, getmWidth(), this);
+    private void initExListView(List<TwoCategoryModel.BodyBean> temp) {
+        mMallGoodsAdapter = new MallGoodsAdapter(mContext, getmWidth(), temp, AdModelStr, this, this);
         relationGoodsGoodsLv.setGroupIndicator(null);
         relationGoodsGoodsLv.setAdapter(mMallGoodsAdapter);
-        for(int i = 0; i < mMallGoodsAdapter.getGroupCount(); i++){
+        for (int i = 0; i < mMallGoodsAdapter.getGroupCount(); i++) {
             relationGoodsGoodsLv.expandGroup(i);
         }
 
@@ -141,33 +160,53 @@ public class MallActivity extends MyBaseActivity implements AdapterInterface, Se
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         oneAdapter.setSelectId(position);
-                        mMallGoodsAdapter.setAdModel(mMallCategoryModel.getBody().get(position));
-                        getTwoCategoryById(mMallCategoryModel.getBody().get(position).getGoods_category_id());
+                        getDataByCategory(position);
                     }
                 });
-                getTwoCategoryById(mMallCategoryModel.getBody().get(0).getGoods_category_id());
+                getDataByCategory(0);
             }
         } else if (id == Common.NET_GET_SEARCH_KEYWORD_ID) {
             mSearchKeywordModel = mGson.fromJson(data, SearchKeywordModel.class);
-            if (mSearchKeywordModel.getBody().size()>0) {
+            if (mSearchKeywordModel.getBody().size() > 0) {
                 searchAdapter = new SearchKeywprdAdapter(mContext, mSearchKeywordModel.getBody(), this);
                 relationGoodsSearchLv.setAdapter(searchAdapter);
                 relationGoodsSearchLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         relationGoodsSv.setText(searchAdapter.getItem(position).getName());
+                        startActivity(SearchListActivity.buildIntent(mContext, searchAdapter.getItem(position).getName()));
                     }
                 });
             }
         } else if (id == Common.NET_GET_CATEGOYP_TWO_ID) {
             mTwoCategoryModel = mGson.fromJson(data, TwoCategoryModel.class);
-            mMallGoodsAdapter.clearData();
-            mMallGoodsAdapter.adddata(mTwoCategoryModel.getBody());
+            initExListView(mTwoCategoryModel.getBody());
+        }
+    }
+
+    private void getDataByCategory(int position) {
+        if (mMallCategoryModel.getBody().get(position).getImg_bg_url()!=null) {
+            imgBgUrl = mMallCategoryModel.getBody().get(position).getImg_bg_url();
+            imgUrl = mMallCategoryModel.getBody().get(position).getImg_url();
+            webUrl = mMallCategoryModel.getBody().get(position).getWeb_url();
+
+            relationGoodsGoodsLv.setVisibility(View.GONE);
+            relationGoodsBgIv.setVisibility(View.VISIBLE);
+            relationGoodsBfIv.setVisibility(View.VISIBLE);
+
+            ImageLoader.getInstance().displayImage(Common.ImageUrl+imgBgUrl, relationGoodsBgIv);
+            ImageLoader.getInstance().displayImage(Common.ImageUrl+imgUrl, relationGoodsBfIv);
+        } else {
+            relationGoodsGoodsLv.setVisibility(View.VISIBLE);
+            relationGoodsBgIv.setVisibility(View.GONE);
+            relationGoodsBfIv.setVisibility(View.GONE);
+            AdModelStr = mMallCategoryModel.getBody().get(position);
+            getTwoCategoryById(mMallCategoryModel.getBody().get(position).getGoods_category_id());
         }
     }
 
     private void getTwoCategoryById(int id) {
-        OkHttpUtils.get().url(Common.Url_Get_Two_Category+id).id(Common.NET_GET_CATEGOYP_TWO_ID)
+        OkHttpUtils.get().url(Common.Url_Get_Two_Category + id).id(Common.NET_GET_CATEGOYP_TWO_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_GET_CATEGOYP_TWO_ID).build()
                 .execute(new MyStringCallback(mContext, this, true));
@@ -184,16 +223,25 @@ public class MallActivity extends MyBaseActivity implements AdapterInterface, Se
 
     @Override
     public void onItemClick(View view, int position) {
-
+        switch (view.getId()) {
+            case R.id.item_mall_category_two_gronp_iv:
+                startActivity(WebPageActivity.buildIntent(mContext
+                        , mMallGoodsAdapter.getAdModel().getAd_url(), ""));
+                break;
+        }
     }
 
-    @OnClick({R.id.relation_goods_search_cacel_tx})
+    @OnClick({R.id.relation_goods_search_cacel_tx, R.id.relation_goods_bg_iv, R.id.relation_goods_bf_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.relation_goods_search_cacel_tx:
                 relationGoodsSv.setFocusable(false);
                 relationGoodsSv.setFocusableInTouchMode(false);
                 cancelIM(view);
+                break;
+            case R.id.relation_goods_bg_iv:
+            case R.id.relation_goods_bf_iv:
+                startActivity(WebPageActivity.buildIntent(mContext, webUrl, ""));
                 break;
         }
     }
@@ -206,6 +254,22 @@ public class MallActivity extends MyBaseActivity implements AdapterInterface, Se
         } else {
             relationGoodsLl.setVisibility(View.VISIBLE);
             relationGoodsSearchLv.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onClick(View v, int groupId, int childId) {
+        switch (v.getId()) {
+            case R.id.item_mall_category_two_child_one_ll:
+                startActivity(TwoLevelCategoryListActivity.buildIntent(mContext,
+                        mMallGoodsAdapter.getChild(groupId, childId*2).getGoods_category_id(),
+                        mMallGoodsAdapter.getChild(groupId, childId*2).getName(), false));
+                break;
+            case R.id.item_mall_category_two_child_two_ll:
+                startActivity(TwoLevelCategoryListActivity.buildIntent(mContext,
+                        mMallGoodsAdapter.getChild(groupId, childId*2+1).getGoods_category_id(),
+                        mMallGoodsAdapter.getChild(groupId, childId*2+1).getName(), false));
+                break;
         }
     }
 }

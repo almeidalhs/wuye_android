@@ -17,9 +17,12 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.request.AddPostContentModel;
+import com.atman.wysq.model.response.GoodsListModel;
+import com.atman.wysq.utils.Common;
 import com.atman.wysq.widget.face.SmileUtils;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.choicepicture_library.tools.Bimp;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ public class CreateImageTextPostAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private List<AddPostContentModel> contentList;
-    private List<String> goodsList;
+    private List<GoodsListModel> goodsList;
     private AdapterInterface mAdapterInterface;
     private int index = -1;
     private EditText mEditText;
@@ -62,6 +65,9 @@ public class CreateImageTextPostAdapter extends BaseExpandableListAdapter {
     }
 
     public void setLocalUrl(int mPosition, String url) {
+        if (contentList.size()<mPosition+1) {
+            addContent(new AddPostContentModel("", "", "", null));
+        }
         contentList.get(mPosition).setBitmap(null);
         contentList.get(mPosition).setLocalUrl(url);
         notifyDataSetChanged();
@@ -80,9 +86,22 @@ public class CreateImageTextPostAdapter extends BaseExpandableListAdapter {
         notifyDataSetChanged();
     }
 
+    public List<AddPostContentModel> getContentList() {
+        return contentList;
+    }
+
+    public List<GoodsListModel> getGoodsList() {
+        return goodsList;
+    }
+
     public void addContent(AddPostContentModel temp) {
         this.contentList.add(temp);
         notifyDataSetChanged();
+    }
+
+    public void clearAll () {
+        this.contentList.clear();
+        this.goodsList.clear();
     }
 
     public void deleteContent(int p) {
@@ -90,12 +109,12 @@ public class CreateImageTextPostAdapter extends BaseExpandableListAdapter {
         notifyDataSetChanged();
     }
 
-    public void addGoods(List<String> temp) {
+    public void addGoods(List<GoodsListModel> temp) {
         this.goodsList.addAll(temp);
         notifyDataSetChanged();
     }
 
-    public void addGoods(String temp) {
+    public void addGoods(GoodsListModel temp) {
         this.goodsList.add(temp);
         notifyDataSetChanged();
     }
@@ -119,7 +138,9 @@ public class CreateImageTextPostAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         if (groupPosition == 0) {
-            if (contentList.size()>10) {
+            if (contentList.size()==0) {
+                return 1;
+            } else if (contentList.size()>10) {
                 return 10;
             } else {
                 return contentList.size();
@@ -198,35 +219,46 @@ public class CreateImageTextPostAdapter extends BaseExpandableListAdapter {
         if (groupPosition==0) {
             convertView = layoutInflaterChild.inflate(R.layout.item_create_imageview_childone_view, null);
             childHolder = new ChildViewHolder(convertView);
-            if (contentList.size()>=10 || childPosition!=contentList.size()-1) {
-                childHolder.itemChildoneAddLl.setVisibility(View.GONE);
-            } else {
-                childHolder.itemChildoneAddLl.setVisibility(View.VISIBLE);
-            }
 
-            if (contentList.size() == 1) {
+            if (contentList.size() == 0) {
                 childHolder.itemChildoneDeleteIv.setVisibility(View.GONE);
-            } else {
-                childHolder.itemChildoneDeleteIv.setVisibility(View.VISIBLE);
-            }
-
-            if (contentList.get(childPosition).getLocalUrl().isEmpty()) {
                 childHolder.itemChildoneHeadRl.setVisibility(View.GONE);
                 childHolder.itemChildoneHeadLl.setVisibility(View.VISIBLE);
+                childHolder.itemChildoneAddLl.setVisibility(View.VISIBLE);
             } else {
-                childHolder.itemChildoneHeadLl.setVisibility(View.GONE);
-                childHolder.itemChildoneHeadRl.setVisibility(View.VISIBLE);
-                if (contentList.get(childPosition).getBitmap()!=null) {
-                    childHolder.itemChildoneHeadIv.setImageBitmap(contentList.get(childPosition).getBitmap());
+                if (contentList.size() == 1) {
+                    childHolder.itemChildoneDeleteIv.setVisibility(View.GONE);
                 } else {
-                    Bitmap bm = null;
-                    try {
-                        bm = Bimp.revitionImageSize(contentList.get(childPosition).getLocalUrl());
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    childHolder.itemChildoneDeleteIv.setVisibility(View.VISIBLE);
+                }
+
+                if (contentList.size()>=10 || childPosition!=contentList.size()-1) {
+                    childHolder.itemChildoneAddLl.setVisibility(View.GONE);
+                } else {
+                    childHolder.itemChildoneAddLl.setVisibility(View.VISIBLE);
+                }
+
+                childHolder.itemChildoneContentEt.setText(SmileUtils.getEmotionContent(context
+                        , childHolder.itemChildoneContentEt, contentList.get(childPosition).getContent()));
+
+                if (contentList.get(childPosition).getLocalUrl().isEmpty()) {
+                    childHolder.itemChildoneHeadRl.setVisibility(View.GONE);
+                    childHolder.itemChildoneHeadLl.setVisibility(View.VISIBLE);
+                } else {
+                    childHolder.itemChildoneHeadLl.setVisibility(View.GONE);
+                    childHolder.itemChildoneHeadRl.setVisibility(View.VISIBLE);
+                    if (contentList.get(childPosition).getBitmap()!=null) {
+                        childHolder.itemChildoneHeadIv.setImageBitmap(contentList.get(childPosition).getBitmap());
+                    } else {
+                        Bitmap bm = null;
+                        try {
+                            bm = Bimp.revitionImageSize(contentList.get(childPosition).getLocalUrl());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        contentList.get(childPosition).setBitmap(bm);
+                        childHolder.itemChildoneHeadIv.setImageBitmap(bm);
                     }
-                    contentList.get(childPosition).setBitmap(bm);
-                    childHolder.itemChildoneHeadIv.setImageBitmap(bm);
                 }
             }
 
@@ -248,6 +280,11 @@ public class CreateImageTextPostAdapter extends BaseExpandableListAdapter {
             } else {
                 childTwoHolder.itemChildtwoLl.setVisibility(View.VISIBLE);
                 childTwoHolder.itemChildtwoDeleteIv.setVisibility(View.VISIBLE);
+
+                ImageLoader.getInstance().displayImage(Common.ImageUrl+goodsList.get(childPosition).getPic_img()
+                        , childTwoHolder.itemChildtwoHeadIv);
+                childTwoHolder.itemChildtwoGoodsNameTv.setText(goodsList.get(childPosition).getTitle());
+                childTwoHolder.itemChildtwoGoodsPriceTv.setText(""+goodsList.get(childPosition).getDiscount_price());
             }
 
             childTwoHolder.itemChildtwoAddLl.setOnClickListener(new View.OnClickListener() {
@@ -270,8 +307,6 @@ public class CreateImageTextPostAdapter extends BaseExpandableListAdapter {
 
     //焦点管理
     private void managerFocus(final int childPosition) {
-        childHolder.itemChildoneContentEt.setText(SmileUtils.getEmotionContent(context
-                , childHolder.itemChildoneContentEt, contentList.get(childPosition).getContent()));
         childHolder.itemChildoneContentEt.addTextChangedListener(new postTextWatcher(context
                 , childHolder.itemChildoneContentEt, childPosition));
         childHolder.itemChildoneContentEt.setOnTouchListener(new View.OnTouchListener() {
@@ -412,6 +447,8 @@ public class CreateImageTextPostAdapter extends BaseExpandableListAdapter {
         TextView itemChildtwoGoodsPriceTv;
         @Bind(R.id.item_childtwo_delete_iv)
         ImageView itemChildtwoDeleteIv;
+        @Bind(R.id.item_childtwo_head_iv)
+        ImageView itemChildtwoHeadIv;
         @Bind(R.id.item_childtwo_add_ll)
         LinearLayout itemChildtwoAddLl;
         @Bind(R.id.item_childtwo_ll)

@@ -24,6 +24,7 @@ import com.atman.wysq.model.response.GetGoodsCommentResponseModel;
 import com.atman.wysq.model.response.GoodsDetailsResponseModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.community.CreateImageTextPostActivity;
 import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.ui.mall.order.ConfirmationOrderActivity;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
@@ -143,6 +144,10 @@ public class GoodsDetailActivity extends MyBaseActivity implements ScrollViewLis
 
         mScrollView = pullToRefreshScrollView.getRefreshableView();
         mScrollView.setScrollViewListener(this);
+
+        if (MyBaseApplication.isRelation) {
+            itemGoodsdetailPlayBt.setText("关联商品");
+        }
     }
 
     @Override
@@ -223,7 +228,7 @@ public class GoodsDetailActivity extends MyBaseActivity implements ScrollViewLis
             ImageLoader.getInstance().displayImage(Common.ImageUrl + mGoodsDetailsResponseModel.getBody().getIcon()
                     , partGoodsdetailTopBfToolIv, MyBaseApplication.getApplication().getOptionsNot());
         }
-        if (mGoodsDetailsResponseModel.getBody().getPostage() > 0) {
+        if (Double.parseDouble(mGoodsDetailsResponseModel.getBody().getPostage()) > 0) {
             partGoodsdetailTopBfFreeTx.setText("邮费:¥"+mGoodsDetailsResponseModel.getBody().getPostage());
         } else {
             partGoodsdetailTopBfFreeTx.setText("包邮");
@@ -406,13 +411,23 @@ public class GoodsDetailActivity extends MyBaseActivity implements ScrollViewLis
         if (!isLogin()) {
             showLogin();
         } else {
-            startActivity(ConfirmationOrderActivity.buildIntent(mContext
-                    , mGoodsDetailsResponseModel.getBody().getTitle()
-                    ,mGoodsDetailsResponseModel.getBody().getPic_img()
-                    ,mGoodsDetailsResponseModel.getBody().getDiscount_price()
-                    ,mGoodsDetailsResponseModel.getBody().getGoods_id()
-                    ,mGoodsDetailsResponseModel.getBody().getGoods_type()
-                    ,mGoodsDetailsResponseModel.getBody().getGold_coin_price()));
+            if (MyBaseApplication.isRelation) {
+                Intent intent = new Intent(this, CreateImageTextPostActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("Goods_id", mGoodsDetailsResponseModel.getBody().getGoods_id());
+                intent.putExtra("Pic_img", mGoodsDetailsResponseModel.getBody().getPic_img());
+                intent.putExtra("Title", mGoodsDetailsResponseModel.getBody().getTitle());
+                intent.putExtra("Discount_price", mGoodsDetailsResponseModel.getBody().getDiscount_price());
+                startActivity(intent);
+            } else {
+                startActivity(ConfirmationOrderActivity.buildIntent(mContext
+                        , mGoodsDetailsResponseModel.getBody().getTitle()
+                        ,mGoodsDetailsResponseModel.getBody().getPic_img()
+                        ,mGoodsDetailsResponseModel.getBody().getDiscount_price()
+                        ,mGoodsDetailsResponseModel.getBody().getGoods_id()
+                        ,mGoodsDetailsResponseModel.getBody().getGoods_type()
+                        ,mGoodsDetailsResponseModel.getBody().getGold_coin_price()));
+            }
         }
     }
 

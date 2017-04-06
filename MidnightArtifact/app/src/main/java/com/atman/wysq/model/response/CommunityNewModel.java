@@ -104,18 +104,18 @@ public class CommunityNewModel {
         private String url;
         private int file_length;
         private int category;
-        private long like_num;
+        private String like_num;
         private List<?> blogComments;
         private List<String> wysqImglist;
         private List<?> giftList;
         private List<?> goodsList;
         private List<?> blogGoodsList;
 
-        public long getLike_num() {
+        public String getLike_num() {
             return like_num;
         }
 
-        public void setLike_num(long like_num) {
+        public void setLike_num(String like_num) {
             this.like_num = like_num;
         }
 

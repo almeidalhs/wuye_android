@@ -50,6 +50,7 @@
         <activity android:name=".ui.base.BaseGestureLockActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.base.WebPageActivity"/>
         <activity android:name=".ui.mall.TwoLevelCategoryListActivity"/>
+        <activity android:name=".ui.mall.SearchListActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.mall.GoodsDetailActivity"/>
         <activity android:name=".ui.mall.order.ConfirmationOrderActivity"/>
         <activity android:name=".ui.mall.address.AddressManageActivity" android:launchMode="singleTask"/>
@@ -61,7 +62,6 @@
         <activity android:name=".ui.community.PostingsDetailActivity" />
         <activity android:name=".ui.community.ReportActivity"/>
         <activity android:name=".ui.community.CommentChildrenListActivity"/>
-        <activity android:name=".ui.community.PostActivity"/>
         <activity android:name=".ui.community.BlogRewardListActivty"/>
         <activity android:name=".ui.community.MycollectionActivity"/>
         <activity android:name=".ui.community.MySecretListActivity"/>

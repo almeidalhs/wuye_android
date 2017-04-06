@@ -104,7 +104,7 @@ public class GoodsDetailsResponseModel implements Parcelable{
         private long update_time;
         private int goods_type;
         private int source;
-        private int postage;
+        private String postage;
         private String icon;
         private String gold_coin_price;
         private String charm_price;
@@ -149,7 +149,7 @@ public class GoodsDetailsResponseModel implements Parcelable{
             chat_prop_id = in.readInt();
             update_time = in.readLong();
             source = in.readInt();
-            postage = in.readInt();
+            postage = in.readString();
             icon = in.readString();
             goodsDetailImgs = in.createTypedArrayList(GoodsDetailImgsEntity.CREATOR);
         }
@@ -309,11 +309,11 @@ public class GoodsDetailsResponseModel implements Parcelable{
             this.source = source;
         }
 
-        public int getPostage() {
+        public String getPostage() {
             return postage;
         }
 
-        public void setPostage(int postage) {
+        public void setPostage(String postage) {
             this.postage = postage;
         }
 
@@ -347,7 +347,7 @@ public class GoodsDetailsResponseModel implements Parcelable{
             dest.writeInt(chat_prop_id);
             dest.writeLong(update_time);
             dest.writeInt(source);
-            dest.writeInt(postage);
+            dest.writeString(postage);
             dest.writeString(icon);
             dest.writeTypedList(goodsDetailImgs);
         }

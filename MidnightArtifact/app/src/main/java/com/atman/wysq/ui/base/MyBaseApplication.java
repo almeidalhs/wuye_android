@@ -19,9 +19,11 @@ import com.atman.wysq.model.event.YunXinMessageEvent;
 import com.atman.wysq.model.greendao.gen.DaoMaster;
 import com.atman.wysq.model.greendao.gen.DaoSession;
 import com.atman.wysq.model.greendao.gen.TouChuanOtherNoticeDao;
+import com.atman.wysq.model.request.AddPostContentModel;
 import com.atman.wysq.model.response.ConfigModel;
 import com.atman.wysq.model.response.GetGoldenRoleModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
+import com.atman.wysq.model.response.GoodsListModel;
 import com.atman.wysq.ui.MainActivity;
 import com.atman.wysq.ui.receiver.RootMessageObserver;
 import com.atman.wysq.yunxin.DemoCache;
@@ -67,6 +69,7 @@ import com.umeng.socialize.PlatformConfig;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -112,6 +115,11 @@ public class MyBaseApplication extends BaseApplication {
     public static boolean isReportUnRead = false;
     public boolean isError = false;
     public static String appId = "";
+
+    public static List<GoodsListModel> creatPostGoods = new ArrayList<>();
+    public static List<AddPostContentModel> creatPostContents = new ArrayList<>();
+    public static boolean isRelation = false;
+    public static String imagetextPostTitle = "";
 
     private DisplayImageOptions options,optionsHead, optionsNot;
 

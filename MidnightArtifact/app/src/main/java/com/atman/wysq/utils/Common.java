@@ -261,6 +261,8 @@ public class Common {
     public static String Url_Get_Search_Keyword = hostUrl + "rest/goods/searchKeyword";
     //获取商城二级分类
     public static String Url_Get_Two_Category = hostUrl + "rest/category/leaflist/";
+    //关键字搜索
+    public static String Url_Search = hostUrl + "rest/goods/search?keywords=";
     /**************************http访问路径*****************************/
 
 
@@ -500,6 +502,8 @@ public class Common {
     public static int NET_GET_SEARCH_KEYWORD_ID = 116;
     //获取商城二级分类
     public static int NET_GET_CATEGOYP_TWO_ID = 117;
+    //关键字搜索
+    public static int NET_SEARCH_ID = 118;
     /**************************http访问回应识别码*****************************/
 
 

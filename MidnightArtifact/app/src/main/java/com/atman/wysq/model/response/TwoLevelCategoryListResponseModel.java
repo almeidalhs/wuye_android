@@ -70,7 +70,7 @@ public class TwoLevelCategoryListResponseModel {
         private int chat_prop_id;
         private long update_time;
         private int source;
-        private int postage;
+        private String postage;
         private String icon;
 
         public int getGoods_id() {
@@ -193,11 +193,11 @@ public class TwoLevelCategoryListResponseModel {
             this.source = source;
         }
 
-        public int getPostage() {
+        public String getPostage() {
             return postage;
         }
 
-        public void setPostage(int postage) {
+        public void setPostage(String postage) {
             this.postage = postage;
         }
 

@@ -1,35 +1,24 @@
 package com.atman.wysq.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.model.request.AddPostContentModel;
 import com.atman.wysq.model.response.MallCategoryModel;
 import com.atman.wysq.model.response.TwoCategoryModel;
 import com.atman.wysq.utils.Common;
-import com.atman.wysq.widget.face.SmileUtils;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
-import com.base.baselibs.util.LogUtils;
-import com.choicepicture_library.tools.Bimp;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -44,6 +33,7 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<TwoCategoryModel.BodyBean> dataList;
     private AdapterInterface mAdapterInterface;
+    private OnChildClickListener mOnChildClickListener;
     private int index = -1;
     private EditText mEditText;
     private LinearLayout.LayoutParams params,params2;
@@ -55,26 +45,25 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
     private GroupViewHolder groupHolder;
     private ChildViewHolder childHolder;
 
-    public MallGoodsAdapter(Context context, int mWight, AdapterInterface mAdapterInterface) {
+    public MallGoodsAdapter(Context context, int mWight, List<TwoCategoryModel.BodyBean> temp
+            , MallCategoryModel.BodyBean adModelStr, AdapterInterface mAdapterInterface
+            , OnChildClickListener mOnChildClickListener) {
         this.context = context;
         this.mAdapterInterface = mAdapterInterface;
+        this.mOnChildClickListener = mOnChildClickListener;
+        this.adModel = adModelStr;
+        this.dataList = temp;
         layoutInflaterGroup = LayoutInflater.from(context);
         layoutInflaterChild = LayoutInflater.from(context);
 
-        dataList = new ArrayList<>();
         int w = mWight*3/4 - DensityUtil.dp2px(context, 20);
         params = new LinearLayout.LayoutParams(w, w*80/310);
         w = w - DensityUtil.dp2px(context, 10);
-        LogUtils.e("w:"+w);
-        params2 = new LinearLayout.LayoutParams(w, w);
+        params2 = new LinearLayout.LayoutParams(w/2, w/2);
     }
 
     public MallCategoryModel.BodyBean getAdModel() {
         return adModel;
-    }
-
-    public void setAdModel(MallCategoryModel.BodyBean adModel) {
-        this.adModel = adModel;
     }
 
     public void adddata(List<TwoCategoryModel.BodyBean> temp) {
@@ -101,13 +90,10 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         if (dataList.get(groupPosition).getLeafCategorieList().size()==0) {
-            LogUtils.e("0000");
             return 0;
         } else if (dataList.get(groupPosition).getLeafCategorieList().size()%2==0) {
-            LogUtils.e(">>>:"+dataList.get(groupPosition).getLeafCategorieList().size()/2);
             return dataList.get(groupPosition).getLeafCategorieList().size()/2;
         } else {
-            LogUtils.e(">>>:"+(dataList.get(groupPosition).getLeafCategorieList().size()/2+1));
             return dataList.get(groupPosition).getLeafCategorieList().size()/2+1;
         }
     }
@@ -124,7 +110,7 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
      * 获取一级标签下二级标签的内容
      */
     @Override
-    public Object getChild(int groupPosition, int childPosition) {
+    public TwoCategoryModel.BodyBean.LeafCategorieListBean getChild(int groupPosition, int childPosition) {
         return dataList.get(groupPosition).getLeafCategorieList().get(childPosition);
     }
 
@@ -156,7 +142,7 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
      * 对一级标签进行设置
      */
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+    public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         if (convertView==null) {
             convertView = layoutInflaterGroup.inflate(R.layout.item_mall_two_category_group_view, null);
             groupHolder = new GroupViewHolder(convertView);
@@ -166,7 +152,8 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
         }
 
         groupHolder.itemMallCategoryTwoGronpTv.setText("------"+dataList.get(groupPosition).getName()+"------");
-        if (adModel!=null) {
+
+        if (adModel!=null && groupPosition==0) {
             groupHolder.itemMallCategoryTwoGronpIv.setLayoutParams(params);
             groupHolder.itemMallCategoryTwoGronpIv.setVisibility(View.VISIBLE);
             ImageLoader.getInstance().displayImage(Common.ImageUrl+adModel.getAd_pic()
@@ -174,6 +161,13 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
         } else {
             groupHolder.itemMallCategoryTwoGronpIv.setVisibility(View.GONE);
         }
+
+        groupHolder.itemMallCategoryTwoGronpIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapterInterface.onItemClick(v, groupPosition);
+            }
+        });
         return convertView;
     }
 
@@ -181,7 +175,7 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
      * 对一级标签下的二级标签进行设置
      */
     @Override
-    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
 
         if (convertView==null) {
             convertView = layoutInflaterChild.inflate(R.layout.item_mall_two_category_child_view, null);
@@ -192,45 +186,45 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
         }
 
         childHolder.itemMallCategoryChildOneIv.setLayoutParams(params2);
-//        if ((childPosition*2)>dataList.get(groupPosition).getLeafCategorieList().size()-1) {
-//            childHolder.itemMallCategoryChildOneLl.setVisibility(View.INVISIBLE);
-//        } else {
-//            childHolder.itemMallCategoryChildOneLl.setVisibility(View.VISIBLE);
-//            childHolder.itemMallCategoryChildOneIv.setImageURI(Common.ImageUrl+dataList.get(groupPosition)
-//                    .getLeafCategorieList().get(childPosition*2).getAd_pic());
-//            childHolder.itemMallCategoryChildOneTv.setText(dataList.get(groupPosition)
-//                    .getLeafCategorieList().get(childPosition*2).getName());
-//        }
+        if ((childPosition*2)>dataList.get(groupPosition).getLeafCategorieList().size()-1) {
+            childHolder.itemMallCategoryChildOneLl.setVisibility(View.INVISIBLE);
+        } else {
+            childHolder.itemMallCategoryChildOneLl.setVisibility(View.VISIBLE);
+            childHolder.itemMallCategoryChildOneIv.setImageURI(Common.ImageUrl+dataList.get(groupPosition)
+                    .getLeafCategorieList().get(childPosition*2).getAd_pic());
+            childHolder.itemMallCategoryChildOneTv.setText(dataList.get(groupPosition)
+                    .getLeafCategorieList().get(childPosition*2).getName());
+        }
 
         childHolder.itemMallCategoryChildTwoIv.setLayoutParams(params2);
-//        if ((childPosition*2+1)>dataList.get(groupPosition).getLeafCategorieList().size()-1) {
-//            childHolder.itemMallCategoryChildTwoLl.setVisibility(View.INVISIBLE);
-//        } else {
-//            childHolder.itemMallCategoryChildTwoLl.setVisibility(View.VISIBLE);
-//            childHolder.itemMallCategoryChildTwoIv.setImageURI(Common.ImageUrl+dataList.get(groupPosition)
-//                    .getLeafCategorieList().get(childPosition*2+1).getAd_pic());
-//            childHolder.itemMallCategoryChildTwoTv.setText(dataList.get(groupPosition)
-//                    .getLeafCategorieList().get(childPosition*2+1).getName());
-//        }
+        if ((childPosition*2+1)>dataList.get(groupPosition).getLeafCategorieList().size()-1) {
+            childHolder.itemMallCategoryChildTwoLl.setVisibility(View.INVISIBLE);
+        } else {
+            childHolder.itemMallCategoryChildTwoLl.setVisibility(View.VISIBLE);
+            childHolder.itemMallCategoryChildTwoIv.setImageURI(Common.ImageUrl+dataList.get(groupPosition)
+                    .getLeafCategorieList().get(childPosition*2+1).getAd_pic());
+            childHolder.itemMallCategoryChildTwoTv.setText(dataList.get(groupPosition)
+                    .getLeafCategorieList().get(childPosition*2+1).getName());
+        }
 
-        initChildoneListener(childPosition);
+        initChildoneListener(groupPosition, childPosition);
 
         return convertView;
     }
 
     //添加item控件监听
-    private void initChildoneListener(final int childPosition) {
+    private void initChildoneListener(final int groupPosition, final int childPosition) {
         childHolder.itemMallCategoryChildOneLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapterInterface.onItemClick(v, childPosition);
+                mOnChildClickListener.onClick(v, groupPosition, childPosition);
             }
         });
 
         childHolder.itemMallCategoryChildTwoLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapterInterface.onItemClick(v, childPosition);
+                mOnChildClickListener.onClick(v, groupPosition, childPosition);
             }
         });
     }
@@ -252,6 +246,10 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
         GroupViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    public interface OnChildClickListener {
+        void onClick(View v, int groupId, int childId);
     }
 
     class ChildViewHolder {

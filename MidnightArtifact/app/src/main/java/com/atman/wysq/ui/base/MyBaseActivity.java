@@ -26,7 +26,6 @@ import com.atman.wysq.R;
 import com.atman.wysq.ui.MainActivity;
 import com.atman.wysq.ui.SplashActivity;
 import com.atman.wysq.ui.community.CommentChildrenListActivity;
-import com.atman.wysq.ui.community.PostActivity;
 import com.atman.wysq.ui.community.PostingsDetailActivity;
 import com.atman.wysq.ui.discover.ListenLiveActivity;
 import com.atman.wysq.ui.login.LoginActivity;
