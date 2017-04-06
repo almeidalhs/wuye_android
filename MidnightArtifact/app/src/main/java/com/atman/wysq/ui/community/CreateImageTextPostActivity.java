@@ -147,7 +147,8 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
         });
 
         mAdapter = new CreateImageTextPostAdapter(mContext, this);
-        createImagetextExlistview.addHeaderView(headView);
+        createImagetextExlistview.addHeaderView(headView, null, true);
+        createImagetextExlistview.setHeaderDividersEnabled(false);
         createImagetextExlistview.setAdapter(mAdapter);
 
         for(int i = 0; i < mAdapter.getGroupCount(); i++){

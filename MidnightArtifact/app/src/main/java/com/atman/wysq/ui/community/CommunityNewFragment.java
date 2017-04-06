@@ -373,7 +373,20 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
             public void onClick(View v) {
                 popupWindow.dismiss();
                 startActivity(new Intent(getActivity(), CreateImageTextPostActivity.class));
-//                startActivity(PostActivity.buildIntent(getActivity(), 0));
+            }
+        });
+        popCreateVideoTx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                startActivity(new Intent(getActivity(), CreateVideoPostActivity.class));
+            }
+        });
+        popCreateVoiceTx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                startActivity(new Intent(getActivity(), CreateVoicePostActivity.class));
             }
         });
 

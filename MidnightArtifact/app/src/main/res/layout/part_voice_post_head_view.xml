@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:orientation="vertical"
+    android:padding="@dimen/dimen_dp_10">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_45"
+        android:layout_marginBottom="@dimen/dimen_dp_10"
+        android:background="#f4f4f4"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_10">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dimen_dp_10"
+            android:text="标题"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/dimen_sp_16" />
+
+        <com.base.baselibs.widget.MyCleanEditText
+            android:id="@+id/post_title_et"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_dp_40"
+            android:background="@null"
+            android:hint="输入标题（最多30个字符）"
+            android:inputType="text"
+            android:maxLength="30"
+            android:padding="@dimen/dimen_dp_5"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/dimen_sp_14" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/part_post_rl"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#6fa9ab">
+
+        <ImageView
+            android:id="@+id/post_bg_iv"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_dp_70"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/dimen_dp_30"
+            android:layout_marginRight="@dimen/dimen_dp_30"
+            android:background="@drawable/part_voice_head_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/post_listeningtest_bt"
+                android:layout_width="@dimen/dimen_dp_50"
+                android:layout_height="@dimen/dimen_dp_50"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:layout_marginRight="@dimen/dimen_dp_10"
+                android:background="@drawable/part_voice_listeningtest_selector"
+                android:enabled="false"
+                android:text="试听"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/dimen_sp_13" />
+
+            <TextView
+                android:id="@+id/post_time_tx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/color_red"
+                android:textSize="@dimen/dimen_sp_15" />
+
+            <Button
+                android:id="@+id/post_recording_bt"
+                android:layout_width="@dimen/dimen_dp_50"
+                android:layout_height="@dimen/dimen_dp_50"
+                android:layout_marginLeft="@dimen/dimen_dp_10"
+                android:layout_marginRight="@dimen/dimen_dp_10"
+                android:background="@drawable/part_voice_recording_selector"
+                android:enabled="false"
+                android:text="录音"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/dimen_sp_13" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/post_change_img_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/dimen_dp_20"
+            android:text="点击跟换封面"
+            android:textColor="@color/color_white" />
+    </RelativeLayout>
+
+</LinearLayout>

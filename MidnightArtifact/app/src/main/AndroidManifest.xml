@@ -58,7 +58,6 @@
         <activity android:name=".ui.mall.address.EditAddressActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.mall.order.MyOrderListActivity"/>
         <activity android:name=".ui.mall.order.OrderDetailActivity"/>
-        <activity android:name=".ui.community.PostingsByClassificationActivity"/>
         <activity android:name=".ui.community.PostingsDetailActivity" />
         <activity android:name=".ui.community.ReportActivity"/>
         <activity android:name=".ui.community.CommentChildrenListActivity"/>
@@ -69,6 +68,8 @@
         <activity android:name=".ui.community.ReportListActivity"/>
         <activity android:name=".ui.community.CreateImageTextPostActivity"/>
         <activity android:name=".ui.community.MallActivity"/>
+        <activity android:name=".ui.community.CreateVideoPostActivity"/>
+        <activity android:name=".ui.community.CreateVoicePostActivity"/>
         <activity android:name=".ui.yunxinfriend.OtherPersonalActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.yunxinfriend.HisDynamicsActivity"/>
         <activity android:name=".ui.yunxinfriend.HisVisitorActivity"/>

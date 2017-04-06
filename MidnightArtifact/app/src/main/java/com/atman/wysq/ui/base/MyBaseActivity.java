@@ -429,7 +429,6 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             if (!(mAty instanceof ConfirmationOrderActivity)
                     && !(mAty instanceof CommentChildrenListActivity)
-                    && !(mAty instanceof PostActivity)
                     && !(mAty instanceof PostingsDetailActivity)
                     && !(mAty instanceof SelectGiftActivity)
                     && !(mAty instanceof P2PChatActivity)
