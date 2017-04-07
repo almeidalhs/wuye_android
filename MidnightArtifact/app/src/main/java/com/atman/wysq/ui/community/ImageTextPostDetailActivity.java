@@ -27,15 +27,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atman.wysq.R;
+import com.atman.wysq.adapter.BlogDetailGoodsListAdapter;
 import com.atman.wysq.adapter.PostingsDetailsCommentAdapter;
 import com.atman.wysq.adapter.RewardGridViewAdapter;
 import com.atman.wysq.model.request.AddCommentModel;
 import com.atman.wysq.model.response.AddCommentResultModel;
-import com.atman.wysq.model.response.AddRewardModel;
 import com.atman.wysq.model.response.GetBlogDetailModel;
 import com.atman.wysq.model.response.GetPostingsDetailsCommentListModel;
-import com.atman.wysq.model.response.GetRewardListModel;
-import com.atman.wysq.model.response.GoodsDetailsResponseModel;
 import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
@@ -48,24 +46,18 @@ import com.atman.wysq.utils.ShareHelper;
 import com.atman.wysq.utils.Tools;
 import com.atman.wysq.widget.ShareDialog;
 import com.atman.wysq.widget.face.SmileUtils;
-import com.atman.wysq.yunxin.model.ContentTypeInter;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.MyCleanEditText;
-import com.base.baselibs.widget.PromptDialog;
+import com.base.baselibs.widget.MyListView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.netease.nimlib.sdk.msg.MessageBuilder;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-
-import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -80,7 +72,7 @@ import okhttp3.Response;
  * 邮箱 bltang@atman.com
  * 电话 18578909061
  */
-public class PostingsDetailActivity extends MyBaseActivity implements AdapterInterface
+public class ImageTextPostDetailActivity extends MyBaseActivity implements AdapterInterface
         , UMShareListener, View.OnTouchListener {
 
     @Bind(R.id.blogdetail_comment_lv)
@@ -96,7 +88,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
     @Bind(R.id.blogdetail_send_bt)
     Button blogdetailSendBt;
 
-    private Context mContext = PostingsDetailActivity.this;
+    private Context mContext = ImageTextPostDetailActivity.this;
     private ListView mListView;
 
     private String tilte;
@@ -108,7 +100,6 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
     private GetBlogDetailModel mGetBlogDetailModel;
     private PostingsDetailsCommentAdapter mAdapter;
     private GetPostingsDetailsCommentListModel mGetPostingsDetailsCommentListModel;
-    private GoodsDetailsResponseModel mGoodsDetailsResponseModel;
 
     private int favoriteId = 0;
     private int vipLevel = 0;
@@ -121,22 +112,19 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
     private String imgStr = "";
 
     private View headView;
+    private LinearLayout blogdetailGoodsLl;
+    private MyListView blogdetailGoodsLv;
     private ImageView blogdetailHeadImg;
     private ImageView blogdetailSvipIv;
     private ImageView blogdetailVerifyImg;
     private ImageView blogdetailGenderImg;
-    private ImageView blogdetailGoodsIv;
     private ImageView blogdetailFlowerIv;
     private TextView blogdetailVipTx;
     private TextView blogdetailNameTx;
     private TextView blogdetailLevelTx;
     private TextView bloglistTimeTx;
-    private TextView blogdetailTitleTx;
-    private TextView blogdetailGoodsNameIv;
-    private TextView blogdetailGoodsPriceIv;
     private TextView blogdetailFlowerTv;
     private RelativeLayout blogdetailHeadRl;
-    private RelativeLayout blogdetailGoodsRl;
     private RelativeLayout blogdetailTopRl;
     private LinearLayout blogdetailContentLl;
     private WebView blogdetailContentWb;
@@ -150,13 +138,13 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         disableLoginCheck();
-        setContentView(R.layout.activity_postingsdetail);
+        setContentView(R.layout.activity_imagetext_postdetail);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         ButterKnife.bind(this);
     }
 
     public static Intent buildIntent(Context context, String tilte, long id, boolean isMy, int vipLevel) {
-        Intent intent = new Intent(context, PostingsDetailActivity.class);
+        Intent intent = new Intent(context, ImageTextPostDetailActivity.class);
         intent.putExtra("tilte", tilte);
         intent.putExtra("id", id);
         intent.putExtra("isMy", isMy);
@@ -217,7 +205,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
         blogdetailCommentLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mAdapter != null && position > 1) {
+                if (mAdapter != null && mAdapter.getShop().size()>0 && position > 1) {
                     GetPostingsDetailsCommentListModel.BodyEntity mBodyEntity = mAdapter.getItem(position - 2);
                     startActivity(CommentChildrenListActivity.buildIntent(mContext, mBodyEntity.getBlog_id(), mBodyEntity.getBlog_comment_id()
                             , mBodyEntity.getIcon(), mBodyEntity.getVerify_status(), mBodyEntity.getUser_name()
@@ -242,13 +230,13 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                             .id(Common.NET_GET_BLOGCOLLECTION_NOT)
                             .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                             .tag(Common.NET_GET_BLOGCOLLECTION_NOT).build()
-                            .execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
+                            .execute(new MyStringCallback(mContext, ImageTextPostDetailActivity.this, true));
                 } else {//未收藏，点击收藏
                     OkHttpUtils.postString().url(Common.Url_Get_BlogCollection + bolgId)
                             .id(Common.NET_GET_BLOGCOLLECTION).content("{}").mediaType(Common.JSON)
                             .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                             .tag(Common.NET_GET_BLOGCOLLECTION).build()
-                            .execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
+                            .execute(new MyStringCallback(mContext, ImageTextPostDetailActivity.this, true));
                 }
             }
         });
@@ -278,7 +266,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                     .content(mGson.toJson(mAddCommentModel))
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                     .id(Common.NET_ADD_COMMENT).tag(Common.NET_ADD_COMMENT)
-                    .build().execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
+                    .build().execute(new MyStringCallback(mContext, ImageTextPostDetailActivity.this, true));
         }
     }
 
@@ -307,37 +295,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
         super.onStringResponse(data, response, id);
         if (id == Common.NET_GET_BLOGDETAIL) {
             mGetBlogDetailModel = mGson.fromJson(data, GetBlogDetailModel.class);
-
             updateUI();
-
-            if (mGetBlogDetailModel.getBody().size() > 0 &&
-                    mGetBlogDetailModel.getBody().get(0).getGoods_id() > 0) {
-                blogdetailGoodsRl.setVisibility(View.VISIBLE);
-//                blogdetailTitleTx.setVisibility(View.GONE);
-                blogdetailTopRl.setVisibility(View.GONE);
-                blogdetailFlowerLl.setVisibility(View.GONE);
-                OkHttpUtils.get().url(Common.Url_Get_Category_Detail + mGetBlogDetailModel.getBody().get(0).getGoods_id())
-                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .tag(Common.NET_GET_CATEGORY_DETAIL).id(Common.NET_GET_CATEGORY_DETAIL).build()
-                        .execute(new MyStringCallback(mContext, this, true));
-            } else {
-                blogdetailGoodsRl.setVisibility(View.GONE);
-//                blogdetailTitleTx.setVisibility(View.VISIBLE);
-                blogdetailTopRl.setVisibility(View.VISIBLE);
-                blogdetailFlowerLl.setVisibility(View.VISIBLE);
-
-                blogdetailFlowerTv.setText(mGetBlogDetailModel.getBody().get(0).getFlower_num() + "");
-                if (mGetBlogDetailModel.getBody().get(0).getFlower_num() > 0) {
-                    mRewardListAdapter = new RewardGridViewAdapter(mContext, mGetBlogDetailModel.getBody().get(0).getGiftList());
-                    blogdetailFlowerGv.setAdapter(mRewardListAdapter);
-                    blogdetailFlowerGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            startActivity(BlogRewardListActivty.buildIntent(mContext, mGetBlogDetailModel.getBody().get(0).getBlog_id()));
-                        }
-                    });
-                }
-            }
         } else if (id == Common.NET_GET_BLOGDETAIL_COMMENTLIST) {
             mGetPostingsDetailsCommentListModel = mGson.fromJson(data, GetPostingsDetailsCommentListModel.class);
             if (mGetPostingsDetailsCommentListModel.getBody() == null
@@ -364,12 +322,6 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
             favoriteId = 0;
             changeMyHeart();
             showToast("已取消收藏");
-        } else if (id == Common.NET_GET_CATEGORY_DETAIL) {
-            mGoodsDetailsResponseModel = mGson.fromJson(data, GoodsDetailsResponseModel.class);
-            blogdetailGoodsNameIv.setText(mGoodsDetailsResponseModel.getBody().getTitle());
-            blogdetailGoodsPriceIv.setText("¥ " + mGoodsDetailsResponseModel.getBody().getDiscount_price());
-            ImageLoader.getInstance().displayImage(Common.ImageUrl + mGoodsDetailsResponseModel.getBody().getPic_img()
-                    , blogdetailGoodsIv, MyBaseApplication.getApplication().getOptionsNot());
         } else if (id == Common.NET_ADD_COMMENT) {
             if (isLast) {
                 AddCommentResultModel mAddCommentResultModel = mGson.fromJson(data, AddCommentResultModel.class);
@@ -428,18 +380,16 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
     }
 
     private void initListView() {
+        blogdetailGoodsLl = (LinearLayout) headView.findViewById(R.id.blogdetail_goods_ll);
+        blogdetailGoodsLv = (MyListView) headView.findViewById(R.id.blogdetail_goods_lv);
         blogdetailHeadImg = (ImageView) headView.findViewById(R.id.blogdetail_head_img);
         blogdetailVerifyImg = (ImageView) headView.findViewById(R.id.blogdetail_verify_img);
         blogdetailGenderImg = (ImageView) headView.findViewById(R.id.blogdetail_gender_img);
         blogdetailSvipIv = (ImageView) headView.findViewById(R.id.blogdetail_svip_iv);
-        blogdetailGoodsIv = (ImageView) headView.findViewById(R.id.blogdetail_goods_iv);
         blogdetailNameTx = (TextView) headView.findViewById(R.id.blogdetail_name_tx);
         blogdetailVipTx = (TextView) headView.findViewById(R.id.blogdetail_vip_tx);
         blogdetailLevelTx = (TextView) headView.findViewById(R.id.blogdetail_level_tx);
         bloglistTimeTx = (TextView) headView.findViewById(R.id.bloglist_time_tx);
-        blogdetailTitleTx = (TextView) headView.findViewById(R.id.blogdetail_title_tx);
-        blogdetailGoodsNameIv = (TextView) headView.findViewById(R.id.blogdetail_goods_name_iv);
-        blogdetailGoodsPriceIv = (TextView) headView.findViewById(R.id.blogdetail_goods_price_iv);
         blogdetailHeadRl = (RelativeLayout) headView.findViewById(R.id.blogdetail_head_rl);
         blogdetailHeadRl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -452,14 +402,6 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                     }
                     startActivity(OtherPersonalActivity.buildIntent(mContext, mGetBlogDetailModel.getBody().get(0).getUser_id()));
                 }
-            }
-        });
-        blogdetailGoodsRl = (RelativeLayout) headView.findViewById(R.id.blogdetail_goods_rl);
-        blogdetailGoodsRl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(GoodsDetailActivity.buildIntent(mContext,
-                        mGoodsDetailsResponseModel.getBody().getGoods_id()));
             }
         });
         blogdetailTopRl = (RelativeLayout) headView.findViewById(R.id.blogdetail_top_rl);
@@ -487,7 +429,8 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
         });
 
         mAdapter = new PostingsDetailsCommentAdapter(mContext, this);
-        blogdetailCommentLv.getRefreshableView().addHeaderView(headView);
+        blogdetailCommentLv.getRefreshableView().addHeaderView(headView, null, true);
+        blogdetailCommentLv.getRefreshableView().setHeaderDividersEnabled(false);
         blogdetailCommentLv.setAdapter(mAdapter);
     }
 
@@ -511,10 +454,16 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
         setBarTitleTx(mBodyEntity.getTitle());
         changeMyHeart();
 
-        if (mBodyEntity.getGoods_id() > 0) {//是否事商品贴
-            blogdetailHeadRl.setVisibility(View.GONE);
-        } else {
-            blogdetailHeadRl.setVisibility(View.VISIBLE);
+        blogdetailFlowerTv.setText(mGetBlogDetailModel.getBody().get(0).getFlower_num() + "");
+        if (mGetBlogDetailModel.getBody().get(0).getFlower_num() > 0) {
+            mRewardListAdapter = new RewardGridViewAdapter(mContext, mGetBlogDetailModel.getBody().get(0).getGiftList());
+            blogdetailFlowerGv.setAdapter(mRewardListAdapter);
+            blogdetailFlowerGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    startActivity(BlogRewardListActivty.buildIntent(mContext, mGetBlogDetailModel.getBody().get(0).getBlog_id()));
+                }
+            });
         }
 
         if (mBodyEntity.getSex().equals("M")) {
@@ -568,8 +517,21 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
             }
         }
 
-        bloglistTimeTx.setText(MyTools.convertTime(mBodyEntity.getCreate_time(), "yyyy.MM.dd HH:mm"));
-        blogdetailTitleTx.setText(mBodyEntity.getTitle());
+        if (mBodyEntity.getGoodsList().size()>0) {
+            blogdetailGoodsLl.setVisibility(View.VISIBLE);
+            final BlogDetailGoodsListAdapter tempAdaper = new BlogDetailGoodsListAdapter(mContext
+                    , mBodyEntity.getGoodsList());
+            blogdetailGoodsLv.setAdapter(tempAdaper);
+            blogdetailGoodsLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    startActivity(GoodsDetailActivity.buildIntent(mContext,
+                            (int) tempAdaper.getItem(position).getGoods_id()));
+                }
+            });
+        }
+
+        bloglistTimeTx.setText(MyTools.convertTimeS(mBodyEntity.getCreate_time()));
 
         String temp = mBodyEntity.getContent();
         //<wysqimg=  =wysqimg>
@@ -606,7 +568,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                     mWb.getSettings().setDefaultTextEncodingName("utf-8");
                     mWb.getSettings().setBlockNetworkImage(false);
                     mWb.getSettings().setJavaScriptEnabled(true);
-                    mWb.addJavascriptInterface(new MyJSInterface(PostingsDetailActivity.this), "imagelistner");
+                    mWb.addJavascriptInterface(new MyJSInterface(ImageTextPostDetailActivity.this), "imagelistner");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         mWb.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
                     } else {
@@ -678,8 +640,8 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                                         + MyBaseApplication.mDownLoad_URL, mContext);
                             }
                             MyBaseApplication.getApplication().setFilterLock(true);
-                            ShareHelper.share(PostingsDetailActivity.this, Platform
-                                    , MyBaseApplication.mDownLoad_URL, PostingsDetailActivity.this);
+                            ShareHelper.share(ImageTextPostDetailActivity.this, Platform
+                                    , MyBaseApplication.mDownLoad_URL, ImageTextPostDetailActivity.this);
                         }
                     });
                 } else if (which == 1) {//举报
@@ -703,7 +665,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                             .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                             .content("{\"black_user_id\":" + mGetBlogDetailModel.getBody().get(0).getUser_id() + "}")
                             .mediaType(Common.JSON).id(Common.NET_ADD_BLACKLIST).tag(Common.NET_ADD_BLACKLIST)
-                            .build().execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
+                            .build().execute(new MyStringCallback(mContext, ImageTextPostDetailActivity.this, true));
                 } else if (which == 3) {//删除
                     if (!isLogin()) {
                         showLogin();
@@ -713,7 +675,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                             .content("{}")
                             .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                             .id(Common.NET_DELETE_POST).tag(Common.NET_DELETE_POST)
-                            .build().execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
+                            .build().execute(new MyStringCallback(mContext, ImageTextPostDetailActivity.this, true));
                 }
             }
         });
@@ -778,7 +740,6 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_BLOGDETAIL_COMMENTLIST);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_BLOGCOLLECTION);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_BLOGCOLLECTION_NOT);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_CATEGORY_DETAIL);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_COMMENT);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_LIKE);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BLACKLIST);
@@ -797,7 +758,7 @@ public class PostingsDetailActivity extends MyBaseActivity implements AdapterInt
                 OkHttpUtils.postString().url(Common.Url_Add_Like + "1/" + mAdapter.getItem(position).getBlog_comment_id())
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .content("{}").mediaType(Common.JSON).id(Common.NET_ADD_LIKE).tag(Common.NET_ADD_LIKE)
-                        .build().execute(new MyStringCallback(mContext, PostingsDetailActivity.this, true));
+                        .build().execute(new MyStringCallback(mContext, ImageTextPostDetailActivity.this, true));
                 break;
             case R.id.item_postingsdetail_comment_head_rl:
                 if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null && mAdapter.getItem(position).getUser_id() ==

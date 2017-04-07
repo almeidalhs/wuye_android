@@ -11,14 +11,12 @@
 
         <com.handmark.pulltorefresh.library.PullToRefreshListView
             xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/blogdetail_comment_lv"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/blogdetail_comment_lv"
-            android:layout_marginTop="@dimen/dimen_dp_5"
-            android:background="@color/color_white"
+            android:descendantFocusability="blocksDescendants"
             android:divider="@color/color_line"
             android:dividerHeight="1px"
-            android:descendantFocusability="blocksDescendants"
             ptr:ptrAnimationStyle="flip"
             ptr:ptrMode="both"
             ptr:ptrScrollingWhileRefreshingEnabled="true">
@@ -44,7 +42,7 @@
     <com.atman.wysq.widget.face.FaceRelativeLayout
         android:id="@+id/FaceRelativeLayout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/ll1"
@@ -65,9 +63,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:maxLength="250"
                 android:background="@drawable/et_addcomment_bg_selector"
                 android:hint="我来说一句"
+                android:maxLength="250"
                 android:maxLines="3"
                 android:padding="@dimen/dimen_dp_5"
                 android:textColor="@color/color_black"
@@ -77,27 +75,26 @@
                 android:id="@+id/blogdetail_send_bt"
                 android:layout_width="@dimen/dimen_dp_45"
                 android:layout_height="@dimen/dimen_dp_35"
-                android:layout_marginRight="@dimen/dimen_dp_8"
                 android:layout_marginLeft="@dimen/dimen_dp_8"
-                android:textSize="@dimen/dimen_sp_16"
+                android:layout_marginRight="@dimen/dimen_dp_8"
                 android:background="@drawable/bt_send_bg_selector"
+                android:text="发送"
                 android:textColor="@color/color_black"
-                android:text="发送"/>
+                android:textSize="@dimen/dimen_sp_16" />
 
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_below="@+id/ll1"
             android:id="@+id/ll_facechoose"
             android:layout_width="fill_parent"
-            android:visibility="gone"
-            android:layout_height="@dimen/dimen_dp_150" >
+            android:layout_height="@dimen/dimen_dp_150"
+            android:layout_below="@+id/ll1"
+            android:visibility="gone">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/vp_contains"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-            </android.support.v4.view.ViewPager>
+                android:layout_height="match_parent"></android.support.v4.view.ViewPager>
 
             <LinearLayout
                 android:id="@+id/iv_image"
@@ -106,8 +103,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="@dimen/dimen_dp_6"
                 android:gravity="center"
-                android:orientation="horizontal" >
-            </LinearLayout>
+                android:orientation="horizontal"></LinearLayout>
         </RelativeLayout>
     </com.atman.wysq.widget.face.FaceRelativeLayout>
 

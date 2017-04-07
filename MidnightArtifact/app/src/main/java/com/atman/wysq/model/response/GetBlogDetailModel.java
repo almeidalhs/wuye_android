@@ -101,6 +101,15 @@ public class GetBlogDetailModel {
         private List<String> wysqImglist;
         private int favorite_id;
         private long flower_num;
+        private List<GoodsListEntity> goodsList;
+
+        public List<GoodsListEntity> getGoodsList() {
+            return goodsList;
+        }
+
+        public void setGoodsList(List<GoodsListEntity> goodsList) {
+            this.goodsList = goodsList;
+        }
 
         public long getFlower_num() {
             return flower_num;
@@ -374,6 +383,193 @@ public class GetBlogDetailModel {
 
             public void setIcon(String icon) {
                 this.icon = icon;
+            }
+        }
+
+        public static class GoodsListEntity {
+
+            /**
+             * goods_id : 159
+             * title : 测试图文详情顺序五张图
+             * pic_img : /imageServer/CD0Ecc9dd10609e3431b81360027b06d4658.jpg
+             * store : 1
+             * price : 100.00
+             * discount_price : 95.00
+             * sales : 5
+             * special_edition_id : 14
+             * status : 2
+             * key_words : 测试
+             * gold_coin : 1
+             * integral : 1
+             * chat_prop_id : 4
+             * update_time : 1470377128000
+             * goods_type : 1
+             * source : 1
+             * postage : 6.6
+             * gold_coin_price : 1000
+             */
+
+            private long goods_id;
+            private String title;
+            private String pic_img;
+            private String store;
+            private String price;
+            private String discount_price;
+            private int sales;
+            private int special_edition_id;
+            private int status;
+            private String key_words;
+            private int gold_coin;
+            private int integral;
+            private int chat_prop_id;
+            private long update_time;
+            private int goods_type;
+            private int source;
+            private String postage;
+            private int gold_coin_price;
+
+            public long getGoods_id() {
+                return goods_id;
+            }
+
+            public void setGoods_id(long goods_id) {
+                this.goods_id = goods_id;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String getPic_img() {
+                return pic_img;
+            }
+
+            public void setPic_img(String pic_img) {
+                this.pic_img = pic_img;
+            }
+
+            public String getStore() {
+                return store;
+            }
+
+            public void setStore(String store) {
+                this.store = store;
+            }
+
+            public String getPrice() {
+                return price;
+            }
+
+            public void setPrice(String price) {
+                this.price = price;
+            }
+
+            public String getDiscount_price() {
+                return discount_price;
+            }
+
+            public void setDiscount_price(String discount_price) {
+                this.discount_price = discount_price;
+            }
+
+            public int getSales() {
+                return sales;
+            }
+
+            public void setSales(int sales) {
+                this.sales = sales;
+            }
+
+            public int getSpecial_edition_id() {
+                return special_edition_id;
+            }
+
+            public void setSpecial_edition_id(int special_edition_id) {
+                this.special_edition_id = special_edition_id;
+            }
+
+            public int getStatus() {
+                return status;
+            }
+
+            public void setStatus(int status) {
+                this.status = status;
+            }
+
+            public String getKey_words() {
+                return key_words;
+            }
+
+            public void setKey_words(String key_words) {
+                this.key_words = key_words;
+            }
+
+            public int getGold_coin() {
+                return gold_coin;
+            }
+
+            public void setGold_coin(int gold_coin) {
+                this.gold_coin = gold_coin;
+            }
+
+            public int getIntegral() {
+                return integral;
+            }
+
+            public void setIntegral(int integral) {
+                this.integral = integral;
+            }
+
+            public int getChat_prop_id() {
+                return chat_prop_id;
+            }
+
+            public void setChat_prop_id(int chat_prop_id) {
+                this.chat_prop_id = chat_prop_id;
+            }
+
+            public long getUpdate_time() {
+                return update_time;
+            }
+
+            public void setUpdate_time(long update_time) {
+                this.update_time = update_time;
+            }
+
+            public int getGoods_type() {
+                return goods_type;
+            }
+
+            public void setGoods_type(int goods_type) {
+                this.goods_type = goods_type;
+            }
+
+            public int getSource() {
+                return source;
+            }
+
+            public void setSource(int source) {
+                this.source = source;
+            }
+
+            public String getPostage() {
+                return postage;
+            }
+
+            public void setPostage(String postage) {
+                this.postage = postage;
+            }
+
+            public int getGold_coin_price() {
+                return gold_coin_price;
+            }
+
+            public void setGold_coin_price(int gold_coin_price) {
+                this.gold_coin_price = gold_coin_price;
             }
         }
 

@@ -78,6 +78,10 @@ public class PostingsDetailsCommentAdapter extends BaseAdapter {
         return shop.get(position);
     }
 
+    public List<GetPostingsDetailsCommentListModel.BodyEntity> getShop() {
+        return shop;
+    }
+
     public void setLikeById(int n) {
         shop.get(n).setIsLike(1);
         shop.get(n).setLike_count(shop.get(n).getLike_count() + 1);

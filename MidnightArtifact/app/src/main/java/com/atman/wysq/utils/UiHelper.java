@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.atman.wysq.model.response.MallModel;
 import com.atman.wysq.model.response.MallTopResponseModel;
 import com.atman.wysq.ui.base.WebPageActivity;
-import com.atman.wysq.ui.community.PostingsDetailActivity;
+import com.atman.wysq.ui.community.ImageTextPostDetailActivity;
 import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.ui.mall.GoodsDetailActivity;
 import com.atman.wysq.ui.mall.TwoLevelCategoryListActivity;
@@ -57,7 +57,7 @@ public class UiHelper {
                         bodyEntity.getAd_goods_id(), bodyEntity.getName(), false));
                 break;
             case 6://帖子
-                context.startActivity(PostingsDetailActivity.buildIntent(context, ""
+                context.startActivity(ImageTextPostDetailActivity.buildIntent(context, ""
                         , bodyEntity.getAd_goods_id(), false, 0));
                 break;
             case 8://众筹
@@ -95,7 +95,7 @@ public class UiHelper {
                         bodyEntity.getAd_goods_id(), bodyEntity.getName(), false));
                 break;
             case 6://帖子
-                context.startActivity(PostingsDetailActivity.buildIntent(context, ""
+                context.startActivity(ImageTextPostDetailActivity.buildIntent(context, ""
                         , bodyEntity.getAd_goods_id(), false, 0));
                 break;
             case 8://众筹

@@ -26,7 +26,7 @@ import com.atman.wysq.R;
 import com.atman.wysq.ui.MainActivity;
 import com.atman.wysq.ui.SplashActivity;
 import com.atman.wysq.ui.community.CommentChildrenListActivity;
-import com.atman.wysq.ui.community.PostingsDetailActivity;
+import com.atman.wysq.ui.community.ImageTextPostDetailActivity;
 import com.atman.wysq.ui.discover.ListenLiveActivity;
 import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.ui.mall.order.ConfirmationOrderActivity;
@@ -429,7 +429,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             if (!(mAty instanceof ConfirmationOrderActivity)
                     && !(mAty instanceof CommentChildrenListActivity)
-                    && !(mAty instanceof PostingsDetailActivity)
+                    && !(mAty instanceof ImageTextPostDetailActivity)
                     && !(mAty instanceof SelectGiftActivity)
                     && !(mAty instanceof P2PChatActivity)
                     && !(mAty instanceof ListenLiveActivity)

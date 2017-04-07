@@ -28,7 +28,7 @@ import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.base.WebPageActivity;
 import com.atman.wysq.ui.community.CommunityNewFragment;
-import com.atman.wysq.ui.community.PostingsDetailActivity;
+import com.atman.wysq.ui.community.ImageTextPostDetailActivity;
 import com.atman.wysq.ui.discover.DiscoverNewFragment;
 import com.atman.wysq.ui.mall.GoodsDetailActivity;
 import com.atman.wysq.ui.mall.MallFragment;
@@ -123,7 +123,7 @@ public class MainActivity extends MyBaseActivity {
                 startActivity(TwoLevelCategoryListActivity.buildIntent(mContext,
                         Integer.parseInt(MyBaseApplication.mWEB_ID), "", false));
             } else if (MyBaseApplication.mWEB_TYPE.equals("6")) {//帖子
-                startActivity(PostingsDetailActivity.buildIntent(mContext, ""
+                startActivity(ImageTextPostDetailActivity.buildIntent(mContext, ""
                         , Integer.parseInt(MyBaseApplication.mWEB_ID), false, 0));
             } else if (MyBaseApplication.mWEB_TYPE.equals("7")) {//午夜Url
 

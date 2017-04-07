@@ -495,10 +495,12 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
         int CategoryId = temp.getCategory();
         switch (CategoryId) {
             case 1://图文
-                startActivity(PostingsDetailActivity.buildIntent(getActivity()
+                startActivity(ImageTextPostDetailActivity.buildIntent(getActivity()
                         , temp.getTitle(), temp.getBlog_id(), false, temp.getVip_level()));
                 break;
             case 2://语音
+                startActivity(VoicePostDetailActivity.buildIntent(getActivity()
+                        , temp.getTitle(), temp.getBlog_id(), false, temp.getVip_level()));
                 break;
             case 3://视频
                 break;

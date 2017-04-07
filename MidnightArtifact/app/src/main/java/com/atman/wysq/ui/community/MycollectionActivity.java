@@ -168,7 +168,7 @@ public class MycollectionActivity extends MyBaseActivity implements AdapterInter
             case R.id.item_bloglist_root_ll:
             case R.id.item_bloglist_comment_ll:
                 blogId = mAdapter.getItem(position).getBlog_id();
-                startActivity(PostingsDetailActivity.buildIntent(mContext, mAdapter.getItem(position).getTitle()
+                startActivity(ImageTextPostDetailActivity.buildIntent(mContext, mAdapter.getItem(position).getTitle()
                         , blogId, false, mAdapter.getItem(position).getVip_level()));
                 OkHttpUtils.postString().url(Common.Url_Add_Browse+blogId).mediaType(Common.JSON)
                         .content("{}")

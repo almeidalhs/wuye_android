@@ -58,7 +58,7 @@
         <activity android:name=".ui.mall.address.EditAddressActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.mall.order.MyOrderListActivity"/>
         <activity android:name=".ui.mall.order.OrderDetailActivity"/>
-        <activity android:name=".ui.community.PostingsDetailActivity" />
+        <activity android:name=".ui.community.ImageTextPostDetailActivity" />
         <activity android:name=".ui.community.ReportActivity"/>
         <activity android:name=".ui.community.CommentChildrenListActivity"/>
         <activity android:name=".ui.community.BlogRewardListActivty"/>

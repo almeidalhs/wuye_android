@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/notnull_rl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/color_white"
         android:paddingBottom="@dimen/dimen_dp_3"
         android:paddingTop="@dimen/dimen_dp_3">
@@ -218,8 +218,13 @@
     <TextView
         android:id="@+id/null_tx"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_dp_5"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dimen_dp_15"
+        android:gravity="center"
         android:visibility="gone"
-        android:background="@color/all_bg"/>
+        android:background="@color/color_white"
+        android:textSize="@dimen/dimen_sp_14"
+        android:textColor="@color/color_black"
+        android:text="暂无评论，赶快发表第一个评论吧"/>
 
 </RelativeLayout>
