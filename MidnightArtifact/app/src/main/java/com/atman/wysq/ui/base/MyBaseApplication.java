@@ -118,8 +118,10 @@ public class MyBaseApplication extends BaseApplication {
 
     public static List<GoodsListModel> creatPostGoods = new ArrayList<>();
     public static List<AddPostContentModel> creatPostContents = new ArrayList<>();
-    public static boolean isRelation = false;
+    public static int isRelation = 0;//0复位，1图文帖，2语音，3视频
     public static String imagetextPostTitle = "";
+    public static String voicePath = "";
+    public static int voiceLength = 0;
 
     private DisplayImageOptions options,optionsHead, optionsNot;
 

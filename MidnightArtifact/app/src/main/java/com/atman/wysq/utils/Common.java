@@ -263,6 +263,8 @@ public class Common {
     public static String Url_Get_Two_Category = hostUrl + "rest/category/leaflist/";
     //关键字搜索
     public static String Url_Search = hostUrl + "rest/goods/search?keywords=";
+    //创建语音帖 rest/blog/addAudio
+    public static String Url_Create_Audio_Post = hostUrl + "rest/blog/addAudio";
     /**************************http访问路径*****************************/
 
 
@@ -504,6 +506,10 @@ public class Common {
     public static int NET_GET_CATEGOYP_TWO_ID = 117;
     //关键字搜索
     public static int NET_SEARCH_ID = 118;
+    //上传语音文件
+    public static int NET_UP_VOICE_ID = 119;
+    //创建语音帖
+    public static int NET_CREATE_AUDIO_POST_ID = 120;
     /**************************http访问回应识别码*****************************/
 
 

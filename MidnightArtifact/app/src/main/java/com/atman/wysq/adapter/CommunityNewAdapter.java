@@ -2,6 +2,7 @@ package com.atman.wysq.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,20 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.CommunityNewModel;
+import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.DraweeView;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -100,7 +110,9 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
         if (imgUrl!=null && !imgUrl.startsWith("/")) {
             imgUrl = "/" + imgUrl;
         }
-        holder.itemCommunitynewBgIv.setImageURI(Common.ImageUrl+imgUrl);
+        ImageLoader.getInstance().displayImage(Common.ImageUrl+imgUrl
+                , holder.itemCommunitynewBgIv, MyBaseApplication.getApplication().getOptionsNot());
+//        holder.itemCommunitynewBgIv.setImageURI(Common.ImageUrl+imgUrl);
         holder.itemCommunitynewTitleTv.setText(listData.get(position).getTitle());
         imgUrl = listData.get(position).getIcon();
         if (imgUrl!=null && !imgUrl.startsWith("/")) {

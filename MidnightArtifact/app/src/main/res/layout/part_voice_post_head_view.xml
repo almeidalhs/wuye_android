@@ -44,9 +44,9 @@
 
         <ImageView
             android:id="@+id/post_bg_iv"
-            android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,8 +67,18 @@
                 android:background="@drawable/part_voice_listeningtest_selector"
                 android:enabled="false"
                 android:text="试听"
-                android:textColor="@color/color_white"
+                android:textColor="@drawable/bt_white_text_selector"
                 android:textSize="@dimen/dimen_sp_13" />
+
+            <Chronometer
+                android:id="@+id/post_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/color_red"
+                android:textSize="@dimen/dimen_sp_15" />
 
             <TextView
                 android:id="@+id/post_time_tx"
@@ -78,7 +88,8 @@
                 android:gravity="center"
                 android:text="00:00"
                 android:textColor="@color/color_red"
-                android:textSize="@dimen/dimen_sp_15" />
+                android:textSize="@dimen/dimen_sp_15"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/post_recording_bt"
@@ -87,9 +98,8 @@
                 android:layout_marginLeft="@dimen/dimen_dp_10"
                 android:layout_marginRight="@dimen/dimen_dp_10"
                 android:background="@drawable/part_voice_recording_selector"
-                android:enabled="false"
                 android:text="录音"
-                android:textColor="@color/color_white"
+                android:textColor="@drawable/bt_white_text_selector"
                 android:textSize="@dimen/dimen_sp_13" />
 
         </LinearLayout>
@@ -101,7 +111,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:padding="@dimen/dimen_dp_20"
-            android:text="点击跟换封面"
+            android:text="点击更换封面"
             android:textColor="@color/color_white" />
     </RelativeLayout>
 

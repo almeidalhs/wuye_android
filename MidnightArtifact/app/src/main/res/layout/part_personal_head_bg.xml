@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_white"
-    fresco:failureImage="@mipmap/icon_goodsdetail_business"
+    fresco:failureImage="@mipmap/personal_head_bg"
     fresco:failureImageScaleType="centerCrop"
-    fresco:placeholderImage="@mipmap/icon_goodsdetail_business">
+    fresco:placeholderImage="@mipmap/personal_head_bg">
 
 </com.facebook.drawee.view.SimpleDraweeView>

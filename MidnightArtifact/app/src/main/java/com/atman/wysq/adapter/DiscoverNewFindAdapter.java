@@ -1,6 +1,7 @@
 package com.atman.wysq.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,11 +15,21 @@ import android.widget.TextView;
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.DiscoverNewModel;
 import com.atman.wysq.model.response.DiscoverNewModel.BodyBean;
+import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
+import com.base.baselibs.util.LogUtils;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.DraweeView;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -92,7 +103,9 @@ public class DiscoverNewFindAdapter extends RecyclerView.Adapter<DiscoverNewFind
 
         holder.itemDiscovernewNumTv.setText(" "+listData.get(position).getView_count()+"");
         holder.itemDiscovernewNameTv.setText(listData.get(position).getNick_name());
-        holder.itemDiscovernewIv.setImageURI(Common.ImageUrl+listData.get(position).getPic_url1());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl+listData.get(position).getPic_url1()
+                , holder.itemDiscovernewIv, MyBaseApplication.getApplication().getOptionsNot());
+//        holder.itemDiscovernewIv.setImageURI(Common.ImageUrl+listData.get(position).getPic_url1());
 
         holder.itemDiscovernewIv.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -15,6 +15,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
+            android:scaleType="centerCrop"
             fresco:failureImage="@mipmap/icon_goodsdetail_business"
             fresco:failureImageScaleType="centerInside"
             fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />

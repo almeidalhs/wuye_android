@@ -168,11 +168,11 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
     @Override
     protected void onResume() {
         super.onResume();
-        if (getIntent().getIntExtra("Goods_id", -1)!=-1 && mAdapter!=null && MyBaseApplication.isRelation) {
+        if (getIntent().getIntExtra("Goods_id", -1)!=-1 && mAdapter!=null && MyBaseApplication.isRelation>0) {
             GoodsListModel temp = new GoodsListModel(getIntent().getIntExtra("Goods_id", -1)
                     , getIntent().getStringExtra("Pic_img"), getIntent().getStringExtra("Title")
                     , getIntent().getStringExtra("Discount_price"));
-            MyBaseApplication.isRelation = false;
+            MyBaseApplication.isRelation = 0;
             mAdapter.clearAll();
             mAdapter.addGoods(MyBaseApplication.creatPostGoods);
             mAdapter.addContent(MyBaseApplication.creatPostContents);
@@ -284,7 +284,7 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
                 startActivityForResult(new Intent(mContext, ImageGridActivity.class), CHOOSE_BIG_PICTURE);
                 break;
             case R.id.item_childone_head_iv:
-                showHeadImg();
+                showImg();
                 break;
             case R.id.item_childtwo_delete_iv:
                 mAdapter.deleteGoods(position);
@@ -295,7 +295,7 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
                 MyBaseApplication.creatPostGoods.clear();
                 MyBaseApplication.creatPostGoods.addAll(mAdapter.getGoodsList());
                 mAdapter.clearAll();
-                MyBaseApplication.isRelation = true;
+                MyBaseApplication.isRelation = 1;
                 MyBaseApplication.imagetextPostTitle = postTitleEt.getText().toString();
                 startActivityForResult(new Intent(mContext, MallActivity.class)
                         , Common.fromCreateImageText);
@@ -303,7 +303,7 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
         }
     }
 
-    private void showHeadImg() {
+    private void showImg() {
         BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
         builder.setTitle(Html.fromHtml("<font color=\"#f9464a\">修改图片</font>"));
         builder.setItems(new String[]{"拍照", "相册"}, new DialogInterface.OnClickListener() {
