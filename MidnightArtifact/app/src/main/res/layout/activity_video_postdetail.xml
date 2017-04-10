@@ -7,6 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/color_black"
         android:layout_weight="1">
 
         <com.handmark.pulltorefresh.library.PullToRefreshListView
@@ -14,9 +15,9 @@
             android:id="@+id/blogdetail_comment_lv"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginTop="@dimen/dimen_dp_5"
             android:descendantFocusability="blocksDescendants"
             android:divider="@color/color_line"
+            android:background="@color/all_bg"
             android:dividerHeight="1px"
             ptr:ptrAnimationStyle="flip"
             ptr:ptrMode="both"
@@ -33,9 +34,16 @@
             android:layout_marginRight="@dimen/dimen_dp_10"
             android:src="@mipmap/icon_list_backtotop"
             android:visibility="gone" />
+
+        <com.dl7.player.media.IjkPlayerView
+            android:id="@+id/player_view"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="200dp"/>
     </RelativeLayout>
 
     <ImageView
+        android:id="@+id/postings_line_iv"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:src="@color/color_line" />

@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.atman.wysq.adapter.PostingsDetailsCommentAdapter;
 import com.atman.wysq.adapter.RewardGridViewAdapter;
 import com.atman.wysq.model.request.AddCommentModel;
 import com.atman.wysq.model.response.AddCommentResultModel;
+import com.atman.wysq.model.response.DanmakuModel;
 import com.atman.wysq.model.response.GetBlogDetailModel;
 import com.atman.wysq.model.response.GetPostingsDetailsCommentListModel;
 import com.atman.wysq.model.response.GetUserIndexModel;
@@ -40,6 +43,7 @@ import com.atman.wysq.utils.MyTools;
 import com.atman.wysq.utils.ShareHelper;
 import com.atman.wysq.utils.Tools;
 import com.atman.wysq.widget.ShareDialog;
+import com.atman.wysq.widget.face.FaceRelativeLayout;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
@@ -47,6 +51,8 @@ import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.MyListView;
 import com.base.baselibs.widget.PromptDialog;
+import com.bumptech.glide.Glide;
+import com.dl7.player.media.IjkPlayerView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -63,6 +69,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Response;
+import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
  * Created by tangbingliang on 17/4/7.
@@ -83,6 +90,12 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
     RelativeLayout llFacechoose;
     @Bind(R.id.blogdetail_send_bt)
     Button blogdetailSendBt;
+    @Bind(R.id.player_view)
+    IjkPlayerView playerView;
+    @Bind(R.id.FaceRelativeLayout)
+    FaceRelativeLayout FaceRelativeLayout;
+    @Bind(R.id.postings_line_iv)
+    ImageView postingsLineIv;
 
     private Context mContext = VoicePostDetailActivity.this;
     private ListView mListView;
@@ -133,6 +146,8 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
 
     private RelativeLayout.LayoutParams rlParams;
     private LinearLayout.LayoutParams llParams;
+    private String mImgUrl;
+    private String mAudioUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +220,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         blogdetailCommentLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mAdapter != null && mAdapter.getShop().size()>0 && position > 1) {
+                if (mAdapter != null && mAdapter.getShop().size() > 0 && position > 1) {
                     GetPostingsDetailsCommentListModel.BodyEntity mBodyEntity = mAdapter.getItem(position - 2);
                     startActivity(CommentChildrenListActivity.buildIntent(mContext, mBodyEntity.getBlog_id(), mBodyEntity.getBlog_comment_id()
                             , mBodyEntity.getIcon(), mBodyEntity.getVerify_status(), mBodyEntity.getUser_name()
@@ -242,8 +257,26 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         });
     }
 
+    private void initPlayView(DanmakuModel mDanmakuModel) {
+        Glide.with(this).load(mImgUrl).centerCrop().into(playerView.mPlayerThumb);
+        playerView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(IMediaPlayer iMediaPlayer) {
+                playerView.setVisibility(View.GONE);
+            }
+        });
+        playerView.init().isVideo(false)
+//                .setSkipTip(1000*60*1)//上次续播时间
+                .enableDanmaku()
+//                .setDanmakuSource(getResources().openRawResource(R.raw.bili))
+                .setVideoSource(null, mAudioUrl, null, null, null)
+                .setMediaQuality(IjkPlayerView.MEDIA_QUALITY_HIGH);
+        playerView.setVisibility(View.VISIBLE);
+        playerView.start();
+    }
+
     private void changeMyHeart() {
-        if (favoriteId>0) {//已收藏
+        if (favoriteId > 0) {//已收藏
             isHeartIv = setBarRightTwoIv(R.mipmap.ic_heart_red);
         } else {//未收藏
             isHeartIv = setBarRightTwoIv(R.mipmap.ic_heart_normal);
@@ -288,6 +321,46 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
     @Override
     protected void onResume() {
         super.onResume();
+        playerView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        playerView.onPause();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (playerView.handleVolumeKey(keyCode)) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (playerView.onBackPressed()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        playerView.configurationChanged(newConfig);
+        if (playerView.ismIsFullscreen()) {
+            hideTitleBar();
+            FaceRelativeLayout.setVisibility(View.GONE);
+            postingsLineIv.setVisibility(View.GONE);
+            blogdetailCommentLv.setVisibility(View.GONE);
+        } else {
+            showTitleBar();
+            FaceRelativeLayout.setVisibility(View.VISIBLE);
+            postingsLineIv.setVisibility(View.VISIBLE);
+            blogdetailCommentLv.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -360,9 +433,9 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
             finish();
         } else if (id == Common.NET_GET_USERINDEX) {
             mGetMyUserIndexModel = mGson.fromJson(data, GetUserIndexModel.class);
-            if (mGetMyUserIndexModel.getBody().getUserFelation()==1) {
+            if (mGetMyUserIndexModel.getBody().getUserFelation() == 1) {
                 bloglistRelationTx.setText("取消关注");
-            } else if (mGetMyUserIndexModel.getBody().getUserFelation()==0) {
+            } else if (mGetMyUserIndexModel.getBody().getUserFelation() == 0) {
                 bloglistRelationTx.setText("＋关注");
             }
         } else if (id == Common.NET_CANCEL_MYCONCERNLIST_ID) {
@@ -372,12 +445,15 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
             MyBaseApplication.getApplication().getDaoSession().getAddFriendRecordDao().deleteAll();
         } else if (id == Common.NET_ADD_FOLLOW_ID) {
             showToast("关注成功");
-            if (mGetMyUserIndexModel.getBody().getUserFelation()==0) {
+            if (mGetMyUserIndexModel.getBody().getUserFelation() == 0) {
                 mGetMyUserIndexModel.getBody().setUserFelation(1);
             } else {
                 mGetMyUserIndexModel.getBody().setUserFelation(3);
             }
             bloglistRelationTx.setText("取消关注");
+        } else if (id == Common.NET_GET_DANMAKU_ID) {
+            DanmakuModel mDanmakuModel = mGson.fromJson(data, DanmakuModel.class);
+            initPlayView(mDanmakuModel);
         }
     }
 
@@ -404,8 +480,8 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
     }
 
     private void initListView() {
-        rlParams = new RelativeLayout.LayoutParams(getmWidth(), getmWidth()*240/430);
-        llParams = new LinearLayout.LayoutParams(getmWidth(), getmWidth()*240/430);
+        rlParams = new RelativeLayout.LayoutParams(getmWidth(), getmWidth() * 240 / 430);
+        llParams = new LinearLayout.LayoutParams(getmWidth(), getmWidth() * 240 / 430);
 
         blogdetailGoodsLl = (LinearLayout) headView.findViewById(R.id.blogdetail_goods_ll);
         blogdetailGoodsLv = (MyListView) headView.findViewById(R.id.blogdetail_goods_lv);
@@ -422,8 +498,8 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         blogdetailHeadRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mGetBlogDetailModel!=null && mGetBlogDetailModel.getBody().get(0).getAnonymityUser() == null) {
-                    if (MyBaseApplication.getApplication().mGetMyUserIndexModel != null && mGetBlogDetailModel.getBody().get(0).getUser_id()==
+                if (mGetBlogDetailModel != null && mGetBlogDetailModel.getBody().get(0).getAnonymityUser() == null) {
+                    if (MyBaseApplication.getApplication().mGetMyUserIndexModel != null && mGetBlogDetailModel.getBody().get(0).getUser_id() ==
                             MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId()) {
                         showWraning("亲，这是你自己哦！");
                         return;
@@ -440,7 +516,10 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         blogdetailTopVoiceStartIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                OkHttpUtils.get().url(Common.Url_Get_Danmaku + bolgId).id(Common.NET_GET_DANMAKU_ID)
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .tag(Common.NET_GET_DANMAKU_ID).build()
+                        .execute(new MyStringCallback(mContext, VoicePostDetailActivity.this, true));
             }
         });
         blogdetailFlowerGv = (GridView) headView.findViewById(R.id.blogdetail_flower_gv);
@@ -470,13 +549,13 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                     showLogin();
                     return;
                 }
-                if (blogUserId==MyBaseApplication.getApplication().mGetMyUserIndexModel
+                if (blogUserId == MyBaseApplication.getApplication().mGetMyUserIndexModel
                         .getBody().getUserDetailBean().getUserId()) {
                     showWraning("亲，这是你自己哦！");
                     return;
                 }
-                if (mGetMyUserIndexModel.getBody().getUserFelation()==1
-                        || mGetMyUserIndexModel.getBody().getUserFelation()==3) {
+                if (mGetMyUserIndexModel.getBody().getUserFelation() == 1
+                        || mGetMyUserIndexModel.getBody().getUserFelation() == 3) {
                     PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
                     builder.setMessage("确定取消关注TA吗?");
                     builder.setPositiveButton("不了", new DialogInterface.OnClickListener() {
@@ -536,7 +615,10 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         setBarTitleTx(mBodyEntity.getTitle());
         changeMyHeart();
 
-        blogdetailTopVoiceBgIv.setImageURI(Common.ImageUrl+mBodyEntity.getImg());
+        blogdetailTopVoiceBgIv.setImageURI(Common.ImageUrl + mBodyEntity.getImg());
+
+        mImgUrl = Common.ImageUrl+mBodyEntity.getImg();
+        mAudioUrl = Common.ImageUrl+mBodyEntity.getUrl();
 
         blogdetailFlowerTv.setText(mGetBlogDetailModel.getBody().get(0).getFlower_num() + "");
         if (mGetBlogDetailModel.getBody().get(0).getFlower_num() > 0) {
@@ -579,7 +661,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
             }
             blogdetailNameTx.setText(mBodyEntity.getUser_name());
             blogdetailLevelTx.setText("Lv " + mBodyEntity.getUserLevel());
-            if (vipLevel>=3) {
+            if (vipLevel >= 3) {
                 blogdetailNameTx.setTextColor(getResources().getColor(R.color.color_red));
             } else {
                 blogdetailNameTx.setTextColor(getResources().getColor(R.color.color_333333));
@@ -588,20 +670,20 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                     , blogdetailHeadImg, MyBaseApplication.getApplication().getOptionsNot());
         }
 
-        if (vipLevel>=4) {
+        if (vipLevel >= 4) {
             blogdetailVipTx.setVisibility(View.GONE);
             blogdetailSvipIv.setVisibility(View.VISIBLE);
         } else {
             blogdetailSvipIv.setVisibility(View.GONE);
-            if (vipLevel==0) {
+            if (vipLevel == 0) {
                 blogdetailVipTx.setVisibility(View.GONE);
             } else {
-                blogdetailVipTx.setText("VIP."+vipLevel);
+                blogdetailVipTx.setText("VIP." + vipLevel);
                 blogdetailVipTx.setVisibility(View.VISIBLE);
             }
         }
 
-        if (mBodyEntity.getGoodsList().size()>0) {
+        if (mBodyEntity.getGoodsList().size() > 0) {
             blogdetailGoodsLl.setVisibility(View.VISIBLE);
             final BlogDetailGoodsListAdapter tempAdaper = new BlogDetailGoodsListAdapter(mContext
                     , mBodyEntity.getGoodsList());
@@ -724,6 +806,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        playerView.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_BLOGDETAIL);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_BLOGDETAIL_COMMENTLIST);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_BLOGCOLLECTION);
@@ -732,6 +815,10 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_LIKE);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BLACKLIST);
         OkHttpUtils.getInstance().cancelTag(Common.NET_DELETE_POST);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_DANMAKU_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_FOLLOW_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_MYCONCERNLIST_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERINDEX);
     }
 
     @Override
@@ -749,7 +836,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                         .build().execute(new MyStringCallback(mContext, VoicePostDetailActivity.this, true));
                 break;
             case R.id.item_postingsdetail_comment_head_rl:
-                if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null && mAdapter.getItem(position).getUser_id() ==
+                if (MyBaseApplication.getApplication().mGetMyUserIndexModel != null && mAdapter.getItem(position).getUser_id() ==
                         MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId()) {
                     showWraning("亲，这是你自己哦！");
                     return;
@@ -783,16 +870,16 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         }
         if (requestCode == Common.toSelectGift) {
             int num = data.getIntExtra("price", 0);
-            if (mGetBlogDetailModel.getBody().size()>0) {
+            if (mGetBlogDetailModel.getBody().size() > 0) {
                 long n = mGetBlogDetailModel.getBody().get(0).getFlower_num();
-                mGetBlogDetailModel.getBody().get(0).setFlower_num(n+num/2);
+                mGetBlogDetailModel.getBody().get(0).setFlower_num(n + num / 2);
                 blogdetailFlowerTv.setText(mGetBlogDetailModel.getBody().get(0).getFlower_num() + "");
             } else {
-                blogdetailFlowerTv.setText(num/2 + "");
+                blogdetailFlowerTv.setText(num / 2 + "");
             }
             GetBlogDetailModel.BodyEntity.GiftListEntity temp = new GetBlogDetailModel.BodyEntity.GiftListEntity();
             temp.setIcon(MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
-            if (mRewardListAdapter==null) {
+            if (mRewardListAdapter == null) {
                 mRewardListAdapter = new RewardGridViewAdapter(mContext, temp);
                 blogdetailFlowerGv.setAdapter(mRewardListAdapter);
             } else {

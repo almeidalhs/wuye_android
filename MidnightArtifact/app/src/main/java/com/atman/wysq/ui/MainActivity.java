@@ -3,6 +3,7 @@ package com.atman.wysq.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -179,6 +180,11 @@ public class MainActivity extends MyBaseActivity {
             }
         }
         tabSessionUnreadTx.setLayoutParams(params);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     public static Intent buildIntent(Context context, boolean isToWeb) {

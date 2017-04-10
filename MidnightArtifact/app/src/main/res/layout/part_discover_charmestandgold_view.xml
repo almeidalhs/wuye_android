@@ -79,7 +79,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/black_ranking_bg"
+                android:background="@drawable/danmaku_bg"
                 android:paddingBottom="@dimen/dimen_dp_2"
                 android:paddingLeft="@dimen/dimen_dp_5"
                 android:paddingRight="@dimen/dimen_dp_5"
@@ -148,7 +148,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/black_ranking_bg"
+                android:background="@drawable/danmaku_bg"
                 android:paddingBottom="@dimen/dimen_dp_2"
                 android:paddingLeft="@dimen/dimen_dp_5"
                 android:paddingRight="@dimen/dimen_dp_5"
@@ -217,7 +217,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/black_ranking_bg"
+                android:background="@drawable/danmaku_bg"
                 android:paddingBottom="@dimen/dimen_dp_2"
                 android:paddingLeft="@dimen/dimen_dp_5"
                 android:paddingRight="@dimen/dimen_dp_5"
@@ -303,7 +303,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/black_ranking_bg"
+                android:background="@drawable/danmaku_bg"
                 android:paddingBottom="@dimen/dimen_dp_2"
                 android:paddingLeft="@dimen/dimen_dp_5"
                 android:paddingRight="@dimen/dimen_dp_5"
@@ -372,7 +372,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/black_ranking_bg"
+                android:background="@drawable/danmaku_bg"
                 android:paddingBottom="@dimen/dimen_dp_2"
                 android:paddingLeft="@dimen/dimen_dp_5"
                 android:paddingRight="@dimen/dimen_dp_5"
@@ -441,7 +441,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/black_ranking_bg"
+                android:background="@drawable/danmaku_bg"
                 android:paddingBottom="@dimen/dimen_dp_2"
                 android:paddingLeft="@dimen/dimen_dp_5"
                 android:paddingRight="@dimen/dimen_dp_5"

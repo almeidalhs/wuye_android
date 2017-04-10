@@ -10,6 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/okhttputils/okhttputils.iml" filepath="$PROJECT_DIR$/okhttputils/okhttputils.iml" />
       <module fileurl="file://$PROJECT_DIR$/pic3d_lib/pic3d_lib.iml" filepath="$PROJECT_DIR$/pic3d_lib/pic3d_lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/picturebrowsing_library/picturebrowsing_library.iml" filepath="$PROJECT_DIR$/picturebrowsing_library/picturebrowsing_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/playerview/playerview.iml" filepath="$PROJECT_DIR$/playerview/playerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/swipeback_libs/swipeback_libs.iml" filepath="$PROJECT_DIR$/swipeback_libs/swipeback_libs.iml" />
     </modules>
   </component>

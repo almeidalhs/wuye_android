@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.MainActivity" android:theme="@style/PersonalStyle"  />
+        <activity android:name=".ui.MainActivity" android:theme="@style/PersonalStyle"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".ui.PictureBrowsingActivity"/>
         <activity android:name=".ui.login.LoginActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.login.RegisterActivity"/>
@@ -70,8 +71,12 @@
         <activity android:name=".ui.community.MallActivity"/>
         <activity android:name=".ui.community.CreateVideoPostActivity"/>
         <activity android:name=".ui.community.CreateVoicePostActivity"/>
-        <activity android:name=".ui.community.VoicePostDetailActivity"/>
-        <activity android:name=".ui.community.VideoPostDetailActivity"/>
+        <activity android:name=".ui.community.VoicePostDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".ui.community.VideoPostDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity android:name=".ui.yunxinfriend.OtherPersonalActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.yunxinfriend.HisDynamicsActivity"/>
         <activity android:name=".ui.yunxinfriend.HisVisitorActivity"/>
