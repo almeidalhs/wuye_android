@@ -14,7 +14,6 @@
             android:id="@+id/blogdetail_comment_lv"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginTop="@dimen/dimen_dp_5"
             android:descendantFocusability="blocksDescendants"
             android:divider="@color/color_line"
             android:dividerHeight="1px"

@@ -114,8 +114,7 @@
         <ImageView
             android:id="@+id/item_communitynew_notlive_iv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_audio" />
+            android:layout_height="wrap_content" />
 
         <View
             android:layout_width="1px"

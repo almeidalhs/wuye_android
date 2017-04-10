@@ -118,6 +118,11 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
         if (imgUrl!=null && !imgUrl.startsWith("/")) {
             imgUrl = "/" + imgUrl;
         }
+        if (listData.get(position).getStick()==1) {
+            holder.itemCommunitynewTopTv.setVisibility(View.VISIBLE);
+        } else {
+            holder.itemCommunitynewTopTv.setVisibility(View.GONE);
+        }
         holder.itemCommunitynewHeadIv.setImageURI(Common.ImageUrl+imgUrl);
         Drawable drawable = null;
         drawable = mContext.getResources().getDrawable(R.mipmap.ic_eye);

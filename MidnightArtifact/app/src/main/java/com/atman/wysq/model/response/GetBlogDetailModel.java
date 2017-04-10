@@ -102,6 +102,33 @@ public class GetBlogDetailModel {
         private int favorite_id;
         private long flower_num;
         private List<GoodsListEntity> goodsList;
+        private String img;
+        private String url;
+        private int file_length;
+
+        public String getImg() {
+            return img;
+        }
+
+        public void setImg(String img) {
+            this.img = img;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public int getFile_length() {
+            return file_length;
+        }
+
+        public void setFile_length(int file_length) {
+            this.file_length = file_length;
+        }
 
         public List<GoodsListEntity> getGoodsList() {
             return goodsList;

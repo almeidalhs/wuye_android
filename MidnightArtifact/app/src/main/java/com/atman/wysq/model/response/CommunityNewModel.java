@@ -84,7 +84,7 @@ public class CommunityNewModel {
         private int stick;
         private int comment_count;
         private int favorite_count;
-        private int view_count;
+        private String view_count;
         private int anonymity;
         private AnonymityUserBean anonymityUser;
         private int replay_flag;
@@ -215,11 +215,11 @@ public class CommunityNewModel {
             this.favorite_count = favorite_count;
         }
 
-        public int getView_count() {
+        public String getView_count() {
             return view_count;
         }
 
-        public void setView_count(int view_count) {
+        public void setView_count(String view_count) {
             this.view_count = view_count;
         }
 

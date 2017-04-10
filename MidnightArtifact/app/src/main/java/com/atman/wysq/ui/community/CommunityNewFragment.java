@@ -157,27 +157,23 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
 
     private void doHttp(boolean b) {
         String url = "";
-        if (mPage == 1) {
-            if (mTpyeId == 4) {
-                showToast("开发中");
-                return;
-            } else {
-                url = Common.Url_Get_Community_First + mTpyeId;
-            }
+        if (mTpyeId == 4) {
+            url = Common.Url_Get_Hot_Post + mPage;
         } else {
-            switch (mTpyeId) {
-                case 1:
-                    url = Common.Url_Get_Community_Dynamic + mPage;
-                    break;
-                case 2:
-                    url = Common.Url_Get_Community_Audio + mPage;
-                    break;
-                case 3:
-                    url = Common.Url_Get_Community_Video + mPage;
-                    break;
-                case 4:
-                    showToast("开发中");
-                    break;
+            if (mPage == 1) {
+                url = Common.Url_Get_Community_First + mTpyeId;
+            } else {
+                switch (mTpyeId) {
+                    case 1:
+                        url = Common.Url_Get_Community_Dynamic + mPage;
+                        break;
+                    case 2:
+                        url = Common.Url_Get_Community_Audio + mPage;
+                        break;
+                    case 3:
+                        url = Common.Url_Get_Community_Video + mPage;
+                        break;
+                }
             }
         }
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_COMMUNITY_FIRST_ID);

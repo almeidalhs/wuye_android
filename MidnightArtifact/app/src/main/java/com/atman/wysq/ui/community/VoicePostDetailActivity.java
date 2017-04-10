@@ -47,6 +47,7 @@ import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.MyListView;
 import com.base.baselibs.widget.PromptDialog;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -114,6 +115,8 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
     private ImageView blogdetailVerifyImg;
     private ImageView blogdetailGenderImg;
     private ImageView blogdetailFlowerIv;
+    private ImageView blogdetailTopVoiceStartIv;
+    private SimpleDraweeView blogdetailTopVoiceBgIv;
     private TextView blogdetailVipTx;
     private TextView blogdetailNameTx;
     private TextView blogdetailLevelTx;
@@ -121,13 +124,15 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
     private TextView blogdetailFlowerTv;
     private TextView bloglistRelationTx;
     private RelativeLayout blogdetailHeadRl;
-    private RelativeLayout blogdetailTopRl;
-    private LinearLayout blogdetailFlowerLl;
+    private RelativeLayout blogdetailTopVoiceRl;
     private GridView blogdetailFlowerGv;
     private RewardGridViewAdapter mRewardListAdapter;
 
     private ImageView isHeartIv;
     private GetUserIndexModel mGetMyUserIndexModel;
+
+    private RelativeLayout.LayoutParams rlParams;
+    private LinearLayout.LayoutParams llParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -399,6 +404,9 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
     }
 
     private void initListView() {
+        rlParams = new RelativeLayout.LayoutParams(getmWidth(), getmWidth()*240/430);
+        llParams = new LinearLayout.LayoutParams(getmWidth(), getmWidth()*240/430);
+
         blogdetailGoodsLl = (LinearLayout) headView.findViewById(R.id.blogdetail_goods_ll);
         blogdetailGoodsLv = (MyListView) headView.findViewById(R.id.blogdetail_goods_lv);
         blogdetailHeadImg = (ImageView) headView.findViewById(R.id.blogdetail_head_img);
@@ -424,10 +432,19 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                 }
             }
         });
-        blogdetailTopRl = (RelativeLayout) headView.findViewById(R.id.blogdetail_top_rl);
+        blogdetailTopVoiceRl = (RelativeLayout) headView.findViewById(R.id.blogdetail_top_voice_rl);
+        blogdetailTopVoiceRl.setLayoutParams(llParams);
+        blogdetailTopVoiceBgIv = (SimpleDraweeView) headView.findViewById(R.id.blogdetail_top_voice_bg_iv);
+        blogdetailTopVoiceBgIv.setLayoutParams(rlParams);
+        blogdetailTopVoiceStartIv = (ImageView) headView.findViewById(R.id.blogdetail_top_voice_start_iv);
+        blogdetailTopVoiceStartIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         blogdetailFlowerGv = (GridView) headView.findViewById(R.id.blogdetail_flower_gv);
         blogdetailFlowerTv = (TextView) headView.findViewById(R.id.blogdetail_flower_tv);
-        blogdetailFlowerLl = (LinearLayout) headView.findViewById(R.id.blogdetail_flower_ll);
         blogdetailFlowerIv = (ImageView) headView.findViewById(R.id.blogdetail_flower_iv);
         blogdetailFlowerIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -514,21 +531,24 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         blogUserId = mBodyEntity.getUser_id();
         favoriteId = mBodyEntity.getFavorite_id();
         isReplay = mBodyEntity.getReplay_flag();
+        vipLevel = mBodyEntity.getUserLevel();
 
         setBarTitleTx(mBodyEntity.getTitle());
         changeMyHeart();
+
+        blogdetailTopVoiceBgIv.setImageURI(Common.ImageUrl+mBodyEntity.getImg());
 
         blogdetailFlowerTv.setText(mGetBlogDetailModel.getBody().get(0).getFlower_num() + "");
         if (mGetBlogDetailModel.getBody().get(0).getFlower_num() > 0) {
             mRewardListAdapter = new RewardGridViewAdapter(mContext, mGetBlogDetailModel.getBody().get(0).getGiftList());
             blogdetailFlowerGv.setAdapter(mRewardListAdapter);
-            blogdetailFlowerGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    startActivity(BlogRewardListActivty.buildIntent(mContext, mGetBlogDetailModel.getBody().get(0).getBlog_id()));
-                }
-            });
         }
+        blogdetailFlowerGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(BlogRewardListActivty.buildIntent(mContext, mGetBlogDetailModel.getBody().get(0).getBlog_id()));
+            }
+        });
 
         if (mBodyEntity.getSex().equals("M")) {
             blogdetailGenderImg.setImageResource(R.mipmap.personal_man_ic);
@@ -772,7 +792,12 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
             }
             GetBlogDetailModel.BodyEntity.GiftListEntity temp = new GetBlogDetailModel.BodyEntity.GiftListEntity();
             temp.setIcon(MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
-            mRewardListAdapter.addData(temp);
+            if (mRewardListAdapter==null) {
+                mRewardListAdapter = new RewardGridViewAdapter(mContext, temp);
+                blogdetailFlowerGv.setAdapter(mRewardListAdapter);
+            } else {
+                mRewardListAdapter.addData(temp);
+            }
         }
     }
 

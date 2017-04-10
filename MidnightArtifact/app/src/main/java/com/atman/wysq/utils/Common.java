@@ -265,6 +265,8 @@ public class Common {
     public static String Url_Search = hostUrl + "rest/goods/search?keywords=";
     //创建语音帖 rest/blog/addAudio
     public static String Url_Create_Audio_Post = hostUrl + "rest/blog/addAudio";
+    //热榜 rest/blog/hot/{page}
+    public static String Url_Get_Hot_Post = hostUrl + "rest/blog/hot/";
     /**************************http访问路径*****************************/
 
 

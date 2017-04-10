@@ -522,13 +522,13 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
         if (mGetBlogDetailModel.getBody().get(0).getFlower_num() > 0) {
             mRewardListAdapter = new RewardGridViewAdapter(mContext, mGetBlogDetailModel.getBody().get(0).getGiftList());
             blogdetailFlowerGv.setAdapter(mRewardListAdapter);
-            blogdetailFlowerGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    startActivity(BlogRewardListActivty.buildIntent(mContext, mGetBlogDetailModel.getBody().get(0).getBlog_id()));
-                }
-            });
         }
+        blogdetailFlowerGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(BlogRewardListActivty.buildIntent(mContext, mGetBlogDetailModel.getBody().get(0).getBlog_id()));
+            }
+        });
 
         if (mBodyEntity.getSex().equals("M")) {
             blogdetailGenderImg.setImageResource(R.mipmap.personal_man_ic);
@@ -772,7 +772,12 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
             }
             GetBlogDetailModel.BodyEntity.GiftListEntity temp = new GetBlogDetailModel.BodyEntity.GiftListEntity();
             temp.setIcon(MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
-            mRewardListAdapter.addData(temp);
+            if (mRewardListAdapter==null) {
+                mRewardListAdapter = new RewardGridViewAdapter(mContext, temp);
+                blogdetailFlowerGv.setAdapter(mRewardListAdapter);
+            } else {
+                mRewardListAdapter.addData(temp);
+            }
         }
     }
 

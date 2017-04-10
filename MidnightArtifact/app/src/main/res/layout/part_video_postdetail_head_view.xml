@@ -5,6 +5,46 @@
     android:layout_height="match_parent"
     android:background="@color/color_white">
 
+    <LinearLayout
+        android:id="@+id/blogdetail_flower_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/all_bg"
+        android:gravity="center"
+        android:clickable="true"
+        android:layout_marginBottom="@dimen/dimen_dp_5"
+        android:orientation="horizontal"
+        android:padding="@dimen/dimen_dp_10">
+
+        <GridView
+            android:id="@+id/blogdetail_flower_gv"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:numColumns="10"/>
+
+        <TextView
+            android:id="@+id/blogdetail_flower_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_dp_5"
+            android:text="0"
+            android:textColor="@color/color_red" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_dp_5"
+            android:background="@drawable/red_flower_bg">
+
+            <ImageView
+                android:id="@+id/blogdetail_flower_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/postingdetails_flower" />
+        </RelativeLayout>
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/blogdetail_top_rl"
         android:layout_width="match_parent"
@@ -132,46 +172,6 @@
             android:textColor="#A9A9A9"
             android:textSize="@dimen/dimen_sp_12" />
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/blogdetail_flower_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/all_bg"
-        android:gravity="center"
-        android:clickable="true"
-        android:layout_marginBottom="@dimen/dimen_dp_5"
-        android:orientation="horizontal"
-        android:padding="@dimen/dimen_dp_10">
-
-        <GridView
-            android:id="@+id/blogdetail_flower_gv"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numColumns="10"/>
-
-        <TextView
-            android:id="@+id/blogdetail_flower_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_dp_5"
-            android:text="0"
-            android:textColor="@color/color_red" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_dp_5"
-            android:background="@drawable/red_flower_bg">
-
-            <ImageView
-                android:id="@+id/blogdetail_flower_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/postingdetails_flower" />
-        </RelativeLayout>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/blogdetail_goods_ll"

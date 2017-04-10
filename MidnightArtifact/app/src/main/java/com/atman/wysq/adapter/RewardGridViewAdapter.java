@@ -15,6 +15,7 @@ import com.atman.wysq.utils.Common;
 import com.base.baselibs.widget.RoundImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -38,6 +39,13 @@ public class RewardGridViewAdapter extends BaseAdapter {
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
         this.shop = shop;
+    }
+
+    public RewardGridViewAdapter(Context context, GetBlogDetailModel.BodyEntity.GiftListEntity shop) {
+        this.context = context;
+        layoutInflater = LayoutInflater.from(context);
+        this.shop = new ArrayList<>();
+        this.shop.add(shop);
     }
 
     @Override
