@@ -70,6 +70,8 @@
         <activity android:name=".ui.community.MallActivity"/>
         <activity android:name=".ui.community.CreateVideoPostActivity"/>
         <activity android:name=".ui.community.CreateVoicePostActivity"/>
+        <activity android:name=".ui.community.VoicePostDetailActivity"/>
+        <activity android:name=".ui.community.VideoPostDetailActivity"/>
         <activity android:name=".ui.yunxinfriend.OtherPersonalActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.yunxinfriend.HisDynamicsActivity"/>
         <activity android:name=".ui.yunxinfriend.HisVisitorActivity"/>

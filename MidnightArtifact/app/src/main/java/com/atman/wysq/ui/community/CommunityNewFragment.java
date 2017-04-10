@@ -503,6 +503,8 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
                         , temp.getTitle(), temp.getBlog_id(), false, temp.getVip_level()));
                 break;
             case 3://视频
+                startActivity(VideoPostDetailActivity.buildIntent(getActivity()
+                        , temp.getTitle(), temp.getBlog_id(), false, temp.getVip_level()));
                 break;
             case 4://直播
                 break;

@@ -133,22 +133,6 @@
             android:textSize="@dimen/dimen_sp_12" />
     </RelativeLayout>
 
-    <WebView
-        android:id="@+id/blogdetail_content_wb"
-        android:layout_marginLeft="@dimen/dimen_dp_10"
-        android:layout_marginRight="@dimen/dimen_dp_10"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="wrap_content"/>
-
-    <LinearLayout
-        android:id="@+id/blogdetail_content_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-    </LinearLayout>
-
     <LinearLayout
         android:id="@+id/blogdetail_flower_ll"
         android:layout_width="match_parent"
@@ -156,7 +140,6 @@
         android:background="@color/all_bg"
         android:gravity="center"
         android:clickable="true"
-        android:layout_marginTop="@dimen/dimen_dp_10"
         android:layout_marginBottom="@dimen/dimen_dp_5"
         android:orientation="horizontal"
         android:padding="@dimen/dimen_dp_10">
