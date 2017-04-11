@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.CreateVoicePostAdapter;
-import com.atman.wysq.model.request.CreateVoicePostModel;
+import com.atman.wysq.model.request.CreateMultiMediaPostModel;
 import com.atman.wysq.model.response.GoodsListModel;
 import com.atman.wysq.model.response.HeadImgResultModel;
 import com.atman.wysq.model.response.HeadImgSuccessModel;
@@ -48,8 +48,6 @@ import com.netease.nimlib.sdk.media.player.OnPlayListener;
 import com.netease.nimlib.sdk.media.record.AudioRecorder;
 import com.netease.nimlib.sdk.media.record.IAudioRecordCallback;
 import com.netease.nimlib.sdk.media.record.RecordType;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.sina.weibo.sdk.utils.LogUtil;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.io.File;
@@ -244,6 +242,7 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
             if (mHeadImgResultModel!=null && mHeadImgResultModel.getFiles().size()>0 ) {
                 if (!mHeadImgResultModel.getFiles().get(0).isSuccessful()) {
                     showToast("封面图片修改失败");
+                    cancelLoading();
                 } else {
                     HeadImgSuccessModel mHeadImgSuccessModel = mGson.fromJson(data, HeadImgSuccessModel.class);
                     upImgUrl = mHeadImgSuccessModel.getFiles().get(0).getUrl();
@@ -256,6 +255,7 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
             if (mUpVoiceModel.getFiles().size()==0
                     || !mUpVoiceModel.getFiles().get(0).isSuccessful()) {
                 showToast("上传失败");
+                cancelLoading();
                 return;
             }
 
@@ -268,7 +268,7 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
                 maps.add(map);
             }
 
-            CreateVoicePostModel temp = new CreateVoicePostModel(upImgUrl, upVoiceUrl
+            CreateMultiMediaPostModel temp = new CreateMultiMediaPostModel(upImgUrl, upVoiceUrl
                     , upTitle, time, mAnonymity, maps);
             LogUtils.e(">>>>mGson.toJson(temp):"+mGson.toJson(temp));
             OkHttpUtils.postString().url(Common.Url_Create_Audio_Post)
@@ -366,8 +366,7 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
                     MyBaseApplication.voicePath = voiceFile.getPath();
                     MyBaseApplication.voiceLength = time;
                 }
-                startActivityForResult(new Intent(mContext, MallActivity.class)
-                        , Common.fromCreateImageText);
+                startActivity(new Intent(mContext, MallActivity.class));
                 break;
         }
     }

@@ -269,6 +269,8 @@ public class Common {
     public static String Url_Get_Hot_Post = hostUrl + "rest/blog/hot/";
     //获取弹幕 rest/blog/commentsList/{blog_id}
     public static String Url_Get_Danmaku = hostUrl + "rest/blog/commentsList/";
+    //创建视频帖 rest/blog/addVideo
+    public static String Url_Create_Video_Post = hostUrl + "rest/blog/addVideo";
     /**************************http访问路径*****************************/
 
 
@@ -516,6 +518,10 @@ public class Common {
     public static int NET_CREATE_AUDIO_POST_ID = 120;
     //获取弹幕
     public static int NET_GET_DANMAKU_ID = 121;
+    //上传视频文件
+    public static int NET_UP_VIDEO_ID = 122;
+    //创建视频帖
+    public static int NET_CREATE_VIDEO_POST_ID = 123;
     /**************************http访问回应识别码*****************************/
 
 

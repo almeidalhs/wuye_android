@@ -72,6 +72,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import mabeijianxi.camera.VCamera;
+import mabeijianxi.camera.util.DeviceUtils;
+
 /**
  * 描述
  * 作者 tangbingliang
@@ -121,7 +124,10 @@ public class MyBaseApplication extends BaseApplication {
     public static int isRelation = 0;//0复位，1图文帖，2语音，3视频
     public static String imagetextPostTitle = "";
     public static String voicePath = "";
+    public static String videoPath = "";
+    public static String videoImg = "";
     public static int voiceLength = 0;
+    public static int videoLength = 0;
 
     private DisplayImageOptions options,optionsHead, optionsNot;
 
@@ -151,6 +157,27 @@ public class MyBaseApplication extends BaseApplication {
 
         Fresco.initialize(this);
 
+        initSmallVideo(this);
+
+    }
+
+    public static void initSmallVideo(Context context) {
+        // 设置拍摄视频缓存路径
+        File dcim = Environment
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        if (DeviceUtils.isZte()) {
+            if (dcim.exists()) {
+                VCamera.setVideoCachePath(dcim + "/wysq/");
+            } else {
+                VCamera.setVideoCachePath(dcim.getPath().replace("/sdcard/",
+                        "/sdcard-ext/")
+                        + "/wysq/");
+            }
+        } else {
+            VCamera.setVideoCachePath(dcim + "/wysq/");
+        }
+        VCamera.setDebugMode(true);
+        VCamera.initialize(context);
     }
 
     public int getmLOGIN_STATUS() {

@@ -25,6 +25,7 @@ import com.atman.wysq.model.response.GoodsDetailsResponseModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.community.CreateImageTextPostActivity;
+import com.atman.wysq.ui.community.CreateVideoPostActivity;
 import com.atman.wysq.ui.community.CreateVoicePostActivity;
 import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.ui.mall.order.ConfirmationOrderActivity;
@@ -422,6 +423,14 @@ public class GoodsDetailActivity extends MyBaseActivity implements ScrollViewLis
                 startActivity(intent);
             } else if (MyBaseApplication.isRelation==2) {
                 Intent intent = new Intent(this, CreateVoicePostActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("Goods_id", mGoodsDetailsResponseModel.getBody().getGoods_id());
+                intent.putExtra("Pic_img", mGoodsDetailsResponseModel.getBody().getPic_img());
+                intent.putExtra("Title", mGoodsDetailsResponseModel.getBody().getTitle());
+                intent.putExtra("Discount_price", mGoodsDetailsResponseModel.getBody().getDiscount_price());
+                startActivity(intent);
+            } else if (MyBaseApplication.isRelation==3) {
+                Intent intent = new Intent(this, CreateVideoPostActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Goods_id", mGoodsDetailsResponseModel.getBody().getGoods_id());
                 intent.putExtra("Pic_img", mGoodsDetailsResponseModel.getBody().getPic_img());
