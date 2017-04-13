@@ -331,7 +331,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                                 @Override
                                 public void onLoadingFailed(String s, View view, FailReason failReason) {
                                     playerView.sendDanmaku(CreateSpannableTextUtil.getSpannableText(mContext
-                                            , null, str), n*1000, true);
+                                            , null, str, playerView.getmDanmakuTextSize()), n*1000, true);
                                     Message message = new Message();
                                     message.what = 1;
                                     mHandler.sendMessage(message);
@@ -341,7 +341,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                                 @Override
                                 public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                                     playerView.sendDanmaku(CreateSpannableTextUtil.getSpannableText(mContext
-                                            , bitmap, str), n*1000, true);
+                                            , bitmap, str, playerView.getmDanmakuTextSize()), n*1000, true);
                                     Message message = new Message();
                                     message.what = 1;
                                     mHandler.sendMessage(message);

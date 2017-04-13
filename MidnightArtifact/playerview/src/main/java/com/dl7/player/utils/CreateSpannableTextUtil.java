@@ -14,12 +14,12 @@ import android.text.TextUtils;
 
 public class CreateSpannableTextUtil {
 
-    public static SpannableStringBuilder getSpannableText(Context context, Bitmap bitmap, String text) {
+    public static SpannableStringBuilder getSpannableText(Context context, Bitmap bitmap, String text, float textSize) {
         if (bitmap==null) {
             bitmap = BitmapFactory.decodeResource(context.getResources()
                     , com.dl7.player.R.mipmap.niming_ic);
         }
-        CircleImageDrawable circleDrawable = new CircleImageDrawable(bitmap);
+        CircleImageDrawable circleDrawable = new CircleImageDrawable(bitmap, textSize);
         int w = circleDrawable.getIntrinsicWidth();
         circleDrawable.setBounds(0, 0, w, w);
         return createSpannable(circleDrawable, text);

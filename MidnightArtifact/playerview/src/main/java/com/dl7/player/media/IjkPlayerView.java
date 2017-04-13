@@ -59,6 +59,7 @@ import com.dl7.player.danmaku.BaseDanmakuConverter;
 import com.dl7.player.danmaku.BiliDanmukuParser;
 import com.dl7.player.danmaku.OnDanmakuListener;
 import com.dl7.player.utils.AnimHelper;
+import com.dl7.player.utils.DpOrSp2PxUtil;
 import com.dl7.player.utils.MotionEventUtils;
 import com.dl7.player.utils.NavUtils;
 import com.dl7.player.utils.SDCardUtils;
@@ -241,8 +242,10 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
         this(context, null);
     }
 
+    private Context mContext;
     public IjkPlayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.mContext = context;
         _initView(context);
     }
 
@@ -549,8 +552,10 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
         if (mIsPlayComplete) {
             if (mDanmakuView != null && mDanmakuView.isPrepared()) {
                 mDanmakuView.seekTo((long) 0);
+                mDanmakuView.removeAllDanmakus(false);
                 mDanmakuView.pause();
             }
+            mVideoView.seekTo(0);
             mIsPlayComplete = false;
         }
         if (!mVideoView.isPlaying()) {
@@ -560,7 +565,6 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
             mHandler.sendEmptyMessage(MSG_UPDATE_SEEK);
         }
         if (mIsNeverPlay) {
-            mIsNeverPlay = false;
             mIvPlayCircle.setVisibility(GONE);
             mLoadingView.setVisibility(VISIBLE);
             mIsShowBar = false;
@@ -612,7 +616,8 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
     }
 
     public void reset() {
-
+        mVideoView.release(false);
+        mVideoView.seekTo(0);
     }
 
     /**============================ 控制栏处理 ============================*/
@@ -1509,7 +1514,7 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
             case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
                 mIsBufferingStart = true;
                 _pauseDanmaku();
-                if (!mIsNeverPlay) {
+                if (mIsNeverPlay) {
                     mLoadingView.setVisibility(View.VISIBLE);
                 }
             case MediaPlayerParams.STATE_PREPARING:
@@ -1519,6 +1524,7 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
                 mIsRenderingStart = true;
             case IMediaPlayer.MEDIA_INFO_BUFFERING_END:
                 mIsBufferingStart = false;
+                mIsNeverPlay = false;
                 mLoadingView.setVisibility(View.GONE);
                 if (isVideo) {
                     mPlayerThumb.setVisibility(View.GONE);
@@ -1963,9 +1969,9 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.input_options_small_textsize) {
-                    mDanmakuTextSize = 25f * (mDanmakuParser.getDisplayer().getDensity() - 0.6f) * 0.7f;
+                    mDanmakuTextSize = 23f * (mDanmakuParser.getDisplayer().getDensity() - 0.6f) * 0.7f;
                 } else if (checkedId == R.id.input_options_medium_textsize) {
-                    mDanmakuTextSize = 25f * (mDanmakuParser.getDisplayer().getDensity() - 0.6f);
+                    mDanmakuTextSize = 23f * (mDanmakuParser.getDisplayer().getDensity() - 0.6f);
                 }
             }
         });
@@ -2064,8 +2070,9 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
         public void drawBackground(BaseDanmaku danmaku, Canvas canvas, float left, float top) {
             paint.setAntiAlias(true);
             paint.setColor(Color.WHITE);
-            RectF rectF = new RectF(left + 5, top + 10, left + danmaku.paintWidth - 5
-                    , top + danmaku.paintHeight - 5); // 圆角矩形
+            float p = DpOrSp2PxUtil.dp2px(mContext,5);
+            RectF rectF = new RectF(left + p, top + p, left + danmaku.paintWidth - p
+                    , top + danmaku.paintHeight - p/2); // 圆角矩形
             canvas.drawRoundRect(rectF, 50 , 50 , paint);
         }
 
@@ -2196,6 +2203,13 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
         return this;
     }
 
+    public float getmDanmakuTextSize() {
+        if (mDanmakuTextSize == INVALID_VALUE) {
+            mDanmakuTextSize = 23f * (mDanmakuParser.getDisplayer().getDensity() - 0.6f);
+        }
+        return mDanmakuTextSize;
+    }
+
     /**
      * 发射弹幕
      *
@@ -2220,7 +2234,7 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
             return;
         }
         if (mDanmakuTextSize == INVALID_VALUE) {
-            mDanmakuTextSize = 25f * (mDanmakuParser.getDisplayer().getDensity() - 0.6f);
+            mDanmakuTextSize = 23f * (mDanmakuParser.getDisplayer().getDensity() - 0.6f);
         }
         danmaku.text = text;
         danmaku.padding = 5;
@@ -2254,7 +2268,6 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
             return;
         }
         if (!mDanmakuView.isPrepared()) {
-//            Toast.makeText(mAttachActivity, "弹幕还没准备好", Toast.LENGTH_SHORT).show();
             return;
         }
         BaseDanmaku danmaku = mDanmakuContext.mDanmakuFactory.createDanmaku(mDanmakuType);
@@ -2264,12 +2277,6 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
         if (mDanmakuTextSize == INVALID_VALUE) {
             mDanmakuTextSize = 23f * (mDanmakuParser.getDisplayer().getDensity() - 0.6f);
         }
-//        float f = (float)Math.random() * 2;
-//        if (f<0.7) {
-//            f = f*2;
-//        }
-//        Log.e(">>>",">>>>(duration):"+f);
-//        danmaku.duration.setFactor(f); //滚动速度系数,越小越快
         danmaku.text = text;
         danmaku.padding = 5;
         danmaku.isLive = isLive;

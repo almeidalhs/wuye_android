@@ -27,6 +27,7 @@ import com.atman.wysq.model.response.MyLiveInfoModel;
 import com.atman.wysq.model.response.ToLiveEorrModel;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.base.MyBaseFragment;
+import com.atman.wysq.ui.discover.ListenLiveActivity;
 import com.atman.wysq.ui.discover.MyLiveRoomActivity;
 import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
@@ -503,6 +504,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
                         , temp.getTitle(), temp.getBlog_id(), false, temp.getVip_level()));
                 break;
             case 4://直播
+                startActivity(ListenLiveActivity.buildIntent(getActivity(), temp.getLiveRoom()));
                 break;
         }
     }

@@ -1,15 +1,16 @@
 package com.atman.wysq.model.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by tangbingliang on 17/3/24.
  */
 
-public class CommunityNewModel {
+public class CommunityNewModel implements Serializable {
     /**
      * result : 1
-     * body : [{"blog_id":185857,"blog_board_id":3,"user_id":450214548,"title":"发布","content":" 1 <wysqimg=/imageServer/03A1d295e946e6bc4d91be31cd21f0b721a0.jpg=wysqimg> 2 <wysqimg=/imageServer/8A234ae3172aed424be3ae7c60f804f61231.jpg=wysqimg> 3 <wysqimg=/imageServer/8B07c8b0ccc266444ca2bc2c328a87f0dca9.jpg=wysqimg> 4 <wysqimg=/imageServer/55ECe66471f5d12046e095a4edd534699b29.jpg=wysqimg> 5 <wysqimg=/imageServer/8DCC218432da3b674d0383aae9fa304ec4b4.jpg=wysqimg> 6 <wysqimg=/imageServer/B73866710fb5fc6b48bfbcba95d446c8024b.jpg=wysqimg> 7 <wysqimg=/imageServer/97795aa3a5ee1d7b44f39567e84680b628b5.jpg=wysqimg> 8 <wysqimg=/imageServer/447Ce7202a34e53e4e7fb8eadc8785494178.jpg=wysqimg> 9 <wysqimg=/imageServer/9BA3ddd04c34d64a4ab691e960c64ef4e76d.jpg=wysqimg> 10","create_time":1480472130000,"update_time":1481613075000,"status":2,"type":1,"stick":0,"comment_count":0,"favorite_count":0,"view_count":2,"blogComments":[],"anonymity":1,"anonymityUser":{"icon":"/imageServer/9C66zhongxing.png","next_level_integral":1,"userLevel":0,"nick_name":"匿名用户","gold_coin":0,"charm":0},"replay_flag":0,"unread_flag":0,"user_name":"狼心狗肺","icon":"/imageServer/103B4977ebd4d68c41cb94ace9ab10dd6605.jpg","sex":"M","verify_status":0,"userLevel":10,"achieve_level_pic":"/propServer/achievement/new/color_dj_6.png","thumb_pic":"/imageServer/03A1d295e946e6bc4d91be31cd21f0b721a0-s.jpg","goods_id":0,"wysqImglist":["/imageServer/03A1d295e946e6bc4d91be31cd21f0b721a0-s.jpg","/imageServer/8A234ae3172aed424be3ae7c60f804f61231-s.jpg","/imageServer/8B07c8b0ccc266444ca2bc2c328a87f0dca9-s.jpg","/imageServer/55ECe66471f5d12046e095a4edd534699b29-s.jpg","/imageServer/8DCC218432da3b674d0383aae9fa304ec4b4-s.jpg","/imageServer/B73866710fb5fc6b48bfbcba95d446c8024b-s.jpg","/imageServer/97795aa3a5ee1d7b44f39567e84680b628b5-s.jpg","/imageServer/447Ce7202a34e53e4e7fb8eadc8785494178-s.jpg","/imageServer/9BA3ddd04c34d64a4ab691e960c64ef4e76d-s.jpg"],"vip_level":0,"comment_type":0,"achieve_gold_pic":"/propServer/achievement/new/color_cf_5.png","giftList":[],"goodsList":[],"blogGoodsList":[],"img":"/imageServer/03A1d295e946e6bc4d91be31cd21f0b721a0-s.jpg","url":"","file_length":0,"category":1}]
+     * body : [{"category":4,"title":"什么是","like_num":"1000万","icon":"/imageServer/3EE637bb21d637614e15a224c4b79e0ede98.jpg","img":"/imageServer/6C43cff7316e7b004089be2d1eb162492e68.jpg","liveRoom":{"live_room_id":143,"room_name":"什么是","user_id":450215827,"cid":"f7e600df491045ffaa42ea155d64ac7c","pic_url":"/imageServer/6C43cff7316e7b004089be2d1eb162492e68.jpg","description":"什么是","member_count":0,"status":1,"create_time":1491468070000,"update_time":1491468070000,"room_id":8281987,"currentRecord":{"live_record_id":2775,"live_room_id":143,"channel":"f7e600df491045ffaa42ea155d64ac7c","pushUrl":"rtmp://p201.live.126.net/live/f7e600df491045ffaa42ea155d64ac7c?wsSecret=8ad7fd689f3f429af5e6a919355801f8&wsTime=1491994030","rtmpPullUrl":"http://v201.live.126.net/live/f7e600df491045ffaa42ea155d64ac7c.flv?netease=v201.live.126.net","start_time":1491994150000,"end_time":1491994149000,"create_time":1491994149000,"update_time":1491994149000},"userExt":{"user_id":450215827,"integral":"10000031","secret_type":0,"type":1,"icon":"/imageServer/3EE637bb21d637614e15a224c4b79e0ede98.jpg","sex":"F","create_time":1491025950000,"update_time":1491025950000,"name_change":0,"next_level_integral":9999999999999999,"userLevel":10,"mobile":"15555555233","nick_name":"夜友-517104","status":2,"verify_status":0,"user_token":"8f13a48916f8baf19e7d453d7fb1b911","can_live_room":1,"gold_coin":49038,"charm":20,"can_chat":1,"can_shake":1,"convert_coin":1007,"vip_level":2,"like_num":10000020,"pay_password":"*955A167AF04DC059522D4030188DE1451BECD820","left_coin":48031,"in_chart":1,"chat_count":1,"accrue_coin":39682},"userList":[]},"live_room_id":143}]
      */
 
     private String result;
@@ -31,179 +32,54 @@ public class CommunityNewModel {
         this.body = body;
     }
 
-    public static class BodyBean {
+    public static class BodyBean implements Serializable {
         /**
-         * blog_id : 185857
-         * blog_board_id : 3
-         * user_id : 450214548
-         * title : 发布
-         * content :  1 <wysqimg=/imageServer/03A1d295e946e6bc4d91be31cd21f0b721a0.jpg=wysqimg> 2 <wysqimg=/imageServer/8A234ae3172aed424be3ae7c60f804f61231.jpg=wysqimg> 3 <wysqimg=/imageServer/8B07c8b0ccc266444ca2bc2c328a87f0dca9.jpg=wysqimg> 4 <wysqimg=/imageServer/55ECe66471f5d12046e095a4edd534699b29.jpg=wysqimg> 5 <wysqimg=/imageServer/8DCC218432da3b674d0383aae9fa304ec4b4.jpg=wysqimg> 6 <wysqimg=/imageServer/B73866710fb5fc6b48bfbcba95d446c8024b.jpg=wysqimg> 7 <wysqimg=/imageServer/97795aa3a5ee1d7b44f39567e84680b628b5.jpg=wysqimg> 8 <wysqimg=/imageServer/447Ce7202a34e53e4e7fb8eadc8785494178.jpg=wysqimg> 9 <wysqimg=/imageServer/9BA3ddd04c34d64a4ab691e960c64ef4e76d.jpg=wysqimg> 10
-         * create_time : 1480472130000
-         * update_time : 1481613075000
-         * status : 2
-         * type : 1
-         * stick : 0
-         * comment_count : 0
-         * favorite_count : 0
-         * view_count : 2
-         * blogComments : []
-         * anonymity : 1
-         * anonymityUser : {"icon":"/imageServer/9C66zhongxing.png","next_level_integral":1,"userLevel":0,"nick_name":"匿名用户","gold_coin":0,"charm":0}
-         * replay_flag : 0
-         * unread_flag : 0
-         * user_name : 狼心狗肺
-         * icon : /imageServer/103B4977ebd4d68c41cb94ace9ab10dd6605.jpg
-         * sex : M
-         * verify_status : 0
-         * userLevel : 10
-         * achieve_level_pic : /propServer/achievement/new/color_dj_6.png
-         * thumb_pic : /imageServer/03A1d295e946e6bc4d91be31cd21f0b721a0-s.jpg
-         * goods_id : 0
-         * wysqImglist : ["/imageServer/03A1d295e946e6bc4d91be31cd21f0b721a0-s.jpg","/imageServer/8A234ae3172aed424be3ae7c60f804f61231-s.jpg","/imageServer/8B07c8b0ccc266444ca2bc2c328a87f0dca9-s.jpg","/imageServer/55ECe66471f5d12046e095a4edd534699b29-s.jpg","/imageServer/8DCC218432da3b674d0383aae9fa304ec4b4-s.jpg","/imageServer/B73866710fb5fc6b48bfbcba95d446c8024b-s.jpg","/imageServer/97795aa3a5ee1d7b44f39567e84680b628b5-s.jpg","/imageServer/447Ce7202a34e53e4e7fb8eadc8785494178-s.jpg","/imageServer/9BA3ddd04c34d64a4ab691e960c64ef4e76d-s.jpg"]
-         * vip_level : 0
-         * comment_type : 0
-         * achieve_gold_pic : /propServer/achievement/new/color_cf_5.png
-         * giftList : []
-         * goodsList : []
-         * blogGoodsList : []
-         * img : /imageServer/03A1d295e946e6bc4d91be31cd21f0b721a0-s.jpg
-         * url :
-         * file_length : 0
-         * category : 1
+         * category : 4
+         * title : 什么是
+         * like_num : 1000万
+         * icon : /imageServer/3EE637bb21d637614e15a224c4b79e0ede98.jpg
+         * img : /imageServer/6C43cff7316e7b004089be2d1eb162492e68.jpg
+         * liveRoom : {"live_room_id":143,"room_name":"什么是","user_id":450215827,"cid":"f7e600df491045ffaa42ea155d64ac7c","pic_url":"/imageServer/6C43cff7316e7b004089be2d1eb162492e68.jpg","description":"什么是","member_count":0,"status":1,"create_time":1491468070000,"update_time":1491468070000,"room_id":8281987,"currentRecord":{"live_record_id":2775,"live_room_id":143,"channel":"f7e600df491045ffaa42ea155d64ac7c","pushUrl":"rtmp://p201.live.126.net/live/f7e600df491045ffaa42ea155d64ac7c?wsSecret=8ad7fd689f3f429af5e6a919355801f8&wsTime=1491994030","rtmpPullUrl":"http://v201.live.126.net/live/f7e600df491045ffaa42ea155d64ac7c.flv?netease=v201.live.126.net","start_time":1491994150000,"end_time":1491994149000,"create_time":1491994149000,"update_time":1491994149000},"userExt":{"user_id":450215827,"integral":"10000031","secret_type":0,"type":1,"icon":"/imageServer/3EE637bb21d637614e15a224c4b79e0ede98.jpg","sex":"F","create_time":1491025950000,"update_time":1491025950000,"name_change":0,"next_level_integral":9999999999999999,"userLevel":10,"mobile":"15555555233","nick_name":"夜友-517104","status":2,"verify_status":0,"user_token":"8f13a48916f8baf19e7d453d7fb1b911","can_live_room":1,"gold_coin":49038,"charm":20,"can_chat":1,"can_shake":1,"convert_coin":1007,"vip_level":2,"like_num":10000020,"pay_password":"*955A167AF04DC059522D4030188DE1451BECD820","left_coin":48031,"in_chart":1,"chat_count":1,"accrue_coin":39682},"userList":[]}
+         * live_room_id : 143
          */
 
-        private long blog_id;
-        private int blog_board_id;
-        private long user_id;
+        private int category;
         private String title;
-        private String content;
-        private long create_time;
-        private long update_time;
-        private int status;
-        private int type;
-        private int stick;
-        private int comment_count;
+        private String like_num;
+        private String icon;
+        private String img;
+        private LiveRoomBean liveRoom;
+        private int live_room_id;
+        private String comment_count;
         private int favorite_count;
         private String view_count;
-        private int anonymity;
-        private AnonymityUserBean anonymityUser;
+        private int stick;
         private int replay_flag;
-        private int unread_flag;
-        private String user_name;
-        private String icon;
-        private String sex;
-        private int verify_status;
-        private int userLevel;
-        private String achieve_level_pic;
-        private String thumb_pic;
-        private int goods_id;
         private int vip_level;
-        private int comment_type;
-        private String achieve_gold_pic;
-        private String img;
-        private String url;
-        private int file_length;
-        private int category;
-        private String like_num;
-        private List<?> blogComments;
-        private List<String> wysqImglist;
-        private List<?> giftList;
-        private List<?> goodsList;
-        private List<?> blogGoodsList;
+        private int anonymity;
+        private long blog_id;
 
-        public String getLike_num() {
-            return like_num;
+        public int getReplay_flag() {
+            return replay_flag;
         }
 
-        public void setLike_num(String like_num) {
-            this.like_num = like_num;
+        public void setReplay_flag(int replay_flag) {
+            this.replay_flag = replay_flag;
         }
 
-        public long getBlog_id() {
-            return blog_id;
+        public int getVip_level() {
+            return vip_level;
         }
 
-        public void setBlog_id(long blog_id) {
-            this.blog_id = blog_id;
+        public void setVip_level(int vip_level) {
+            this.vip_level = vip_level;
         }
 
-        public int getBlog_board_id() {
-            return blog_board_id;
-        }
-
-        public void setBlog_board_id(int blog_board_id) {
-            this.blog_board_id = blog_board_id;
-        }
-
-        public long getUser_id() {
-            return user_id;
-        }
-
-        public void setUser_id(long user_id) {
-            this.user_id = user_id;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
-
-        public long getCreate_time() {
-            return create_time;
-        }
-
-        public void setCreate_time(long create_time) {
-            this.create_time = create_time;
-        }
-
-        public long getUpdate_time() {
-            return update_time;
-        }
-
-        public void setUpdate_time(long update_time) {
-            this.update_time = update_time;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public int getStick() {
-            return stick;
-        }
-
-        public void setStick(int stick) {
-            this.stick = stick;
-        }
-
-        public int getComment_count() {
+        public String getComment_count() {
             return comment_count;
         }
 
-        public void setComment_count(int comment_count) {
+        public void setComment_count(String comment_count) {
             this.comment_count = comment_count;
         }
 
@@ -223,6 +99,14 @@ public class CommunityNewModel {
             this.view_count = view_count;
         }
 
+        public int getStick() {
+            return stick;
+        }
+
+        public void setStick(int stick) {
+            this.stick = stick;
+        }
+
         public int getAnonymity() {
             return anonymity;
         }
@@ -231,140 +115,12 @@ public class CommunityNewModel {
             this.anonymity = anonymity;
         }
 
-        public AnonymityUserBean getAnonymityUser() {
-            return anonymityUser;
+        public long getBlog_id() {
+            return blog_id;
         }
 
-        public void setAnonymityUser(AnonymityUserBean anonymityUser) {
-            this.anonymityUser = anonymityUser;
-        }
-
-        public int getReplay_flag() {
-            return replay_flag;
-        }
-
-        public void setReplay_flag(int replay_flag) {
-            this.replay_flag = replay_flag;
-        }
-
-        public int getUnread_flag() {
-            return unread_flag;
-        }
-
-        public void setUnread_flag(int unread_flag) {
-            this.unread_flag = unread_flag;
-        }
-
-        public String getUser_name() {
-            return user_name;
-        }
-
-        public void setUser_name(String user_name) {
-            this.user_name = user_name;
-        }
-
-        public String getIcon() {
-            return icon;
-        }
-
-        public void setIcon(String icon) {
-            this.icon = icon;
-        }
-
-        public String getSex() {
-            return sex;
-        }
-
-        public void setSex(String sex) {
-            this.sex = sex;
-        }
-
-        public int getVerify_status() {
-            return verify_status;
-        }
-
-        public void setVerify_status(int verify_status) {
-            this.verify_status = verify_status;
-        }
-
-        public int getUserLevel() {
-            return userLevel;
-        }
-
-        public void setUserLevel(int userLevel) {
-            this.userLevel = userLevel;
-        }
-
-        public String getAchieve_level_pic() {
-            return achieve_level_pic;
-        }
-
-        public void setAchieve_level_pic(String achieve_level_pic) {
-            this.achieve_level_pic = achieve_level_pic;
-        }
-
-        public String getThumb_pic() {
-            return thumb_pic;
-        }
-
-        public void setThumb_pic(String thumb_pic) {
-            this.thumb_pic = thumb_pic;
-        }
-
-        public int getGoods_id() {
-            return goods_id;
-        }
-
-        public void setGoods_id(int goods_id) {
-            this.goods_id = goods_id;
-        }
-
-        public int getVip_level() {
-            return vip_level;
-        }
-
-        public void setVip_level(int vip_level) {
-            this.vip_level = vip_level;
-        }
-
-        public int getComment_type() {
-            return comment_type;
-        }
-
-        public void setComment_type(int comment_type) {
-            this.comment_type = comment_type;
-        }
-
-        public String getAchieve_gold_pic() {
-            return achieve_gold_pic;
-        }
-
-        public void setAchieve_gold_pic(String achieve_gold_pic) {
-            this.achieve_gold_pic = achieve_gold_pic;
-        }
-
-        public String getImg() {
-            return img;
-        }
-
-        public void setImg(String img) {
-            this.img = img;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public int getFile_length() {
-            return file_length;
-        }
-
-        public void setFile_length(int file_length) {
-            this.file_length = file_length;
+        public void setBlog_id(long blog_id) {
+            this.blog_id = blog_id;
         }
 
         public int getCategory() {
@@ -375,109 +131,589 @@ public class CommunityNewModel {
             this.category = category;
         }
 
-        public List<?> getBlogComments() {
-            return blogComments;
+        public String getTitle() {
+            return title;
         }
 
-        public void setBlogComments(List<?> blogComments) {
-            this.blogComments = blogComments;
+        public void setTitle(String title) {
+            this.title = title;
         }
 
-        public List<String> getWysqImglist() {
-            return wysqImglist;
+        public String getLike_num() {
+            return like_num;
         }
 
-        public void setWysqImglist(List<String> wysqImglist) {
-            this.wysqImglist = wysqImglist;
+        public void setLike_num(String like_num) {
+            this.like_num = like_num;
         }
 
-        public List<?> getGiftList() {
-            return giftList;
+        public String getIcon() {
+            return icon;
         }
 
-        public void setGiftList(List<?> giftList) {
-            this.giftList = giftList;
+        public void setIcon(String icon) {
+            this.icon = icon;
         }
 
-        public List<?> getGoodsList() {
-            return goodsList;
+        public String getImg() {
+            return img;
         }
 
-        public void setGoodsList(List<?> goodsList) {
-            this.goodsList = goodsList;
+        public void setImg(String img) {
+            this.img = img;
         }
 
-        public List<?> getBlogGoodsList() {
-            return blogGoodsList;
+        public LiveRoomBean getLiveRoom() {
+            return liveRoom;
         }
 
-        public void setBlogGoodsList(List<?> blogGoodsList) {
-            this.blogGoodsList = blogGoodsList;
+        public void setLiveRoom(LiveRoomBean liveRoom) {
+            this.liveRoom = liveRoom;
         }
 
-        public static class AnonymityUserBean {
+        public int getLive_room_id() {
+            return live_room_id;
+        }
+
+        public void setLive_room_id(int live_room_id) {
+            this.live_room_id = live_room_id;
+        }
+
+        public static class LiveRoomBean implements Serializable {
             /**
-             * icon : /imageServer/9C66zhongxing.png
-             * next_level_integral : 1
-             * userLevel : 0
-             * nick_name : 匿名用户
-             * gold_coin : 0
-             * charm : 0
+             * live_room_id : 143
+             * room_name : 什么是
+             * user_id : 450215827
+             * cid : f7e600df491045ffaa42ea155d64ac7c
+             * pic_url : /imageServer/6C43cff7316e7b004089be2d1eb162492e68.jpg
+             * description : 什么是
+             * member_count : 0
+             * status : 1
+             * create_time : 1491468070000
+             * update_time : 1491468070000
+             * room_id : 8281987
+             * currentRecord : {"live_record_id":2775,"live_room_id":143,"channel":"f7e600df491045ffaa42ea155d64ac7c","pushUrl":"rtmp://p201.live.126.net/live/f7e600df491045ffaa42ea155d64ac7c?wsSecret=8ad7fd689f3f429af5e6a919355801f8&wsTime=1491994030","rtmpPullUrl":"http://v201.live.126.net/live/f7e600df491045ffaa42ea155d64ac7c.flv?netease=v201.live.126.net","start_time":1491994150000,"end_time":1491994149000,"create_time":1491994149000,"update_time":1491994149000}
+             * userExt : {"user_id":450215827,"integral":"10000031","secret_type":0,"type":1,"icon":"/imageServer/3EE637bb21d637614e15a224c4b79e0ede98.jpg","sex":"F","create_time":1491025950000,"update_time":1491025950000,"name_change":0,"next_level_integral":9999999999999999,"userLevel":10,"mobile":"15555555233","nick_name":"夜友-517104","status":2,"verify_status":0,"user_token":"8f13a48916f8baf19e7d453d7fb1b911","can_live_room":1,"gold_coin":49038,"charm":20,"can_chat":1,"can_shake":1,"convert_coin":1007,"vip_level":2,"like_num":10000020,"pay_password":"*955A167AF04DC059522D4030188DE1451BECD820","left_coin":48031,"in_chart":1,"chat_count":1,"accrue_coin":39682}
+             * userList : []
              */
 
-            private String icon;
-            private long next_level_integral;
-            private int userLevel;
-            private String nick_name;
-            private int gold_coin;
-            private int charm;
+            private int live_room_id;
+            private String room_name;
+            private long user_id;
+            private String cid;
+            private String pic_url;
+            private String description;
+            private int member_count;
+            private int status;
+            private long create_time;
+            private long update_time;
+            private int room_id;
+            private CurrentRecordBean currentRecord;
+            private UserExtBean userExt;
+            private List<?> userList;
 
-            public String getIcon() {
-                return icon;
+            public int getLive_room_id() {
+                return live_room_id;
             }
 
-            public void setIcon(String icon) {
-                this.icon = icon;
+            public void setLive_room_id(int live_room_id) {
+                this.live_room_id = live_room_id;
             }
 
-            public long getNext_level_integral() {
-                return next_level_integral;
+            public String getRoom_name() {
+                return room_name;
             }
 
-            public void setNext_level_integral(long next_level_integral) {
-                this.next_level_integral = next_level_integral;
+            public void setRoom_name(String room_name) {
+                this.room_name = room_name;
             }
 
-            public int getUserLevel() {
-                return userLevel;
+            public long getUser_id() {
+                return user_id;
             }
 
-            public void setUserLevel(int userLevel) {
-                this.userLevel = userLevel;
+            public void setUser_id(long user_id) {
+                this.user_id = user_id;
             }
 
-            public String getNick_name() {
-                return nick_name;
+            public String getCid() {
+                return cid;
             }
 
-            public void setNick_name(String nick_name) {
-                this.nick_name = nick_name;
+            public void setCid(String cid) {
+                this.cid = cid;
             }
 
-            public int getGold_coin() {
-                return gold_coin;
+            public String getPic_url() {
+                return pic_url;
             }
 
-            public void setGold_coin(int gold_coin) {
-                this.gold_coin = gold_coin;
+            public void setPic_url(String pic_url) {
+                this.pic_url = pic_url;
             }
 
-            public int getCharm() {
-                return charm;
+            public String getDescription() {
+                return description;
             }
 
-            public void setCharm(int charm) {
-                this.charm = charm;
+            public void setDescription(String description) {
+                this.description = description;
+            }
+
+            public int getMember_count() {
+                return member_count;
+            }
+
+            public void setMember_count(int member_count) {
+                this.member_count = member_count;
+            }
+
+            public int getStatus() {
+                return status;
+            }
+
+            public void setStatus(int status) {
+                this.status = status;
+            }
+
+            public long getCreate_time() {
+                return create_time;
+            }
+
+            public void setCreate_time(long create_time) {
+                this.create_time = create_time;
+            }
+
+            public long getUpdate_time() {
+                return update_time;
+            }
+
+            public void setUpdate_time(long update_time) {
+                this.update_time = update_time;
+            }
+
+            public int getRoom_id() {
+                return room_id;
+            }
+
+            public void setRoom_id(int room_id) {
+                this.room_id = room_id;
+            }
+
+            public CurrentRecordBean getCurrentRecord() {
+                return currentRecord;
+            }
+
+            public void setCurrentRecord(CurrentRecordBean currentRecord) {
+                this.currentRecord = currentRecord;
+            }
+
+            public UserExtBean getUserExt() {
+                return userExt;
+            }
+
+            public void setUserExt(UserExtBean userExt) {
+                this.userExt = userExt;
+            }
+
+            public List<?> getUserList() {
+                return userList;
+            }
+
+            public void setUserList(List<?> userList) {
+                this.userList = userList;
+            }
+
+            public static class CurrentRecordBean implements Serializable {
+                /**
+                 * live_record_id : 2775
+                 * live_room_id : 143
+                 * channel : f7e600df491045ffaa42ea155d64ac7c
+                 * pushUrl : rtmp://p201.live.126.net/live/f7e600df491045ffaa42ea155d64ac7c?wsSecret=8ad7fd689f3f429af5e6a919355801f8&wsTime=1491994030
+                 * rtmpPullUrl : http://v201.live.126.net/live/f7e600df491045ffaa42ea155d64ac7c.flv?netease=v201.live.126.net
+                 * start_time : 1491994150000
+                 * end_time : 1491994149000
+                 * create_time : 1491994149000
+                 * update_time : 1491994149000
+                 */
+
+                private int live_record_id;
+                private int live_room_id;
+                private String channel;
+                private String pushUrl;
+                private String rtmpPullUrl;
+                private long start_time;
+                private long end_time;
+                private long create_time;
+                private long update_time;
+
+                public int getLive_record_id() {
+                    return live_record_id;
+                }
+
+                public void setLive_record_id(int live_record_id) {
+                    this.live_record_id = live_record_id;
+                }
+
+                public int getLive_room_id() {
+                    return live_room_id;
+                }
+
+                public void setLive_room_id(int live_room_id) {
+                    this.live_room_id = live_room_id;
+                }
+
+                public String getChannel() {
+                    return channel;
+                }
+
+                public void setChannel(String channel) {
+                    this.channel = channel;
+                }
+
+                public String getPushUrl() {
+                    return pushUrl;
+                }
+
+                public void setPushUrl(String pushUrl) {
+                    this.pushUrl = pushUrl;
+                }
+
+                public String getRtmpPullUrl() {
+                    return rtmpPullUrl;
+                }
+
+                public void setRtmpPullUrl(String rtmpPullUrl) {
+                    this.rtmpPullUrl = rtmpPullUrl;
+                }
+
+                public long getStart_time() {
+                    return start_time;
+                }
+
+                public void setStart_time(long start_time) {
+                    this.start_time = start_time;
+                }
+
+                public long getEnd_time() {
+                    return end_time;
+                }
+
+                public void setEnd_time(long end_time) {
+                    this.end_time = end_time;
+                }
+
+                public long getCreate_time() {
+                    return create_time;
+                }
+
+                public void setCreate_time(long create_time) {
+                    this.create_time = create_time;
+                }
+
+                public long getUpdate_time() {
+                    return update_time;
+                }
+
+                public void setUpdate_time(long update_time) {
+                    this.update_time = update_time;
+                }
+            }
+
+            public static class UserExtBean implements Serializable {
+                /**
+                 * user_id : 450215827
+                 * integral : 10000031
+                 * secret_type : 0
+                 * type : 1
+                 * icon : /imageServer/3EE637bb21d637614e15a224c4b79e0ede98.jpg
+                 * sex : F
+                 * create_time : 1491025950000
+                 * update_time : 1491025950000
+                 * name_change : 0
+                 * next_level_integral : 9999999999999999
+                 * userLevel : 10
+                 * mobile : 15555555233
+                 * nick_name : 夜友-517104
+                 * status : 2
+                 * verify_status : 0
+                 * user_token : 8f13a48916f8baf19e7d453d7fb1b911
+                 * can_live_room : 1
+                 * gold_coin : 49038
+                 * charm : 20
+                 * can_chat : 1
+                 * can_shake : 1
+                 * convert_coin : 1007
+                 * vip_level : 2
+                 * like_num : 10000020
+                 * pay_password : *955A167AF04DC059522D4030188DE1451BECD820
+                 * left_coin : 48031
+                 * in_chart : 1
+                 * chat_count : 1
+                 * accrue_coin : 39682
+                 */
+
+                private long user_id;
+                private String integral;
+                private int secret_type;
+                private int type;
+                private String icon;
+                private String sex;
+                private long create_time;
+                private long update_time;
+                private int name_change;
+                private long next_level_integral;
+                private int userLevel;
+                private String mobile;
+                private String nick_name;
+                private int status;
+                private int verify_status;
+                private String user_token;
+                private int can_live_room;
+                private int gold_coin;
+                private int charm;
+                private int can_chat;
+                private int can_shake;
+                private int convert_coin;
+                private int vip_level;
+                private int like_num;
+                private String pay_password;
+                private int left_coin;
+                private int in_chart;
+                private int chat_count;
+                private int accrue_coin;
+
+                public long getUser_id() {
+                    return user_id;
+                }
+
+                public void setUser_id(long user_id) {
+                    this.user_id = user_id;
+                }
+
+                public String getIntegral() {
+                    return integral;
+                }
+
+                public void setIntegral(String integral) {
+                    this.integral = integral;
+                }
+
+                public int getSecret_type() {
+                    return secret_type;
+                }
+
+                public void setSecret_type(int secret_type) {
+                    this.secret_type = secret_type;
+                }
+
+                public int getType() {
+                    return type;
+                }
+
+                public void setType(int type) {
+                    this.type = type;
+                }
+
+                public String getIcon() {
+                    return icon;
+                }
+
+                public void setIcon(String icon) {
+                    this.icon = icon;
+                }
+
+                public String getSex() {
+                    return sex;
+                }
+
+                public void setSex(String sex) {
+                    this.sex = sex;
+                }
+
+                public long getCreate_time() {
+                    return create_time;
+                }
+
+                public void setCreate_time(long create_time) {
+                    this.create_time = create_time;
+                }
+
+                public long getUpdate_time() {
+                    return update_time;
+                }
+
+                public void setUpdate_time(long update_time) {
+                    this.update_time = update_time;
+                }
+
+                public int getName_change() {
+                    return name_change;
+                }
+
+                public void setName_change(int name_change) {
+                    this.name_change = name_change;
+                }
+
+                public long getNext_level_integral() {
+                    return next_level_integral;
+                }
+
+                public void setNext_level_integral(long next_level_integral) {
+                    this.next_level_integral = next_level_integral;
+                }
+
+                public int getUserLevel() {
+                    return userLevel;
+                }
+
+                public void setUserLevel(int userLevel) {
+                    this.userLevel = userLevel;
+                }
+
+                public String getMobile() {
+                    return mobile;
+                }
+
+                public void setMobile(String mobile) {
+                    this.mobile = mobile;
+                }
+
+                public String getNick_name() {
+                    return nick_name;
+                }
+
+                public void setNick_name(String nick_name) {
+                    this.nick_name = nick_name;
+                }
+
+                public int getStatus() {
+                    return status;
+                }
+
+                public void setStatus(int status) {
+                    this.status = status;
+                }
+
+                public int getVerify_status() {
+                    return verify_status;
+                }
+
+                public void setVerify_status(int verify_status) {
+                    this.verify_status = verify_status;
+                }
+
+                public String getUser_token() {
+                    return user_token;
+                }
+
+                public void setUser_token(String user_token) {
+                    this.user_token = user_token;
+                }
+
+                public int getCan_live_room() {
+                    return can_live_room;
+                }
+
+                public void setCan_live_room(int can_live_room) {
+                    this.can_live_room = can_live_room;
+                }
+
+                public int getGold_coin() {
+                    return gold_coin;
+                }
+
+                public void setGold_coin(int gold_coin) {
+                    this.gold_coin = gold_coin;
+                }
+
+                public int getCharm() {
+                    return charm;
+                }
+
+                public void setCharm(int charm) {
+                    this.charm = charm;
+                }
+
+                public int getCan_chat() {
+                    return can_chat;
+                }
+
+                public void setCan_chat(int can_chat) {
+                    this.can_chat = can_chat;
+                }
+
+                public int getCan_shake() {
+                    return can_shake;
+                }
+
+                public void setCan_shake(int can_shake) {
+                    this.can_shake = can_shake;
+                }
+
+                public int getConvert_coin() {
+                    return convert_coin;
+                }
+
+                public void setConvert_coin(int convert_coin) {
+                    this.convert_coin = convert_coin;
+                }
+
+                public int getVip_level() {
+                    return vip_level;
+                }
+
+                public void setVip_level(int vip_level) {
+                    this.vip_level = vip_level;
+                }
+
+                public int getLike_num() {
+                    return like_num;
+                }
+
+                public void setLike_num(int like_num) {
+                    this.like_num = like_num;
+                }
+
+                public String getPay_password() {
+                    return pay_password;
+                }
+
+                public void setPay_password(String pay_password) {
+                    this.pay_password = pay_password;
+                }
+
+                public int getLeft_coin() {
+                    return left_coin;
+                }
+
+                public void setLeft_coin(int left_coin) {
+                    this.left_coin = left_coin;
+                }
+
+                public int getIn_chart() {
+                    return in_chart;
+                }
+
+                public void setIn_chart(int in_chart) {
+                    this.in_chart = in_chart;
+                }
+
+                public int getChat_count() {
+                    return chat_count;
+                }
+
+                public void setChat_count(int chat_count) {
+                    this.chat_count = chat_count;
+                }
+
+                public int getAccrue_coin() {
+                    return accrue_coin;
+                }
+
+                public void setAccrue_coin(int accrue_coin) {
+                    this.accrue_coin = accrue_coin;
+                }
             }
         }
     }

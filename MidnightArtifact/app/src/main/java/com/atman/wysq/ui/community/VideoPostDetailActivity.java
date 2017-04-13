@@ -266,7 +266,8 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
         });
     }
 
-    private void initPlayView(DanmakuModel mDanmakuModel) {
+    private boolean isCreate = false;
+    private void initPlayView() {
         Glide.with(this).load(mImgUrl).centerCrop().into(playerView.mPlayerThumb);
         playerView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
             @Override
@@ -274,13 +275,16 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
                 playerView.setVisibility(View.GONE);
             }
         });
-        playerView.init().isVideo(true)
-                .enableDanmaku()
-                .setVideoSource(null, mAudioUrl, null, null, null)
-                .setMediaQuality(IjkPlayerView.MEDIA_QUALITY_HIGH);
+        if (!isCreate) {
+            isCreate = true;
+            playerView.init().isVideo(true)
+                    .enableDanmaku()
+                    .setVideoSource(null, mAudioUrl, null, null, null)
+                    .setMediaQuality(IjkPlayerView.MEDIA_QUALITY_HIGH);
+        }
         playerView.setVisibility(View.VISIBLE);
-        n = 0;
         playerView.start();
+        n = 0;
         Message message = new Message();
         message.what = 0;
         mHandler.sendMessage(message);
@@ -319,7 +323,7 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
                                 @Override
                                 public void onLoadingFailed(String s, View view, FailReason failReason) {
                                     playerView.sendDanmaku(CreateSpannableTextUtil.getSpannableText(mContext
-                                            , null, str), n*1000, true);
+                                            , null, str, playerView.getmDanmakuTextSize()), n*1000, true);
                                     Message message = new Message();
                                     message.what = 1;
                                     mHandler.sendMessage(message);
@@ -329,7 +333,7 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
                                 @Override
                                 public void onLoadingComplete(String s, View view, Bitmap bitmap) {
                                     playerView.sendDanmaku(CreateSpannableTextUtil.getSpannableText(mContext
-                                            , bitmap, str), n*1000, true);
+                                            , bitmap, str, playerView.getmDanmakuTextSize()), n*1000, true);
                                     Message message = new Message();
                                     message.what = 1;
                                     mHandler.sendMessage(message);
@@ -524,7 +528,7 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
             bloglistRelationTx.setText("取消关注");
         } else if (id == Common.NET_GET_DANMAKU_ID) {
             mDanmakuModel = mGson.fromJson(data, DanmakuModel.class);
-            initPlayView(mDanmakuModel);
+            initPlayView();
         }
     }
 

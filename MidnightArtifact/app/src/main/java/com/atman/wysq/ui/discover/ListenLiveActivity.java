@@ -34,6 +34,7 @@ import com.atman.wysq.R;
 import com.atman.wysq.adapter.ChatRoomAdapter;
 import com.atman.wysq.model.bean.ImMessage;
 import com.atman.wysq.model.response.ChatRoomMessageModel;
+import com.atman.wysq.model.response.CommunityNewModel;
 import com.atman.wysq.model.response.GetLiveHallModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.model.response.GetUserIndexModel;
@@ -169,7 +170,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     private Context mContext = ListenLiveActivity.this;
     private GetMyUserIndexModel.BodyBean.UserDetailBeanBean.UserExtBean mMyUserInfo;
 
-    private GetLiveHallModel.BodyBean mBodyBean;
+    private CommunityNewModel.BodyBean.LiveRoomBean mBodyBean;
     private long roomId;
     private long chatRoomId;
     private String mliveStreamingURL;
@@ -204,7 +205,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    public static Intent buildIntent(Context context, GetLiveHallModel.BodyBean temp) {
+    public static Intent buildIntent(Context context, CommunityNewModel.BodyBean.LiveRoomBean temp) {
         Intent intent = new Intent(context, ListenLiveActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("temp", temp);
@@ -225,7 +226,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         hideTitleBar();
         setSwipeBackEnable(false);
 
-        mBodyBean = (GetLiveHallModel.BodyBean) getIntent().getSerializableExtra("temp");
+        mBodyBean = (CommunityNewModel.BodyBean.LiveRoomBean) getIntent().getSerializableExtra("temp");
         roomId = mBodyBean.getLive_room_id();
         chatRoomId = mBodyBean.getRoom_id();
         Pic_url = mBodyBean.getPic_url();

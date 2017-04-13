@@ -20,11 +20,11 @@ public class CircleImageDrawable extends Drawable {
     private int mWidth;
     private Bitmap mBitmap;
 
-    public CircleImageDrawable(Bitmap bitmap) {
+    public CircleImageDrawable(Bitmap bitmap, float textSize) {
         mWidth = Math.min(bitmap.getWidth(), bitmap.getHeight());
-        if (bitmap != null && mWidth>50) {
+        if (bitmap != null) {
             Matrix matrix = new Matrix();
-            matrix.postScale(50f/mWidth, 50f/mWidth);
+            matrix.postScale(textSize/mWidth*1.3f, textSize/mWidth*1.3f);
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         }
         mBitmap = bitmap;
