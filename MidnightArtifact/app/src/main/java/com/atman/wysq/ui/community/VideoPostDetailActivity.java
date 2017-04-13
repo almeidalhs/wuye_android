@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -53,10 +56,13 @@ import com.base.baselibs.widget.MyListView;
 import com.base.baselibs.widget.PromptDialog;
 import com.bumptech.glide.Glide;
 import com.dl7.player.media.IjkPlayerView;
+import com.dl7.player.utils.CreateSpannableTextUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.tbl.okhttputils.OkHttpUtils;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -96,9 +102,12 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
     FaceRelativeLayout FaceRelativeLayout;
     @Bind(R.id.postings_line_iv)
     ImageView postingsLineIv;
+    @Bind(R.id.postings_temp_iv)
+    ImageView postingsTempIv;
 
     private Context mContext = VideoPostDetailActivity.this;
     private ListView mListView;
+    private DanmakuModel mDanmakuModel;
 
     private String tilte;
     private long bolgId;
@@ -266,14 +275,76 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
             }
         });
         playerView.init().isVideo(true)
-//                .setSkipTip(1000*60*1)//上次续播时间
                 .enableDanmaku()
-//                .setDanmakuSource(getResources().openRawResource(R.raw.bili))
                 .setVideoSource(null, mAudioUrl, null, null, null)
                 .setMediaQuality(IjkPlayerView.MEDIA_QUALITY_HIGH);
         playerView.setVisibility(View.VISIBLE);
+        n = 0;
         playerView.start();
+        Message message = new Message();
+        message.what = 0;
+        mHandler.sendMessage(message);
     }
+
+    private int n = 0;
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    if (playerView.getDanmakuViewStat()) {
+                        Message message = new Message();
+                        message.what = 1;
+                        mHandler.sendMessage(message);
+                    } else {
+                        Message message = new Message();
+                        message.what = 0;
+                        mHandler.sendMessage(message);
+                    }
+                    break;
+                case 1:
+                    if (n>=mDanmakuModel.getBody().size()) {
+                        return;
+                    }
+                    final String str = mDanmakuModel.getBody().get(n).getContent();
+                    ImageLoader.getInstance().displayImage(Common.ImageUrl + mDanmakuModel.getBody().get(n).getIcon()
+                            , postingsTempIv
+                            , MyBaseApplication.getApplication().getOptionsNot(), new ImageLoadingListener() {
+                                @Override
+                                public void onLoadingStarted(String s, View view) {
+
+                                }
+
+                                @Override
+                                public void onLoadingFailed(String s, View view, FailReason failReason) {
+                                    playerView.sendDanmaku(CreateSpannableTextUtil.getSpannableText(mContext
+                                            , null, str), n*1000, true);
+                                    Message message = new Message();
+                                    message.what = 1;
+                                    mHandler.sendMessage(message);
+                                    n++;
+                                }
+
+                                @Override
+                                public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                                    playerView.sendDanmaku(CreateSpannableTextUtil.getSpannableText(mContext
+                                            , bitmap, str), n*1000, true);
+                                    Message message = new Message();
+                                    message.what = 1;
+                                    mHandler.sendMessage(message);
+                                    n++;
+                                }
+
+                                @Override
+                                public void onLoadingCancelled(String s, View view) {
+
+                                }
+                            });
+                    break;
+            }
+        }
+    };
 
     private void changeMyHeart() {
         if (favoriteId > 0) {//已收藏
@@ -452,7 +523,7 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
             }
             bloglistRelationTx.setText("取消关注");
         } else if (id == Common.NET_GET_DANMAKU_ID) {
-            DanmakuModel mDanmakuModel = mGson.fromJson(data, DanmakuModel.class);
+            mDanmakuModel = mGson.fromJson(data, DanmakuModel.class);
             initPlayView(mDanmakuModel);
         }
     }

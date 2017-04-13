@@ -35,5 +35,8 @@ dependencies {
     compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.7.5'
 //    compile 'com.github.Rukey7:ijkplayer-armv7a:0.7.5'
     // Danmaku
-    compile 'com.github.ctiao:DanmakuFlameMaster:0.6.2'
+    compile 'com.github.ctiao:DanmakuFlameMaster:0.7.4'
+    compile 'com.github.ctiao:ndkbitmap-armv7a:0.7.4'
+//    compile 'com.github.ctiao:ndkbitmap-armv5:0.7.4'
+//    compile 'com.github.ctiao:ndkbitmap-x86:0.7.4'
 }

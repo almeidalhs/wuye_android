@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MidnightArtifact.iml" filepath="$PROJECT_DIR$/MidnightArtifact.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SmallVideoLib/SmallVideoLib.iml" filepath="$PROJECT_DIR$/SmallVideoLib/SmallVideoLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/baselibs/baselibs.iml" filepath="$PROJECT_DIR$/baselibs/baselibs.iml" />
       <module fileurl="file://$PROJECT_DIR$/choicepicture_library/choicepicture_library.iml" filepath="$PROJECT_DIR$/choicepicture_library/choicepicture_library.iml" />

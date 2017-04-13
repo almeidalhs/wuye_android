@@ -10,6 +10,12 @@
         android:background="@color/color_black"
         android:layout_weight="1">
 
+        <ImageView
+            android:id="@+id/postings_temp_iv"
+            android:layout_width="@dimen/dimen_dp_40"
+            android:layout_height="@dimen/dimen_dp_40"
+            android:visibility="gone" />
+
         <com.handmark.pulltorefresh.library.PullToRefreshListView
             xmlns:ptr="http://schemas.android.com/apk/res-auto"
             android:id="@+id/blogdetail_comment_lv"

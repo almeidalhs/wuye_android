@@ -1,2 +1,2 @@
-include ':app', ':baselibs', ':swipeback_libs', ':handmark_pull_library', ':okhttputils', ':choicepicture_library', ':picturebrowsing_library', ':playerview', ':SmallVideoLib'
+include ':app', ':baselibs', ':swipeback_libs', ':handmark_pull_library', ':okhttputils', ':choicepicture_library', ':picturebrowsing_library', ':playerview'
 include ':pic3d_lib'

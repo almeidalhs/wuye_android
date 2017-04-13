@@ -7,9 +7,12 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.BatteryManager;
@@ -24,6 +27,9 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -72,6 +78,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import master.flame.danmaku.controller.DrawHandler;
@@ -81,8 +88,10 @@ import master.flame.danmaku.danmaku.loader.IllegalDataException;
 import master.flame.danmaku.danmaku.loader.android.DanmakuLoaderFactory;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
+import master.flame.danmaku.danmaku.model.android.BaseCacheStuffer;
 import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
+import master.flame.danmaku.danmaku.model.android.SpannedCacheStuffer;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.danmaku.parser.IDataSource;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
@@ -1389,6 +1398,9 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
      * @param isIncrease 递增或递减
      */
     private void _setVolume(boolean isIncrease) {
+        if (mAudioManager==null) {
+            return;
+        }
         int curVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (isIncrease) {
             curVolume += mMaxVolume / 15;
@@ -1985,8 +1997,21 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
      */
     private void _loadDanmaku() {
         if (mIsEnableDanmaku) {
+
+            // 设置最大显示行数
+            HashMap<Integer, Integer> maxLinesPair = new HashMap<>();
+            maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 3); // 滚动弹幕最大显示5行
+
+            // 设置是否禁止重叠
+            HashMap<Integer, Boolean> overlappingEnablePair = new HashMap<>();
+            overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
+            overlappingEnablePair.put(BaseDanmaku.TYPE_FIX_TOP, true);
+
             // 设置弹幕
             mDanmakuContext = DanmakuContext.create();
+            mDanmakuContext.setMaximumLines(maxLinesPair)
+                    .preventOverlapping(overlappingEnablePair);
+            mDanmakuContext.setCacheStuffer(new BackgroundCacheStuffer(), mCacheStufferAdapter);
             //同步弹幕和video，貌似没法保持同步，可能我用的有问题，先注释掉- -
 //            mDanmakuContext.setDanmakuSync(new VideoDanmakuSync(this));
             if (mDanmakuParser == null) {
@@ -2022,6 +2047,48 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
             mDanmakuView.prepare(mDanmakuParser, mDanmakuContext);
         }
     }
+
+    /**
+     * 绘制背景(自定义弹幕样式)
+     */
+    private class BackgroundCacheStuffer extends SpannedCacheStuffer {
+        // 通过扩展SimpleTextCacheStuffer或SpannedCacheStuffer个性化你的弹幕样式
+        final Paint paint = new Paint();
+
+        @Override
+        public void measure(BaseDanmaku danmaku, TextPaint paint, boolean fromWorkerThread) {
+            super.measure(danmaku, paint, fromWorkerThread);
+        }
+
+        @Override
+        public void drawBackground(BaseDanmaku danmaku, Canvas canvas, float left, float top) {
+            paint.setAntiAlias(true);
+            paint.setColor(Color.WHITE);
+            RectF rectF = new RectF(left + 5, top + 10, left + danmaku.paintWidth - 5
+                    , top + danmaku.paintHeight - 5); // 圆角矩形
+            canvas.drawRoundRect(rectF, 50 , 50 , paint);
+        }
+
+        @Override
+        public void drawStroke(BaseDanmaku danmaku, String lineText, Canvas canvas, float left, float top, Paint paint) {
+            // 禁用描边绘制
+        }
+    }
+
+    private BaseCacheStuffer.Proxy mCacheStufferAdapter = new BaseCacheStuffer.Proxy() {
+
+        @Override
+        public void prepareDrawing(final BaseDanmaku danmaku, boolean fromWorkerThread) {
+        }
+
+        @Override
+        public void releaseResource(BaseDanmaku danmaku) {
+            // TODO 重要:清理含有ImageSpan的text中的一些占用内存的资源 例如drawable
+            if (danmaku.text instanceof Spanned) {
+                danmaku.text = "";
+            }
+        }
+    };
 
     /**
      * 使能弹幕功能
@@ -2163,6 +2230,53 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
         danmaku.textColor = mDanmakuTextColor;
         danmaku.underlineColor = Color.GREEN;
         danmaku.setTime(mDanmakuView.getCurrentTime() + 500);
+        mDanmakuView.addDanmaku(danmaku);
+
+        if (mDanmakuListener != null) {
+            if (mDanmakuConverter != null) {
+                mDanmakuListener.onDataObtain(mDanmakuConverter.convertDanmaku(danmaku));
+            } else {
+                mDanmakuListener.onDataObtain(danmaku);
+            }
+        }
+    }
+
+    public boolean getDanmakuViewStat(){
+        return mDanmakuView.isPrepared();
+    }
+
+    public void sendDanmaku(SpannableStringBuilder text, long time, boolean isLive) {
+        if (!mIsEnableDanmaku) {
+            throw new RuntimeException("Danmaku is disable, use enableDanmaku() first");
+        }
+        if (TextUtils.isEmpty(text)) {
+            Toast.makeText(mAttachActivity, "内容为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!mDanmakuView.isPrepared()) {
+//            Toast.makeText(mAttachActivity, "弹幕还没准备好", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        BaseDanmaku danmaku = mDanmakuContext.mDanmakuFactory.createDanmaku(mDanmakuType);
+        if (danmaku == null || mDanmakuView == null) {
+            return;
+        }
+        if (mDanmakuTextSize == INVALID_VALUE) {
+            mDanmakuTextSize = 23f * (mDanmakuParser.getDisplayer().getDensity() - 0.6f);
+        }
+//        float f = (float)Math.random() * 2;
+//        if (f<0.7) {
+//            f = f*2;
+//        }
+//        Log.e(">>>",">>>>(duration):"+f);
+//        danmaku.duration.setFactor(f); //滚动速度系数,越小越快
+        danmaku.text = text;
+        danmaku.padding = 5;
+        danmaku.isLive = isLive;
+        danmaku.priority = 1;  // 可能会被各种过滤器过滤并隐藏显示
+        danmaku.textSize = mDanmakuTextSize;
+        danmaku.textColor = Color.BLACK;
+        danmaku.setTime(mDanmakuView.getCurrentTime()+500+time);
         mDanmakuView.addDanmaku(danmaku);
 
         if (mDanmakuListener != null) {
@@ -2476,5 +2590,16 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
                 mIsScreenLocked = true;
             }
         }
+    }
+
+    private OnPlayStateListener playStateListener;
+
+    public void setPlayStateListener(OnPlayStateListener playStateListener) {
+        this.playStateListener = playStateListener;
+    }
+
+    public interface OnPlayStateListener {
+        void isPlaying();
+        void notPlay();
     }
 }
