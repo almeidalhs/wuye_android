@@ -271,6 +271,10 @@ public class Common {
     public static String Url_Get_Danmaku = hostUrl + "rest/blog/commentsList/";
     //创建视频帖 rest/blog/addVideo
     public static String Url_Create_Video_Post = hostUrl + "rest/blog/addVideo";
+    //直播详情 rest/live/148
+    public static String Url_Live_Detail_Post = hostUrl + "rest/live/";
+    //定时获取kiss和钱 rest/live/like/450000534/0
+    public static String Url_Get_Like_Post = hostUrl + "rest/live/like/";
     /**************************http访问路径*****************************/
 
 
@@ -522,6 +526,10 @@ public class Common {
     public static int NET_UP_VIDEO_ID = 122;
     //创建视频帖
     public static int NET_CREATE_VIDEO_POST_ID = 123;
+    //直播详情
+    public static int NET_LIVE_DETAIL_ID = 124;
+    //定时获取kiss和钱
+    public static int NET_GET_LIVE_LIKE_ID = 125;
     /**************************http访问回应识别码*****************************/
 
 

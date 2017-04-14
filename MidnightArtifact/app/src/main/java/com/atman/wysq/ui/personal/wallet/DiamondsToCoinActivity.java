@@ -2,6 +2,7 @@ package com.atman.wysq.ui.personal.wallet;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.atman.wysq.R;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.widget.PayPassWordDialog;
 import com.base.baselibs.iimp.EditCheckBack;
@@ -132,10 +134,37 @@ public class DiamondsToCoinActivity extends MyBaseActivity implements EditCheckB
                     showToast("请输入的金币数不能为0");
                     return;
                 }
-
-                new PayPassWordDialog(mContext, this).show();
+                showWran();
+//                new PayPassWordDialog(mContext, this).show();
                 break;
         }
+    }
+
+    public void showWran() {
+        PromptDialog.Builder builder = new PromptDialog.Builder(this);
+        builder.setMessage("您确定要兑换吗？");
+        builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("确定兑换", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Map<String, Object> map = new HashMap<>();
+                map.put("diamond", consumeDiamondNum);
+                map.put("wallet_ps", "");
+                OkHttpUtils.postString().url(Common.Url_DiamondsToCoin)
+                        .tag(Common.NET_DIAMONDS_TO_COIN_ID).content(mGson.toJson(map))
+                        .mediaType(Common.JSON).id(Common.NET_DIAMONDS_TO_COIN_ID)
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .build().execute(new MyStringCallback(mContext, DiamondsToCoinActivity.this, true));
+
+            }
+        });
+        builder.show();
     }
 
     @Override

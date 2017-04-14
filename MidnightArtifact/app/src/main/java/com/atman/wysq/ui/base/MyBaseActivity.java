@@ -28,6 +28,7 @@ import com.atman.wysq.ui.SplashActivity;
 import com.atman.wysq.ui.community.CommentChildrenListActivity;
 import com.atman.wysq.ui.community.ImageTextPostDetailActivity;
 import com.atman.wysq.ui.discover.ListenLiveActivity;
+import com.atman.wysq.ui.discover.MyLiveRoomActivity;
 import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.ui.mall.order.ConfirmationOrderActivity;
 import com.atman.wysq.ui.receiver.StartReciverSeriver;
@@ -432,6 +433,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
                     && !(mAty instanceof ImageTextPostDetailActivity)
                     && !(mAty instanceof SelectGiftActivity)
                     && !(mAty instanceof P2PChatActivity)
+                    && !(mAty instanceof MyLiveRoomActivity)
                     && !(mAty instanceof ListenLiveActivity)
                     && isFastDoubleClick()) {
                 return true;

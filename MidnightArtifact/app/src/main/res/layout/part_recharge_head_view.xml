@@ -83,7 +83,7 @@
 
         <TextView
             android:id="@+id/recharge_diamondstocion_tv"
-            android:layout_width="@dimen/dimen_dp_90"
+            android:layout_width="@dimen/dimen_dp_100"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginRight="@dimen/dimen_dp_30"
@@ -95,11 +95,12 @@
 
         <TextView
             android:id="@+id/recharge_withdrawals_tv"
-            android:layout_width="@dimen/dimen_dp_90"
+            android:layout_width="@dimen/dimen_dp_100"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:background="@drawable/mygoldshop_mudle_selector"
             android:padding="7dp"
+            android:layout_marginLeft="@dimen/dimen_dp_30"
             android:text="提      现"
             android:textColor="@color/color_white"
             android:textSize="@dimen/dimen_sp_15" />
@@ -112,6 +113,7 @@
             android:layout_marginLeft="@dimen/dimen_dp_30"
             android:background="@drawable/mygoldshop_two_selector"
             android:padding="7dp"
+            android:visibility="gone"
             android:text="钻石商城"
             android:textColor="@color/color_white"
             android:textSize="@dimen/dimen_sp_15" />

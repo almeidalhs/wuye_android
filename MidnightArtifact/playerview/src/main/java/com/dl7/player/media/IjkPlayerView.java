@@ -567,6 +567,7 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
         if (mIsNeverPlay) {
             mIvPlayCircle.setVisibility(GONE);
             mLoadingView.setVisibility(VISIBLE);
+            mIsNeverPlay = false;
             mIsShowBar = false;
             // 放这边装载弹幕，不然会莫名其妙出现多切几次到首页会弹幕自动播放问题，这里处理下
             _loadDanmaku();
@@ -1519,7 +1520,6 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
                 }
             case MediaPlayerParams.STATE_PREPARING:
                 break;
-
             case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
                 mIsRenderingStart = true;
             case IMediaPlayer.MEDIA_INFO_BUFFERING_END:

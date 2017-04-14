@@ -97,8 +97,6 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
         rechargeWithdrawalsTv.setOnClickListener(this);
         rechargeDiamondsshopTv = (TextView) headView.findViewById(R.id.recharge_diamondsshop_tv);
         rechargeDiamondsshopTv.setOnClickListener(this);
-        rechargeMydiamondsLl = (LinearLayout) headView.findViewById(R.id.recharge_mydiamonds_ll);
-        rechargeMydiamondsLl.setOnClickListener(this);
 
         initListView();
     }
@@ -197,9 +195,6 @@ public class RechargeActivity extends MyBaseActivity implements AdapterInterface
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.recharge_mydiamonds_ll:
-                startActivity(new Intent(mContext, MyDiamondsActivity.class));
-                break;
             case R.id.recharge_diamondstocion_tv:
                 startActivity(new Intent(mContext, DiamondsToCoinActivity.class));
                 break;

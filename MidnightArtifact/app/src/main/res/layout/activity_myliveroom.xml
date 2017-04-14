@@ -1,190 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/myliveroom_bg_iv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
-    <ImageView
-        android:id="@+id/myliveroom_back_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/live_live_icon_close" />
-
     <LinearLayout
-        android:id="@+id/myliveroom_ll"
+        android:id="@+id/myliveroom_ll1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_dp_170"
-        android:background="@color/color_88000000"
-        android:orientation="vertical">
+        android:background="@color/color_44000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/dimen_dp_10"
+        android:paddingLeft="@dimen/dimen_dp_10">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/myliveroom_title_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_dp_10">
-
-            <RelativeLayout
-                android:id="@+id/myliveroom_rl"
-                android:layout_width="@dimen/dimen_dp_45"
-                android:layout_height="@dimen/dimen_dp_45"
-                android:layout_alignParentLeft="true"
-                android:layout_centerInParent="true">
-
-                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/myliveroom_head_iv"
-                    android:layout_width="@dimen/dimen_dp_45"
-                    android:layout_height="@dimen/dimen_dp_45"
-                    fresco:failureImage="@mipmap/ic_launcher"
-                    fresco:failureImageScaleType="centerInside"
-                    fresco:placeholderImage="@mipmap/ic_launcher"
-                    fresco:roundedCornerRadius="@dimen/dimen_dp_5"
-                    fresco:roundingBorderColor="@android:color/white"
-                    fresco:roundingBorderWidth="@dimen/dimen_dp_2" />
-
-                <ImageView
-                    android:id="@+id/myliveroom_gender_iv"
-                    android:layout_width="@dimen/dimen_dp_15"
-                    android:layout_height="@dimen/dimen_dp_15"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="@dimen/dimen_dp_2"
-                    android:layout_marginRight="@dimen/dimen_dp_2"
-                    android:src="@mipmap/personal_man_ic" />
-
-                <ImageView
-                    android:id="@+id/myliveroom_verify_iv"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_dp_15"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_margin="@dimen/dimen_dp_2"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/personal_identification"
-                    android:visibility="gone" />
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/myliveroom_name_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_dp_10"
-                android:layout_marginRight="@dimen/dimen_dp_10"
-                android:layout_toRightOf="@+id/myliveroom_rl"
-                android:singleLine="true"
-                android:text="--"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/dimen_sp_14" />
-
-            <TextView
-                android:id="@+id/myliveroom_title_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/myliveroom_name_tv"
-                android:layout_marginLeft="@dimen/dimen_dp_10"
-                android:layout_marginRight="@dimen/dimen_dp_10"
-                android:layout_marginTop="@dimen/dimen_dp_5"
-                android:layout_toRightOf="@+id/myliveroom_rl"
-                android:singleLine="true"
-                android:text="--"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/dimen_sp_14" />
-
-            <TextView
-                android:id="@+id/myliveroom_level_tx"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_dp_5"
-                android:layout_toRightOf="@+id/myliveroom_name_tv"
-                android:background="@drawable/level_blue_bg"
-                android:paddingLeft="@dimen/dimen_dp_3"
-                android:paddingRight="@dimen/dimen_dp_3"
-                android:text="Lv.0"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/dimen_sp_12" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/myliveroom_level_tx"
-                android:layout_weight="1"
-                android:paddingLeft="@dimen/dimen_dp_3">
-
-                <TextView
-                    android:id="@+id/myliveroom_vip_tx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/level_red_bg"
-                    android:paddingLeft="@dimen/dimen_dp_5"
-                    android:paddingRight="@dimen/dimen_dp_5"
-                    android:text="VIP.0"
-                    android:textColor="@color/color_white"
-                    android:textSize="@dimen/dimen_sp_10"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:id="@+id/myliveroom_svip_iv"
-                    android:layout_width="@dimen/dimen_dp_50"
-                    android:layout_height="@dimen/dimen_dp_13"
-                    android:src="@mipmap/other_svip_ic"
-                    android:visibility="gone" />
-
-            </RelativeLayout>
-
-        </RelativeLayout>
+            android:layout_marginRight="@dimen/dimen_dp_10"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="--"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/dimen_sp_16" />
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="@dimen/dimen_dp_10"
-            android:background="@color/color_white" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/myliveroom_back_iv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/dimen_dp_10"
-            android:paddingRight="@dimen/dimen_dp_10"
-            android:paddingTop="@dimen/dimen_dp_5">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_dp_5"
-                android:text="当前直播间人数："
-                android:textColor="@color/color_bfbfbf"
-                android:textSize="@dimen/dimen_sp_11" />
-
-            <TextView
-                android:id="@+id/myliveroom_num_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_dp_5"
-                android:layout_weight="1"
-                android:text="0"
-                android:textColor="@color/color_bfbfbf"
-                android:textSize="@dimen/dimen_sp_11" />
-
-            <ImageView
-                android:id="@+id/myliveroom_anim_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/liveroom_anim" />
-        </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/live_live_icon_close" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/myliveroom_ll2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_50"
+        android:layout_below="@+id/myliveroom_ll1"
+        android:background="@color/color_44000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:paddingRight="@dimen/dimen_dp_10">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/myliveroom_recyclerview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimen_dp_5"
+            android:layout_marginRight="@dimen/dimen_dp_5"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/myliveroom_invitation_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/invitation_ic" />
+
+        <TextView
+            android:id="@+id/myliveroom_kissnum_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_dp_5"
+            android:drawableLeft="@mipmap/kiss_ic"
+            android:gravity="center"
+            android:text=" 0"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/dimen_sp_14" />
+
+        <TextView
+            android:id="@+id/myliveroom_money_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_dp_5"
+            android:drawableLeft="@mipmap/money_ic"
+            android:gravity="center"
+            android:text=" 0"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/dimen_sp_14" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/myliveroom_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/myliveroom_ll2"
+        android:background="@color/color_white" />
+
+    <LinearLayout
+        android:id="@+id/myliveroom_ll3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/myliveroom_line"
+        android:background="@color/color_44000000"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/dimen_dp_30"
+        android:paddingTop="@dimen/dimen_dp_30">
+
+        <RelativeLayout
+            android:layout_width="@dimen/dimen_dp_55"
+            android:layout_height="@dimen/dimen_dp_55"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true">
+
+            <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/myliveroom_head_iv"
+                android:layout_width="@dimen/dimen_dp_55"
+                android:layout_height="@dimen/dimen_dp_55"
+                fresco:failureImage="@mipmap/ic_launcher"
+                fresco:failureImageScaleType="centerInside"
+                fresco:placeholderImage="@mipmap/ic_launcher"
+                fresco:roundedCornerRadius="@dimen/dimen_dp_5"
+                fresco:roundingBorderColor="@android:color/white"
+                fresco:roundingBorderWidth="@dimen/dimen_dp_2" />
+
+            <ImageView
+                android:id="@+id/myliveroom_gender_iv"
+                android:layout_width="@dimen/dimen_dp_15"
+                android:layout_height="@dimen/dimen_dp_15"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/dimen_dp_2"
+                android:layout_marginRight="@dimen/dimen_dp_2"
+                android:src="@mipmap/personal_man_ic" />
+
+            <ImageView
+                android:id="@+id/myliveroom_verify_iv"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_dp_15"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/dimen_dp_2"
+                android:scaleType="fitXY"
+                android:src="@mipmap/personal_identification"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/myliveroom_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_dp_10"
+            android:singleLine="true"
+            android:text="--"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/dimen_sp_14" />
+
+    </LinearLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/myliveroom_ll"
-        android:background="@color/color_aaffffff"
-        android:orientation="vertical">
+        android:layout_below="@+id/myliveroom_ll3"
+        android:background="@color/color_white">
 
         <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
             android:id="@+id/chatroom_lv"
@@ -198,39 +176,103 @@
             ptr:ptrMode="both"
             ptr:ptrScrollingWhileRefreshingEnabled="true"></com.handmark.pulltorefresh.library.PullToRefreshListView>
 
-    </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/myliveroom_gift_rl"
+            android:layout_width="@dimen/dimen_dp_250"
+            android:layout_height="@dimen/dimen_dp_50"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/dimen_dp_5"
+            android:layout_marginTop="@dimen/dimen_dp_5"
+            android:visibility="gone" >
+
+            <ImageView
+                android:layout_margin="@dimen/dimen_dp_5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/live_gift_bg"/>
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/myliveroom_gift_head_iv"
+                android:layout_width="@dimen/dimen_dp_35"
+                android:layout_height="@dimen/dimen_dp_35"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dimen_dp_8"
+                fresco:failureImage="@mipmap/ic_launcher"
+                fresco:failureImageScaleType="centerInside"
+                fresco:placeholderImage="@mipmap/ic_launcher"
+                fresco:roundAsCircle="true" />
+
+            <TextView
+                android:id="@+id/myliveroom_gift_name_tv"
+                android:layout_marginLeft="@dimen/dimen_dp_5"
+                android:layout_toRightOf="@+id/myliveroom_gift_head_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_dp_5"
+                android:textSize="@dimen/dimen_sp_14"
+                android:textColor="#e96c73"
+                android:text="name"/>
+
+            <TextView
+                android:id="@+id/myliveroom_gift_content_tv"
+                android:layout_below="@+id/myliveroom_gift_name_tv"
+                android:layout_marginLeft="@dimen/dimen_dp_5"
+                android:layout_toRightOf="@+id/myliveroom_gift_head_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dimen_sp_14"
+                android:textColor="@color/color_white"
+                android:singleLine="true"
+                android:layout_toLeftOf="@+id/myliveroom_gift_iv"
+                android:text="content"/>
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/myliveroom_gift_iv"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dimen_dp_15"
+                android:layout_width="@dimen/dimen_dp_50"
+                android:layout_height="@dimen/dimen_dp_50"
+                fresco:actualImageScaleType="centerInside" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/myliveroom_pic_iv"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/dimen_dp_10"
+        android:layout_marginRight="@dimen/dimen_dp_10"
+        android:layout_marginTop="@dimen/dimen_dp_120">
+
+        <ImageView
+            android:id="@+id/myliveroom_flowrs_iv"
+            android:layout_width="@dimen/dimen_dp_40"
+            android:layout_height="@dimen/dimen_dp_40"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dimen_dp_10"
+            android:src="@mipmap/add_flowrs_ic" />
+
+        <com.base.baselibs.widget.addflowers.PeriscopeLayout
+            android:id="@+id/periscope"
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/myliveroom_pic_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dimen_dp_40"
+        android:layout_height="@dimen/dimen_dp_40"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/dimen_dp_10"
         android:layout_marginRight="@dimen/dimen_dp_20"
         android:src="@mipmap/live_action_icon_image" />
-
-    <TextView
-        android:id="@+id/myliveroom_gold_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/myliveroom_ll"
-        android:layout_marginLeft="@dimen/dimen_dp_20"
-        android:layout_marginTop="@dimen/dimen_dp_50"
-        android:drawableLeft="@mipmap/wy_gold_icon"
-        android:gravity="center"
-        android:text=" +3"
-        android:textColor="#fee34d"
-        android:textSize="@dimen/dimen_sp_16"
-        android:textStyle="bold"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/myliveroom_gift_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/ic_app"
-        android:visibility="gone" />
 
 </RelativeLayout>

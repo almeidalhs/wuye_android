@@ -31,6 +31,42 @@ public class ChatRoomMessageModel {
     private int isAnchorImage;
     private int cmdType;
     private long banChatUserId;
+    private String center_user_avatar;
+    private String center_user_name;
+    private String center_user_id;
+    private String center_content;
+
+    public String getCenter_user_avatar() {
+        return center_user_avatar;
+    }
+
+    public void setCenter_user_avatar(String center_user_avatar) {
+        this.center_user_avatar = center_user_avatar;
+    }
+
+    public String getCenter_user_name() {
+        return center_user_name;
+    }
+
+    public void setCenter_user_name(String center_user_name) {
+        this.center_user_name = center_user_name;
+    }
+
+    public String getCenter_user_id() {
+        return center_user_id;
+    }
+
+    public void setCenter_user_id(String center_user_id) {
+        this.center_user_id = center_user_id;
+    }
+
+    public String getCenter_content() {
+        return center_content;
+    }
+
+    public void setCenter_content(String center_content) {
+        this.center_content = center_content;
+    }
 
     public String getGiftName() {
         return giftName;
