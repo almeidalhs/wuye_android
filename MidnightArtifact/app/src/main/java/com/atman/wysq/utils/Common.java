@@ -275,6 +275,10 @@ public class Common {
     public static String Url_Live_Detail_Post = hostUrl + "rest/live/";
     //定时获取kiss和钱 rest/live/like/450000534/0
     public static String Url_Get_Like_Post = hostUrl + "rest/live/like/";
+    //获取关注我的人 rest/user/followme
+    public static String Url_Get_FollowMe_Post = hostUrl + "rest/user/followme";
+    //邀请好友 rest/live/invite
+    public static String Url_Invite_Friends_Post = hostUrl + "rest/live/invite";
     /**************************http访问路径*****************************/
 
 
@@ -530,6 +534,10 @@ public class Common {
     public static int NET_LIVE_DETAIL_ID = 124;
     //定时获取kiss和钱
     public static int NET_GET_LIVE_LIKE_ID = 125;
+    //获取关注我的人
+    public static int NET_GET_FOLLOWME_ID = 126;
+    //邀请好友
+    public static int NET_INVITE_FRIENDS_ID = 127;
     /**************************http访问回应识别码*****************************/
 
 

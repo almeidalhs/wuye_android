@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/color_white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_dp_40">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="邀请好友"
+            android:textColor="@color/color_787878"
+            android:textSize="@dimen/dimen_sp_15"/>
+
+        <TextView
+            android:id="@+id/dialog_invit_close_tx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="关闭"
+            android:layout_marginRight="@dimen/dimen_dp_10"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/color_787878"
+            android:textSize="@dimen/dimen_sp_14"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_line"/>
+
+    <ListView
+        android:id="@+id/dialog_invit_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/color_line"
+        android:dividerHeight="1px"
+        android:scrollbars="none"/>
+
+</LinearLayout>

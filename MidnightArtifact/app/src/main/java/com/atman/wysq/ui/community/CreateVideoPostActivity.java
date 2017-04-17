@@ -245,6 +245,7 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                             .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                             .addFile("files0_name", StringUtils.getFileName(upVideoUrl), new File(upVideoUrl))
                             .id(Common.NET_UP_VIDEO_ID).tag(Common.NET_UP_VIDEO_ID).build()
+                            .connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
                             .execute(new MyStringCallback(mContext, CreateVideoPostActivity.this, true));
                 }
             }

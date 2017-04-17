@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -13,24 +12,30 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.ChatRoomAdapter;
+import com.atman.wysq.adapter.InvitationAdapter;
 import com.atman.wysq.adapter.LiveDetailOnLineAdapter;
 import com.atman.wysq.model.bean.ImMessage;
 import com.atman.wysq.model.event.GiftEvent;
 import com.atman.wysq.model.response.ChatRoomMessageModel;
+import com.atman.wysq.model.response.GetFollowMeModel;
 import com.atman.wysq.model.response.GetLiveDetailLikeModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.model.response.GetUserIndexModel;
@@ -75,9 +80,6 @@ import com.netease.nimlib.sdk.media.player.OnPlayListener;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -631,6 +633,49 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
             myliveroomKissnumTv.setText(" " + mGetLiveDetailLikeModel.getBody().getLike_num());
             myliveroomMoneyTv.setText(" " + mGetLiveDetailLikeModel.getBody().getGold_num());
+        } else if (id == Common.NET_GET_FOLLOWME_ID) {
+            GetFollowMeModel mGetFollowMeModel = mGson.fromJson(data, GetFollowMeModel.class);
+
+            if (mGetFollowMeModel.getBody().size()==0) {
+                showToast("还没有好友关注您！");
+                return;
+            }
+
+            View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_invitation_view, null);
+            TextView dialogClose = (TextView) view.findViewById(R.id.dialog_invit_close_tx);
+            ListView dialogListview = (ListView) view.findViewById(R.id.dialog_invit_listview);
+
+            final InvitationAdapter temp = new InvitationAdapter(mContext, mGetFollowMeModel.getBody());
+            dialogListview.setAdapter(temp);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.dialog_center);
+            builder.setCancelable(false).setView(view);
+            final AlertDialog dialog = builder.create();
+            android.view.WindowManager.LayoutParams p = dialog.getWindow().getAttributes();  //获取对话框当前的参数值
+            p.width = (int) (getmWidth() * 0.75);    //宽度设置为屏幕的0.75
+            p.height = (int) (getmHight() * 0.6);    //高度设置为屏幕的0.6
+            dialog.show();
+
+            dialogListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Map<String, Object> p = new HashMap<>();
+                    p.put("follow_user_id", temp.getItem(position).getUser_id());
+                    p.put("liveroom_id", roomId);
+                    OkHttpUtils.postString().url(Common.Url_Invite_Friends_Post).content(mGson.toJson(p))
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).mediaType(Common.JSON)
+                            .tag(Common.NET_INVITE_FRIENDS_ID).id(Common.NET_INVITE_FRIENDS_ID).build()
+                            .execute(new MyStringCallback(mContext, MyLiveRoomActivity.this, false));
+                }
+            });
+            dialogClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (id == Common.NET_INVITE_FRIENDS_ID) {
+            showToast("邀请好友成功！");
         }
     }
 
@@ -679,7 +724,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                     OkHttpUtils.postString().url(Common.Url_Get_Like_Post + userId + "/" + waitUpNum).content("{}")
                             .id(Common.NET_GET_LIVE_LIKE_ID).tag(Common.NET_GET_LIVE_LIKE_ID)
                             .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
-                            .execute(new MyStringCallback(mContext, MyLiveRoomActivity.this, true));
+                            .execute(new MyStringCallback(mContext, MyLiveRoomActivity.this, false));
                     waitUpNum = 0;
                     break;
                 case 1:
@@ -783,6 +828,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_MYCONCERNLIST_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_DETAIL_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_LIVE_LIKE_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_FOLLOWME_ID);
     }
 
     private void closeLive() {
@@ -827,7 +873,11 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                 myliveroomKissnumTv.setText(" " + (LikeNum + 1));
                 periscope.addHeart();
                 break;
-            case R.id.myliveroom_invitation_iv:
+            case R.id.myliveroom_invitation_iv://邀请好友
+                OkHttpUtils.get().url(Common.Url_Get_FollowMe_Post).id(Common.NET_GET_FOLLOWME_ID)
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .tag(Common.NET_GET_FOLLOWME_ID).build()
+                        .execute(new MyStringCallback(mContext, this, true));
                 break;
             case R.id.myliveroom_gift_head_iv:
                 checkOtherHead(giftUserId);

@@ -297,6 +297,7 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
                 .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                 .addFile("files0_name", StringUtils.getFileName(voiceFile.getPath()), voiceFile)
                 .id(Common.NET_UP_VOICE_ID).tag(Common.NET_UP_VOICE_ID).build()
+                .connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
                 .execute(new MyStringCallback(mContext, CreateVoicePostActivity.this, true));
     }
 
