@@ -1,5 +1,6 @@
 package com.atman.wysq.model.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -185,6 +186,15 @@ public class GetMyUserIndexModel {
             private String achieve_level_pic;
             private String achieve_charm_pic;
             private String achieve_gold_pic;
+            private List<PhotoListBean> photoList;
+
+            public List<PhotoListBean> getPhotoList() {
+                return photoList;
+            }
+
+            public void setPhotoList(List<PhotoListBean> photoList) {
+                this.photoList = photoList;
+            }
 
             public long getUserId() {
                 return userId;
@@ -288,6 +298,81 @@ public class GetMyUserIndexModel {
 
             public void setAchieve_gold_pic(String achieve_gold_pic) {
                 this.achieve_gold_pic = achieve_gold_pic;
+            }
+
+            public static class PhotoListBean implements Serializable {
+                /**
+                 * photo_id : 166
+                 * user_id : 450214623
+                 * pic_url : /imageServer/8D28ba1a81d319f94dd6a6e24f872642c06c.jpg
+                 * state : 1
+                 * create_time : 1490845241000
+                 * update_time : 1490845241000
+                 */
+
+                private long photo_id;
+                private long user_id;
+                private String pic_url;
+                private int state;
+                private long create_time;
+                private long update_time;
+                private boolean isSelect;
+
+                public boolean isSelect() {
+                    return isSelect;
+                }
+
+                public void setSelect(boolean select) {
+                    isSelect = select;
+                }
+
+                public long getPhoto_id() {
+                    return photo_id;
+                }
+
+                public void setPhoto_id(long photo_id) {
+                    this.photo_id = photo_id;
+                }
+
+                public long getUser_id() {
+                    return user_id;
+                }
+
+                public void setUser_id(long user_id) {
+                    this.user_id = user_id;
+                }
+
+                public String getPic_url() {
+                    return pic_url;
+                }
+
+                public void setPic_url(String pic_url) {
+                    this.pic_url = pic_url;
+                }
+
+                public int getState() {
+                    return state;
+                }
+
+                public void setState(int state) {
+                    this.state = state;
+                }
+
+                public long getCreate_time() {
+                    return create_time;
+                }
+
+                public void setCreate_time(long create_time) {
+                    this.create_time = create_time;
+                }
+
+                public long getUpdate_time() {
+                    return update_time;
+                }
+
+                public void setUpdate_time(long update_time) {
+                    this.update_time = update_time;
+                }
             }
 
             public static class UserExtBean {

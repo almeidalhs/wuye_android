@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.facebook.drawee.view.SimpleDraweeView
-    android:id="@+id/personal_top_bg_iv"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_white"
-    fresco:failureImage="@mipmap/personal_head_bg"
-    fresco:failureImageScaleType="centerCrop"
-    fresco:placeholderImage="@mipmap/personal_head_bg">
+    android:layout_height="match_parent">
 
-</com.facebook.drawee.view.SimpleDraweeView>
+    <ImageView
+        android:id="@+id/fragment_img_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="@mipmap/personal_head_bg"/>
+
+    <LinearLayout
+        android:id="@+id/fragment_img_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/fragment_img_content"
+            android:name="com.base.baselibs.widget.adview.CycleViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -281,6 +281,10 @@ public class Common {
     public static String Url_Invite_Friends_Post = hostUrl + "rest/live/invite";
     //直播间送礼 rest/gift/buyLiveRoom/{gift_id}/{to_user_id}
     public static String Url_Live_Gift_Post = hostUrl + "rest/gift/buyLiveRoom/";
+    //删除相册照片 rest/user/photo/del
+    public static String Url_Delete_Ablum_Post = hostUrl + "rest/user/photo/del";
+    //添加相册照片 rest/user/photo
+    public static String Url_Add_Ablum_Post = hostUrl + "rest/user/photo";
     /**************************http访问路径*****************************/
 
 
@@ -542,6 +546,10 @@ public class Common {
     public static int NET_INVITE_FRIENDS_ID = 127;
     //直播间送礼
     public static int NET_LIVE_GIFT_ID = 128;
+    //删除相册照片
+    public static int NET_DELETE_ABLUM_ID = 129;
+    //添加相册照片
+    public static int NET_ADD_ABLUM_ID = 130;
     /**************************http访问回应识别码*****************************/
 
 

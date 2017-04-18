@@ -48,6 +48,7 @@
         <activity android:name=".ui.personal.wallet.MyDiamondsActivity"/>
         <activity android:name=".ui.personal.wallet.DiamondsToCoinActivity"/>
         <activity android:name=".ui.personal.wallet.WithdrawCashActivity"/>
+        <activity android:name=".ui.personal.PersonalAlbumActivity"/>
         <activity android:name=".ui.base.BaseGestureLockActivity" android:launchMode="singleTask"/>
         <activity android:name=".ui.base.WebPageActivity"/>
         <activity android:name=".ui.mall.TwoLevelCategoryListActivity"/>

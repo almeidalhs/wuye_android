@@ -197,8 +197,8 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 	 */
 	public void setWheel(boolean isWheel) {
 		this.isWheel = isWheel;
-		isCycle = true;
 		if (isWheel) {
+			isCycle = true;
 			handler.postDelayed(runnable, time);
 		}
 	}

@@ -48,6 +48,9 @@ import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.PromptDialog;
+import com.base.baselibs.widget.adview.ADInfo;
+import com.base.baselibs.widget.adview.CycleViewPager;
+import com.base.baselibs.widget.adview.ViewFactory;
 import com.base.baselibs.widget.pullzoom.PullZoomScrollVIew;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
@@ -83,6 +86,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     private ImageView personalTaskIv;
     private SimpleDraweeView personalHeadIv;
     private ImageView personalHeadVerifyImg;
+    private ImageView fragmentImgIv;
     private TextView personalNameTx;
     private TextView personalGendercertificationTv;
     private GetMyUserIndexModel mGetUserIndexModel;
@@ -96,6 +100,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     private LinearLayout personalFriendsLl;
     private LinearLayout personalVipLl;
     private LinearLayout personalMygiftLl;
+    private LinearLayout fragmentImgLl;
 
     private TextView personalVisitorNumTx;
     private TextView personalVipTx;
@@ -107,7 +112,6 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     private SimpleDraweeView personalGuardianOneIv, personalGuardianTwoIv, personalGuardianThreeIv;
     private ImageView personalGuardianTopOneIv, personalGuardianTopTwoIv, personalGuardianTopThreeIv;
     private RelativeLayout personalGuardianOneRl,personalGuardianTwoRl,personalGuardianThreeRl;
-    private SimpleDraweeView personalTopBgIv;
 
     private LinearLayout personalMysecretLl, personalMycollectionLl;
     private RelativeLayout personalSecretreplyRl;
@@ -119,6 +123,8 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     private boolean isHead = false;
 
     private int PICK_FROM_CAMERA = 777;
+
+    private CycleViewPager cycleViewPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -146,12 +152,11 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
 
         DisplayMetrics localDisplayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
-        int mScreenHeight = localDisplayMetrics.heightPixels;
         int mScreenWidth = localDisplayMetrics.widthPixels;
-        LinearLayout.LayoutParams localObject = new LinearLayout.LayoutParams(mScreenWidth, (int) (9.0F * (mScreenWidth / 12.0F)));
+        LinearLayout.LayoutParams localObject = new LinearLayout.LayoutParams(mScreenWidth
+                , (int) (7.0F * (mScreenWidth / 12.0F)));
         personalScrollview.setHeaderLayoutParams(localObject);
 
-        personalTopBgIv = (SimpleDraweeView) personalScrollview.findViewById(R.id.personal_top_bg_iv);
         personalSettingIv = (ImageView) personalScrollview.findViewById(R.id.personal_setting_iv);
         personalGenderIv = (ImageView) personalScrollview.findViewById(R.id.personal_gender_iv);
         personalTaskIv = (ImageView) personalScrollview.findViewById(R.id.personal_task_iv);
@@ -201,6 +206,15 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         personalGuardianTwoRl = (RelativeLayout) personalScrollview.findViewById(R.id.personal_guardian_two_rl);
         personalGuardianThreeRl = (RelativeLayout) personalScrollview.findViewById(R.id.personal_guardian_three_rl);
 
+        fragmentImgLl = (LinearLayout) personalScrollview.findViewById(R.id.fragment_img_ll);
+        fragmentImgIv = (ImageView) personalScrollview.findViewById(R.id.fragment_img_iv);
+        fragmentImgIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), PersonalAlbumActivity.class));
+            }
+        });
+
         personalMysecretLl.setOnClickListener(this);
         personalMycollectionLl.setOnClickListener(this);
         personalSecretreplyRl.setOnClickListener(this);
@@ -242,8 +256,8 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
 
     public void hitSetring() {
         LogUtils.e("hitSetring");
+        fragmentImgLl.setVisibility(View.GONE);
         personalHeadIv.setImageResource(R.mipmap.ic_launcher);
-        personalTopBgIv.setImageURI(Uri.parse("res:///" + R.mipmap.personal_head_bg));
         personalSettingIv.setVisibility(View.INVISIBLE);
         personalGenderIv.setVisibility(View.INVISIBLE);
         personalGendercertificationTv.setVisibility(View.INVISIBLE);
@@ -318,6 +332,76 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         }
     }
 
+    private String[] imageUrls;
+    private List<ImageView> views = new ArrayList<>();
+    private List<ADInfo> infos = new ArrayList<>();
+    private void initialize() {
+        List<GetMyUserIndexModel.BodyBean.UserDetailBeanBean.PhotoListBean> temp
+                = mGetUserIndexModel.getBody().getUserDetailBean().getPhotoList();
+
+        if (temp.size()==0) {
+            fragmentImgLl.setVisibility(View.GONE);
+            return;
+        }
+        fragmentImgLl.setVisibility(View.VISIBLE);
+
+        cycleViewPager = (CycleViewPager) getActivity().getFragmentManager()
+                .findFragmentById(R.id.fragment_img_content);
+
+        imageUrls = new String[temp.size()];
+        for (int i = 0; i < temp.size(); i++) {
+            imageUrls[i] = Common.ImageUrl + temp.get(i).getPic_url();
+        }
+
+        infos.clear();
+        for (int i = 0; i < imageUrls.length; i++) {
+            ADInfo info = new ADInfo();
+            info.setUrl(imageUrls[i]);
+            info.setContent("图片-->" + i);
+            infos.add(info);
+        }
+
+        views.clear();
+        // 将最后一个ImageView添加进来
+        views.add(ViewFactory.getImageView(getActivity(), infos.get(infos.size() - 1).getUrl()));
+        for (int i = 0; i < infos.size(); i++) {
+            ImageView img = ViewFactory.getImageView(getActivity(), infos.get(i).getUrl());
+            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            views.add(img);
+        }
+        // 将第一个ImageView添加进来
+        ImageView imageView = ViewFactory.getImageView(getActivity(), infos.get(0).getUrl());
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        views.add(imageView);
+
+        // 设置循环，在调用setData方法前调用
+        cycleViewPager.setCycle(false);
+        cycleViewPager.setScrollable(true);
+        cycleViewPager.setWheel(false);
+        cycleViewPager.setHitIndicator(true);
+
+        cycleViewPager.setData(views, infos, mAdCycleViewListener);
+
+        //设置圆点指示图标组居中显示，默认靠右
+        cycleViewPager.setIndicatorRight();
+    }
+
+    private CycleViewPager.ImageCycleViewListener mAdCycleViewListener = new CycleViewPager.ImageCycleViewListener() {
+
+        @Override
+        public void onImageClick(ADInfo info, int position, View imageView) {
+            if (cycleViewPager.isCycle()) {
+                position = position - 1;
+            }
+            if (position<0) {
+                position = 0;
+            }
+            startActivity(PersonalAlbumActivity.buildIntent(getActivity()
+                    , mGetUserIndexModel.getBody().getUserDetailBean().getPhotoList()));
+        }
+
+    };
+
     @Override
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
@@ -326,6 +410,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             MyBaseApplication.mGetMyUserIndexModel = mGetUserIndexModel;
             UpDateUI();
             checkLogin();
+            initialize();
             OkHttpUtils.get().url(Common.Url_Get_Task)
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                     .tag(Common.NET_GET_RASK).id(Common.NET_GET_RASK).build()
@@ -367,7 +452,6 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             MyBaseApplication.getApplication().setFilterLock(false);
             showToast("头像修改成功");
             MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().setIcon(mHeadImgUrl);
-            personalTopBgIv.setImageURI(Common.ImageUrl + mHeadImgUrl);
             personalHeadIv.setImageURI(Common.ImageUrl + mHeadImgUrl);
         } else if (id == Common.NET_VERIFY) {
             showToast("提交成功，请等待审核！");
@@ -450,7 +534,6 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             personalGendercertificationTv.setVisibility(View.GONE);
             personalHeadVerifyImg.setVisibility(View.GONE);
         }
-        personalTopBgIv.setImageURI(Common.ImageUrl + mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
         personalHeadIv.setImageURI(Common.ImageUrl + mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
 
         initVisitorIV();
