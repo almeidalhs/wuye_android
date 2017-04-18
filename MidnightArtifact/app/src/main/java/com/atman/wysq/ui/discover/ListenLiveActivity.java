@@ -42,6 +42,7 @@ import com.atman.wysq.model.response.GetFollowMeModel;
 import com.atman.wysq.model.response.GetLiveDetailLikeModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.model.response.GetUserIndexModel;
+import com.atman.wysq.model.response.GiftListModel;
 import com.atman.wysq.model.response.ListenLiveRoomInfoModel;
 import com.atman.wysq.model.response.LiveDetailModel;
 import com.atman.wysq.ui.PictureBrowsingActivity;
@@ -94,6 +95,7 @@ import com.tbl.okhttputils.OkHttpUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -193,6 +195,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     private NELivePlayer mMediaPlayer = null;
     private ChatRoomAdapter mAdapter;
     private Observer<List<ChatRoomMessage>> incomingChatRoomMsg;
+    private List<GiftListModel.BodyEntity> mGiftList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -331,6 +334,18 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                                     || temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
                                 if (temp.getGiftId() <= 0) {
                                     getLiveNum();
+                                } else {
+                                    String url = "";
+                                    for (int z = 0; z < mGiftList.size(); z++) {
+                                        if (temp.getGiftId() == mGiftList.get(z).getGift_id()) {
+                                            url = Common.ImageUrl + mGiftList.get(z).getPic_url();
+                                            break;
+                                        }
+                                    }
+                                    giftUserId = temp.getUser().getUserId();
+                                    GiftAnimation(temp.getUser().getIcon()
+                                            , temp.getUser().getNickName()
+                                            , temp.getContent().split(":")[1], url);
                                 }
                                 String noStr = temp.getContent();
                                 if (temp.getBanChatUserId() == mMyUserInfo.getUser_id()) {
@@ -527,6 +542,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 .content(mGson.toJson("")).mediaType(Common.JSON).tag(Common.NET_LIVE_USERLOG_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
                 .execute(new MyStringCallback(mContext, this, false));
+        OkHttpUtils.get().url(Common.Url_Get_GiftList).id(Common.NET_GET_GIFTLIST)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .tag(Common.NET_GET_GIFTLIST).build().execute(new MyStringCallback(mContext, this, true));
 
         getLiveDetail();
     }
@@ -653,6 +671,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
             listenliveKissnumTv.setText(" " + mGetLiveDetailLikeModel.getBody().getLike_num());
             listenliveMoneyTv.setText(" " + mGetLiveDetailLikeModel.getBody().getGold_num());
+        } else if (id == Common.NET_GET_GIFTLIST) {
+            GiftListModel mGiftListModel = mGson.fromJson(data, GiftListModel.class);
+            mGiftList = mGiftListModel.getBody();
         }
     }
 
@@ -677,6 +698,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_FOLLOWME_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_INVITE_FRIENDS_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_LIVE_LIKE_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_GIFTLIST);
     }
 
     @Override
@@ -714,10 +736,13 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     @OnClick({R.id.listenlive_invitation_iv, R.id.listenlive_flowrs_iv, R.id.listenlive_bg_iv
-            , R.id.listenlive_gift_iv, R.id.blogdetail_addemol_iv, R.id.p2pchat_pic_iv
+            , R.id.listenlive_gift_iv, R.id.blogdetail_addemol_iv, R.id.p2pchat_pic_iv, R.id.listenlive_gift_head_iv
             , R.id.p2pchat_send_bt, R.id.listenlive_back_iv, R.id.listenlive_head_iv, R.id.listenlive_antion_tv})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.listenlive_gift_head_iv:
+                checkOtherHead(giftUserId);
+                break;
             case R.id.listenlive_antion_tv:
                 if (listenliveAntionTv.getText().toString().contains("已")) {
                     tempId = userId;
@@ -758,7 +783,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 showWarnExit();
                 break;
             case R.id.listenlive_gift_iv:
-                startActivityForResult(SelectGiftActivity.buildIntent(mContext, String.valueOf(mMyUserInfo.getUser_id()), true, 0)
+                startActivityForResult(SelectGiftActivity.buildIntent(mContext, String.valueOf(mMyUserInfo.getUser_id()), true, 2)
                         , Common.toSelectGift);
                 break;
             case R.id.blogdetail_addemol_iv:
@@ -895,6 +920,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             giftId = String.valueOf(data.getIntExtra("giftId", 0));
             String str = "【" + mMyUserInfo.getNick_name() + "】赠送主播礼物：" + data.getStringExtra("name");
             String url = Common.ImageUrl + data.getStringExtra("url");
+            giftUserId = mMyUserInfo.getUser_id();
             GiftAnimation(mMyUserInfo.getIcon(), mMyUserInfo.getNick_name(), data.getStringExtra("name"), url);
             ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
                     String.valueOf(chatRoomId), str);
@@ -1286,6 +1312,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         checkOtherHead(onLineAdapter.getItemData(position).getUser_id());
     }
 
+    private long giftUserId;
     private void checkOtherHead(long UserId) {
         if (UserId == MyBaseApplication.getApplication()
                 .mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUser_id()) {

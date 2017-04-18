@@ -279,6 +279,8 @@ public class Common {
     public static String Url_Get_FollowMe_Post = hostUrl + "rest/user/followme";
     //邀请好友 rest/live/invite
     public static String Url_Invite_Friends_Post = hostUrl + "rest/live/invite";
+    //直播间送礼 rest/gift/buyLiveRoom/{gift_id}/{to_user_id}
+    public static String Url_Live_Gift_Post = hostUrl + "rest/gift/buyLiveRoom/";
     /**************************http访问路径*****************************/
 
 
@@ -538,6 +540,8 @@ public class Common {
     public static int NET_GET_FOLLOWME_ID = 126;
     //邀请好友
     public static int NET_INVITE_FRIENDS_ID = 127;
+    //直播间送礼
+    public static int NET_LIVE_GIFT_ID = 128;
     /**************************http访问回应识别码*****************************/
 
 

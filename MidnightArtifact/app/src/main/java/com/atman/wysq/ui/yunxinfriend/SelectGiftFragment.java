@@ -129,6 +129,9 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
                 if (fromId == 1) {
                     url = Common.Url_Reward;
                     reponseId = Common.NET_REWARD_ID;
+                } else if (fromId == 2) {
+                    url = Common.Url_Live_Gift_Post;
+                    reponseId = Common.NET_LIVE_GIFT_ID;
                 }
                 OkHttpUtils.postString().url(url + mAdapter.getItem(po).getGift_id()+"/"+id).content("")
                         .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
