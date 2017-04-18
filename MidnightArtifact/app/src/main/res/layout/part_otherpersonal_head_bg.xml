@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:scaleType="centerCrop"
-    android:background="@color/color_white"
-    android:src="@mipmap/personal_head_bg">
+    android:layout_height="match_parent">
 
-</ImageView>
+    <ImageView
+        android:id="@+id/fragment_other_img_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/personal_head_bg"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:id="@+id/fragment_other_img_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/fragment_other_img_content"
+            android:name="com.base.baselibs.widget.adview.CycleViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</RelativeLayout>

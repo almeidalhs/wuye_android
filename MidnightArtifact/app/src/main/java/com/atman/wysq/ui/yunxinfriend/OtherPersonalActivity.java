@@ -17,10 +17,13 @@ import com.atman.wysq.model.bean.TouChuanGiftNotice;
 import com.atman.wysq.model.event.YunXinAddFriendEvent;
 import com.atman.wysq.model.greendao.gen.AddFriendRecordDao;
 import com.atman.wysq.model.response.GetChatTokenModel;
+import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.model.response.GetUserIndexModel;
+import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.community.ReportActivity;
+import com.atman.wysq.ui.personal.PersonalAlbumActivity;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
@@ -29,6 +32,9 @@ import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.CustomImageView;
 import com.base.baselibs.widget.PromptDialog;
 import com.base.baselibs.widget.RoundImageView;
+import com.base.baselibs.widget.adview.ADInfo;
+import com.base.baselibs.widget.adview.CycleViewPager;
+import com.base.baselibs.widget.adview.ViewFactory;
 import com.base.baselibs.widget.pullzoom.PullZoomScrollVIew;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
@@ -76,10 +82,12 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
     private LinearLayout otherpersonalDynamicLl;
     private LinearLayout otherpersonalVisitorLl;
     private LinearLayout otherpersonalFriendsLl;
+    private LinearLayout fragmentOtherImgLl;
+    private ImageView fragmentOtherImgIv;
     private ImageView otherpersonalHeadIv;
     private ImageView otherpersonalGenderIv;
     private ImageView otherpersonalHeadVerifyImg;
-    private ImageView otherpersonalSvipIv;
+    private TextView otherpersonalSvipIv;
     private TextView otherpersonalNameTx;
     private TextView otherpersonalVipTx;
     private TextView otherpersonalDynamicNumberTx;
@@ -122,9 +130,10 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         mAddFriendRecord = mAddFriendRecordDao.queryBuilder().where(AddFriendRecordDao.Properties.ToRequest.eq(id)
                 , AddFriendRecordDao.Properties.FromRequest.eq(PreferenceUtil.getPreferences(getApplicationContext(), PreferenceUtil.PARM_USERID))).build().list();
 
-        LinearLayout.LayoutParams localObject = new LinearLayout.LayoutParams(getmWidth(), (int) (9.0F * (getmWidth() / 17.0F)));
+        LinearLayout.LayoutParams localObject = new LinearLayout.LayoutParams(getmWidth(), (int) (7.0F * (getmWidth() / 12.0F)));
         otherpersonalScrollview.setHeaderLayoutParams(localObject);
 
+        fragmentOtherImgLl = (LinearLayout) otherpersonalScrollview.findViewById(R.id.fragment_other_img_ll);
         otherpersonalBackLl = (LinearLayout) otherpersonalScrollview.findViewById(R.id.otherpersonal_back_ll);
         otherpersonalBackLl.setOnClickListener(this);
         otherpersonalMoreLl = (LinearLayout) otherpersonalScrollview.findViewById(R.id.otherpersonal_more_ll);
@@ -136,10 +145,11 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         otherpersonalFriendsLl = (LinearLayout) otherpersonalScrollview.findViewById(R.id.otherpersonal_friends_ll);
         otherpersonalFriendsLl.setOnClickListener(this);
 
+        fragmentOtherImgIv = (ImageView) otherpersonalScrollview.findViewById(R.id.fragment_other_img_iv);
         otherpersonalHeadIv = (ImageView) otherpersonalScrollview.findViewById(R.id.otherpersonal_head_iv);
         otherpersonalGenderIv = (ImageView) otherpersonalScrollview.findViewById(R.id.otherpersonal_gender_iv);
         otherpersonalHeadVerifyImg = (ImageView) otherpersonalScrollview.findViewById(R.id.otherpersonal_head_verify_img);
-        otherpersonalSvipIv = (ImageView) otherpersonalScrollview.findViewById(R.id.otherpersonal_svip_iv);
+        otherpersonalSvipIv = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_svip_iv);
         otherpersonalNameTx = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_name_tx);
         otherpersonalVipTx = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_vip_tx);
         otherpersonalDynamicNumberTx = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_dynamic_number_tx);
@@ -150,6 +160,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         otherpersonalRelationshipBt.setOnClickListener(this);
         otherpersonalGiftBt = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_gift_bt);
         otherpersonalGiftBt.setOnClickListener(this);
+        fragmentOtherImgIv.setOnClickListener(this);
 
         otherpersonalDynmicOneIv = (CustomImageView) otherpersonalScrollview.findViewById(R.id.otherpersonal_dynmic_one_iv);
         otherpersonalDynmicTwoIv = (CustomImageView) otherpersonalScrollview.findViewById(R.id.otherpersonal_dynmic_two_iv);
@@ -185,12 +196,99 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         super.onResume();
     }
 
+    private String[] imageUrls;
+    private List<ImageView> views = new ArrayList<>();
+    private List<ADInfo> infos = new ArrayList<>();
+    private CycleViewPager cycleViewPager;
+    private void initialize() {
+        List<GetUserIndexModel.BodyBean.UserDetailBeanBean.PhotoListBean> temp
+                = mGetMyUserIndexModel.getBody().getUserDetailBean().getPhotoList();
+
+        if (temp.size()==0) {
+            fragmentOtherImgLl.setVisibility(View.GONE);
+            return;
+        }
+        fragmentOtherImgLl.setVisibility(View.VISIBLE);
+
+        cycleViewPager = (CycleViewPager) getFragmentManager()
+                .findFragmentById(R.id.fragment_other_img_content);
+
+        imageUrls = new String[temp.size()];
+        for (int i = 0; i < temp.size(); i++) {
+            imageUrls[i] = Common.ImageUrl + temp.get(i).getPic_url();
+        }
+
+        infos.clear();
+        for (int i = 0; i < imageUrls.length; i++) {
+            ADInfo info = new ADInfo();
+            info.setUrl(imageUrls[i]);
+            info.setContent("图片-->" + i);
+            infos.add(info);
+        }
+
+        views.clear();
+        // 将最后一个ImageView添加进来
+        views.add(ViewFactory.getImageView(mContext, infos.get(infos.size() - 1).getUrl()));
+        for (int i = 0; i < infos.size(); i++) {
+            ImageView img = ViewFactory.getImageView(mContext, infos.get(i).getUrl());
+            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            views.add(img);
+        }
+        // 将第一个ImageView添加进来
+        ImageView imageView = ViewFactory.getImageView(mContext, infos.get(0).getUrl());
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        views.add(imageView);
+
+        // 设置循环，在调用setData方法前调用
+        cycleViewPager.setCycle(true);
+        cycleViewPager.setScrollable(true);
+        cycleViewPager.setWheel(true);
+        cycleViewPager.setHitIndicator(true);
+
+        cycleViewPager.setData(views, infos, mAdCycleViewListener);
+
+        //设置圆点指示图标组居中显示，默认靠右
+        cycleViewPager.setIndicatorRight();
+    }
+
+    private CycleViewPager.ImageCycleViewListener mAdCycleViewListener = new CycleViewPager.ImageCycleViewListener() {
+
+        @Override
+        public void onImageClick(ADInfo info, int position, View imageView) {
+            if (cycleViewPager.isCycle()) {
+                position = position - 1;
+            }
+            if (position<0) {
+                position = 0;
+            }
+            toPicWatch(position);
+        }
+
+    };
+
+    private void toPicWatch(int p) {
+        String imagePath = "";
+        for (int i = 0; i < mGetMyUserIndexModel.getBody().getUserDetailBean().getPhotoList().size(); i++) {
+            if (i != 0) {
+                imagePath += ",";
+            }
+            imagePath += (Common.ImageUrl + mGetMyUserIndexModel.getBody().getUserDetailBean().getPhotoList().get(i).getPic_url());
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra("image", imagePath);
+        intent.putExtra("num", p);
+        intent.setClass(mContext, PictureBrowsingActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_GET_USERINDEX) {
             mGetMyUserIndexModel = mGson.fromJson(data, GetUserIndexModel.class);
             updataView();
+            initialize();
         } else if (id == Common.NET_ADD_BLACKLIST) {
             showToast("已成功拉黑");
             Intent mIntent = new Intent();
@@ -239,17 +337,12 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         } else {
             otherpersonalNameTx.setTextColor(getResources().getColor(R.color.color_7F2505));
         }
+        otherpersonalVipTx.setText("VIP."+mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUserLevel());
         if (mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>=4) {
             otherpersonalVipTx.setVisibility(View.GONE);
             otherpersonalSvipIv.setVisibility(View.VISIBLE);
         } else {
             otherpersonalSvipIv.setVisibility(View.GONE);
-            if (mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()==0) {
-                otherpersonalVipTx.setVisibility(View.GONE);
-            } else {
-                otherpersonalVipTx.setText("VIP."+mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level());
-                otherpersonalVipTx.setVisibility(View.VISIBLE);
-            }
         }
         if (mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getSex().equals("M")) {
             otherpersonalGenderIv.setImageResource(R.mipmap.personal_man_ic);
@@ -612,6 +705,8 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .tag(Common.NET_ISTABALCK_ID).id(Common.NET_ISTABALCK_ID).build()
                         .execute(new MyStringCallback(mContext, this, true));
+                break;
+            case R.id.fragment_other_img_iv:
                 break;
         }
     }

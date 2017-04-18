@@ -4,83 +4,104 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/otherpersonal_head_rl"
-        android:layout_width="@dimen/dimen_dp_65"
-        android:layout_height="@dimen/dimen_dp_65"
-        android:layout_centerInParent="true">
-
-        <com.base.baselibs.widget.CustomImageView xmlns:img="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/otherpersonal_head_iv"
-            android:layout_width="@dimen/dimen_dp_65"
-            android:layout_height="@dimen/dimen_dp_65"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/ic_launcher"
-            img:circle="false"
-            img:radius="@dimen/dimen_dp_5" />
-
-        <ImageView
-            android:id="@+id/otherpersonal_gender_iv"
-            android:layout_width="@dimen/dimen_dp_15"
-            android:layout_height="@dimen/dimen_dp_15"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/personal_man_ic" />
-
-        <ImageView
-            android:id="@+id/otherpersonal_head_verify_img"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_dp_20"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/personal_identification"
-            android:scaleType="fitXY"
-            android:visibility="gone" />
-    </RelativeLayout>
-
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/otherpersonal_head_rl"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dimen_dp_5">
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="@dimen/dimen_dp_10"
+        android:paddingRight="@dimen/dimen_dp_10"
+        android:paddingTop="@dimen/dimen_dp_5"
+        android:paddingBottom="@dimen/dimen_dp_5"
+        android:gravity="center_vertical"
+        android:background="@color/color_44000000"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/otherpersonal_name_tx"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dimen_dp_5"
-            android:text="name"
-            android:textColor="#7F2505"
-            android:textSize="@dimen/dimen_sp_16" />
-
-        <TextView
-            android:id="@+id/otherpersonal_vip_tx"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/otherpersonal_name_tx"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dimen_dp_5"
-            android:paddingLeft="@dimen/dimen_dp_5"
-            android:paddingRight="@dimen/dimen_dp_5"
-            android:background="@drawable/level_red_bg"
-            android:text="VIP.0"
-            android:textColor="@color/color_white"
-            android:textSize="@dimen/dimen_sp_12" />
-
-        <ImageView
-            android:id="@+id/otherpersonal_svip_iv"
+        <RelativeLayout
+            android:id="@+id/otherpersonal_head_rl"
             android:layout_width="@dimen/dimen_dp_50"
-            android:layout_height="@dimen/dimen_dp_16"
-            android:layout_below="@+id/otherpersonal_name_tx"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone"
-            android:layout_marginTop="@dimen/dimen_dp_5"
-            android:src="@mipmap/other_svip_ic" />
+            android:layout_centerInParent="true"
+            android:layout_height="@dimen/dimen_dp_50">
 
-    </RelativeLayout>
+            <com.base.baselibs.widget.CustomImageView xmlns:img="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/otherpersonal_head_iv"
+                android:layout_width="@dimen/dimen_dp_65"
+                android:layout_height="@dimen/dimen_dp_65"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_launcher"
+                img:circle="false"
+                img:radius="@dimen/dimen_dp_5" />
+
+            <ImageView
+                android:id="@+id/otherpersonal_gender_iv"
+                android:layout_width="@dimen/dimen_dp_15"
+                android:layout_height="@dimen/dimen_dp_15"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:src="@mipmap/personal_man_ic"/>
+
+            <ImageView
+                android:id="@+id/otherpersonal_head_verify_img"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_dp_15"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"
+                android:scaleType="fitXY"
+                android:src="@mipmap/personal_identification"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/dimen_dp_10"
+            android:paddingRight="@dimen/dimen_dp_10"
+            android:gravity="center_vertical|left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/otherpersonal_name_tx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dimen_sp_16"
+                android:textColor="@color/color_white"
+                android:text="name"/>
+
+            <TextView
+                android:id="@+id/otherpersonal_vip_tx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/otherpersonal_name_tx"
+                android:paddingLeft="@dimen/dimen_dp_8"
+                android:paddingRight="@dimen/dimen_dp_8"
+                android:paddingTop="@dimen/dimen_dp_3"
+                android:paddingBottom="@dimen/dimen_dp_3"
+                android:background="@drawable/level_green_new_bg"
+                android:text="VIP.0"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/dimen_sp_10" />
+
+            <TextView
+                android:id="@+id/otherpersonal_svip_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_5"
+                android:layout_toRightOf="@+id/personal_vip_tx"
+                android:layout_below="@+id/personal_name_tx"
+                android:visibility="gone"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dimen_dp_5"
+                android:paddingRight="@dimen/dimen_dp_5"
+                android:paddingTop="@dimen/dimen_dp_3"
+                android:paddingBottom="@dimen/dimen_dp_3"
+                android:background="@drawable/level_red_new_bg"
+                android:text=" SVIP"
+                android:drawableLeft="@mipmap/crown_white"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/dimen_sp_10" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/otherpersonal_back_ll"
