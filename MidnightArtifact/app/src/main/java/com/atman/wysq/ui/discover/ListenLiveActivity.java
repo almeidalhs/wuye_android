@@ -11,35 +11,39 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Chronometer;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.ChatRoomAdapter;
+import com.atman.wysq.adapter.InvitationAdapter;
+import com.atman.wysq.adapter.LiveDetailOnLineAdapter;
 import com.atman.wysq.model.bean.ImMessage;
 import com.atman.wysq.model.response.ChatRoomMessageModel;
 import com.atman.wysq.model.response.CommunityNewModel;
-import com.atman.wysq.model.response.GetLiveHallModel;
+import com.atman.wysq.model.response.GetFollowMeModel;
+import com.atman.wysq.model.response.GetLiveDetailLikeModel;
 import com.atman.wysq.model.response.GetMyUserIndexModel;
 import com.atman.wysq.model.response.GetUserIndexModel;
 import com.atman.wysq.model.response.ListenLiveRoomInfoModel;
-import com.atman.wysq.model.response.MyLiveInfoModel;
+import com.atman.wysq.model.response.LiveDetailModel;
 import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
@@ -52,6 +56,7 @@ import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.widget.ShowHeadPopWindow;
 import com.atman.wysq.widget.face.FaceRelativeLayout;
 import com.atman.wysq.yunxin.model.ChatRoomTypeInter;
+import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.iimp.EditCheckBack;
 import com.base.baselibs.iimp.MyTextWatcherTwo;
 import com.base.baselibs.net.MyStringCallback;
@@ -60,6 +65,8 @@ import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.PromptDialog;
+import com.base.baselibs.widget.addflowers.PeriscopeLayout;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -77,9 +84,6 @@ import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.netease.nimlib.sdk.media.player.AudioPlayer;
 import com.netease.nimlib.sdk.media.player.OnPlayListener;
-import com.netease.nimlib.sdk.media.record.AudioRecorder;
-import com.netease.nimlib.sdk.media.record.IAudioRecordCallback;
-import com.netease.nimlib.sdk.media.record.RecordType;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
@@ -93,6 +97,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -105,8 +111,8 @@ import okhttp3.Response;
  */
 
 public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandler
-        , ChatRoomAdapter.RoomAdapterInter, EditCheckBack, IAudioRecordCallback
-        , FaceRelativeLayout.onEditListener, ShowHeadPopWindow.onHeadPopClickListenner {
+        , ChatRoomAdapter.RoomAdapterInter, EditCheckBack, FaceRelativeLayout.onEditListener
+        , ShowHeadPopWindow.onHeadPopClickListenner, AdapterInterface {
 
     @Bind(R.id.listenlive_bg_iv)
     SimpleDraweeView listenliveBgIv;
@@ -120,40 +126,16 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     TextView listenliveNameTv;
     @Bind(R.id.listenlive_title_tv)
     TextView listenliveTitleTv;
-    @Bind(R.id.listenlive_level_tx)
-    TextView listenliveLevelTx;
-    @Bind(R.id.listenlive_vip_tx)
-    TextView listenliveVipTx;
-    @Bind(R.id.listenlive_svip_iv)
-    ImageView listenliveSvipIv;
-    @Bind(R.id.listenlive_num_tv)
-    TextView listenliveNumTv;
-    @Bind(R.id.listenlive_anim_iv)
-    ImageView listenliveAnimIv;
     @Bind(R.id.chatroom_lv)
     PullToRefreshListView chatroomLv;
-    @Bind(R.id.timer)
-    Chronometer timer;
-    @Bind(R.id.timer_tip)
-    TextView timerTip;
-    @Bind(R.id.timer_tip_container)
-    LinearLayout timerTipContainer;
-    @Bind(R.id.layoutPlayAudio)
-    FrameLayout layoutPlayAudio;
     @Bind(R.id.listenlive_gift_iv)
     ImageView listenliveGiftIv;
-    @Bind(R.id.p2pchat_record_iv)
-    ImageView p2pchatRecordIv;
     @Bind(R.id.blogdetail_addcomment_et)
     MyCleanEditText blogdetailAddcommentEt;
-    @Bind(R.id.p2pchat_record_bt)
-    Button p2pchatRecordBt;
     @Bind(R.id.blogdetail_addemol_iv)
     ImageView blogdetailAddemolIv;
     @Bind(R.id.p2pchat_pic_iv)
     ImageView p2pchatPicIv;
-    @Bind(R.id.listenlive_display_gift_iv)
-    ImageView listenliveDisplayGiftIv;
     @Bind(R.id.p2pchat_send_bt)
     Button p2pchatSendBt;
     @Bind(R.id.ll1)
@@ -166,32 +148,47 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     RelativeLayout llFacechoose;
     @Bind(R.id.FaceRelativeLayout)
     FaceRelativeLayout FaceRelativeLayout;
+    @Bind(R.id.listenlive_kissnum_tv)
+    TextView listenliveKissnumTv;
+    @Bind(R.id.listenlive_money_tv)
+    TextView listenliveMoneyTv;
+    @Bind(R.id.periscope)
+    PeriscopeLayout periscope;
+    @Bind(R.id.listenlive_recyclerview)
+    RecyclerView listenliveRecyclerview;
+    @Bind(R.id.listenlive_antion_tv)
+    TextView listenliveAntionTv;
+    @Bind(R.id.listenlive_gift_head_iv)
+    SimpleDraweeView listenliveGiftHeadIv;
+    @Bind(R.id.listenlive_gift_name_tv)
+    TextView listenliveGiftNameTv;
+    @Bind(R.id.listenlive_gift_content_tv)
+    TextView listenliveGiftContentTv;
+    @Bind(R.id.listenlive_gift_inner_iv)
+    SimpleDraweeView listenliveGiftInnerIv;
+    @Bind(R.id.listenlive_gift_rl)
+    RelativeLayout listenliveGiftRl;
 
     private Context mContext = ListenLiveActivity.this;
     private GetMyUserIndexModel.BodyBean.UserDetailBeanBean.UserExtBean mMyUserInfo;
 
     private CommunityNewModel.BodyBean.LiveRoomBean mBodyBean;
     private long roomId;
+    private long userId;
     private long chatRoomId;
     private String mliveStreamingURL;
     private String Pic_url;
     private String title;
-    private AnimationDrawable animationDrawable;
     private AudioPlayer player;
-    private long listenTime = 0;
     private int positionAudio;
 
-    private boolean touched = false; // 是否按着
-    private final int maxDuration = 60;
-    protected AudioRecorder audioMessageHelper;
-    private boolean started = false;
-    private boolean cancelled = false;
-    private boolean isToLimit = false;
     private boolean mIsBalck = false;
-    private File mFile;
     private String giftId;
 
     private ListenLiveRoomInfoModel mListenLiveRoomInfoModel;
+    private LiveDetailModel mLiveDetailModel;
+    private LiveDetailOnLineAdapter onLineAdapter;
+    private int waitUpNum = 0;
 
     private NELivePlayer mMediaPlayer = null;
     private ChatRoomAdapter mAdapter;
@@ -228,6 +225,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
         mBodyBean = (CommunityNewModel.BodyBean.LiveRoomBean) getIntent().getSerializableExtra("temp");
         roomId = mBodyBean.getLive_room_id();
+        userId = mBodyBean.getUser_id();
         chatRoomId = mBodyBean.getRoom_id();
         Pic_url = mBodyBean.getPic_url();
         mliveStreamingURL = mBodyBean.getCurrentRecord().getRtmpPullUrl();
@@ -238,22 +236,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         mMyUserInfo = MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
                 .getUserDetailBean().getUserExt();
 
-        listenliveTitleTv.setText(title);
+        listenliveTitleTv.setText("话题:" + title);
         if (Pic_url != null && !Pic_url.isEmpty()) {
             listenliveBgIv.setImageURI(Common.ImageUrl + Pic_url);
-        }
-        listenliveLevelTx.setText("Lv." + mBodyBean.getUserExt().getUserLevel());
-        if (mBodyBean.getUserExt().getVip_level() >= 4) {
-            listenliveVipTx.setVisibility(View.GONE);
-            listenliveSvipIv.setVisibility(View.VISIBLE);
-        } else {
-            listenliveSvipIv.setVisibility(View.GONE);
-            if (mBodyBean.getUserExt().getVip_level() == 0) {
-                listenliveVipTx.setVisibility(View.GONE);
-            } else {
-                listenliveVipTx.setText("VIP." + mBodyBean.getUserExt().getVip_level());
-                listenliveVipTx.setVisibility(View.VISIBLE);
-            }
         }
         listenliveNameTv.setText(mBodyBean.getUserExt().getNick_name());
         player = new AudioPlayer(mContext);
@@ -272,155 +257,31 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         }
         listenliveHeadIv.setImageURI(Common.ImageUrl + mBodyBean.getUserExt().getIcon());
 
-        p2pchatRecordBt.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (mIsBalck) {
-                        showWraning("你已被对方加入黑名单");
-                        return true;
-                    }
-                    if (!isCanSeed()) {
-                        showWraning("主播请你"+diTime+"后再发言");
-                        return true;
-                    }
-                    touched = true;
-                    initAudioRecord();
-                    onStartAudioRecord();
-                } else if (event.getAction() == MotionEvent.ACTION_CANCEL
-                        || event.getAction() == MotionEvent.ACTION_UP) {
-                    if (mIsBalck) {
-                        return true;
-                    }
-                    touched = false;
-                    onEndAudioRecord(isCancelled(v, event));
-                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    if (mIsBalck) {
-                        return true;
-                    }
-                    touched = false;
-                    cancelAudioRecord(isCancelled(v, event));
-                }
-                return false;
-            }
-        });
-
         blogdetailAddcommentEt.addTextChangedListener(new MyTextWatcherTwo(this));
 
         initListenLive();
 
         initChatRoom();
+        initOnlineList();
     }
 
-    /**
-     * 初始化AudioRecord
-     */
-    private void initAudioRecord() {
-        if (audioMessageHelper == null) {
-            audioMessageHelper = new AudioRecorder(mContext, RecordType.AAC, maxDuration, this);
-        }
-    }
-
-    /**
-     * 开始语音录制
-     */
-    private void onStartAudioRecord() {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        started = audioMessageHelper.startRecord();
-        cancelled = false;
-        if (started == false) {
-            showToast("初始化录音失败");
-            return;
-        }
-        isToLimit = false;
-        if (!touched) {
-            return;
-        }
-
-        p2pchatRecordBt.setText("松开  结束");
-
-        updateTimerTip(false); // 初始化语音动画状态
-        playAudioRecordAnim();
-    }
-
-    /**
-     * 开始语音录制动画
-     */
-    private void playAudioRecordAnim() {
-        layoutPlayAudio.setVisibility(View.VISIBLE);
-        timer.setBase(SystemClock.elapsedRealtime());
-        timer.start();
-    }
-
-    /**
-     * 正在进行语音录制和取消语音录制，界面展示
-     *
-     * @param cancel
-     */
-    private void updateTimerTip(boolean cancel) {
-        if (cancel) {
-            timerTip.setText("松开手指，取消发送");
-        } else {
-            timerTip.setText("手指上滑，取消发送");
-        }
-    }
-
-    /**
-     * 结束语音录制
-     *
-     * @param cancel
-     */
-    private void onEndAudioRecord(boolean cancel) {
-        getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        if (audioMessageHelper!=null) {
-            audioMessageHelper.completeRecord(cancel);
-        }
-        p2pchatRecordBt.setText("按住 说话");
-        stopAudioRecordAnim();
-    }
-
-    // 上滑取消录音判断
-    private static boolean isCancelled(View view, MotionEvent event) {
-        int[] location = new int[2];
-        view.getLocationOnScreen(location);
-
-        if (event.getRawX() < location[0] || event.getRawX() > location[0] + view.getWidth()
-                || event.getRawY() < location[1] - 40) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * 结束语音录制动画
-     */
-    private void stopAudioRecordAnim() {
-        layoutPlayAudio.setVisibility(View.GONE);
-        timer.stop();
-        timer.setBase(SystemClock.elapsedRealtime());
-    }
-
-    /**
-     * 取消语音录制
-     *
-     * @param cancel
-     */
-    private void cancelAudioRecord(boolean cancel) {
-        // reject
-        if (!started) {
-            return;
-        }
-        // no change
-        if (cancelled == cancel) {
-            return;
-        }
-
-        cancelled = cancel;
-        updateTimerTip(cancel);
+    private void initOnlineList() {
+        onLineAdapter = new LiveDetailOnLineAdapter(mContext, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        listenliveRecyclerview.setLayoutManager(linearLayoutManager);
+        listenliveRecyclerview.setAdapter(onLineAdapter);
+        listenliveRecyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == 0) {//滑动停止
+                    Fresco.getImagePipeline().resume();//开启图片加载
+                } else {
+                    Fresco.getImagePipeline().pause();//暂停图片加载
+                }
+            }
+        });
     }
 
     private void initChatRoom() {
@@ -452,10 +313,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             @Override
             public void onEvent(List<ChatRoomMessage> messages) {
                 // 处理新收到的消息
-                LogUtils.e(">>>>>messages.size():" + messages.size());
-                LogUtils.e(">>>>>messages.get(0).getContent():" + messages.get(0).getContent());
-                LogUtils.e(">>>>>messages.get(0).getMsgType():" + messages.get(0).getMsgType());
-                LogUtils.e(">>>>>messages.get(0).getRemoteExtension:" + messages.get(0).getRemoteExtension());
                 for (int i = 0; i < messages.size(); i++) {
                     if (String.valueOf(chatRoomId).equals(messages.get(0).getSessionId())) {
                         ChatRoomMessageModel temp = null;
@@ -472,15 +329,15 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                         if (temp != null) {
                             if (temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystem
                                     || temp.getType() == ChatRoomTypeInter.ChatRoomTypeSystemCMD) {
-                                if (temp.getGiftId()<=0) {
+                                if (temp.getGiftId() <= 0) {
                                     getLiveNum();
                                 }
                                 String noStr = temp.getContent();
-                                if (temp.getBanChatUserId()==mMyUserInfo.getUser_id()) {
+                                if (temp.getBanChatUserId() == mMyUserInfo.getUser_id()) {
                                     noStr = "主播请你15分钟后再发言";
-                                    PreferenceUtil.saveLongPreference(mContext, PreferenceUtil.PARM_GAG_TIME, (long)temp.getSendTime() * 1000);
+                                    PreferenceUtil.saveLongPreference(mContext, PreferenceUtil.PARM_GAG_TIME, (long) temp.getSendTime() * 1000);
                                 }
-                                if (noStr!=null && !noStr.isEmpty()) {
+                                if (noStr != null && !noStr.isEmpty()) {
                                     mImMessage = new ImMessage(null, messages.get(i).getUuid()
                                             , String.valueOf(mMyUserInfo.getUser_id())
                                             , messages.get(i).getSessionId()
@@ -543,7 +400,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                                             , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration / 1000, 0, false, 1);
                                 }
                             }
-                            if (mImMessage!=null) {
+                            if (mImMessage != null) {
                                 mAdapter.addImMessageDao(mImMessage);
                             }
                         }
@@ -632,12 +489,10 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     NELivePlayer.OnPreparedListener mPreparedListener = new NELivePlayer.OnPreparedListener() {
         public void onPrepared(NELivePlayer mp) {
             mMediaPlayer.start();
-            String str = "【"+mMyUserInfo.getNick_name()+"】进入了电台";
+            String str = "【" + mMyUserInfo.getNick_name() + "】进入了电台";
             ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
                     String.valueOf(chatRoomId), str);
             seedMessge(message, ChatRoomTypeInter.ChatRoomTypeSystem, "", str, "0");
-            animationDrawable = (AnimationDrawable) listenliveAnimIv.getBackground();
-            animationDrawable.start();
         }
     };
 
@@ -672,41 +527,23 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 .content(mGson.toJson("")).mediaType(Common.JSON).tag(Common.NET_LIVE_USERLOG_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
                 .execute(new MyStringCallback(mContext, this, false));
-        handlerTime.postDelayed(runnableTime, 0); //3s后执行
+
+        getLiveDetail();
     }
 
-    private void payListenMoney() {
-        //扣金币接口，每分钟调用一下
-        LogUtils.e("Money:"+(Common.Url_Live_Money + roomId + "/" + listenTime));
-        OkHttpUtils.postString().url(Common.Url_Live_Money + roomId + "/" + listenTime)
-                .id(Common.NET_LIVE_MONEY_ID).content(mGson.toJson(""))
-                .mediaType(Common.JSON).tag(Common.NET_LIVE_MONEY_ID)
-                .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
-                .execute(new MyStringCallback(mContext, this, false));
-        if (listenTime!=1) {
-            listenTime=1;
-        }
+    private void getLiveDetail() {
+        OkHttpUtils.get().url(Common.Url_Live_Detail_Post + roomId).id(Common.NET_LIVE_DETAIL_ID)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .tag(Common.NET_LIVE_DETAIL_ID).build().execute(new MyStringCallback(mContext, this, true));
     }
-
-    private long TIME = 60000L;
-    Handler handlerTime = new Handler();
-    Runnable runnableTime = new Runnable() {
-
-        @Override
-        public void run() {
-            payListenMoney();
-            handlerTime.postDelayed(runnableTime, TIME); //3s后执行
-        }
-    };
 
     @Override
     public void onError(Call call, Exception e, int code, int id) {
         if (id == Common.NET_LIVE_ENTER_ID) {
-
         } else if (id == Common.NET_LIVE_USERLOG_ID) {
-
         } else if (id == Common.NET_LIVE_MONEY_ID) {
-
+        } else if (id == Common.NET_GET_LIVE_LIKE_ID) {
+            startGetOnLine();
         } else {
             super.onError(call, e, code, id);
         }
@@ -717,54 +554,106 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         super.onStringResponse(data, response, id);
         if (id == Common.NET_LIVE_ENTER_ID) {
             mListenLiveRoomInfoModel = mGson.fromJson(data, ListenLiveRoomInfoModel.class);
-
-            setLiveNum(mListenLiveRoomInfoModel.getBody().getMember_count() + "");
         } else if (id == Common.NET_LIVE_USERLOG_ID) {
 
-        } else if (id == Common.NET_LIVE_MONEY_ID) {
-//            LivePayMoneyModel mLivePayMoneyModel = mGson.fromJson(data, LivePayMoneyModel.class);
-//            if (mLivePayMoneyModel.getBody()==0) {
-//                PromptDialog.Builder builder = new PromptDialog.Builder(this);
-//                builder.setMessage("");
-//                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                builder.show();
-//            }
         } else if (id == Common.NET_LIVE_NUM_ID) {
-            MyLiveInfoModel mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
-            setLiveNum(mMyLiveInfoModel.getBody().getMember_count()+"");
+            LiveDetailModel temp = mGson.fromJson(data, LiveDetailModel.class);
+            onLineAdapter.clearData();
+            if (temp.getBody().getUserList().size() > 0) {
+                onLineAdapter.addData(temp.getBody().getUserList());
+            }
         } else if (id == Common.NET_GET_USERINDEX) {
             GetUserIndexModel mGetMyUserIndexModel = mGson.fromJson(data, GetUserIndexModel.class);
-            if (mGetMyUserIndexModel.getBody().getIsBlack()==1) {
+            if (mGetMyUserIndexModel.getBody().getIsBlack() == 1) {
                 mIsBalck = true;
             } else {
                 mIsBalck = false;
             }
             boolean isAnchor = false;
-//            if (mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUser_id()
-//                    ==mBodyBean.getUser_id()) {
-//                isAnchor = true;
-//            }
             new ShowHeadPopWindow(ListenLiveActivity.this, getmWidth(), isAnchor
                     , mGetMyUserIndexModel.getBody().getUserFelation()
                     , mGetMyUserIndexModel.getBody().getUserDetailBean(), this);
         } else if (id == Common.NET_ADD_FOLLOW_ID) {
-
+            if (userId == tempId) {
+                listenliveAntionTv.setText("已关注");
+            }
         } else if (id == Common.NET_CANCEL_BLACKLIST_ID) {
+            if (userId == tempId) {
+                listenliveAntionTv.setText("+ 关注");
+            }
             mIsBalck = false;
         } else if (id == Common.NET_ADD_BLACKLIST) {
             mIsBalck = true;
         } else if (id == Common.NET_CANCEL_MYCONCERNLIST_ID) {
 
-        }
-    }
+        } else if (id == Common.NET_LIVE_DETAIL_ID) {
+            mLiveDetailModel = mGson.fromJson(data, LiveDetailModel.class);
 
-    private void setLiveNum(String s) {
-        listenliveNumTv.setText(s);
+            listenliveKissnumTv.setText(" " + mLiveDetailModel.getBody().getLike_num());
+            listenliveMoneyTv.setText(" " + mLiveDetailModel.getBody().getGold_num());
+
+            onLineAdapter.clearData();
+            if (mLiveDetailModel.getBody().getUserList().size() > 0) {
+                onLineAdapter.addData(mLiveDetailModel.getBody().getUserList());
+            }
+            mHanlder.removeMessages(0);
+            startGetOnLine();
+        } else if (id == Common.NET_GET_FOLLOWME_ID) {
+            GetFollowMeModel mGetFollowMeModel = mGson.fromJson(data, GetFollowMeModel.class);
+
+            if (mGetFollowMeModel.getBody().size() == 0) {
+                showToast("还没有好友关注您！");
+                return;
+            }
+
+            View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_invitation_view, null);
+            TextView dialogClose = (TextView) view.findViewById(R.id.dialog_invit_close_tx);
+            ListView dialogListview = (ListView) view.findViewById(R.id.dialog_invit_listview);
+
+            final InvitationAdapter temp = new InvitationAdapter(mContext, mGetFollowMeModel.getBody());
+            dialogListview.setAdapter(temp);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.dialog_center);
+            builder.setCancelable(false).setView(view);
+            final AlertDialog dialog = builder.create();
+            WindowManager.LayoutParams p = dialog.getWindow().getAttributes();  //获取对话框当前的参数值
+            p.width = (int) (getmWidth() * 0.75);    //宽度设置为屏幕的0.75
+            p.height = (int) (getmHight() * 0.6);    //高度设置为屏幕的0.6
+            dialog.show();
+
+            dialogListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Map<String, Object> p = new HashMap<>();
+                    p.put("follow_user_id", temp.getItem(position).getUser_id());
+                    p.put("liveroom_id", roomId);
+                    OkHttpUtils.postString().url(Common.Url_Invite_Friends_Post).content(mGson.toJson(p))
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).mediaType(Common.JSON)
+                            .tag(Common.NET_INVITE_FRIENDS_ID).id(Common.NET_INVITE_FRIENDS_ID).build()
+                            .execute(new MyStringCallback(mContext, ListenLiveActivity.this, false));
+                }
+            });
+            dialogClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (id == Common.NET_INVITE_FRIENDS_ID) {
+            showToast("邀请好友成功！");
+        } else if (id == Common.NET_GET_LIVE_LIKE_ID) {
+            startGetOnLine();
+
+            GetLiveDetailLikeModel mGetLiveDetailLikeModel = mGson.fromJson(data, GetLiveDetailLikeModel.class);
+
+            int LikeNum = Integer.valueOf(listenliveKissnumTv.getText().toString().trim());
+            int tempLikeNum = Integer.valueOf(mGetLiveDetailLikeModel.getBody().getLike_num());
+
+            addFlowrs(tempLikeNum - LikeNum);
+
+            listenliveKissnumTv.setText(" " + mGetLiveDetailLikeModel.getBody().getLike_num());
+            listenliveMoneyTv.setText(" " + mGetLiveDetailLikeModel.getBody().getGold_num());
+        }
     }
 
     @Override
@@ -778,13 +667,16 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_ENTER_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_USERLOG_ID);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_MONEY_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_NUM_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERINDEX);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_FOLLOW_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_BLACKLIST_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BLACKLIST);
         OkHttpUtils.getInstance().cancelTag(Common.NET_CANCEL_MYCONCERNLIST_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_DETAIL_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_FOLLOWME_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_INVITE_FRIENDS_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_LIVE_LIKE_ID);
     }
 
     @Override
@@ -809,8 +701,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                handlerTime.removeCallbacks(runnableTime);
-                String str = "【"+mMyUserInfo.getNick_name()+"】离开了电台";
+                String str = "【" + mMyUserInfo.getNick_name() + "】离开了电台";
                 ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
                         String.valueOf(chatRoomId), str);
                 seedMessge(message, ChatRoomTypeInter.ChatRoomTypeSystemCMD, "", str, "0");
@@ -822,67 +713,55 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         builder.show();
     }
 
-    @OnClick({R.id.listenlive_bg_iv, R.id.listenlive_gift_iv, R.id.p2pchat_record_iv, R.id.blogdetail_addemol_iv
-            , R.id.p2pchat_pic_iv, R.id.p2pchat_send_bt, R.id.listenlive_back_iv, R.id.listenlive_head_iv})
+    @OnClick({R.id.listenlive_invitation_iv, R.id.listenlive_flowrs_iv, R.id.listenlive_bg_iv
+            , R.id.listenlive_gift_iv, R.id.blogdetail_addemol_iv, R.id.p2pchat_pic_iv
+            , R.id.p2pchat_send_bt, R.id.listenlive_back_iv, R.id.listenlive_head_iv, R.id.listenlive_antion_tv})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.listenlive_head_iv:
-                OkHttpUtils.get().url(Common.Url_Get_UserIndex + "/" + mBodyBean.getUser_id())
+            case R.id.listenlive_antion_tv:
+                if (listenliveAntionTv.getText().toString().contains("已")) {
+                    tempId = userId;
+                    OkHttpUtils.postString()
+                            .url(Common.Url_Cancel_BlackList + userId)
+                            .tag(Common.NET_CANCEL_BLACKLIST_ID).id(Common.NET_CANCEL_BLACKLIST_ID)
+                            .content(mGson.toJson(""))
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .build().execute(new MyStringCallback(mContext, ListenLiveActivity.this, true));
+                } else {
+                    onAddFriend(userId);
+                }
+                break;
+            case R.id.listenlive_invitation_iv://邀请好友
+                OkHttpUtils.get().url(Common.Url_Get_FollowMe_Post).id(Common.NET_GET_FOLLOWME_ID)
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .tag(Common.NET_GET_USERINDEX).id(Common.NET_GET_USERINDEX).build()
+                        .tag(Common.NET_GET_FOLLOWME_ID).build()
                         .execute(new MyStringCallback(mContext, this, true));
                 break;
+            case R.id.listenlive_flowrs_iv:
+                waitUpNum += 1;
+                int LikeNum = Integer.valueOf(listenliveKissnumTv.getText().toString().trim());
+                listenliveKissnumTv.setText(" " + (LikeNum + 1));
+                periscope.addHeart();
+                break;
+            case R.id.listenlive_head_iv:
+                checkOtherHead(mBodyBean.getUser_id());
+                break;
             case R.id.listenlive_bg_iv:
-                if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
-                    return;
-                }
                 if (isIMOpen()) {
                     cancelIM(view);
                 }
                 blogdetailAddemolIv.setImageResource(R.mipmap.chat_face_ic);
-                p2pchatRecordIv.setImageResource(R.mipmap.chat_record_ic);
                 blogdetailAddcommentEt.setVisibility(View.VISIBLE);
                 llFacechoose.setVisibility(View.GONE);
-                p2pchatRecordBt.setVisibility(View.GONE);
                 break;
             case R.id.listenlive_back_iv:
                 showWarnExit();
                 break;
             case R.id.listenlive_gift_iv:
-                if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
-                    return;
-                }
                 startActivityForResult(SelectGiftActivity.buildIntent(mContext, String.valueOf(mMyUserInfo.getUser_id()), true, 0)
                         , Common.toSelectGift);
                 break;
-            case R.id.p2pchat_record_iv:
-                if (layoutPlayAudio.getVisibility() == View.VISIBLE) {
-                    return;
-                }
-                if (llFacechoose.getVisibility() == View.VISIBLE) {
-                    llFacechoose.setVisibility(View.GONE);
-                }
-                if (blogdetailAddcommentEt.getVisibility() == View.VISIBLE) {
-                    if (isIMOpen()) {
-                        cancelIM(view);
-                    }
-                    blogdetailAddcommentEt.setVisibility(View.GONE);
-                    p2pchatRecordBt.setVisibility(View.VISIBLE);
-                    p2pchatRecordIv.setImageResource(R.mipmap.chat_key_ic);
-                } else {
-                    blogdetailAddcommentEt.setVisibility(View.VISIBLE);
-                    p2pchatRecordBt.setVisibility(View.GONE);
-                    p2pchatRecordIv.setImageResource(R.mipmap.chat_record_ic);
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(0, InputMethodManager.RESULT_SHOWN);
-                }
-                blogdetailAddemolIv.setImageResource(R.mipmap.chat_face_ic);
-                handler.postDelayed(runnable, 200);
-                break;
             case R.id.blogdetail_addemol_iv:
-                if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
-                    return;
-                }
                 if (llFacechoose.getVisibility() == View.GONE) {
                     if (isIMOpen()) {
                         cancelIM(view);
@@ -896,26 +775,18 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                     imm.toggleSoftInput(0, InputMethodManager.RESULT_SHOWN);
                 }
                 blogdetailAddcommentEt.setVisibility(View.VISIBLE);
-                p2pchatRecordBt.setVisibility(View.GONE);
-                p2pchatRecordIv.setImageResource(R.mipmap.chat_record_ic);
                 handler.postDelayed(runnable, 200);
                 break;
             case R.id.p2pchat_pic_iv:
-                if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
-                    return;
-                }
                 if (!isCanSeed()) {
-                    showWraning("主播请你"+diTime+"后再发言");
+                    showWraning("主播请你" + diTime + "后再发言");
                     return;
                 }
                 selectImg();
                 break;
             case R.id.p2pchat_send_bt:
-                if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
-                    return;
-                }
                 if (!isCanSeed()) {
-                    showWraning("主播请你"+diTime+"后再发言");
+                    showWraning("主播请你" + diTime + "后再发言");
                     return;
                 }
                 if (blogdetailAddcommentEt.getText().toString().trim().isEmpty()) {
@@ -945,6 +816,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     private final int CHOOSE_BIG_PICTURE = 444;
     private final int TAKE_BIG_PICTURE = 555;
     private String path = "";
+
     private void selectImg() {
         BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
         builder.setItems(new String[]{"拍照", "相册选取"}, new DialogInterface.OnClickListener() {
@@ -977,45 +849,40 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     private Animation animation = null;
-    private void GiftAnimation(String url) {
-        if (animation==null) {
-            animation = AnimationUtils.loadAnimation(mContext, R.anim.gift_anim_right);
+
+    private void GiftAnimation(String icon, String nick, String giftName, String url) {
+
+        listenliveGiftRl.clearAnimation();
+        listenliveGiftRl.setVisibility(View.GONE);
+
+        listenliveGiftHeadIv.setImageURI(Common.ImageUrl+icon);
+        listenliveGiftNameTv.setText(nick);
+
+        listenliveGiftContentTv.setText(giftName);
+
+        if (animation == null) {
+            animation = AnimationUtils.loadAnimation(mContext, R.anim.gift_anim);
         }
         animation.setFillAfter(true);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                listenliveDisplayGiftIv.setVisibility(View.VISIBLE);
+                listenliveGiftRl.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                listenliveDisplayGiftIv.clearAnimation();
-                listenliveDisplayGiftIv.setVisibility(View.GONE);
+//                myliveroomGiftRl.clearAnimation();
+//                myliveroomGiftRl.setVisibility(View.GONE);
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
+
             }
         });
-        ImageLoader.getInstance().displayImage(url, listenliveDisplayGiftIv, new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String s, View view) {
-            }
-
-            @Override
-            public void onLoadingFailed(String s, View view, FailReason failReason) {
-            }
-
-            @Override
-            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                listenliveDisplayGiftIv.startAnimation(animation);
-            }
-
-            @Override
-            public void onLoadingCancelled(String s, View view) {
-            }
-        });
+        listenliveGiftInnerIv.setImageURI(url);
+        listenliveGiftRl.startAnimation(animation);
     }
 
     @Override
@@ -1026,9 +893,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         }
         if (requestCode == Common.toSelectGift) {
             giftId = String.valueOf(data.getIntExtra("giftId", 0));
-            String str = "【"+mMyUserInfo.getNick_name()+"】赠送主播礼物："+data.getStringExtra("name");
-            String url = Common.ImageUrl+data.getStringExtra("url");
-            GiftAnimation(url);
+            String str = "【" + mMyUserInfo.getNick_name() + "】赠送主播礼物：" + data.getStringExtra("name");
+            String url = Common.ImageUrl + data.getStringExtra("url");
+            GiftAnimation(mMyUserInfo.getIcon(), mMyUserInfo.getNick_name(), data.getStringExtra("name"), url);
             ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
                     String.valueOf(chatRoomId), str);
             seedMessge(message, ChatRoomTypeInter.ChatRoomTypeText, "", str, giftId);
@@ -1046,7 +913,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 if (imageUri != null) {
                     try {
                         File temp = BitmapTools.revitionImage(mContext, imageUri);
-                        if (temp==null) {
+                        if (temp == null) {
                             showToast("发送失败");
                             return;
                         }
@@ -1071,27 +938,27 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         mUserMap.put("userId", mMyUserInfo.getUser_id());
         mUserMap.put("userLevel", mMyUserInfo.getUserLevel());
         Map<String, Object> mMap = new HashMap<>();
-        mMap.put("isAnchorImage",0);
-        mMap.put("user",mUserMap);
-        mMap.put("sendTime",me.getTime());
-        if (type==4) {
-            mMap.put("cmdType",1);
+        mMap.put("isAnchorImage", 0);
+        mMap.put("user", mUserMap);
+        mMap.put("sendTime", me.getTime());
+        if (type == 4) {
+            mMap.put("cmdType", 1);
         }
-        if (Integer.parseInt(giftId)>0) {
-            mMap.put("type",3);
+        if (Integer.parseInt(giftId) > 0) {
+            mMap.put("type", 3);
         } else {
-            mMap.put("type",type);
+            mMap.put("type", type);
         }
-        mMap.put("content",text);
-        mMap.put("id",chatRoomId);
-        mMap.put("giftId",giftId);
+        mMap.put("content", text);
+        mMap.put("id", chatRoomId);
+        mMap.put("giftId", giftId);
 
         // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
         ImMessage mImMessage = null;
         switch (type) {
             case ChatRoomTypeInter.ChatRoomTypeText:
                 me.setContent(mGson.toJson(mMap));
-                if (Integer.parseInt(giftId)>0) {
+                if (Integer.parseInt(giftId) > 0) {
                     mImMessage = new ImMessage(null, me.getUuid()
                             , String.valueOf(mMyUserInfo.getUser_id())
                             , me.getSessionId()
@@ -1135,9 +1002,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 break;
             case ChatRoomTypeInter.ChatRoomTypeAudio:
                 me.setRemoteExtension(mMap);
-                String urlAudio = ((AudioAttachment)me.getAttachment()).getUrl();
-                String pathAudio = ((AudioAttachment)me.getAttachment()).getPathForSave();
-                long Duration = ((AudioAttachment)me.getAttachment()).getDuration();
+                String urlAudio = ((AudioAttachment) me.getAttachment()).getUrl();
+                String pathAudio = ((AudioAttachment) me.getAttachment()).getPathForSave();
+                long Duration = ((AudioAttachment) me.getAttachment()).getDuration();
                 mImMessage = new ImMessage(null, me.getUuid()
                         , String.valueOf(mMyUserInfo.getUser_id())
                         , me.getSessionId()
@@ -1148,7 +1015,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                         , mMyUserInfo.getVerify_status()
                         , true, me.getTime()
                         , ChatRoomTypeInter.ChatRoomTypeAudio
-                        , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration/1000, 0, false, 1);
+                        , "[语音]", "", "", "", "", "", "", pathAudio, urlAudio, Duration / 1000, 0, false, 1);
                 mAdapter.addImMessageDao(mImMessage);
                 break;
             default:
@@ -1164,27 +1031,15 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         switch (v.getId()) {
             case R.id.item_p2pchat_noti_tx:
             case R.id.item_p2pchat_text_headleft_iv:
-                if (Long.parseLong(mAdapter.getItem(position).getUserId())==MyBaseApplication.getApplication()
-                        .mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUser_id()) {
-                    return;
-                }
-                OkHttpUtils.get().url(Common.Url_Get_UserIndex + "/" + mAdapter.getItem(position).getUserId())
-                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .tag(Common.NET_GET_USERINDEX).id(Common.NET_GET_USERINDEX).build()
-                        .execute(new MyStringCallback(mContext, this, true));
+                checkOtherHead(Long.parseLong(mAdapter.getItem(position).getUserId()));
                 break;
             case R.id.item_p2pchat_root_Rl:
-                if (layoutPlayAudio.getVisibility()==View.VISIBLE) {
-                    return;
-                }
                 if (isIMOpen()) {
                     cancelIM(v);
                 }
                 blogdetailAddemolIv.setImageResource(R.mipmap.chat_face_ic);
-                p2pchatRecordIv.setImageResource(R.mipmap.chat_record_ic);
                 blogdetailAddcommentEt.setVisibility(View.VISIBLE);
                 llFacechoose.setVisibility(View.GONE);
-                p2pchatRecordBt.setVisibility(View.GONE);
                 break;
             case R.id.item_p2pchat_image_left_iv:
             case R.id.item_p2pchat_image_right_iv:
@@ -1276,60 +1131,15 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     @Override
-    public void onRecordReady() {
-    }
-
-    @Override
-    public void onRecordStart(File file, RecordType recordType) {
-        mFile = file;
-    }
-
-    @Override
-    public void onRecordSuccess(File file, long l, RecordType recordType) {
-        ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomAudioMessage(
-                String.valueOf(chatRoomId), file, l);
-        seedMessge(message, ChatRoomTypeInter.ChatRoomTypeAudio, "", "", "0");
-    }
-
-    @Override
-    public void onRecordFail() {
-    }
-
-    @Override
-    public void onRecordCancel() {
-    }
-
-    @Override
-    public void onRecordReachedMaxTime(int i) {
-        Message message = new Message();
-        message.what = 1;
-        hand.sendMessage(message);
-        ChatRoomMessage temp = ChatRoomMessageBuilder.createChatRoomAudioMessage(
-                String.valueOf(chatRoomId), mFile, 60000);
-        seedMessge(temp, ChatRoomTypeInter.ChatRoomTypeAudio, "", "", "0");
-    }
-
-    Handler hand = new Handler(){
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    touched = false;
-                    onEndAudioRecord(false);
-                    isToLimit = true;
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-
-    };
-
-    @Override
     public void onEditClick() {
         blogdetailAddemolIv.setImageResource(R.mipmap.chat_face_ic);
     }
 
+    private long tempId;
+
     @Override
     public void onAddFriend(long userId) {
+        tempId = userId;
         Map<String, Long> p = new HashMap<>();
         p.put("follow_user_id", userId);
         OkHttpUtils.postString().url(Common.Url_Add_Follow).content(mGson.toJson(p))
@@ -1403,15 +1213,87 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     }
 
     private String diTime = "15分钟";
+
     private boolean isCanSeed() {
         boolean iscan = false;
         long startTime = PreferenceUtil.getLongPreferences(mContext, PreferenceUtil.PARM_GAG_TIME);
         long endTime = System.currentTimeMillis();
         diTime = MyTools.getTwoTime15Count(startTime, endTime);
-        LogUtils.e("MyTools.getGapCountM(startTime, endTime):"+MyTools.getGapCountM(startTime, endTime));
-        if (startTime==0 || MyTools.getGapCountM(startTime, endTime)>15) {
+        LogUtils.e("MyTools.getGapCountM(startTime, endTime):" + MyTools.getGapCountM(startTime, endTime));
+        if (startTime == 0 || MyTools.getGapCountM(startTime, endTime) > 15) {
             iscan = true;
         }
         return iscan;
+    }
+
+    private Timer mTimer = new Timer();
+    private int n = 0;
+
+    private void addFlowrs(final int disNum) {
+        if (disNum == 0)
+            return;
+        int sleepTime = disTime / disNum;
+        if (sleepTime > 1000) {
+            sleepTime = 1000;
+        } else if (sleepTime < 200) {
+            sleepTime = 200;
+        }
+        n = 0;
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (n >= disNum) {
+                    mTimer.cancel();
+                    return;
+                }
+                n++;
+                Message message = new Message();
+                message.what = 1;
+                mHanlder.sendMessage(message);
+            }
+        }, 0, sleepTime);
+    }
+
+    int disTime = 30000;
+
+    private void startGetOnLine() {
+        Message message = new Message();
+        message.what = 0;
+        mHanlder.sendMessageDelayed(message, disTime);
+    }
+
+    Handler mHanlder = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    OkHttpUtils.postString().url(Common.Url_Get_Like_Post + userId + "/" + waitUpNum).content("{}")
+                            .id(Common.NET_GET_LIVE_LIKE_ID).tag(Common.NET_GET_LIVE_LIKE_ID)
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
+                            .execute(new MyStringCallback(mContext, ListenLiveActivity.this, false));
+                    waitUpNum = 0;
+                    break;
+                case 1:
+                    periscope.addHeart();
+                    break;
+            }
+        }
+    };
+
+    @Override
+    public void onItemClick(View view, int position) {
+        checkOtherHead(onLineAdapter.getItemData(position).getUser_id());
+    }
+
+    private void checkOtherHead(long UserId) {
+        if (UserId == MyBaseApplication.getApplication()
+                .mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUser_id()) {
+            return;
+        }
+        OkHttpUtils.get().url(Common.Url_Get_UserIndex + "/" + UserId)
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .tag(Common.NET_GET_USERINDEX).id(Common.NET_GET_USERINDEX).build()
+                .execute(new MyStringCallback(mContext, this, true));
     }
 }
