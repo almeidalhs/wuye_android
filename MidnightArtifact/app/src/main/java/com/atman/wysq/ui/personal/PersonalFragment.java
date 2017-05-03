@@ -408,8 +408,8 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
 
     @Override
     public void onStringResponse(String data, Response response, int id) {
-        super.onStringResponse(data, response, id);
         if (id == Common.NET_GET_USERINDEX) {
+            super.onStringResponse(data, response, id);
             mGetUserIndexModel = mGson.fromJson(data, GetMyUserIndexModel.class);
             MyBaseApplication.mGetMyUserIndexModel = mGetUserIndexModel;
             UpDateUI();
@@ -452,14 +452,17 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
                 }
             }
         } else if (id == Common.NET_MODIFY_HEAD) {
+            super.onStringResponse(data, response, id);
             isHead = false;
             MyBaseApplication.getApplication().setFilterLock(false);
             showToast("头像修改成功");
             MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().setIcon(mHeadImgUrl);
             personalHeadIv.setImageURI(Common.ImageUrl + mHeadImgUrl);
         } else if (id == Common.NET_VERIFY) {
-            showToast("提交成功，请等待审核！");
+            super.onStringResponse(data, response, id);
+            showWraning("提交成功，请等待审核！");
         } else if (id == Common.NET_GET_RASK) {
+            super.onStringResponse(data, response, id);
             if (mGson==null) {
                 mGson = new Gson();
                 return;
@@ -475,6 +478,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
                 }
             }
         } else if (id == Common.NET_LOGIN_ID) {
+            super.onStringResponse(data, response, id);
             PreferenceUtil.saveBoolPreference(getActivity(), PreferenceUtil.PARM_ISOUT, false);
         }
     }
@@ -719,8 +723,17 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
                 startActivity(new Intent(getActivity(), MyOrderListActivity.class));
                 break;
             case R.id.personal_gendercertification_tv:
-                MyBaseApplication.getApplication().setFilterLock(true);
-                path = UiHelper.photoBefor(getActivity(), path, PICK_FROM_CAMERA);
+                PromptDialog.Builder builder = new PromptDialog.Builder(getActivity());
+                builder.setMessage("亲，请一定要拍摄自己的真实照片上传哦，否则有可能审核不通过！");
+                builder.setNegativeButton("好的", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        MyBaseApplication.getApplication().setFilterLock(true);
+                        path = UiHelper.photoBefor(getActivity(), path, PICK_FROM_CAMERA);
+                    }
+                });
+                builder.show();
                 break;
             case R.id.personal_setting_iv:
                 getActivity().startActivityForResult(new Intent(getActivity()
@@ -737,7 +750,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
                 }
                 break;
             case R.id.personal_service_ll:
-                showWran(getResources().getString(R.string.personal_service_phone_str));
+                showToPhone(getResources().getString(R.string.personal_service_phone_str));
                 break;
             case R.id.personal_task_ll:
                 getActivity().startActivity(new Intent(getActivity(), TaskListActivity.class));
@@ -750,7 +763,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         }
     }
 
-    public void showWran(final String str) {
+    public void showToPhone(final String str) {
         PromptDialog.Builder builder = new PromptDialog.Builder(getActivity());
         builder.setMessage("客服电话："+str);
         builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {

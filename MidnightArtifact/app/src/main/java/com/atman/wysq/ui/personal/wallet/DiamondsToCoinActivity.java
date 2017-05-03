@@ -64,6 +64,12 @@ public class DiamondsToCoinActivity extends MyBaseActivity implements EditCheckB
     public void initWidget(View... v) {
         super.initWidget(v);
         setBarTitleTx("钻石兑换金币");
+        setBarRightTx("明细").setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(RecordDetailActivity.buildIntent(mContext, 0));
+            }
+        });
         diamondNum = MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getConvert_coin();
         toCoinNum = countToCoin(diamondNum);
 

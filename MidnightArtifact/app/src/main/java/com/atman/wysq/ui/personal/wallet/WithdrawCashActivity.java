@@ -18,6 +18,7 @@ import com.atman.wysq.widget.PayPassWordDialog;
 import com.base.baselibs.iimp.EditCheckBack;
 import com.base.baselibs.iimp.MyTextWatcherTwo;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.MD5Util;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.tbl.okhttputils.OkHttpUtils;
@@ -76,6 +77,13 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
         super.initWidget(v);
         setBarTitleTx("钻石提现");
 
+        setBarRightTx("明细").setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(RecordDetailActivity.buildIntent(mContext, 1));
+            }
+        });
+
         withdrawWranTv.setText("提示：单次提现最低金额" + MyBaseApplication.KDiamondCashStart
                 + "元，不满200元将收取3元手续费，提现转账需1-3个工作日。");
 
@@ -86,18 +94,27 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
     }
 
     private void initThisView() {
-        setConsumeText();
 
         //钻石转换小于50元的不让输入
+        LogUtils.e(">>>countToDiamonds(Long.parseLong(MyBaseApplication.KDiamondCashStart)):"+countToDiamonds(Long.parseLong(MyBaseApplication.KDiamondCashStart)));
+        LogUtils.e(">>>ownDiamonds:"+ownDiamonds);
+        LogUtils.e(">>>MyBaseApplication.KDiamondCashStart:"+MyBaseApplication.KDiamondCashStart);
         if (countToDiamonds(Long.parseLong(MyBaseApplication.KDiamondCashStart)) > ownDiamonds) {
             withdrawNumEt.setInputType(InputType.TYPE_NULL);
             withdrawSumbitBt.setClickable(false);
             withdrawSumbitBt.setEnabled(false);
+            withdrawConsumeTv.setText("您的钻石余额不足，单次最低提现"+MyBaseApplication.KDiamondCashStart
+                    +"元（等于"+countToDiamonds(Long.parseLong(MyBaseApplication.KDiamondCashStart))+"钻石）");
+            withdrawConsumeTv.setTextColor(getResources().getColor(R.color.color_red));
+            LogUtils.e(">>>1111");
         } else {
             withdrawNumEt.addTextChangedListener(new MyTextWatcherTwo(this));
             withdrawNumEt.setInputType(InputType.TYPE_CLASS_NUMBER);
             withdrawSumbitBt.setClickable(true);
             withdrawSumbitBt.setEnabled(true);
+            withdrawConsumeTv.setTextColor(getResources().getColor(R.color.color_787878));
+            setConsumeText();
+            LogUtils.e(">>>2222");
         }
     }
 
@@ -142,17 +159,18 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
         super.onStringResponse(data, response, id);
         if (id == Common.NET_GET_WITHDRAEALS_LIST_ID) {
             mGetWithdrawalsListModel = mGson.fromJson(data, GetWithdrawalsListModel.class);
-            if (mGetWithdrawalsListModel.getBody().size() > 0) {
+            if (mGetWithdrawalsListModel.getBody().size() > 0
+                    && mGetWithdrawalsListModel.getBody().get(0).getAccount()!=null
+                    && !mGetWithdrawalsListModel.getBody().get(0).getAccount().isEmpty()) {
                 walletId = mGetWithdrawalsListModel.getBody().get(0).getWallet_channel_id();
                 withdrawAccountMonifyTv.setText("去修改");
                 withdrawAccountTv.setText("提现到账号：" + mGetWithdrawalsListModel.getBody().get(0).getAccount());
-                initThisView();
             } else {
                 withdrawNumEt.setInputType(InputType.TYPE_NULL);
                 withdrawSumbitBt.setClickable(false);
                 withdrawSumbitBt.setEnabled(false);
-                setConsumeText();
             }
+            initThisView();
         } else if (id == Common.NET_CASH_ID) {
             showWraning("您的提现申请已提交，请耐心等候！");
             ownDiamonds = MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean()
@@ -161,6 +179,7 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
                     .getUserExt().setConvert_coin((int) (ownDiamonds - consumeDiamonds));
             withdrawDismondsNumTv.setText("" + (ownDiamonds - consumeDiamonds));
             withdrawNumEt.setText("");
+            ownDiamonds = ownDiamonds - consumeDiamonds;
             initThisView();
         }
     }
@@ -186,6 +205,10 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
             case R.id.withdraw_sumbit_bt:
                 if (isnull) {
                     showToast("请输入提现金额");
+                    return;
+                }
+                if (inputMoney==0 || inputMoney<Integer.valueOf(MyBaseApplication.KDiamondCashStart)) {
+                    showToast("提现金额最少"+MyBaseApplication.KDiamondCashStart);
                     return;
                 }
                 new PayPassWordDialog(mContext, this).show();
@@ -217,6 +240,7 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
         map.put("diamond", consumeDiamonds);
         map.put("wallet_id", walletId);
         map.put("wallet_ps", MD5Util.getMD5(pw));
+        LogUtils.e(">>>>mGson.toJson(map):"+mGson.toJson(map));
         OkHttpUtils.postString().url(Common.Url_Cash_PW).content(mGson.toJson(map))
                 .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_CASH_ID).id(Common.NET_CASH_ID).build()

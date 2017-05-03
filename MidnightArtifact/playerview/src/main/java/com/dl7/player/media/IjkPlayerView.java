@@ -571,6 +571,8 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
             mIsShowBar = false;
             // 放这边装载弹幕，不然会莫名其妙出现多切几次到首页会弹幕自动播放问题，这里处理下
             _loadDanmaku();
+        } else {
+            _resumeDanmaku();
         }
         // 视频播放时开启屏幕常亮
         mAttachActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -914,7 +916,7 @@ public class IjkPlayerView extends FrameLayout implements View.OnClickListener {
     /**
      * 全屏切换，点击全屏按钮
      */
-    private void _toggleFullScreen() {
+    public void _toggleFullScreen() {
         if (WindowUtils.getScreenOrientation(mAttachActivity) == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             mAttachActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } else {

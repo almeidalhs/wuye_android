@@ -11,14 +11,19 @@ import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.MD5Util;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.util.TimeCount;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.tbl.okhttputils.OkHttpUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 import okhttp3.Response;
 
 /**
@@ -60,7 +65,8 @@ public class SettingPayPWForCodeActivity extends MyBaseActivity {
         super.initWidget(v);
         setBarTitleTx("设置支付密码");
 
-
+        settingPaypwCodePhoneEt.setText(MyBaseApplication.getApplication().mGetMyUserIndexModel
+                .getBody().getUserDetailBean().getUserExt().getMobile());
     }
 
     @Override
@@ -74,6 +80,19 @@ public class SettingPayPWForCodeActivity extends MyBaseActivity {
         if (id == Common.NET_SEED_PAY_MEESAGE_ID) {
             showToast("验证码已发送，请注意查收！");
             timeCount.start();
+        } else if (id == Common.NET_CHECK_CODE_ID) {
+            startActivity(SettingPayPWActivity.buildIntent(mContext, mPhoneNumber, codeStr, typeID));
+            finish();
+        }
+    }
+
+    @Override
+    public void onError(Call call, Exception e, int code, int id) {
+        if (id == Common.NET_CHECK_CODE_ID) {
+            cancelLoading();
+            showWraning(e.toString().replace("java.io.IOException: ",""));
+        } else {
+            super.onError(call, e, code, id);
         }
     }
 
@@ -81,15 +100,16 @@ public class SettingPayPWForCodeActivity extends MyBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
 
+        OkHttpUtils.getInstance().cancelTag(Common.NET_CHECK_CODE_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_SEED_PAY_MEESAGE_ID);
     }
 
     @OnClick({R.id.setting_paypw_code_tx, R.id.setting_paypw_code_bt
             , R.id.setting_paypw_code_default_phone_tv})
     public void onClick(View view) {
+        mPhoneNumber = settingPaypwCodePhoneEt.getText().toString().trim();
         switch (view.getId()) {
             case R.id.setting_paypw_code_tx:
-                mPhoneNumber = settingPaypwCodePhoneEt.getText().toString().trim();
                 if (mPhoneNumber.isEmpty()) {
                     showToast("请输入手机号");
                     return;
@@ -111,8 +131,13 @@ public class SettingPayPWForCodeActivity extends MyBaseActivity {
                     showToast("请输入正确的验证码");
                     return;
                 }
-                startActivity(SettingPayPWActivity.buildIntent(mContext, mPhoneNumber, codeStr, typeID));
-                finish();
+                Map<String, Object> map = new HashMap<>();
+                map.put("mobile", mPhoneNumber);
+                map.put("valid_code", codeStr);
+                OkHttpUtils.postString().url(Common.Url_Check_Code).content(mGson.toJson(map))
+                        .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .tag(Common.NET_CHECK_CODE_ID).id(Common.NET_CHECK_CODE_ID).build()
+                        .execute(new MyStringCallback(mContext, this, true));
                 break;
             case R.id.setting_paypw_code_default_phone_tv:
                 settingPaypwCodePhoneEt.setText(MyBaseApplication.mGetMyUserIndexModel.getBody()

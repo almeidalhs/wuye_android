@@ -78,7 +78,6 @@ public class ModifyPayPWActivity extends MyBaseActivity {
         switch (view.getId()) {
             case R.id.modify_paypw_forgot_tv:
                 startActivity(SettingPayPWForCodeActivity.buildIntent(mContext, 2));
-                finish();
                 break;
             case R.id.setting_paypw_ok_bt:
                 onePW = modifyPaypwOldEt.getText().toString().trim();

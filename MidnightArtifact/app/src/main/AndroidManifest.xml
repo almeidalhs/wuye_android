@@ -45,7 +45,7 @@
         <activity android:name=".ui.personal.wallet.SettingPayPWActivity"/>
         <activity android:name=".ui.personal.wallet.SettingPayPWForCodeActivity"/>
         <activity android:name=".ui.personal.wallet.ModifyPayPWActivity"/>
-        <activity android:name=".ui.personal.wallet.MyDiamondsActivity"/>
+        <activity android:name=".ui.personal.wallet.RecordDetailActivity"/>
         <activity android:name=".ui.personal.wallet.DiamondsToCoinActivity"/>
         <activity android:name=".ui.personal.wallet.WithdrawCashActivity"/>
         <activity android:name=".ui.personal.PersonalAlbumActivity"/>

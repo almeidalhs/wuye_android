@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -66,6 +67,7 @@ import com.dl7.player.utils.CenteredImageSpan;
 import com.dl7.player.utils.CircleImageDrawable;
 import com.dl7.player.utils.CreateSpannableTextUtil;
 import com.dl7.player.utils.DpOrSp2PxUtil;
+import com.dl7.player.utils.WindowUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -93,7 +95,7 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
  */
 
 public class VoicePostDetailActivity extends MyBaseActivity implements AdapterInterface
-        , UMShareListener, View.OnTouchListener {
+        , UMShareListener {
 
     @Bind(R.id.blogdetail_comment_lv)
     PullToRefreshListView blogdetailCommentLv;
@@ -250,7 +252,6 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                 }
             }
         });
-        blogdetailSendBt.setOnTouchListener(this);
 
         changeMyHeart();
 
@@ -284,6 +285,11 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
             @Override
             public void onCompletion(IMediaPlayer iMediaPlayer) {
                 playerView.setVisibility(View.GONE);
+                onLoad(PullToRefreshBase.Mode.BOTH, blogdetailCommentLv);
+                if (WindowUtils.getScreenOrientation(VoicePostDetailActivity.this)
+                        == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                    playerView._toggleFullScreen();
+                }
             }
         });
         playerView.init().isVideo(false)
@@ -293,6 +299,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         playerView.setVisibility(View.VISIBLE);
         n = 0;
         playerView.start();
+        onLoad(PullToRefreshBase.Mode.DISABLED, blogdetailCommentLv);
         Message message = new Message();
         message.what = 0;
         mHandler.sendMessage(message);
@@ -376,8 +383,10 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
             llFacechoose.setVisibility(View.GONE);
         }
         String str = blogdetailAddcommentEt.getText().toString().trim();
+        LogUtils.e(">>>>str:"+str);
         if (!str.isEmpty()) {
             AddCommentModel mAddCommentModel = new AddCommentModel(bolgId, str);
+            LogUtils.e(">>>>mGson.toJson(mAddCommentModel):"+mGson.toJson(mAddCommentModel));
             OkHttpUtils.postString().url(Common.Url_Add_Comment).mediaType(Common.JSON)
                     .content(mGson.toJson(mAddCommentModel))
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
@@ -876,18 +885,6 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (isFastDoubleClick()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         playerView.onDestroy();
@@ -941,6 +938,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                     showLogin();
                     return;
                 }
+                LogUtils.e(">>>>>blogdetail_send_bt");
                 sendMessage(view);
                 break;
         }

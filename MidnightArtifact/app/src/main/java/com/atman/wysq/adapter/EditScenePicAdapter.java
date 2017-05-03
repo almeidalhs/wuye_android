@@ -150,7 +150,11 @@ public class EditScenePicAdapter extends RecyclerView.Adapter<EditScenePicAdapte
 
     @Override
     public int getItemCount() {
-        return listData.size();
+        if (listData.size()>=5) {
+            return 5;
+        } else {
+            return listData.size();
+        }
     }
 
     public void clearData() {

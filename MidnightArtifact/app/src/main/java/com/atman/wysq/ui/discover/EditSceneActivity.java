@@ -182,6 +182,10 @@ public class EditSceneActivity extends MyBaseActivity implements AdapterInterfac
                     mScenePicList.add(temp);
                 }
                 mAdapter.addData(mScenePicList);
+            } else {
+                ScenePicList temp = new ScenePicList("-1", true);
+                mScenePicList.add(temp);
+                mAdapter.addData(mScenePicList);
             }
         } else if (id == Common.NET_RESET_HEAD) {
             HeadImgResultModel mHeadImgResultModel = mGson.fromJson(data, HeadImgResultModel.class);
@@ -244,11 +248,15 @@ public class EditSceneActivity extends MyBaseActivity implements AdapterInterfac
 
     @Override
     public void onItemClick(View view, int position) {
-        if (mAdapter.getItemData(position).getUrl().equals("-1")) {
+        if (mAdapter.getListData().size()==0 && mAdapter.getItemCount()==1) {
             showHeadImg(view);
         } else {
-            mAdapter.selectById(position);
-            showDeleteImg(view, position);
+            if (mAdapter.getItemData(position).getUrl().equals("-1")) {
+                showHeadImg(view);
+            } else {
+                mAdapter.selectById(position);
+                showDeleteImg(view, position);
+            }
         }
     }
 

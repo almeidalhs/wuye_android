@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ import com.base.baselibs.widget.PromptDialog;
 import com.bumptech.glide.Glide;
 import com.dl7.player.media.IjkPlayerView;
 import com.dl7.player.utils.CreateSpannableTextUtil;
+import com.dl7.player.utils.WindowUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -82,7 +84,7 @@ import tv.danmaku.ijk.media.player.IMediaPlayer;
  */
 
 public class VideoPostDetailActivity extends MyBaseActivity implements AdapterInterface
-        , UMShareListener, View.OnTouchListener {
+        , UMShareListener {
 
     @Bind(R.id.blogdetail_comment_lv)
     PullToRefreshListView blogdetailCommentLv;
@@ -238,7 +240,6 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
                 }
             }
         });
-        blogdetailSendBt.setOnTouchListener(this);
 
         changeMyHeart();
 
@@ -273,6 +274,11 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
             @Override
             public void onCompletion(IMediaPlayer iMediaPlayer) {
                 playerView.setVisibility(View.GONE);
+                onLoad(PullToRefreshBase.Mode.BOTH, blogdetailCommentLv);
+                if (WindowUtils.getScreenOrientation(VideoPostDetailActivity.this)
+                        == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                    playerView._toggleFullScreen();
+                }
             }
         });
         if (!isCreate) {
@@ -284,6 +290,7 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
         }
         playerView.setVisibility(View.VISIBLE);
         playerView.start();
+        onLoad(PullToRefreshBase.Mode.DISABLED, blogdetailCommentLv);
         n = 0;
         Message message = new Message();
         message.what = 0;
@@ -865,18 +872,6 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
             }
         });
         builder.show();
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (isFastDoubleClick()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return false;
     }
 
     @Override

@@ -285,6 +285,8 @@ public class Common {
     public static String Url_Delete_Ablum_Post = hostUrl + "rest/user/photo/del";
     //添加相册照片 rest/user/photo
     public static String Url_Add_Ablum_Post = hostUrl + "rest/user/photo";
+    //验证码验证 rest/wallet/checkAuthCode
+    public static String Url_Check_Code = hostUrl + "rest/wallet/checkAuthCode";
     /**************************http访问路径*****************************/
 
 
@@ -550,6 +552,8 @@ public class Common {
     public static int NET_DELETE_ABLUM_ID = 129;
     //添加相册照片
     public static int NET_ADD_ABLUM_ID = 130;
+    //验证码验证
+    public static int NET_CHECK_CODE_ID = 131;
     /**************************http访问回应识别码*****************************/
 
 

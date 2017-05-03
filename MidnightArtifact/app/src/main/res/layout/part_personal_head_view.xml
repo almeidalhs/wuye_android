@@ -107,7 +107,7 @@
             android:id="@+id/personal_gendercertification_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="女用户认证"
+            android:text="用户认证"
             android:visibility="gone"
             android:textSize="@dimen/dimen_sp_12"
             android:padding="@dimen/dimen_dp_5"
