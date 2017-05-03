@@ -582,20 +582,21 @@ public class ImageTextPostDetailActivity extends MyBaseActivity implements Adapt
             }
             ImageLoader.getInstance().displayImage(Common.ImageUrl + mBodyEntity.getIcon()
                     , blogdetailHeadImg, MyBaseApplication.getApplication().getOptionsNot());
-        }
 
-        if (vipLevel>=4) {
-            blogdetailVipTx.setVisibility(View.GONE);
-            blogdetailSvipIv.setVisibility(View.VISIBLE);
-        } else {
-            blogdetailSvipIv.setVisibility(View.GONE);
-            if (vipLevel==0) {
+            if (vipLevel>=4) {
                 blogdetailVipTx.setVisibility(View.GONE);
+                blogdetailSvipIv.setVisibility(View.VISIBLE);
             } else {
-                blogdetailVipTx.setText("VIP."+vipLevel);
-                blogdetailVipTx.setVisibility(View.VISIBLE);
+                blogdetailSvipIv.setVisibility(View.GONE);
+                if (vipLevel==0) {
+                    blogdetailVipTx.setVisibility(View.GONE);
+                } else {
+                    blogdetailVipTx.setText("VIP."+vipLevel);
+                    blogdetailVipTx.setVisibility(View.VISIBLE);
+                }
             }
         }
+
 
         if (mBodyEntity.getGoodsList().size()>0) {
             blogdetailGoodsLl.setVisibility(View.VISIBLE);

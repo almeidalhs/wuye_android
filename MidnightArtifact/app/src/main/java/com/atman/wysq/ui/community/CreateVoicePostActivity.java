@@ -547,6 +547,22 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
         started = audioMessageHelper.startRecord();
         if (started == false) {
             showToast("初始化录音失败");
+            PromptDialog.Builder builder = new PromptDialog.Builder(mContext);
+            builder.setMessage("您的录音权限未开启，请至“权限管理”中设置!");
+            builder.setPositiveButton("去设置", new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    startActivity(UiHelper.getAppDetailSettingIntent(mContext));
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
             overRecording();
             return;
         }
