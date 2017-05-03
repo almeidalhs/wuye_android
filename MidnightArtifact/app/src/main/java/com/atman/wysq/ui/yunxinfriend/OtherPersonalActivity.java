@@ -23,6 +23,7 @@ import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.community.ReportActivity;
+import com.atman.wysq.ui.community.ReportListActivity;
 import com.atman.wysq.ui.personal.PersonalAlbumActivity;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
@@ -726,7 +727,8 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
                     return;
                 }
                 if (which == 0) {//举报
-                    startActivity(ReportActivity.buildIntent(mContext, id, 1));
+                    startActivity(ReportListActivity.buildIntent(mContext, id, 2));
+//                    startActivity(ReportActivity.buildIntent(mContext, id, 1));
                 } else if (which == 1) {//把TA加入黑名单
                     if (mGetMyUserIndexModel.getBody().getIsBlack()==1) {
                         OkHttpUtils.postString()

@@ -47,6 +47,7 @@ import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.community.ReportActivity;
+import com.atman.wysq.ui.community.ReportListActivity;
 import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.MyTools;
@@ -692,11 +693,16 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             sleepTime = 200;
         }
         n = 0;
+        if (mTimer==null) {
+            mTimer = new Timer();
+        }
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if (n >= disNum) {
                     mTimer.cancel();
+                    mTimer.purge();
+                    mTimer = null;
                     return;
                 }
                 n++;
@@ -1306,7 +1312,8 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                     return;
                 }
                 if (which == 0) {//举报
-                    startActivity(ReportActivity.buildIntent(mContext, id, 1));
+                    startActivity(ReportListActivity.buildIntent(mContext, id, 2));
+//                    startActivity(ReportActivity.buildIntent(mContext, id, 1));
                 } else if (which == 1) {//把TA加入黑名单
                     ob.dismiss();
                     if (mIsBalck) {

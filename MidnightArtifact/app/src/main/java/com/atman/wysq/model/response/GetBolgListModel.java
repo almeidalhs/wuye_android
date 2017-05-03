@@ -59,10 +59,19 @@ public class GetBolgListModel {
         private String achieve_level_pic;
         private int goods_id;
         private int vip_level;
+        private int category;
         private String achieve_gold_pic;
         private List<?> blogComments;
         private List<?> wysqImglist;
         private String goods_url;
+
+        public int getCategory() {
+            return category;
+        }
+
+        public void setCategory(int category) {
+            this.category = category;
+        }
 
         public int getFavorite_id() {
             return favorite_id;

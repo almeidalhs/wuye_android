@@ -11,10 +11,14 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
+import com.atman.wysq.model.response.CommunityNewModel;
 import com.atman.wysq.model.response.MallModel;
 import com.atman.wysq.model.response.MallTopResponseModel;
 import com.atman.wysq.ui.base.WebPageActivity;
 import com.atman.wysq.ui.community.ImageTextPostDetailActivity;
+import com.atman.wysq.ui.community.VideoPostDetailActivity;
+import com.atman.wysq.ui.community.VoicePostDetailActivity;
+import com.atman.wysq.ui.discover.ListenLiveActivity;
 import com.atman.wysq.ui.login.LoginActivity;
 import com.atman.wysq.ui.mall.GoodsDetailActivity;
 import com.atman.wysq.ui.mall.TwoLevelCategoryListActivity;
@@ -32,6 +36,27 @@ import java.io.File;
  * 电话 18578909061
  */
 public class UiHelper {
+    
+    public static void toCommunityDetail(Activity context, int CategoryId, String Title
+            , long Blog_id, int Vip_level, int toID, CommunityNewModel.BodyBean.LiveRoomBean liveRoomBean) {
+        switch (CategoryId) {
+            case 1://图文
+                context.startActivityForResult(ImageTextPostDetailActivity.buildIntent(context
+                        , Title, Blog_id, false, Vip_level), toID);
+                break;
+            case 2://语音
+                context.startActivityForResult(VoicePostDetailActivity.buildIntent(context
+                        , Title, Blog_id, false, Vip_level), toID);
+                break;
+            case 3://视频
+                context.startActivityForResult(VideoPostDetailActivity.buildIntent(context
+                        , Title, Blog_id, false, Vip_level), toID);
+                break;
+            case 4://直播
+                context.startActivityForResult(ListenLiveActivity.buildIntent(context, liveRoomBean), toID);
+                break;
+        }
+    }
 
     public static void toActivity(Context context, MallModel.BodyBean.AdListOneBean bodyEntity, boolean isLogin){
         LogUtils.e("bodyEntity.getType():"+bodyEntity.getType());

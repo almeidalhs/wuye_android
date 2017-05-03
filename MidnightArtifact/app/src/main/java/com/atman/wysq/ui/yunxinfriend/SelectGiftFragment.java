@@ -133,6 +133,9 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
                     url = Common.Url_Live_Gift_Post;
                     reponseId = Common.NET_LIVE_GIFT_ID;
                 }
+                LogUtils.e(">>>fromId:"+fromId);
+                LogUtils.e(">>>url:"+url);
+                LogUtils.e(">>>reponseId:"+reponseId);
                 OkHttpUtils.postString().url(url + mAdapter.getItem(po).getGift_id()+"/"+id).content("")
                         .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                         .tag(reponseId).id(reponseId).build()
@@ -173,7 +176,7 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_PAY_GIFTLIST
-                || id == Common.NET_REWARD_ID) {
+                || id == Common.NET_REWARD_ID || id==Common.NET_LIVE_GIFT_ID) {
             ((SelectGiftActivity)getActivity()).backResuilt(mAdapter.getItem(myPosition).getPic_url()
                     , mAdapter.getItem(myPosition).getPaopao(), mAdapter.getItem(myPosition).getPrice()
                     , mAdapter.getItem(myPosition).getName(), mAdapter.getItem(myPosition).getPic_url()
@@ -216,6 +219,8 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
     public void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_PAY_GIFTLIST);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_REWARD_ID);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_GIFT_ID);
     }
 
     @Override

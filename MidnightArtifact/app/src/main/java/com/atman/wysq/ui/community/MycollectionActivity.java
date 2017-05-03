@@ -13,6 +13,7 @@ import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -167,9 +168,14 @@ public class MycollectionActivity extends MyBaseActivity implements AdapterInter
             case R.id.item_bloglist_browse_ll:
             case R.id.item_bloglist_root_ll:
             case R.id.item_bloglist_comment_ll:
+
+                UiHelper.toCommunityDetail(this,mAdapter.getItem(position).getCategory()
+                        , mAdapter.getItem(position).getTitle(), mAdapter.getItem(position).getBlog_id()
+                        , mAdapter.getItem(position).getVip_level(), -1, null);
+
                 blogId = mAdapter.getItem(position).getBlog_id();
-                startActivity(ImageTextPostDetailActivity.buildIntent(mContext, mAdapter.getItem(position).getTitle()
-                        , blogId, false, mAdapter.getItem(position).getVip_level()));
+//                startActivity(ImageTextPostDetailActivity.buildIntent(mContext, mAdapter.getItem(position).getTitle()
+//                        , blogId, false, mAdapter.getItem(position).getVip_level()));
                 OkHttpUtils.postString().url(Common.Url_Add_Browse+blogId).mediaType(Common.JSON)
                         .content("{}")
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())

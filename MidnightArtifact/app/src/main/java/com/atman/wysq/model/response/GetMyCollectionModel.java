@@ -105,10 +105,19 @@ public class GetMyCollectionModel {
         private int userLevel;
         private String achieve_level_pic;
         private int goods_id;
+        private int category;
         private int vip_level;
         private String achieve_gold_pic;
         private List<?> blogComments;
         private List<?> wysqImglist;
+
+        public int getCategory() {
+            return category;
+        }
+
+        public void setCategory(int category) {
+            this.category = category;
+        }
 
         public int getBlog_id() {
             return blog_id;

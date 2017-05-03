@@ -91,6 +91,8 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
     private boolean myRoomTitleInfoSta = false;
     private boolean myRoomPicInfoSta = false;
 
+    private boolean isTo = false;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -212,12 +214,16 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
             }
         } else if (id == Common.NET_GETMYLIVEINFO_ID) {
             mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
-            pop.showAtLocation(pop.getV(), Gravity.CENTER, 0, 0);
-            pop.setTitle(mMyLiveInfoModel.getBody().getRoom_name());
-            popSimpleDraweeView = pop.setBg(Common.ImageUrl + mMyLiveInfoModel.getBody().getPic_url());
-            popSimpleDraweeView.setOnClickListener(this);
-            partLivepopGoliveTx = pop.getPartLivepopGoliveTx();
-            partLivepopGoliveTx.setOnClickListener(this);
+            if (pop!=null) {
+                pop.showAtLocation(pop.getV(), Gravity.CENTER, 0, 0);
+                pop.setTitle(mMyLiveInfoModel.getBody().getRoom_name());
+                popSimpleDraweeView = pop.setBg(Common.ImageUrl + mMyLiveInfoModel.getBody().getPic_url());
+                popSimpleDraweeView.setOnClickListener(this);
+                partLivepopGoliveTx = pop.getPartLivepopGoliveTx();
+                partLivepopGoliveTx.setOnClickListener(this);
+            } else {
+                toMyLive(mMyLiveInfoModel);
+            }
         } else if (id == Common.NET_UPDATA_MYLIVEINFO_ID || id == Common.NET_ADD_LIVE_ID) {
             mMyLiveInfoModel = mGson.fromJson(data, MyLiveInfoModel.class);
             if (mMyLiveInfoModel.getBody()==null) {
@@ -273,6 +279,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
         OkHttpUtils.getInstance().cancelTag(Common.NET_UPDATA_MYLIVEINFO_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_LIVE_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_RESET_HEAD);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BROWSE);
     }
 
     @OnClick({R.id.part_community_topleft_ll, R.id.community_tab_dynamic, R.id.community_tab_voice
@@ -489,23 +496,28 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
     @Override
     public void onItemClick(View view, int position) {
         CommunityNewModel.BodyBean temp = mCommunityNewAdapter.getItemData(position);
-        int CategoryId = temp.getCategory();
-        switch (CategoryId) {
-            case 1://图文
-                startActivity(ImageTextPostDetailActivity.buildIntent(getActivity()
-                        , temp.getTitle(), temp.getBlog_id(), false, temp.getVip_level()));
-                break;
-            case 2://语音
-                startActivity(VoicePostDetailActivity.buildIntent(getActivity()
-                        , temp.getTitle(), temp.getBlog_id(), false, temp.getVip_level()));
-                break;
-            case 3://视频
-                startActivity(VideoPostDetailActivity.buildIntent(getActivity()
-                        , temp.getTitle(), temp.getBlog_id(), false, temp.getVip_level()));
-                break;
-            case 4://直播
+        if (temp.getCategory() == 4) {
+            if (!isLogin()) {
+                showLogin();
+                return;
+            }
+            if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null && MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                    .getUserDetailBean().getUserExt().getUser_id()==temp.getLiveRoom().getUser_id()) {
+                OkHttpUtils.get().url(Common.Url_GetMyLiveInfo)
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .tag(Common.NET_GETMYLIVEINFO_ID).id(Common.NET_GETMYLIVEINFO_ID).build()
+                        .execute(new MyStringCallback(getActivity(), CommunityNewFragment.this, true));
+            } else {
                 startActivity(ListenLiveActivity.buildIntent(getActivity(), temp.getLiveRoom()));
-                break;
+            }
+        } else {
+            UiHelper.toCommunityDetail(getActivity(),temp.getCategory(), temp.getTitle(), temp.getBlog_id()
+                    , temp.getVip_level(), -1, temp.getLiveRoom());
+            OkHttpUtils.postString().url(Common.Url_Add_Browse+temp.getBlog_id()).mediaType(Common.JSON)
+                    .content("{}")
+                    .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                    .id(Common.NET_ADD_BROWSE).tag(Common.NET_ADD_BROWSE)
+                    .build().execute(new MyStringCallback(getActivity(), CommunityNewFragment.this, false));
         }
     }
 }

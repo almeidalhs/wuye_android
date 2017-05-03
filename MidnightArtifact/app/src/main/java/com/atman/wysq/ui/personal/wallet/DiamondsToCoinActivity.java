@@ -105,13 +105,14 @@ public class DiamondsToCoinActivity extends MyBaseActivity implements EditCheckB
         if (id == Common.NET_DIAMONDS_TO_COIN_ID) {
             showToast("兑换成功");
             diamondNum = diamondNum - consumeDiamondNum;
-            toCoinNum = toCoinNum + inputCoinNum;
+            toCoinNum = toCoinNum - inputCoinNum;
             MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().setConvert_coin((int) diamondNum);
             MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt()
                     .setLeft_coin((int) (MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean()
                             .getUserExt().getLeft_coin() + inputCoinNum));
             setTextStr();
             dismondstocoinNumEt.setText("");
+            finish();
         }
     }
 

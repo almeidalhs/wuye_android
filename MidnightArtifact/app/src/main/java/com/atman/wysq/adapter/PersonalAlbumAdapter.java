@@ -16,6 +16,7 @@ import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
+import com.base.baselibs.util.LogUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -70,12 +71,13 @@ public class PersonalAlbumAdapter extends RecyclerView.Adapter<PersonalAlbumAdap
 
     public void deleteDataById(int id) {
         for (int i=0;i<listData.size();i++) {
+            LogUtils.e(">>>i:"+i);
             if (listData.get(i).getPhoto_id()==id) {
                 listData.remove(i);
-                notifyItemChanged(i);
                 break;
             }
         }
+        notifyDataSetChanged();
     }
 
     public void addData(GetMyUserIndexModel.BodyBean.UserDetailBeanBean.PhotoListBean mList) {

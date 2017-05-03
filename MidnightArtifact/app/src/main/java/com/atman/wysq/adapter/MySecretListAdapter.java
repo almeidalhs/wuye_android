@@ -177,6 +177,20 @@ public class MySecretListAdapter extends BaseAdapter {
             holder.itemBloglistTitleTx.setVisibility(View.VISIBLE);
         }
 
+        //1:未审核 2:已通过 3:未通过 4:已删除
+        if (mStateId == 2) {
+            holder.itemBloglistStateTx.setVisibility(View.GONE);
+        } else if (mStateId == 1) {
+            holder.itemBloglistStateTx.setVisibility(View.VISIBLE);
+            holder.itemBloglistStateTx.setText("审核中");
+        } else if (mStateId == 3) {
+            holder.itemBloglistStateTx.setVisibility(View.VISIBLE);
+            holder.itemBloglistStateTx.setText("未通过");
+        } else if (mStateId == 4) {
+            holder.itemBloglistStateTx.setVisibility(View.VISIBLE);
+            holder.itemBloglistStateTx.setText("已删除");
+        }
+
         Drawable drawable = null;
         if (mBodyEntity.getFavorite_id() > 0) {
             drawable = context.getResources().getDrawable(R.mipmap.square_like_press);
@@ -301,6 +315,14 @@ public class MySecretListAdapter extends BaseAdapter {
                     , holder.itemBloglistHeadImg, MyBaseApplication.getApplication().getOptionsNot());
         }
 
+        if (mBodyEntity.getCategory()==1) {
+            holder.itemBloglistTypeIv.setBackgroundResource(R.mipmap.ic_normal);
+        } else if (mBodyEntity.getCategory()==2) {
+            holder.itemBloglistTypeIv.setBackgroundResource(R.mipmap.ic_audio);
+        } else if (mBodyEntity.getCategory()==3) {
+            holder.itemBloglistTypeIv.setBackgroundResource(R.mipmap.ic_video);
+        }
+
         holder.itemBloglistHeadRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -337,6 +359,8 @@ public class MySecretListAdapter extends BaseAdapter {
         ImageView itemBloglistSvipIv;
         @Bind(R.id.item_bloglist_time_tx)
         TextView itemBloglistTimeTx;
+        @Bind(R.id.item_bloglist_type_iv)
+        ImageView itemBloglistTypeIv;
         @Bind(R.id.item_bloglist_top_rl)
         RelativeLayout itemBloglistTopRl;
         @Bind(R.id.item_bloglist_highly_tx)
@@ -367,6 +391,8 @@ public class MySecretListAdapter extends BaseAdapter {
         LinearLayout itemBloglistCollectionLl;
         @Bind(R.id.item_bloglist_commentimg_tx)
         TextView itemBloglistCommentimgTx;
+        @Bind(R.id.item_bloglist_state_tx)
+        TextView itemBloglistStateTx;
         @Bind(R.id.item_bloglist_comment_tx)
         TextView itemBloglistCommentTx;
         @Bind(R.id.item_bloglist_comment_ll)

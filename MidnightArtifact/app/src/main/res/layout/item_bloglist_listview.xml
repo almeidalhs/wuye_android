@@ -117,6 +117,25 @@
             android:textSize="@dimen/dimen_sp_12"
             android:textColor="#A9A9A9"
             android:text="今天"/>
+
+        <TextView
+            android:id="@+id/item_bloglist_state_tx"
+            android:layout_below="@+id/item_bloglist_name_tx"
+            android:layout_toRightOf="@+id/item_bloglist_time_tx"
+            android:layout_marginLeft="@dimen/dimen_dp_15"
+            android:layout_marginTop="@dimen/dimen_dp_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dimen_sp_12"
+            android:visibility="gone"
+            android:textColor="#ff0000"
+            android:text="已删除"/>
+
+        <ImageView
+            android:id="@+id/item_bloglist_type_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
     <LinearLayout

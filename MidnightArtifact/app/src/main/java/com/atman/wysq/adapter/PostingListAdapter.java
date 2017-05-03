@@ -242,7 +242,7 @@ public class PostingListAdapter extends BaseAdapter {
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         holder.itemBloglistCommentimgTx.setCompoundDrawables(drawable, null, null, null);
 
-        if (mBodyEntity.getSex()!=null && mBodyEntity.getSex().equals("M")) {
+        if (mBodyEntity.getSex() != null && mBodyEntity.getSex().equals("M")) {
             holder.itemBloglistGenderImg.setImageResource(R.mipmap.personal_man_ic);
         } else {
             holder.itemBloglistGenderImg.setImageResource(R.mipmap.personal_weman_ic);
@@ -315,6 +315,14 @@ public class PostingListAdapter extends BaseAdapter {
             }
         });
 
+        if (mBodyEntity.getCategory()==1) {
+            holder.itemBloglistTypeIv.setBackgroundResource(R.mipmap.ic_normal);
+        } else if (mBodyEntity.getCategory()==2) {
+            holder.itemBloglistTypeIv.setBackgroundResource(R.mipmap.ic_audio);
+        } else if (mBodyEntity.getCategory()==3) {
+            holder.itemBloglistTypeIv.setBackgroundResource(R.mipmap.ic_video);
+        }
+
         return convertView;
     }
 
@@ -342,6 +350,8 @@ public class PostingListAdapter extends BaseAdapter {
         ImageView itemBloglistSvipIv;
         @Bind(R.id.item_bloglist_time_tx)
         TextView itemBloglistTimeTx;
+        @Bind(R.id.item_bloglist_type_iv)
+        ImageView itemBloglistTypeIv;
         @Bind(R.id.item_bloglist_top_rl)
         RelativeLayout itemBloglistTopRl;
         @Bind(R.id.item_bloglist_highly_tx)

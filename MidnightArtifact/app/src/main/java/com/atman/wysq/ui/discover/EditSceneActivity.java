@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.DensityUtil;
+import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.MyCleanEditText;
@@ -287,21 +290,29 @@ public class EditSceneActivity extends MyBaseActivity implements AdapterInterfac
         if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
             imageUri = data.getData();
         } else if (requestCode == TAKE_BIG_PICTURE) {
-            try {
-                imageUri = Uri.parse("file:///"+Tools.revitionImage(path));
-            } catch (IOException e) {
-                imageUri = Uri.parse("file:///" + path);
-                e.printStackTrace();
-            }
+            imageUri = Uri.parse("file:///" + path);
         }
         if (imageUri != null) {
+            if (imageUri.getPath().contains("external")) {
+                imageUri = Uri.parse("file:///" + getRealPathFromUri(mContext, imageUri));
+            }
             File f = new File(imageUri.getPath().replace("//","/"));
             if (!f.exists()) {
                 showToast("图片不存在");
                 return;
+            } else {
+                try {
+                    imageUri = Uri.parse("file:///"+Tools.revitionImage(imageUri.getPath()));
+                    ScenePicList temp = new ScenePicList(f.getPath(), false);
+                    mAdapter.addData(temp);
+                } catch (IOException e) {
+                    LogUtils.e(">>>e:"+e.toString());
+                    showToast("图片压缩失败");
+                    e.printStackTrace();
+                }
             }
-            ScenePicList temp = new ScenePicList(f.getPath(), false);
-            mAdapter.addData(temp);
+        } else {
+            showToast("图片不存在");
         }
     }
 
@@ -325,5 +336,20 @@ public class EditSceneActivity extends MyBaseActivity implements AdapterInterfac
             }
         });
         builder.show();
+    }
+
+    public String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 }

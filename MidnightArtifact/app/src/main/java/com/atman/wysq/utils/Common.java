@@ -132,7 +132,7 @@ public class Common {
     //获取我的秘密
     public static String Url_Get_My_Sceret = hostUrl + "rest/blog/user/";
     //获取我的评论或评论我的
-    public static String Url_Get_UserComment = hostUrl + "rest/blog/usercomment/";
+    public static String Url_Get_UserComment = hostUrl + "rest/blog/usercommented/";
     //添加帖子浏览量
     public static String Url_Add_Browse = hostUrl + "rest/blog/increaseviewcount/";
     //删除帖子

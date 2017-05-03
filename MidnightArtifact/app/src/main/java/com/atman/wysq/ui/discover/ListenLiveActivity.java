@@ -49,6 +49,7 @@ import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.community.ReportActivity;
+import com.atman.wysq.ui.community.ReportListActivity;
 import com.atman.wysq.ui.yunxinfriend.SelectGiftActivity;
 import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
@@ -392,9 +393,10 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                                             , false, System.currentTimeMillis()
                                             , ChatRoomTypeInter.ChatRoomTypeImage
                                             , "[图片]", url, url, urlThumb, "", "", "", "", "", 0, 0, false, 1);
-                                    if (temp.getIsAnchorImage() == 1) {
-                                        listenliveBgIv.setImageURI(url);
-                                    }
+                                    //替换背景图
+//                                    if (temp.getIsAnchorImage() == 1) {
+//                                        listenliveBgIv.setImageURI(url);
+//                                    }
                                 } else if (messages.get(i).getMsgType() == MsgTypeEnum.audio) {
                                     String urlAudio = ((AudioAttachment) messages.get(i).getAttachment()).getUrl();
                                     String pathAudio = ((AudioAttachment) messages.get(i).getAttachment()).getPathForSave();
@@ -1209,7 +1211,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                     return;
                 }
                 if (which == 0) {//举报
-                    startActivity(ReportActivity.buildIntent(mContext, id, 1));
+                    startActivity(ReportListActivity.buildIntent(mContext, id, 2));
+//                    startActivity(ReportActivity.buildIntent(mContext, id, 1));
                 } else if (which == 1) {//把TA加入黑名单
                     ob.dismiss();
                     if (mIsBalck) {

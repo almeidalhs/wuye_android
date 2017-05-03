@@ -17,6 +17,7 @@ import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.community.ImageTextPostDetailActivity;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
@@ -201,8 +202,11 @@ public class HisDynamicsActivity extends MyBaseActivity implements AdapterInterf
             case R.id.item_bloglist_root_ll:
             case R.id.item_bloglist_comment_ll:
                 this.position = position;
-                startActivityForResult(ImageTextPostDetailActivity.buildIntent(mContext, mAdapter.getItem(position).getTitle()
-                        , mAdapter.getItem(position).getBlog_id(), false, mAdapter.getItem(position).getVip_level()), Common.toPostDetail);
+                UiHelper.toCommunityDetail(this,mAdapter.getItem(position).getCategory()
+                        , mAdapter.getItem(position).getTitle(), mAdapter.getItem(position).getBlog_id()
+                        , mAdapter.getItem(position).getVip_level(), Common.toPostDetail, null);
+//                startActivityForResult(ImageTextPostDetailActivity.buildIntent(mContext, mAdapter.getItem(position).getTitle()
+//                        , mAdapter.getItem(position).getBlog_id(), false, mAdapter.getItem(position).getVip_level()), Common.toPostDetail);
                 blogId = mAdapter.getItem(position).getBlog_id();
                 OkHttpUtils.postString().url(Common.Url_Add_Browse + blogId).mediaType(Common.JSON)
                         .content("{}")

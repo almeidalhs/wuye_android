@@ -211,6 +211,10 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         fragmentImgIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isLogin()) {
+                    showLogin();
+                    return;
+                }
                 startActivity(new Intent(getActivity(), PersonalAlbumActivity.class));
             }
         });
@@ -819,6 +823,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             changView();
         } else if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
             imageUri = data.getData();
+            LogUtils.e(">>>imageUri.getPath():"+imageUri.getPath());
             cropImageUri(imageUri, outputX, outputX, CROP_BIG_PICTURE);
         } else if (requestCode == TAKE_BIG_PICTURE) {
             imageUri = Uri.parse("file:///" + path);

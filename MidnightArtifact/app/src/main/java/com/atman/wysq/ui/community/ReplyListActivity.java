@@ -10,11 +10,14 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.MySecretListAdapter;
+import com.atman.wysq.adapter.ReplayListAdapter;
 import com.atman.wysq.model.response.GetMyCollectionModel;
+import com.atman.wysq.model.response.ReplayListModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -60,9 +63,9 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
     private int mPage = 1;
     private int mStateId = 0;//0:我评论的 1:评论我的
     private int position;
-    private int blogId;
+    private long blogId;
 
-    private MySecretListAdapter mAdapter;
+    private ReplayListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +89,7 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
         TextView mEmptyTX = (TextView) mEmpty.findViewById(R.id.empty_list_tx);
         mEmptyTX.setText("暂无回复");
 
-        mAdapter = new MySecretListAdapter(mContext, getmWidth(), this);
+        mAdapter = new ReplayListAdapter(mContext, getmWidth(), this);
         pullToRefreshListView.setEmptyView(mEmpty);
         pullToRefreshListView.setAdapter(mAdapter);
     }
@@ -134,9 +137,9 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_GET_USERCOMMENT) {
-            GetMyCollectionModel mGetMyCollectionModel = mGson.fromJson(data, GetMyCollectionModel.class);
-            if (mGetMyCollectionModel.getBody() == null
-                    || mGetMyCollectionModel.getBody().size() == 0) {
+            ReplayListModel mReplayListModel = mGson.fromJson(data, ReplayListModel.class);
+            if (mReplayListModel.getBody() == null
+                    || mReplayListModel.getBody().size() == 0) {
                 if (mAdapter != null && mAdapter.getCount() > 0) {
                     showToast("没有更多");
                 }
@@ -146,16 +149,8 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
                 if (mPage == 1) {
                     mAdapter.clearData();
                 }
-                mAdapter.addBody(mGetMyCollectionModel.getBody());
+                mAdapter.addBody(mReplayListModel.getBody());
             }
-        } else if (id==Common.NET_GET_BLOGCOLLECTION) {
-            showToast("收藏成功");
-            mAdapter.updataView(mAdapter.setFavoriteById(1, position), pullToRefreshListView.getRefreshableView(), 1);
-        } else if (id==Common.NET_GET_BLOGCOLLECTION_NOT) {
-            showToast("已取消收藏");
-            mAdapter.updataView(mAdapter.setFavoriteById(0, position), pullToRefreshListView.getRefreshableView(), 1);
-        } else if (id == Common.NET_ADD_BROWSE) {
-            mAdapter.updataView(mAdapter.addBrowse(blogId), pullToRefreshListView.getRefreshableView(), 1);
         }
     }
 
@@ -163,7 +158,6 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERCOMMENT);
-        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_BLOGCOLLECTION);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_BLOGCOLLECTION_NOT);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BROWSE);
     }
@@ -209,44 +203,24 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
                     showLogin();
                     return;
                 }
-                if (mAdapter.getItem(position).getUser_id() ==
+                if (mAdapter.getItem(position).getBlog().getUser_id() ==
                         MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId()) {
                     showWraning("亲，这是你自己哦！");
                     return;
                 }
-                startActivity(OtherPersonalActivity.buildIntent(mContext, mAdapter.getItem(position).getUser_id()));
+                startActivity(OtherPersonalActivity.buildIntent(mContext, mAdapter.getItem(position).getBlog().getUser_id()));
                 break;
-            case R.id.item_bloglist_browse_ll:
             case R.id.item_bloglist_root_ll:
-            case R.id.item_bloglist_comment_ll:
-                blogId = mAdapter.getItem(position).getBlog_id();
-                startActivity(ImageTextPostDetailActivity.buildIntent(mContext, mAdapter.getItem(position).getTitle()
-                        , blogId, false, mAdapter.getItem(position).getVip_level() ));
+
+                UiHelper.toCommunityDetail(this,mAdapter.getItem(position).getBlog().getCategory()
+                        , mAdapter.getItem(position).getBlog().getTitle(), mAdapter.getItem(position).getBlog().getBlog_id()
+                        , mAdapter.getItem(position).getBlog().getVip_level(), -1, null);
+
+                blogId = mAdapter.getItem(position).getBlog().getBlog_id();
                 OkHttpUtils.postString().url(Common.Url_Add_Browse+blogId).mediaType(Common.JSON)
-                        .content("{}")
+                        .id(Common.NET_ADD_BROWSE).tag(Common.NET_ADD_BROWSE).content("{}")
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .id(Common.NET_ADD_BROWSE).tag(Common.NET_ADD_BROWSE)
                         .build().execute(new MyStringCallback(mContext, ReplyListActivity.this, false));
-                break;
-            case R.id.item_bloglist_collection_ll:
-                if (!isLogin()) {
-                    showLogin();
-                    return;
-                }
-                this.position = position;
-                if (mAdapter.getItem(position).getFavorite_id()>0) {//已收藏，点击取消收藏
-                    OkHttpUtils.delete().url(Common.Url_Get_BlogCollection_Not + mAdapter.getItem(position).getBlog_id())
-                            .id(Common.NET_GET_BLOGCOLLECTION_NOT)
-                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                            .tag(Common.NET_GET_BLOGCOLLECTION_NOT).build()
-                            .execute(new MyStringCallback(mContext, ReplyListActivity.this, true));
-                } else {//未收藏，点击收藏
-                    OkHttpUtils.postString().url(Common.Url_Get_BlogCollection + mAdapter.getItem(position).getBlog_id())
-                            .id(Common.NET_GET_BLOGCOLLECTION).content("{}").mediaType(Common.JSON)
-                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                            .tag(Common.NET_GET_BLOGCOLLECTION).build()
-                            .execute(new MyStringCallback(mContext, ReplyListActivity.this, true));
-                }
                 break;
         }
     }
