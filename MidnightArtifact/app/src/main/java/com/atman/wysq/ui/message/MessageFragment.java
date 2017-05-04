@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -102,6 +103,8 @@ public class MessageFragment extends MyBaseFragment implements AdapterInterface
     PullToRefreshRecyclerView pullBlacklistRecycler;
     @Bind(R.id.message_blacklist_ll)
     LinearLayout messageBlacklistLl;
+    @Bind(R.id.tab_privateletter_wran_iv)
+    ImageView tabPrivateletterWranIv;
 
     private List<ImSession> mImSession;
     private ImSessionDao mImSessionDao;
@@ -268,6 +271,14 @@ public class MessageFragment extends MyBaseFragment implements AdapterInterface
     }
 
     private void setUnreadMessageNum() {
+
+        int n = ((MainActivity) getActivity()).countUnReadNum();
+        if (n>0) {
+            tabPrivateletterWranIv.setVisibility(View.VISIBLE);
+        } else {
+            tabPrivateletterWranIv.setVisibility(View.GONE);
+        }
+
         mImSessionDao = MyBaseApplication.getApplication().getDaoSession().getImSessionDao();
         mOtherNoticeDao = MyBaseApplication.getApplication().getDaoSession().getTouChuanOtherNoticeDao();
 
@@ -339,7 +350,6 @@ public class MessageFragment extends MyBaseFragment implements AdapterInterface
             mAdapter.setChange(true);
         }
         setUnreadMessageNum();
-        ((MainActivity) getActivity()).countUnReadNum();
     }
 
     @Override

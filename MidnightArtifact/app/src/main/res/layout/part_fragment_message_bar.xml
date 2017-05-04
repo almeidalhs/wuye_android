@@ -41,16 +41,31 @@
         android:orientation="horizontal"
         android:showDividers="middle">
 
-        <RadioButton
-            android:id="@+id/tab_privateletter"
+        <RelativeLayout
             android:layout_width="@dimen/dimen_dp_55"
-            android:layout_height="match_parent"
-            android:background="@drawable/discovernew_top_selector"
-            android:button="@null"
-            android:checked="true"
-            android:text="私信"
-            android:textColor="@color/color_black"
-            android:textSize="@dimen/dimen_sp_18" />
+            android:layout_height="match_parent">
+
+            <RadioButton
+                android:id="@+id/tab_privateletter"
+                android:layout_width="@dimen/dimen_dp_55"
+                android:layout_height="match_parent"
+                android:background="@drawable/discovernew_top_selector"
+                android:button="@null"
+                android:checked="true"
+                android:text="私信"
+                android:textColor="@color/color_black"
+                android:textSize="@dimen/dimen_sp_18" />
+
+            <ImageView
+                android:id="@+id/tab_privateletter_wran_iv"
+                android:layout_width="@dimen/dimen_dp_7"
+                android:layout_height="@dimen/dimen_dp_7"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@+id/personal_secretreply_tv"
+                android:src="@mipmap/dote_pressed"
+                android:visibility="gone" />
+        </RelativeLayout>
+
 
         <RadioButton
             android:id="@+id/tab_follow"

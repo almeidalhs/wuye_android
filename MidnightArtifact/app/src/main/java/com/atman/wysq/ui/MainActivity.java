@@ -145,7 +145,7 @@ public class MainActivity extends MyBaseActivity {
         startService(new Intent(mContext, StartReciverSeriver.class));
     }
 
-    public void countUnReadNum() {
+    public int countUnReadNum() {
         mImSessionDao = MyBaseApplication.getApplication().getDaoSession().getImSessionDao();
         mImSession = mImSessionDao.queryBuilder().build().list();
         int n = 0;
@@ -180,6 +180,7 @@ public class MainActivity extends MyBaseActivity {
             }
         }
         tabSessionUnreadTx.setLayoutParams(params);
+        return n;
     }
 
     @Override
