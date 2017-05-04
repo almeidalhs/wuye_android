@@ -38,19 +38,20 @@ import java.io.File;
 public class UiHelper {
     
     public static void toCommunityDetail(Activity context, int CategoryId, String Title
-            , long Blog_id, int Vip_level, int toID, CommunityNewModel.BodyBean.LiveRoomBean liveRoomBean) {
+            , long Blog_id, int Vip_level, int toID, CommunityNewModel.BodyBean.LiveRoomBean liveRoomBean
+            , boolean isMy) {
         switch (CategoryId) {
             case 1://图文
                 context.startActivityForResult(ImageTextPostDetailActivity.buildIntent(context
-                        , Title, Blog_id, false, Vip_level), toID);
+                        , Title, Blog_id, isMy, Vip_level), toID);
                 break;
             case 2://语音
                 context.startActivityForResult(VoicePostDetailActivity.buildIntent(context
-                        , Title, Blog_id, false, Vip_level), toID);
+                        , Title, Blog_id, isMy, Vip_level), toID);
                 break;
             case 3://视频
                 context.startActivityForResult(VideoPostDetailActivity.buildIntent(context
-                        , Title, Blog_id, false, Vip_level), toID);
+                        , Title, Blog_id, isMy, Vip_level), toID);
                 break;
             case 4://直播
                 context.startActivityForResult(ListenLiveActivity.buildIntent(context, liveRoomBean), toID);

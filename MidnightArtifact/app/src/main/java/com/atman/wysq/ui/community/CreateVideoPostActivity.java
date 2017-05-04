@@ -122,6 +122,10 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                     showToast("请输入标题");
                     return;
                 }
+                if (upVideoUrl==null || upVideoUrl.isEmpty()) {
+                    showToast("请选择视频");
+                    return;
+                }
                 File f = new File(upVideoUrl);
                 if (f==null || !f.exists()) {
                     showToast("请选择视频");

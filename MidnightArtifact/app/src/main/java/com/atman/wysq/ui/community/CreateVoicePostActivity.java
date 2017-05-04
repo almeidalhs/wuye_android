@@ -339,6 +339,10 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
         if (player!=null) {
             player.stop();
         }
+        if (audioMessageHelper != null) {
+            overRecording();
+            audioMessageHelper.completeRecord(true);
+        }
     }
 
     @Override
@@ -385,6 +389,9 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
                 }
                 if (player.isPlaying()) {
                     player.stop();
+                    postListeningtestBt.setText("试听");
+                    postRecordingBt.setClickable(true);
+                    postRecordingBt.setEnabled(true);
                     return;
                 }
                 player.setDataSource(voiceFile.getPath());
@@ -394,12 +401,18 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
                         postTimeTx.setVisibility(View.VISIBLE);
                         postTimer.setVisibility(View.GONE);
                         postTimeTx.setText("00/"+time);
+                        postListeningtestBt.setText("停止");
+                        postRecordingBt.setClickable(false);
+                        postRecordingBt.setEnabled(false);
                     }
 
                     @Override
                     public void onCompletion() {
                         postTimeTx.setVisibility(View.GONE);
                         postTimer.setVisibility(View.VISIBLE);
+                        postListeningtestBt.setText("试听");
+                        postRecordingBt.setClickable(true);
+                        postRecordingBt.setEnabled(true);
                     }
 
                     @Override
@@ -409,6 +422,9 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
                     @Override
                     public void onError(String s) {
                         showToast("播放出错");
+                        postListeningtestBt.setText("试听");
+                        postRecordingBt.setClickable(true);
+                        postRecordingBt.setEnabled(true);
                     }
 
                     @Override
@@ -431,6 +447,8 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
                 break;
             case R.id.post_recording_bt:
                 if (!isRecording) {
+                    postTimeTx.setVisibility(View.GONE);
+                    postTimer.setVisibility(View.VISIBLE);
                     postRecordingBt.setText("停止");
                     isRecording = true;
                     if (voiceFile!=null && voiceFile.exists()) {

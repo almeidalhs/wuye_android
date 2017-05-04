@@ -9,9 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.adapter.MySecretListAdapter;
 import com.atman.wysq.adapter.ReplayListAdapter;
-import com.atman.wysq.model.response.GetMyCollectionModel;
 import com.atman.wysq.model.response.ReplayListModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
@@ -212,9 +210,14 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
                 break;
             case R.id.item_bloglist_root_ll:
 
+                boolean isMy = false;
+                if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null && MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                        .getUserDetailBean().getUserExt().getUser_id()==mAdapter.getItem(position).getBlog().getUser_id()) {
+                    isMy = true;
+                }
                 UiHelper.toCommunityDetail(this,mAdapter.getItem(position).getBlog().getCategory()
                         , mAdapter.getItem(position).getBlog().getTitle(), mAdapter.getItem(position).getBlog().getBlog_id()
-                        , mAdapter.getItem(position).getBlog().getVip_level(), -1, null);
+                        , mAdapter.getItem(position).getBlog().getVip_level(), -1, null, isMy);
 
                 blogId = mAdapter.getItem(position).getBlog().getBlog_id();
                 OkHttpUtils.postString().url(Common.Url_Add_Browse+blogId).mediaType(Common.JSON)

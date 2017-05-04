@@ -211,6 +211,9 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     cancelIM(view);
                 }
+                if (llFacechoose.getVisibility() == View.VISIBLE) {
+                    llFacechoose.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -801,7 +804,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
         String[] str;
         if (isMy) {
-            str = new String[]{"分享", "举报", "把TA加入黑名单", "删除"};
+            str = new String[]{"分享", "删除"};
         } else {
             str = new String[]{"分享", "举报", "把TA加入黑名单"};
         }
@@ -845,7 +848,11 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                         showLogin();
                         return;
                     }
-                    startActivity(ReportListActivity.buildIntent(mContext, (long) bolgId, 2));
+                    if (isMy) {
+                        deletePost();
+                    } else {
+                        startActivity(ReportListActivity.buildIntent(mContext, (long) bolgId, 2));
+                    }
                 } else if (which == 2) {//把TA加入黑名单
                     if (!isLogin()) {
                         showLogin();
@@ -867,11 +874,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                         showLogin();
                         return;
                     }
-                    OkHttpUtils.postString().url(Common.Url_Delete_Post + bolgId).mediaType(Common.JSON)
-                            .content("{}")
-                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                            .id(Common.NET_DELETE_POST).tag(Common.NET_DELETE_POST)
-                            .build().execute(new MyStringCallback(mContext, VoicePostDetailActivity.this, true));
+                    deletePost();
                 }
             }
         });
@@ -882,6 +885,14 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
             }
         });
         builder.show();
+    }
+
+    private void deletePost() {
+        OkHttpUtils.postString().url(Common.Url_Delete_Post + bolgId).mediaType(Common.JSON)
+                .content("{}")
+                .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                .id(Common.NET_DELETE_POST).tag(Common.NET_DELETE_POST)
+                .build().execute(new MyStringCallback(mContext, VoicePostDetailActivity.this, true));
     }
 
     @Override

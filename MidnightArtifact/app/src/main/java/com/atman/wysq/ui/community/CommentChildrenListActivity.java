@@ -138,7 +138,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
         level = getIntent().getIntExtra("level", 0);
         vipLevel = getIntent().getIntExtra("vipLevel", 0);
         headUrl = getIntent().getStringExtra("headUrl");
-        blog_id = getIntent().getIntExtra("blog_id", -1);
+        blog_id = getIntent().getLongExtra("blog_id", -1);
         name = getIntent().getStringExtra("name");
         sex = getIntent().getStringExtra("sex");
         anonymityImg = getIntent().getStringExtra("anonymityImg");

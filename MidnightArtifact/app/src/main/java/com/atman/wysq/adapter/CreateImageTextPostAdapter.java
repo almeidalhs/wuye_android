@@ -73,6 +73,16 @@ public class CreateImageTextPostAdapter extends BaseExpandableListAdapter {
         notifyDataSetChanged();
     }
 
+    public void setLocalUrlList(int mPosition, String url) {
+        if (contentList.get(mPosition).getLocalUrl().equals("")) {
+            contentList.get(mPosition).setBitmap(null);
+            contentList.get(mPosition).setLocalUrl(url);
+        } else {
+            addContent(new AddPostContentModel(url, "", "", null));
+        }
+        notifyDataSetChanged();
+    }
+
     public int getIndex() {
         return index;
     }
@@ -88,6 +98,19 @@ public class CreateImageTextPostAdapter extends BaseExpandableListAdapter {
 
     public List<AddPostContentModel> getContentList() {
         return contentList;
+    }
+
+    public int getContentListSize() {
+        int num = 0;
+        if (contentList.get(0).getLocalUrl().equals("")) {
+            num = contentList.size()-1;
+        } else if (contentList.size()==10
+                && contentList.get(9).getLocalUrl().equals("")) {
+            num = contentList.size()-1;
+        } else {
+            num = contentList.size();
+        }
+        return num;
     }
 
     public List<GoodsListModel> getGoodsList() {

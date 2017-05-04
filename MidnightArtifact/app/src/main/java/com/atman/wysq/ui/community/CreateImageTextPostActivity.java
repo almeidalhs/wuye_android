@@ -66,7 +66,8 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
     private CreateImageTextPostAdapter mAdapter;
 
     private String path = "";
-    private final int CHOOSE_BIG_PICTURE = 444;
+    private final int CHOOSE_BIG_PICTURE = 333;
+    private final int CHOOSE_BIG_PICTURE_SINGLE = 444;
     private final int TAKE_BIG_PICTURE = 555;
     private int mPosition = 0;
     private int mAnonymity = 0;
@@ -81,7 +82,7 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
-        setBarTitleTx("创建帖子");
+        setBarTitleTx("发布帖子");
         topRightTv = setBarRightTx("提交");
         topRightTv.setTextColor(getResources().getColor(R.color.color_red));
         topRightTv.setOnClickListener(new View.OnClickListener() {
@@ -279,7 +280,7 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
                 path = UiHelper.photo(mContext, path, TAKE_BIG_PICTURE);
                 break;
             case R.id.item_childone_album_iv://选择照片
-                Bimp.max = 1;
+                Bimp.max = 10-mAdapter.getContentListSize();
                 clear();
                 startActivityForResult(new Intent(mContext, ImageGridActivity.class), CHOOSE_BIG_PICTURE);
                 break;
@@ -316,7 +317,7 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
                 } else {//选择照片
                     Bimp.max = 1;
                     clear();
-                    startActivityForResult(new Intent(mContext, ImageGridActivity.class), CHOOSE_BIG_PICTURE);
+                    startActivityForResult(new Intent(mContext, ImageGridActivity.class), CHOOSE_BIG_PICTURE_SINGLE);
                 }
             }
         });
@@ -337,6 +338,10 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
             return;
         }
         if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
+            for (int i=0;i<Bimp.drr.size();i++) {
+                mAdapter.setLocalUrlList(mPosition, Bimp.drr.get(i));
+            }
+        } else if (requestCode == CHOOSE_BIG_PICTURE_SINGLE) {//选择照片
             for (int i=0;i<Bimp.drr.size();i++) {
                 mAdapter.setLocalUrl(mPosition, Bimp.drr.get(i));
             }

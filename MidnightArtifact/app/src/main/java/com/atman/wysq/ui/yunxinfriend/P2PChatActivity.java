@@ -44,6 +44,7 @@ import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.personal.wallet.RechargeActivity;
 import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.ContentUriUtil;
 import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.yunxin.model.ContentTypeInter;
 import com.atman.wysq.yunxin.model.GuessAttachment;
@@ -990,6 +991,9 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
                 imageUri = Uri.parse("file:///" + path);
             }
             if (imageUri != null) {
+                if (!imageUri.getPath().startsWith("/storage")) {
+                    imageUri = Uri.parse("file:///" + ContentUriUtil.getPath(mContext, imageUri));
+                }
                 IMMessage message = null;
                 // 创建图片消息
                 if (imageUri.toString().contains("content:")){

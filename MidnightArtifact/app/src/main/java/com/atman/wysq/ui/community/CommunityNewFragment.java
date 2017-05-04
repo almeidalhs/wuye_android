@@ -31,6 +31,7 @@ import com.atman.wysq.ui.discover.ListenLiveActivity;
 import com.atman.wysq.ui.discover.MyLiveRoomActivity;
 import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.ContentUriUtil;
 import com.atman.wysq.utils.SpaceItemDecorationGrivView;
 import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.widget.ShowLivePopWindow;
@@ -376,6 +377,10 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
+                if (!isLogin()) {
+                    showLogin();
+                    return;
+                }
                 startActivity(new Intent(getActivity(), CreateImageTextPostActivity.class));
             }
         });
@@ -383,6 +388,10 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
+                if (!isLogin()) {
+                    showLogin();
+                    return;
+                }
                 startActivity(new Intent(getActivity(), CreateVideoPostActivity.class));
             }
         });
@@ -390,6 +399,10 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
+                if (!isLogin()) {
+                    showLogin();
+                    return;
+                }
                 startActivity(new Intent(getActivity(), CreateVoicePostActivity.class));
             }
         });
@@ -477,6 +490,9 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
             imageUri = Uri.parse("file:///" + path);
         }
         if (imageUri != null) {
+            if (!imageUri.getPath().startsWith("/storage")) {
+                imageUri = Uri.parse("file:///" + ContentUriUtil.getPath(getActivity(), imageUri));
+            }
             myRoomPicInfoSta = true;
             File temp = null;
             try {
@@ -496,6 +512,11 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
     @Override
     public void onItemClick(View view, int position) {
         CommunityNewModel.BodyBean temp = mCommunityNewAdapter.getItemData(position);
+        boolean isMy = false;
+        if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null && MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                .getUserDetailBean().getUserExt().getUser_id()==temp.getBlog_id()) {
+            isMy = true;
+        }
         if (temp.getCategory() == 4) {
             if (!isLogin()) {
                 showLogin();
@@ -512,7 +533,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
             }
         } else {
             UiHelper.toCommunityDetail(getActivity(),temp.getCategory(), temp.getTitle(), temp.getBlog_id()
-                    , temp.getVip_level(), -1, temp.getLiveRoom());
+                    , temp.getVip_level(), -1, temp.getLiveRoom(),isMy);
             OkHttpUtils.postString().url(Common.Url_Add_Browse+temp.getBlog_id()).mediaType(Common.JSON)
                     .content("{}")
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())

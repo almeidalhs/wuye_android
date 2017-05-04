@@ -50,6 +50,7 @@ import com.atman.wysq.ui.community.ReportActivity;
 import com.atman.wysq.ui.community.ReportListActivity;
 import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.ContentUriUtil;
 import com.atman.wysq.utils.MyTools;
 import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.widget.ShowHeadPopWindow;
@@ -934,6 +935,9 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         }
         if (imageUri != null) {
             if (imageUri != null) {
+                if (!imageUri.getPath().startsWith("/storage")) {
+                    imageUri = Uri.parse("file:///" + ContentUriUtil.getPath(mContext, imageUri));
+                }
                 try {
                     File temp = BitmapTools.revitionImage(mContext, imageUri);
                     if (temp == null) {

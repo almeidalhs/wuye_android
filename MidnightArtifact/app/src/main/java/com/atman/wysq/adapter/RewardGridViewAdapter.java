@@ -58,6 +58,11 @@ public class RewardGridViewAdapter extends BaseAdapter {
     }
 
     public void addData (GetBlogDetailModel.BodyEntity.GiftListEntity temp) {
+        for (int i=0;i<shop.size();i++) {
+            if (shop.get(i).getUser_id()==temp.getUser_id()) {
+                shop.remove(i);
+            }
+        }
         shop.add(0, temp);
         notifyDataSetChanged();
     }

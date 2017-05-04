@@ -148,13 +148,13 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
                 holder.itemCommunitynewNotliveIv.setBackgroundResource(R.mipmap.ic_video);
             }
 
-            if (listData.get(position).getFavorite_count() > 0) {
-                drawable = mContext.getResources().getDrawable(R.mipmap.square_like_press);
-                holder.itemCommunitynewNotliveHeartTv.setTextColor(mContext.getResources().getColor(R.color.color_fda7a7));
-            } else {
-                drawable = mContext.getResources().getDrawable(R.mipmap.square_like_default);
-                holder.itemCommunitynewNotliveHeartTv.setTextColor(mContext.getResources().getColor(R.color.color_bfbfbf));
-            }
+//            if (listData.get(position).getFavorite_count() > 0) {
+//                drawable = mContext.getResources().getDrawable(R.mipmap.square_like_press);
+//                holder.itemCommunitynewNotliveHeartTv.setTextColor(mContext.getResources().getColor(R.color.color_fda7a7));
+//            } else {
+//                drawable = mContext.getResources().getDrawable(R.mipmap.square_like_default);
+//                holder.itemCommunitynewNotliveHeartTv.setTextColor(mContext.getResources().getColor(R.color.color_bfbfbf));
+//            }
             /// 这一步必须要做,否则不会显示.
             drawable.setBounds(0, 0, drawable.getMinimumWidth()*4/5, drawable.getMinimumHeight()*4/5);
             holder.itemCommunitynewNotliveHeartTv.setCompoundDrawables(drawable, null, null, null);

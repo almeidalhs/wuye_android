@@ -23,6 +23,7 @@ import com.atman.wysq.model.response.HeadImgSuccessModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.ContentUriUtil;
 import com.atman.wysq.utils.SpaceItemDecoration;
 import com.atman.wysq.utils.Tools;
 import com.atman.wysq.utils.UiHelper;
@@ -157,23 +158,28 @@ public class EditSceneActivity extends MyBaseActivity implements AdapterInterfac
 
             if (mGetSceneInfoModel.getBody().size()>0) {
                 editsceneStartwordEt.setText(mGetSceneInfoModel.getBody().get(0).getPrologue());
-                if (!mGetSceneInfoModel.getBody().get(0).getPic_url1().isEmpty()) {
+                if (mGetSceneInfoModel.getBody().get(0).getPic_url1()!=null
+                        && !mGetSceneInfoModel.getBody().get(0).getPic_url1().isEmpty()) {
                     ScenePicList temp = new ScenePicList(mGetSceneInfoModel.getBody().get(0).getPic_url1(), true);
                     mScenePicList.add(temp);
                 }
-                if (!mGetSceneInfoModel.getBody().get(0).getPic_url2().isEmpty()) {
+                if (mGetSceneInfoModel.getBody().get(0).getPic_url2()!=null
+                        && !mGetSceneInfoModel.getBody().get(0).getPic_url2().isEmpty()) {
                     ScenePicList temp = new ScenePicList(mGetSceneInfoModel.getBody().get(0).getPic_url2(), true);
                     mScenePicList.add(temp);
                 }
-                if (!mGetSceneInfoModel.getBody().get(0).getPic_url3().isEmpty()) {
+                if (mGetSceneInfoModel.getBody().get(0).getPic_url3()!=null
+                        && !mGetSceneInfoModel.getBody().get(0).getPic_url3().isEmpty()) {
                     ScenePicList temp = new ScenePicList(mGetSceneInfoModel.getBody().get(0).getPic_url3(), true);
                     mScenePicList.add(temp);
                 }
-                if (!mGetSceneInfoModel.getBody().get(0).getPic_url4().isEmpty()) {
+                if (mGetSceneInfoModel.getBody().get(0).getPic_url4()!=null
+                        && !mGetSceneInfoModel.getBody().get(0).getPic_url4().isEmpty()) {
                     ScenePicList temp = new ScenePicList(mGetSceneInfoModel.getBody().get(0).getPic_url4(), true);
                     mScenePicList.add(temp);
                 }
-                if (!mGetSceneInfoModel.getBody().get(0).getPic_url5().isEmpty()) {
+                if (mGetSceneInfoModel.getBody().get(0).getPic_url5()!=null
+                        && !mGetSceneInfoModel.getBody().get(0).getPic_url5().isEmpty()) {
                     ScenePicList temp = new ScenePicList(mGetSceneInfoModel.getBody().get(0).getPic_url5(), true);
                     mScenePicList.add(temp);
                 }
@@ -300,10 +306,18 @@ public class EditSceneActivity extends MyBaseActivity implements AdapterInterfac
         } else if (requestCode == TAKE_BIG_PICTURE) {
             imageUri = Uri.parse("file:///" + path);
         }
+        LogUtils.e(">>>imageUri:"+imageUri);
+        LogUtils.e(">>>imageUri.getPath():"+imageUri.getPath());
+        LogUtils.e(">>>imageUri>>:"+ getRealPathFromUri(mContext, imageUri));
         if (imageUri != null) {
-            if (imageUri.getPath().contains("external")) {
+            if (!imageUri.getPath().startsWith("/storage")) {
+                imageUri = Uri.parse("file:///" + ContentUriUtil.getPath(mContext, imageUri));
+            } else if (imageUri.getPath().contains("/document")) {
+                imageUri = Uri.parse("file:///" + ContentUriUtil.getPath(mContext, imageUri));
+            } else if (imageUri.getPath().contains("external")) {
                 imageUri = Uri.parse("file:///" + getRealPathFromUri(mContext, imageUri));
             }
+            LogUtils.e(">>>imageUri333:"+imageUri);
             File f = new File(imageUri.getPath().replace("//","/"));
             if (!f.exists()) {
                 showToast("图片不存在");

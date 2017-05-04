@@ -169,13 +169,16 @@ public class MycollectionActivity extends MyBaseActivity implements AdapterInter
             case R.id.item_bloglist_root_ll:
             case R.id.item_bloglist_comment_ll:
 
+                boolean isMy = false;
+                if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null && MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                        .getUserDetailBean().getUserExt().getUser_id()==mAdapter.getItem(position).getUser_id()) {
+                    isMy = true;
+                }
                 UiHelper.toCommunityDetail(this,mAdapter.getItem(position).getCategory()
                         , mAdapter.getItem(position).getTitle(), mAdapter.getItem(position).getBlog_id()
-                        , mAdapter.getItem(position).getVip_level(), -1, null);
+                        , mAdapter.getItem(position).getVip_level(), -1, null, isMy);
 
                 blogId = mAdapter.getItem(position).getBlog_id();
-//                startActivity(ImageTextPostDetailActivity.buildIntent(mContext, mAdapter.getItem(position).getTitle()
-//                        , blogId, false, mAdapter.getItem(position).getVip_level()));
                 OkHttpUtils.postString().url(Common.Url_Add_Browse+blogId).mediaType(Common.JSON)
                         .content("{}")
                         .addHeader("cookie", MyBaseApplication.getApplication().getCookie())

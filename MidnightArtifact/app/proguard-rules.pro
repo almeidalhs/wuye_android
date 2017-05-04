@@ -160,6 +160,9 @@ public static java.lang.String TABLENAME;
     public static ** valueOf(java.lang.String);
 }
 
+-dontwarn com.umeng.**
+-dontwarn com.umeng.socialize.**
+
 #---------------------------------webview------------------------------------
 -keepclassmembers class fqcn.of.javascript.interface.for.webview {
    public *;

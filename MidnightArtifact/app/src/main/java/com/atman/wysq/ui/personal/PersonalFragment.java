@@ -40,6 +40,7 @@ import com.atman.wysq.ui.personal.wallet.RechargeActivity;
 import com.atman.wysq.ui.yunxinfriend.HisGuardianActivity;
 import com.atman.wysq.ui.yunxinfriend.HisVisitorActivity;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.ContentUriUtil;
 import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.net.YunXinAuthOutEvent;
@@ -836,10 +837,16 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             changView();
         } else if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
             imageUri = data.getData();
+            if (!imageUri.getPath().startsWith("/storage")) {
+                imageUri = Uri.parse("file:///" + ContentUriUtil.getPath(getActivity(), imageUri));
+            }
             LogUtils.e(">>>imageUri.getPath():"+imageUri.getPath());
             cropImageUri(imageUri, outputX, outputX, CROP_BIG_PICTURE);
         } else if (requestCode == TAKE_BIG_PICTURE) {
             imageUri = Uri.parse("file:///" + path);
+            if (!imageUri.getPath().startsWith("/storage")) {
+                imageUri = Uri.parse("file:///" + ContentUriUtil.getPath(getActivity(), imageUri));
+            }
             cropImageUri(imageUri, outputX, outputX, CROP_BIG_PICTURE);
         } else if (requestCode == CROP_BIG_PICTURE) {
             if (imageUri != null) {

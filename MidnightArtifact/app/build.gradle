@@ -80,9 +80,9 @@ android {
             buildConfigField "boolean", "LEO_DEBUG", "true"
             versionNameSuffix "-debug"
 
-            minifyEnabled false
-            shrinkResources false
-            zipAlignEnabled false
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
             signingConfig signingConfigs.releaseConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
