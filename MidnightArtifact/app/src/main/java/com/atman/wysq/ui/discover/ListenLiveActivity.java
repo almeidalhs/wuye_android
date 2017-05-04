@@ -563,6 +563,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         if (id == Common.NET_LIVE_ENTER_ID) {
         } else if (id == Common.NET_LIVE_USERLOG_ID) {
         } else if (id == Common.NET_LIVE_MONEY_ID) {
+        } else if (id == Common.NET_LIVE_LOGOUT_ID) {
+            liveLogout();
         } else if (id == Common.NET_GET_LIVE_LIKE_ID) {
             startGetOnLine();
         } else {
@@ -677,6 +679,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         } else if (id == Common.NET_GET_GIFTLIST) {
             GiftListModel mGiftListModel = mGson.fromJson(data, GiftListModel.class);
             mGiftList = mGiftListModel.getBody();
+        } else if (id==Common.NET_LIVE_LOGOUT_ID) {
+            liveLogout();
         }
     }
 
@@ -702,6 +706,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         OkHttpUtils.getInstance().cancelTag(Common.NET_INVITE_FRIENDS_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_LIVE_LIKE_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_GIFTLIST);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_LIVE_LOGOUT_ID);
     }
 
     @Override
@@ -726,16 +731,23 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                String str = "【" + mMyUserInfo.getNick_name() + "】离开了电台";
-                ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
-                        String.valueOf(chatRoomId), str);
-                seedMessge(message, ChatRoomTypeInter.ChatRoomTypeSystemCMD, "", str, "0");
-                receiveRegister(false);
-                mMediaPlayer.release();
-                finish();
+                OkHttpUtils.postString().url(Common.Url_Live_Logout+roomId).content("{}").mediaType(Common.JSON)
+                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                        .tag(Common.NET_LIVE_LOGOUT_ID).id(Common.NET_LIVE_LOGOUT_ID).build()
+                        .execute(new MyStringCallback(mContext, ListenLiveActivity.this, false));
             }
         });
         builder.show();
+    }
+
+    private void liveLogout() {
+        String str = "【" + mMyUserInfo.getNick_name() + "】离开了电台";
+        ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(
+                String.valueOf(chatRoomId), str);
+        seedMessge(message, ChatRoomTypeInter.ChatRoomTypeSystemCMD, "", str, "0");
+        receiveRegister(false);
+        mMediaPlayer.release();
+        finish();
     }
 
     @OnClick({R.id.listenlive_invitation_iv, R.id.listenlive_flowrs_iv, R.id.listenlive_bg_iv
@@ -1215,7 +1227,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                     return;
                 }
                 if (which == 0) {//举报
-                    startActivity(ReportListActivity.buildIntent(mContext, id, 2));
+                    startActivity(ReportListActivity.buildIntent(mContext, id, 1));
 //                    startActivity(ReportActivity.buildIntent(mContext, id, 1));
                 } else if (which == 1) {//把TA加入黑名单
                     ob.dismiss();

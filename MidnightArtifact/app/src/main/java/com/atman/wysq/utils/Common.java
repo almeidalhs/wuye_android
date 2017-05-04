@@ -287,6 +287,8 @@ public class Common {
     public static String Url_Add_Ablum_Post = hostUrl + "rest/user/photo";
     //验证码验证 rest/wallet/checkAuthCode
     public static String Url_Check_Code = hostUrl + "rest/wallet/checkAuthCode";
+    //推出收听直播 rest/live/userLogOut
+    public static String Url_Live_Logout = hostUrl + "rest/live/userLogOut/";
     /**************************http访问路径*****************************/
 
 
@@ -554,6 +556,8 @@ public class Common {
     public static int NET_ADD_ABLUM_ID = 130;
     //验证码验证
     public static int NET_CHECK_CODE_ID = 131;
+    //推出收听直播
+    public static int NET_LIVE_LOGOUT_ID = 132;
     /**************************http访问回应识别码*****************************/
 
 

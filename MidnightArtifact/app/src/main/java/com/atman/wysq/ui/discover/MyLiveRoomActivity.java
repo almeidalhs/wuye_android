@@ -429,7 +429,13 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 //            myliveroomGiftNameTv.setTextColor(getResources().getColor(R.color.color_white));
 //        }
 
-        myliveroomGiftContentTv.setText(giftID.getContent().split(":")[1]);
+        String str = giftID.getContent().replace("：",":");
+        LogUtils.e(">>>111str:"+str);
+        if (str.split(":").length==2) {
+            str = str.split(":")[1];
+        }
+        LogUtils.e(">>>222str:"+str);
+        myliveroomGiftContentTv.setText(str);
         giftUserId = giftID.getUser().getUserId();
 
         if (animation == null) {
@@ -587,6 +593,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             }
         } else if (id == Common.NET_LIVE_NUM_ID) {//直播间人数
             LiveDetailModel temp = mGson.fromJson(data, LiveDetailModel.class);
+            LogUtils.e(">>>>>temp.getBody().getUserList().size():"+temp.getBody().getUserList().size());
             onLineAdapter.clearData();
             if (temp.getBody().getUserList().size() > 0) {
                 onLineAdapter.addData(temp.getBody().getUserList());
@@ -1316,7 +1323,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                     return;
                 }
                 if (which == 0) {//举报
-                    startActivity(ReportListActivity.buildIntent(mContext, id, 2));
+                    startActivity(ReportListActivity.buildIntent(mContext, id, 1));
 //                    startActivity(ReportActivity.buildIntent(mContext, id, 1));
                 } else if (which == 1) {//把TA加入黑名单
                     ob.dismiss();

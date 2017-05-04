@@ -695,7 +695,7 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
         blogUserId = mBodyEntity.getUser_id();
         favoriteId = mBodyEntity.getFavorite_id();
         isReplay = mBodyEntity.getReplay_flag();
-        vipLevel = mBodyEntity.getUserLevel();
+        vipLevel = mBodyEntity.getVip_level();
 
         setBarTitleTx(mBodyEntity.getTitle());
         changeMyHeart();

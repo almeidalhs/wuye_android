@@ -578,6 +578,7 @@ public class ImageTextPostDetailActivity extends MyBaseActivity implements Adapt
             }
             blogdetailNameTx.setText(mBodyEntity.getUser_name());
             blogdetailLevelTx.setText("Lv " + mBodyEntity.getUserLevel());
+            vipLevel = mBodyEntity.getVip_level();
             if (vipLevel>=3) {
                 blogdetailNameTx.setTextColor(getResources().getColor(R.color.color_red));
             } else {
@@ -736,7 +737,7 @@ public class ImageTextPostDetailActivity extends MyBaseActivity implements Adapt
                     if (isMy) {
                         deletePost();
                     } else {
-                        startActivity(ReportListActivity.buildIntent(mContext, (long) bolgId, 2));
+                        startActivity(ReportListActivity.buildIntent(mContext, (long) bolgId, 1));
                     }
                 } else if (which == 2) {//把TA加入黑名单
                     if (!isLogin()) {

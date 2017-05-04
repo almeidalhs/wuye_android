@@ -146,14 +146,14 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && getActivity() != null) {
+            if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null && MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                    .getUserDetailBean().getUserExt().getCan_live_room() == 1) {
+                partCommunityTopleftLl.setVisibility(View.VISIBLE);
+            } else {
+                partCommunityTopleftLl.setVisibility(View.INVISIBLE);
+            }
             if (isError) {
                 isError = false;
-                if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null && MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
-                        .getUserDetailBean().getUserExt().getCan_live_room() == 1) {
-                    partCommunityTopleftLl.setVisibility(View.VISIBLE);
-                } else {
-                    partCommunityTopleftLl.setVisibility(View.INVISIBLE);
-                }
                 doHttp(true);
             }
         }

@@ -105,6 +105,15 @@ public class GetBlogDetailModel {
         private String img;
         private String url;
         private int file_length;
+        private int vip_level;
+
+        public int getVip_level() {
+            return vip_level;
+        }
+
+        public void setVip_level(int vip_level) {
+            this.vip_level = vip_level;
+        }
 
         public String getImg() {
             return img;

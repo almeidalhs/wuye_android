@@ -1,6 +1,7 @@
 package com.atman.wysq.ui.community;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import com.atman.wysq.utils.Common;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.MyCleanEditText;
+import com.base.baselibs.widget.PromptDialog;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.util.Timer;
@@ -125,8 +127,16 @@ public class ReportActivity extends MyBaseActivity {
     public void onStringResponse(String data, Response response, int id) {
         super.onStringResponse(data, response, id);
         if (id == Common.NET_REPORT) {
-            showToast("举报成功");
-            finish();
+            PromptDialog.Builder builder = new PromptDialog.Builder(this);
+            builder.setMessage("提交成功，我们将尽快处理！");
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            builder.show();
         }
     }
 

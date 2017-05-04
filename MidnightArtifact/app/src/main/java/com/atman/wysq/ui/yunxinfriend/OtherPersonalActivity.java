@@ -727,7 +727,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
                     return;
                 }
                 if (which == 0) {//举报
-                    startActivity(ReportListActivity.buildIntent(mContext, id, 2));
+                    startActivity(ReportListActivity.buildIntent(mContext, id, 1));
 //                    startActivity(ReportActivity.buildIntent(mContext, id, 1));
                 } else if (which == 1) {//把TA加入黑名单
                     if (mGetMyUserIndexModel.getBody().getIsBlack()==1) {

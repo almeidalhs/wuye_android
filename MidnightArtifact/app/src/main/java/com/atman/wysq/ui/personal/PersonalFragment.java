@@ -506,7 +506,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         personalSettingIv.setVisibility(View.VISIBLE);
         personalGenderIv.setVisibility(View.VISIBLE);
 
-        personalVipTx.setText("VIP."+mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getUserLevel());
+        personalVipTx.setText("LV "+mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getUserLevel());
         if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>=4) {
             personalSVipTv.setVisibility(View.VISIBLE);
         } else {
