@@ -91,7 +91,7 @@
             android:padding="7dp"
             android:text="钻石兑金币"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/dimen_sp_15" />
+            android:textSize="@dimen/dimen_sp_14" />
 
         <TextView
             android:id="@+id/recharge_withdrawals_tv"
@@ -103,7 +103,7 @@
             android:layout_marginLeft="@dimen/dimen_dp_30"
             android:text="提      现"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/dimen_sp_15" />
+            android:textSize="@dimen/dimen_sp_14" />
 
         <TextView
             android:id="@+id/recharge_diamondsshop_tv"

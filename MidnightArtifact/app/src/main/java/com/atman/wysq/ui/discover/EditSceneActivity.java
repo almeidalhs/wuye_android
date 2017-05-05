@@ -34,6 +34,8 @@ import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.MyCleanEditText;
+import com.choicepicture_library.ImageGridActivity;
+import com.choicepicture_library.tools.Bimp;
 import com.tbl.okhttputils.OkHttpUtils;
 import com.tbl.okhttputils.builder.PostFormBuilder;
 
@@ -247,6 +249,7 @@ public class EditSceneActivity extends MyBaseActivity implements AdapterInterfac
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        clear();
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_SCENEINFO_ID);
         OkHttpUtils.getInstance().cancelTag(Common.NET_RESET_HEAD);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_CHAT_BACKGROUNG_ID);
@@ -280,9 +283,13 @@ public class EditSceneActivity extends MyBaseActivity implements AdapterInterfac
                 if (which == 0) {//拍照
                     path = UiHelper.photo(mContext, path, TAKE_BIG_PICTURE);
                 } else {//选择照片
-                    Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
-                    getAlbum.setType("image/*");
-                    startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
+//                    Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
+//                    getAlbum.setType("image/*");
+//                    startActivityForResult(getAlbum, CHOOSE_BIG_PICTURE);
+
+                    Bimp.max = 6-mAdapter.getListData().size();
+                    clear();
+                    startActivityForResult(new Intent(mContext, ImageGridActivity.class), CHOOSE_BIG_PICTURE);
                 }
                 MyBaseApplication.getApplication().setFilterLock(true);
             }
@@ -296,45 +303,53 @@ public class EditSceneActivity extends MyBaseActivity implements AdapterInterfac
         builder.show();
     }
 
+    private void clear() {
+        Bimp.num = 0;
+        Bimp.drr.clear();
+        Bimp.drr_or.clear();
+        Bimp.bmp.clear();
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
         if (requestCode == CHOOSE_BIG_PICTURE) {//选择照片
-            imageUri = data.getData();
+//            imageUri = data.getData();
+            for (int i=0;i<Bimp.drr.size();i++) {
+                ScenePicList temp = new ScenePicList(Bimp.drr.get(i), false);
+                mAdapter.addData(temp);
+            }
         } else if (requestCode == TAKE_BIG_PICTURE) {
             imageUri = Uri.parse("file:///" + path);
-        }
-        LogUtils.e(">>>imageUri:"+imageUri);
-        LogUtils.e(">>>imageUri.getPath():"+imageUri.getPath());
-        LogUtils.e(">>>imageUri>>:"+ getRealPathFromUri(mContext, imageUri));
-        if (imageUri != null) {
-            if (!imageUri.getPath().startsWith("/storage")) {
-                imageUri = Uri.parse("file:///" + ContentUriUtil.getPath(mContext, imageUri));
-            } else if (imageUri.getPath().contains("/document")) {
-                imageUri = Uri.parse("file:///" + ContentUriUtil.getPath(mContext, imageUri));
-            } else if (imageUri.getPath().contains("external")) {
-                imageUri = Uri.parse("file:///" + getRealPathFromUri(mContext, imageUri));
-            }
-            LogUtils.e(">>>imageUri333:"+imageUri);
-            File f = new File(imageUri.getPath().replace("//","/"));
-            if (!f.exists()) {
-                showToast("图片不存在");
-                return;
-            } else {
-                try {
-                    imageUri = Uri.parse("file:///"+Tools.revitionImage(imageUri.getPath()));
-                    ScenePicList temp = new ScenePicList(f.getPath(), false);
-                    mAdapter.addData(temp);
-                } catch (IOException e) {
-                    LogUtils.e(">>>e:"+e.toString());
-                    showToast("图片压缩失败");
-                    e.printStackTrace();
+            if (imageUri != null) {
+                if (!imageUri.getPath().startsWith("/storage")) {
+                    imageUri = Uri.parse("file:///" + ContentUriUtil.getPath(mContext, imageUri));
+                } else if (imageUri.getPath().contains("/document")) {
+                    imageUri = Uri.parse("file:///" + ContentUriUtil.getPath(mContext, imageUri));
+                } else if (imageUri.getPath().contains("external")) {
+                    imageUri = Uri.parse("file:///" + getRealPathFromUri(mContext, imageUri));
                 }
+                LogUtils.e(">>>imageUri333:"+imageUri);
+                File f = new File(imageUri.getPath().replace("//","/"));
+                if (!f.exists()) {
+                    showToast("图片不存在");
+                    return;
+                } else {
+                    try {
+                        imageUri = Uri.parse("file:///"+Tools.revitionImage(imageUri.getPath()));
+                        ScenePicList temp = new ScenePicList(f.getPath(), false);
+                        mAdapter.addData(temp);
+                    } catch (IOException e) {
+                        LogUtils.e(">>>e:"+e.toString());
+                        showToast("图片压缩失败");
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                showToast("图片不存在");
             }
-        } else {
-            showToast("图片不存在");
         }
     }
 

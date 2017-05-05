@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -32,6 +34,7 @@ import com.atman.wysq.model.response.HeadImgSuccessModel;
 import com.atman.wysq.model.response.UpVoiceModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.SelectVideoUtil;
 import com.atman.wysq.utils.UiHelper;
@@ -249,7 +252,7 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                             .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                             .addFile("files0_name", StringUtils.getFileName(upVideoUrl), new File(upVideoUrl))
                             .id(Common.NET_UP_VIDEO_ID).tag(Common.NET_UP_VIDEO_ID).build()
-                            .connTimeOut(Common.timeOut).readTimeOut(Common.timeOut).writeTimeOut(Common.timeOut)
+                            .connTimeOut(Common.timeOutTwo).readTimeOut(Common.timeOutTwo).writeTimeOut(Common.timeOutTwo)
                             .execute(new MyStringCallback(mContext, CreateVideoPostActivity.this, true));
                 }
             }
@@ -436,12 +439,22 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
     }
 
     private void displayImg(String path) {
-        upImgUrl = path;
         Bitmap bm = null;
-        try {
-            bm = Bimp.revitionImageSize(path);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (path==null) {
+            bm = getVideoThumb2(upVideoUrl);
+            upImgUrl = BitmapTools.saveBitmap(bm).getPath();
+            try {
+                upImgUrl = BitmapTools.revitionImage(upImgUrl).getPath();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            upImgUrl = path;
+            try {
+                bm = Bimp.revitionImageSize(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         partVideoBgIv.setImageBitmap(bm);
         partVideoAddTv.setVisibility(View.GONE);
@@ -550,6 +563,31 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                 startActivity(new Intent(mContext, MallActivity.class));
                 break;
         }
+    }
+
+    /**
+     * 获取视频文件截图
+     *
+     * @param path 视频文件的路径
+     * @return Bitmap 返回获取的Bitmap
+     */
+    public static Bitmap getVideoThumb(String path) {
+        MediaMetadataRetriever media = new MediaMetadataRetriever();
+        media.setDataSource(path);
+        return media.getFrameAtTime();
+    }
+    /**
+     * 获取视频文件缩略图 API>=8(2.2)
+     *
+     * @param path 视频文件的路径
+     * @param kind 缩略图的分辨率：MINI_KIND、MICRO_KIND、FULL_SCREEN_KIND
+     * @return Bitmap 返回获取的Bitmap
+     */
+    public static Bitmap getVideoThumb2(String path, int kind) {
+        return ThumbnailUtils.createVideoThumbnail(path, kind);
+    }
+    public static Bitmap getVideoThumb2(String path) {
+        return getVideoThumb2(path, MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
     }
 
     private int getPlayTime(String mUri) {

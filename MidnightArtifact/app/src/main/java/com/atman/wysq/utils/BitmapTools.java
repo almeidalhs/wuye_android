@@ -62,12 +62,43 @@ public class BitmapTools {
 		return saveBitmap(bitmap);
     }
 
+    public static File revitionImage(String path) throws IOException {
+
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(in, null, options);
+        in.close();
+        int i = 0;
+        Bitmap bitmap = null;
+        while (true) {
+            if ((options.outWidth >> i <= 800) && (options.outHeight >> i <= 800)) {
+                in = new BufferedInputStream(new FileInputStream(new File(path)));
+                options.inSampleSize = (int) Math.pow(2.0D, i);
+                options.inJustDecodeBounds = false;
+                bitmap = BitmapFactory.decodeStream(in, null, options);
+                break;
+            }
+            i += 1;
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int option_1 = 100;
+        while ( baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+            baos.reset();//重置baos即清空baos
+            bitmap.compress(Bitmap.CompressFormat.JPEG, option_1, baos);//这里压缩options%，把压缩后的数据存放到baos中
+            option_1 -= 10;//每次都减少10
+        }
+        bitmap = rotateBitmapByDegree(bitmap, getBitmapDegree(path));
+		return saveBitmap(bitmap);
+    }
+
     /** 保存方法 */
     public static File saveBitmap(Bitmap bm) {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             return null;
         }
-        String path = Environment.getExternalStorageDirectory()+"/jiying/image";
+        String path = FileUtils.SDPATH;
         File tempf = new File(path);
         if (!tempf.exists()) {
             tempf.mkdirs();

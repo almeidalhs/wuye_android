@@ -344,6 +344,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         List<GetMyUserIndexModel.BodyBean.UserDetailBeanBean.PhotoListBean> temp
                 = mGetUserIndexModel.getBody().getUserDetailBean().getPhotoList();
 
+        LogUtils.e(">>>temp.size():"+temp.size());
         if (temp.size()==0) {
             fragmentImgLl.setVisibility(View.GONE);
             return;
@@ -367,17 +368,11 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         }
 
         views.clear();
-        // 将最后一个ImageView添加进来
-        views.add(ViewFactory.getImageView(getActivity(), infos.get(infos.size() - 1).getUrl()));
         for (int i = 0; i < infos.size(); i++) {
             ImageView img = ViewFactory.getImageView(getActivity(), infos.get(i).getUrl());
             img.setScaleType(ImageView.ScaleType.CENTER_CROP);
             views.add(img);
         }
-        // 将第一个ImageView添加进来
-        ImageView imageView = ViewFactory.getImageView(getActivity(), infos.get(0).getUrl());
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        views.add(imageView);
 
         // 设置循环，在调用setData方法前调用
         cycleViewPager.setCycle(false);
