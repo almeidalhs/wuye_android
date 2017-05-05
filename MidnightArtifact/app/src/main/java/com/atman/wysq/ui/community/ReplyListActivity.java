@@ -2,10 +2,14 @@ package com.atman.wysq.ui.community;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
@@ -16,8 +20,10 @@ import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.UiHelper;
+import com.atman.wysq.widget.face.FaceRelativeLayout;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.widget.MyCleanEditText;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.tbl.okhttputils.OkHttpUtils;
@@ -51,10 +57,28 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
     ImageView replyBarTitleTwoIv;
     @Bind(R.id.reply_bar_title_two_ll)
     LinearLayout replyBarTitleTwoLl;
+    @Bind(R.id.bottom_ll)
+    LinearLayout bottomLl;
     @Bind(R.id.reply_bar_title_back_iv)
     ImageView replyBarTitleBackIv;
     @Bind(R.id.reply_bar_title_back_ll)
     LinearLayout replyBarTitleBackLl;
+    @Bind(R.id.blogdetail_addemol_iv)
+    ImageView blogdetailAddemolIv;
+    @Bind(R.id.blogdetail_addcomment_et)
+    MyCleanEditText blogdetailAddcommentEt;
+    @Bind(R.id.blogdetail_send_bt)
+    Button blogdetailSendBt;
+    @Bind(R.id.ll1)
+    LinearLayout ll1;
+    @Bind(R.id.vp_contains)
+    ViewPager vpContains;
+    @Bind(R.id.iv_image)
+    LinearLayout ivImage;
+    @Bind(R.id.ll_facechoose)
+    RelativeLayout llFacechoose;
+    @Bind(R.id.FaceRelativeLayout)
+    FaceRelativeLayout faceRelativeLayout;
 
     private Context mContext = ReplyListActivity.this;
 
@@ -77,6 +101,8 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
         super.initWidget(v);
         hideTitleBar();
 
+//        blogdetailAddcommentEt.setF
+
         initListView();
     }
 
@@ -90,6 +116,24 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
         mAdapter = new ReplayListAdapter(mContext, getmWidth(), this);
         pullToRefreshListView.setEmptyView(mEmpty);
         pullToRefreshListView.setAdapter(mAdapter);
+        pullToRefreshListView.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    cancelIM(view);
+                }
+                if (llFacechoose.getVisibility() == View.VISIBLE) {
+                    llFacechoose.setVisibility(View.GONE);
+                }
+                if (bottomLl.getVisibility() == View.VISIBLE) {
+                    bottomLl.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            }
+        });
     }
 
     @Override
@@ -197,7 +241,7 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
     public void onItemClick(View view, int position) {
         switch (view.getId()) {
             case R.id.item_bloglist_head_rl:
-                if (MyBaseApplication.getApplication().mGetMyUserIndexModel==null) {
+                if (MyBaseApplication.getApplication().mGetMyUserIndexModel == null) {
                     showLogin();
                     return;
                 }
@@ -208,16 +252,39 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
                 }
                 startActivity(OtherPersonalActivity.buildIntent(mContext, mAdapter.getItem(position).getBlog().getUser_id()));
                 break;
-            case R.id.item_bloglist_root_ll:
-                UiHelper.toCommunityDetail(this,mAdapter.getItem(position).getBlog().getCategory()
-                        , mAdapter.getItem(position).getBlog().getTitle(), mAdapter.getItem(position).getBlog().getBlog_id()
-                        , mAdapter.getItem(position).getBlog().getVip_level(), -1, null);
+            case R.id.item_relay_root_ll:
+                if (mAdapter.getItem(position).getBlog() != null) {
+                    UiHelper.toCommunityDetail(this, mAdapter.getItem(position).getBlog().getCategory()
+                            , mAdapter.getItem(position).getBlog().getTitle(), mAdapter.getItem(position).getBlog().getBlog_id()
+                            , mAdapter.getItem(position).getBlog().getVip_level(), -1, null);
 
-                blogId = mAdapter.getItem(position).getBlog().getBlog_id();
-                OkHttpUtils.postString().url(Common.Url_Add_Browse+blogId).mediaType(Common.JSON)
-                        .id(Common.NET_ADD_BROWSE).tag(Common.NET_ADD_BROWSE).content("{}")
-                        .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
-                        .build().execute(new MyStringCallback(mContext, ReplyListActivity.this, false));
+                    blogId = mAdapter.getItem(position).getBlog().getBlog_id();
+                    OkHttpUtils.postString().url(Common.Url_Add_Browse + blogId).mediaType(Common.JSON)
+                            .id(Common.NET_ADD_BROWSE).tag(Common.NET_ADD_BROWSE).content("{}")
+                            .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .build().execute(new MyStringCallback(mContext, ReplyListActivity.this, false));
+                } else {
+                    startActivity(CommentChildrenListActivity.buildIntent(mContext
+                            , mAdapter.getItem(position).getParentComment().getBlog_id()
+                            , mAdapter.getItem(position).getParentComment().getBlog_comment_id()
+                            , mAdapter.getItem(position).getParentComment().getIcon()
+                            , 0
+                            , mAdapter.getItem(position).getParentComment().getUser_name()
+                            , mAdapter.getItem(position).getParentComment().getSex()
+                            , mAdapter.getItem(position).getParentComment().getUserLevel()
+                            , mAdapter.getItem(position).getParentComment().getCreate_time()
+                            , mAdapter.getItem(position).getComment().getUser_id()
+                            , mAdapter.getItem(position).getParentComment().getContent()
+                            , mAdapter.getItem(position).getParentComment().getUser_id()
+                            , false, "", 1
+                            , mAdapter.getItem(position).getParentComment().getVip_level()));
+                }
+                break;
+            case R.id.item_relay_tx:
+                bottomLl.setVisibility(View.VISIBLE);
+                blogdetailAddcommentEt.requestFocus();
+                blogdetailAddcommentEt.setFocusable(true);
+                blogdetailAddcommentEt.setFocusableInTouchMode(true);
                 break;
         }
     }

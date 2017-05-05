@@ -92,7 +92,7 @@ public class SelectGiftAdapter extends BaseAdapter {
         holder.itemSelectgiftCionTv.setText(temp.getPrice()+"金币");
         holder.itemSelectgiftNameTv.setText(temp.getName());
         holder.itemSelectgiftIv.setLayoutParams(params);
-        if (temp.getPrice() < myCion) {
+        if (temp.getPrice() <= myCion) {
             holder.itemSelectgiftIv.setImageURI(Common.ImageUrl+temp.getPic_url());
         } else {
             holder.itemSelectgiftIv.setImageURI(Common.ImageUrl+temp.getGray_pic_url());

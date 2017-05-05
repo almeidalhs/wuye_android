@@ -41,6 +41,7 @@ import com.atman.wysq.ui.yunxinfriend.HisGuardianActivity;
 import com.atman.wysq.ui.yunxinfriend.HisVisitorActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.ContentUriUtil;
+import com.atman.wysq.utils.FileUtils;
 import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.net.YunXinAuthOutEvent;
@@ -889,7 +890,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         intent.putExtra("outputX", outputX);
         intent.putExtra("outputY", outputY);
         intent.putExtra("scale", true);
-        imageUri = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
+        imageUri = Uri.parse("file://" + "/" + FileUtils.SDPATH + System.currentTimeMillis() +".jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         intent.putExtra("return-data", false);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());

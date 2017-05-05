@@ -353,44 +353,53 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
     }
 
     private void showWarn() {
-        BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
-        builder.setItems(new String[]{"发布", "匿名发布"}, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                if (which == 0) {//发布
-                    mAnonymity = 0;
-                } else {//匿名发布
-                    mAnonymity = 1;
-                }
-                boolean isGif = false;
-                int num = 0;
-                for (int i=0;i<mAdapter.getContentList().size();i++) {
-                    String str = mAdapter.getContentList().get(i).getLocalUrl();
-                    if ((str.substring(str.lastIndexOf(".")+1)).contains("gif")) {
-                        isGif = true;
-                        num = i;
-                        if (mAdapter.getContentList().get(i).getLocalUrl().isEmpty()) {
-                            num -= 1;
-                        }
-                        break;
-                    }
-                }
-                if (!isGif) {
-                    inUrl = 0;
-                    upLoadPic();
+        boolean isGif = false;
+        int num = 0;
+        int picNum = 0;
+        for (int i=0;i<mAdapter.getContentList().size();i++) {
+            String str = mAdapter.getContentList().get(i).getLocalUrl();
+            if (mAdapter.getContentList().get(i).getLocalUrl().isEmpty()) {
+                num -= 1;
+                picNum -= 1;
+            } else {
+                if ((str.substring(str.lastIndexOf(".")+1)).contains("gif")) {
+                    isGif = true;
+                    num = i;
+                    break;
                 } else {
-                    showToast("第"+(num+1)+"张是gif图片，不可选用");
+                    picNum += 1;
                 }
             }
-        });
-        builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+        }
+        if (!isGif) {
+            if (picNum<=0) {
+                showToast("请至少选择一张图片");
+                return;
             }
-        });
-        builder.show();
+            inUrl = 0;
+            BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
+            builder.setItems(new String[]{"发布", "匿名发布"}, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    if (which == 0) {//发布
+                        mAnonymity = 0;
+                    } else {//匿名发布
+                        mAnonymity = 1;
+                    }
+                    upLoadPic();
+                }
+            });
+            builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        } else {
+            showToast("第"+(num+1)+"张是gif图片，不可选用");
+        }
     }
 
     private int inUrl = 0;

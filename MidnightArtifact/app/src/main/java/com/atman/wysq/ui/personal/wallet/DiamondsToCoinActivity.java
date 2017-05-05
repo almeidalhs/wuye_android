@@ -138,7 +138,7 @@ public class DiamondsToCoinActivity extends MyBaseActivity implements EditCheckB
                     showToast("请输入要兑换的金币数");
                     return;
                 } else if (Integer.valueOf(str) == 0) {
-                    showToast("请输入的金币数不能为0");
+                    showToast("您输入的兑换金币数量应大于0");
                     return;
                 }
                 showWran();

@@ -162,6 +162,7 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
                 withdrawAccountMonifyTv.setText("去修改");
                 withdrawAccountTv.setText("提现到账号：" + mGetWithdrawalsListModel.getBody().get(0).getAccount());
             } else {
+                showWraning("您还没有添加体现账号，不能进行提现操作！");
                 withdrawNumEt.setInputType(InputType.TYPE_NULL);
                 withdrawSumbitBt.setClickable(false);
                 withdrawSumbitBt.setEnabled(false);

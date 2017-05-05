@@ -302,35 +302,35 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
     }
 
     private void showWarn() {
-        BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
-        builder.setItems(new String[]{"发布", "匿名发布"}, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                if (which == 0) {//发布
-                    mAnonymity = 0;
-                } else {//匿名发布
-                    mAnonymity = 1;
-                }
+        if (imgPath!=null && !imgPath.isEmpty() && new File(imgPath).exists()) {
+            BottomDialog.Builder builder = new BottomDialog.Builder(mContext);
+            builder.setItems(new String[]{"发布", "匿名发布"}, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    if (which == 0) {//发布
+                        mAnonymity = 0;
+                    } else {//匿名发布
+                        mAnonymity = 1;
+                    }
 
-                if (imgPath!=null && !imgPath.isEmpty() && new File(imgPath).exists()) {
                     OkHttpUtils.post().url(Common.Url_Reset_Head).addParams("uploadType", "img")
                             .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                             .addFile("files0_name", StringUtils.getFileName(imgPath), new File(imgPath))
                             .id(Common.NET_RESET_HEAD).tag(Common.NET_RESET_HEAD).build()
                             .execute(new MyStringCallback(mContext, CreateVoicePostActivity.this, true));
-                } else {
-                    upVoice();
                 }
-            }
-        });
-        builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
+            });
+            builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        } else {
+            showToast("请选择一张图片作为封面");
+        }
     }
 
     @Override

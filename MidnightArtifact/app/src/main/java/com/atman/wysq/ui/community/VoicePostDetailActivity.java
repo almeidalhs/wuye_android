@@ -732,6 +732,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
             blogdetailVerifyImg.setVisibility(View.GONE);
             blogdetailVipTx.setVisibility(View.GONE);
             blogdetailSvipIv.setVisibility(View.GONE);
+            bloglistRelationTx.setVisibility(View.GONE);
         } else {
             isAnonymity = false;
             blogdetailLevelTx.setVisibility(View.VISIBLE);

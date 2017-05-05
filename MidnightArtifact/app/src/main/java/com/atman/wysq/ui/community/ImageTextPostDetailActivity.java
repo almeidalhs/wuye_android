@@ -568,6 +568,7 @@ public class ImageTextPostDetailActivity extends MyBaseActivity implements Adapt
             blogdetailVerifyImg.setVisibility(View.GONE);
             blogdetailVipTx.setVisibility(View.GONE);
             blogdetailSvipIv.setVisibility(View.GONE);
+            bloglistRelationTx.setVisibility(View.GONE);
         } else {
             isAnonymity = false;
             blogdetailLevelTx.setVisibility(View.VISIBLE);
@@ -739,7 +740,7 @@ public class ImageTextPostDetailActivity extends MyBaseActivity implements Adapt
                     if (isMy) {
                         deletePost();
                     } else {
-                        startActivity(ReportListActivity.buildIntent(mContext, (long) bolgId, 1));
+                        startActivity(ReportListActivity.buildIntent(mContext, (long) bolgId, 2));
                     }
                 } else if (which == 2) {//把TA加入黑名单
                     if (!isLogin()) {

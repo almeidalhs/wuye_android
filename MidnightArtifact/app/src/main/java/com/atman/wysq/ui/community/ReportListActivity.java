@@ -69,11 +69,12 @@ public class ReportListActivity extends MyBaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mAdapter.getItem(position).getIs_other()==1) {
-                    startActivity(ReportActivity.buildIntent(mContext, (long) bolgId, 2));
+                    startActivity(ReportActivity.buildIntent(mContext, (long) bolgId, typeId
+                            , mAdapter.getItem(position).getReport_reason_id()));
                     finish();
                 } else {
-                    ReportModel mReportModel = new ReportModel(mAdapter.getItem(position).getDescription()
-                            , typeId, bolgId);
+                    ReportModel mReportModel = new ReportModel(mAdapter.getItem(position).getReport_reason_id()
+                            ,mAdapter.getItem(position).getDescription(), typeId, bolgId);
                     OkHttpUtils.postString().url(Common.Url_RePort).mediaType(Common.JSON)
                             .content(mGson.toJson(mReportModel))
                             .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
@@ -87,6 +88,7 @@ public class ReportListActivity extends MyBaseActivity {
     @Override
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
+        LogUtils.e(">>>(Common.Url_Get_Report_List + typeId):"+Common.Url_Get_Report_List + typeId);
         OkHttpUtils.get().url(Common.Url_Get_Report_List + typeId).id(Common.NET_GET_REPORT_LIST_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_GET_REPORT_LIST_ID).build().execute(new MyStringCallback(mContext, this, true));

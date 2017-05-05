@@ -63,6 +63,9 @@ public class MyStringCallback extends StringCallback {
     public void onError(Call call, Exception e, int code, int id) {
         LogUtils.e("e:"+e.toString()+",id:"+id);
 
+        if (e.toString().contains("Socket closed")) {
+            return;
+        }
         if (e.toString().contains("timeout") || e.toString().contains("java.net.SocketTimeoutException")
                 || e.toString().contains("Failed to connect")) {
             CallBack.onError(call, new IOException("访问超时，请稍后再试..."), code, id);

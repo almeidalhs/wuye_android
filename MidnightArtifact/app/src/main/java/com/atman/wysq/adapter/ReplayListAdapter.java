@@ -94,20 +94,15 @@ public class ReplayListAdapter extends BaseAdapter {
         }
 
         ReplayListModel.BodyBean mBodyEntity = shop.get(position);
+        holder.itemRelayTimeTx.setText(MyTools.convertTimeS(mBodyEntity.getComment().getCreate_time()));
+        if (mStateId==0) {
+            holder.itemRelayTx.setVisibility(View.GONE);
+        } else {
+            holder.itemRelayTx.setVisibility(View.VISIBLE);
+        }
 
-        if (mBodyEntity.getBlog() != null) {
-            if (mStateId == 0) {
-                holder.itemRelayTimeTx.setText(MyTools.convertTimeS(mBodyEntity.getBlog().getCreate_time()));
-            } else {
-                holder.itemRelayTimeTx.setText(MyTools.convertTimeS(mBodyEntity.getBlog().getUpdate_time()));
-            }
-
-            holder.itemRelayRootLl.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAdapterInterface.onItemClick(v, position);
-                }
-            });
+        if (mBodyEntity.getBlog() != null) {//帖子
+            holder.itemRelayTypeTx.setText("[帖子]");
 
             if (mBodyEntity.getBlog().getAnonymityUser() != null) {//匿名用户
                 ImageLoader.getInstance().displayImage(Common.ImageUrl + mBodyEntity.getBlog().getAnonymityUser().getIcon()
@@ -153,19 +148,69 @@ public class ReplayListAdapter extends BaseAdapter {
 
             holder.itemRelayNameTwoTx.setText(mBodyEntity.getComment().getUser_name()+":");
             holder.itemRelayContentTwoTx.setText(SmileUtils.getEmotionContent(context
-                    , holder.itemRelayContentTwoTx, mBodyEntity.getBlog().getTitle()));
+                    , holder.itemRelayContentTwoTx, mBodyEntity.getComment().getContent()));
             holder.itemRelayContentTx.setText(SmileUtils.getEmotionContent(context
-                    , holder.itemRelayContentTx, mBodyEntity.getComment().getContent()));
+                    , holder.itemRelayContentTx, mBodyEntity.getBlog().getTitle()));
+        } else {//评论
+            holder.itemRelayTypeTx.setText("[评论]");
+            holder.itemRelayLevelTx.setVisibility(View.VISIBLE);
+            holder.itemRelayVerifyImg.setVisibility(View.GONE);
+            holder.itemRelayGenderImg.setVisibility(View.VISIBLE);
 
-            holder.itemRelayHeadRl.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            holder.itemRelayNameTx.setText(mBodyEntity.getParentComment().getUser_name());
+            holder.itemRelayLevelTx.setText("Lv " + mBodyEntity.getParentComment().getUserLevel());
+            if (shop.get(position).getParentComment().getVip_level() >= 4) {
+                holder.itemRelayVipTx.setVisibility(View.GONE);
+                holder.itemRelaySvipIv.setVisibility(View.VISIBLE);
+            } else {
+                holder.itemRelaySvipIv.setVisibility(View.GONE);
+                if (shop.get(position).getParentComment().getVip_level() == 0) {
+                    holder.itemRelayVipTx.setVisibility(View.GONE);
+                } else {
+                    holder.itemRelayVipTx.setText("VIP." + shop.get(position).getParentComment().getVip_level());
+                    holder.itemRelayVipTx.setVisibility(View.VISIBLE);
+                }
+            }
+            if (shop.get(position).getParentComment().getVip_level() >= 3) {
+                holder.itemRelayNameTx.setTextColor(context.getResources().getColor(R.color.color_red));
+            } else {
+                holder.itemRelayNameTx.setTextColor(context.getResources().getColor(R.color.color_333333));
+            }
+            ImageLoader.getInstance().displayImage(Common.ImageUrl + mBodyEntity.getParentComment().getIcon()
+                    , holder.itemRelayHeadImg, MyBaseApplication.getApplication().getOptionsNot());
+            holder.itemRelayNameTwoTx.setText(mBodyEntity.getComment().getUser_name()+":");
+            holder.itemRelayContentTwoTx.setText(SmileUtils.getEmotionContent(context
+                    , holder.itemRelayContentTwoTx, mBodyEntity.getComment().getContent()));
+            holder.itemRelayContentTx.setText(SmileUtils.getEmotionContent(context
+                    , holder.itemRelayContentTx, mBodyEntity.getParentComment().getContent()));
+        }
+
+        holder.itemRelayHeadRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (shop.get(position).getBlog()==null){
+                    mAdapterInterface.onItemClick(v, position);
+                } else {
                     if (shop.get(position).getBlog().getAnonymityUser() == null) {
                         mAdapterInterface.onItemClick(v, position);
                     }
                 }
-            });
-        }
+            }
+        });
+
+        holder.itemRelayRootLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapterInterface.onItemClick(v, position);
+            }
+        });
+
+        holder.itemRelayTx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapterInterface.onItemClick(v, position);
+            }
+        });
 
         return convertView;
     }
@@ -204,6 +249,8 @@ public class ReplayListAdapter extends BaseAdapter {
         TextView itemRelayContentTwoTx;
         @Bind(R.id.item_relay_time_tx)
         TextView itemRelayTimeTx;
+        @Bind(R.id.item_relay_tx)
+        TextView itemRelayTx;
         @Bind(R.id.item_relay_root_ll)
         LinearLayout itemRelayRootLl;
 

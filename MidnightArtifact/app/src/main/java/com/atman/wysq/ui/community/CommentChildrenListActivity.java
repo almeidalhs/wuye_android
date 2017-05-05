@@ -63,7 +63,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
 
     private Context mContext = CommentChildrenListActivity.this;
 
-    private int id;
+    private long id;
     private int verifyState;
     private int level;
     private int vipLevel;
@@ -107,7 +107,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    public static Intent buildIntent(Context context, long blog_id, int id, String headUrl, int verifyState, String name
+    public static Intent buildIntent(Context context, long blog_id, long id, String headUrl, int verifyState, String name
             , String sex, int level, long time, long ueseID, String content, long blogUserId, boolean isAnonymity
             , String anonymityImg, int isReplay, int vipLevel) {
         Intent intent = new Intent(context, CommentChildrenListActivity.class);
@@ -132,7 +132,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
     @Override
     public void initWidget(View... v) {
         super.initWidget(v);
-        id = getIntent().getIntExtra("id", -1);
+        id = getIntent().getLongExtra("id", -1);
         verifyState = getIntent().getIntExtra("verifyState", 0);
         isReplay = getIntent().getIntExtra("isReplay", 0);
         level = getIntent().getIntExtra("level", 0);
@@ -275,6 +275,9 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     cancelIM(view);
+                }
+                if (llFacechoose.getVisibility() == View.VISIBLE) {
+                    llFacechoose.setVisibility(View.GONE);
                 }
             }
 
