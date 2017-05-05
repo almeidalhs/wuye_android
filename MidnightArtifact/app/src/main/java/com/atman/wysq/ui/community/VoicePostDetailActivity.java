@@ -7,17 +7,11 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -36,7 +30,6 @@ import com.atman.wysq.R;
 import com.atman.wysq.adapter.BlogDetailGoodsListAdapter;
 import com.atman.wysq.adapter.PostingsDetailsCommentAdapter;
 import com.atman.wysq.adapter.RewardGridViewAdapter;
-import com.atman.wysq.model.danmaku.MyDanmakuModel;
 import com.atman.wysq.model.request.AddCommentModel;
 import com.atman.wysq.model.response.AddCommentResultModel;
 import com.atman.wysq.model.response.DanmakuModel;
@@ -63,10 +56,7 @@ import com.base.baselibs.widget.MyListView;
 import com.base.baselibs.widget.PromptDialog;
 import com.bumptech.glide.Glide;
 import com.dl7.player.media.IjkPlayerView;
-import com.dl7.player.utils.CenteredImageSpan;
-import com.dl7.player.utils.CircleImageDrawable;
 import com.dl7.player.utils.CreateSpannableTextUtil;
-import com.dl7.player.utils.DpOrSp2PxUtil;
 import com.dl7.player.utils.WindowUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -78,9 +68,7 @@ import com.tbl.okhttputils.OkHttpUtils;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -181,11 +169,10 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent(Context context, String tilte, long id, boolean isMy, int vipLevel) {
+    public static Intent buildIntent(Context context, String tilte, long id, int vipLevel) {
         Intent intent = new Intent(context, VoicePostDetailActivity.class);
         intent.putExtra("tilte", tilte);
         intent.putExtra("id", id);
-        intent.putExtra("isMy", isMy);
         intent.putExtra("vipLevel", vipLevel);
         return intent;
     }
@@ -197,8 +184,6 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         tilte = getIntent().getStringExtra("tilte");
         bolgId = getIntent().getLongExtra("id", -1);
         vipLevel = getIntent().getIntExtra("vipLevel", 0);
-        isMy = getIntent().getBooleanExtra("isMy", false);
-        LogUtils.e("id:" + bolgId + ",isMy:" + isMy);
 
         setBarTitleTx(tilte);
 
@@ -386,10 +371,8 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
             llFacechoose.setVisibility(View.GONE);
         }
         String str = blogdetailAddcommentEt.getText().toString().trim();
-        LogUtils.e(">>>>str:"+str);
         if (!str.isEmpty()) {
             AddCommentModel mAddCommentModel = new AddCommentModel(bolgId, str);
-            LogUtils.e(">>>>mGson.toJson(mAddCommentModel):"+mGson.toJson(mAddCommentModel));
             OkHttpUtils.postString().url(Common.Url_Add_Comment).mediaType(Common.JSON)
                     .content(mGson.toJson(mAddCommentModel))
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
@@ -706,6 +689,11 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         favoriteId = mBodyEntity.getFavorite_id();
         isReplay = mBodyEntity.getReplay_flag();
         vipLevel = mBodyEntity.getVip_level();
+        if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null
+                && MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                .getUserDetailBean().getUserExt().getUser_id()==blogUserId) {
+            isMy = true;
+        }
 
         setBarTitleTx(mBodyEntity.getTitle());
         changeMyHeart();

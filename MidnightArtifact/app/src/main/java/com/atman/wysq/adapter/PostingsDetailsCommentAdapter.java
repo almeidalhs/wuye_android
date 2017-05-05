@@ -265,7 +265,8 @@ public class PostingsDetailsCommentAdapter extends BaseAdapter {
     public void addBody(List<GetPostingsDetailsCommentListModel.BodyEntity> body) {
         for (int i = 0; i < shop.size(); i++) {
             for (int j = 0; j < body.size(); j++) {
-                if (shop.get(i).getBlog_comment_id() == body.get(j).getBlog_comment_id()) {
+                if (i>=0 && i<shop.size() && shop.get(i).getBlog_comment_id()
+                        == body.get(j).getBlog_comment_id()) {
                     shop.remove(i);
                     i -= 1;
                 }

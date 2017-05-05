@@ -125,7 +125,7 @@ public class MainActivity extends MyBaseActivity {
                         Integer.parseInt(MyBaseApplication.mWEB_ID), "", false));
             } else if (MyBaseApplication.mWEB_TYPE.equals("6")) {//帖子
                 startActivity(ImageTextPostDetailActivity.buildIntent(mContext, ""
-                        , Integer.parseInt(MyBaseApplication.mWEB_ID), false, 0));
+                        , Integer.parseInt(MyBaseApplication.mWEB_ID), 0));
             } else if (MyBaseApplication.mWEB_TYPE.equals("7")) {//午夜Url
 
             } else if (MyBaseApplication.mWEB_TYPE.equals("8")) {//众筹

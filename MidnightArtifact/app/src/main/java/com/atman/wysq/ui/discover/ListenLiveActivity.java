@@ -1284,11 +1284,16 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             sleepTime = 200;
         }
         n = 0;
+        if (mTimer==null) {
+            mTimer = new Timer();
+        }
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if (n >= disNum) {
                     mTimer.cancel();
+                    mTimer.purge();
+                    mTimer = null;
                     return;
                 }
                 n++;

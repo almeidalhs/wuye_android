@@ -37,6 +37,7 @@ import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.widget.ShowLivePopWindow;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.BottomDialog;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -512,11 +513,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
     @Override
     public void onItemClick(View view, int position) {
         CommunityNewModel.BodyBean temp = mCommunityNewAdapter.getItemData(position);
-        boolean isMy = false;
-        if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null && MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
-                .getUserDetailBean().getUserExt().getUser_id()==temp.getBlog_id()) {
-            isMy = true;
-        }
+
         if (temp.getCategory() == 4) {
             if (!isLogin()) {
                 showLogin();
@@ -533,7 +530,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
             }
         } else {
             UiHelper.toCommunityDetail(getActivity(),temp.getCategory(), temp.getTitle(), temp.getBlog_id()
-                    , temp.getVip_level(), -1, temp.getLiveRoom(),isMy);
+                    , temp.getVip_level(), -1, temp.getLiveRoom());
             OkHttpUtils.postString().url(Common.Url_Add_Browse+temp.getBlog_id()).mediaType(Common.JSON)
                     .content("{}")
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())

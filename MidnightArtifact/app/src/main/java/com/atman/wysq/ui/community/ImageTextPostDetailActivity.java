@@ -151,11 +151,10 @@ public class ImageTextPostDetailActivity extends MyBaseActivity implements Adapt
         ButterKnife.bind(this);
     }
 
-    public static Intent buildIntent(Context context, String tilte, long id, boolean isMy, int vipLevel) {
+    public static Intent buildIntent(Context context, String tilte, long id, int vipLevel) {
         Intent intent = new Intent(context, ImageTextPostDetailActivity.class);
         intent.putExtra("tilte", tilte);
         intent.putExtra("id", id);
-        intent.putExtra("isMy", isMy);
         intent.putExtra("vipLevel", vipLevel);
         return intent;
     }
@@ -167,8 +166,6 @@ public class ImageTextPostDetailActivity extends MyBaseActivity implements Adapt
         tilte = getIntent().getStringExtra("tilte");
         bolgId = getIntent().getLongExtra("id", -1);
         vipLevel = getIntent().getIntExtra("vipLevel", 0);
-        isMy = getIntent().getBooleanExtra("isMy", false);
-        LogUtils.e("id:" + bolgId + ",isMy:" + isMy);
 
         setBarTitleTx(tilte);
 
@@ -533,6 +530,11 @@ public class ImageTextPostDetailActivity extends MyBaseActivity implements Adapt
         blogUserId = mBodyEntity.getUser_id();
         favoriteId = mBodyEntity.getFavorite_id();
         isReplay = mBodyEntity.getReplay_flag();
+        if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null
+                && MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
+                .getUserDetailBean().getUserExt().getUser_id()==blogUserId) {
+            isMy = true;
+        }
 
         setBarTitleTx(mBodyEntity.getTitle());
         changeMyHeart();

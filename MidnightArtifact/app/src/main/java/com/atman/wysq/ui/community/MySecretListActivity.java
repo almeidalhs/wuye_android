@@ -249,17 +249,10 @@ public class MySecretListActivity extends MyBaseActivity implements AdapterInter
             case R.id.item_bloglist_comment_ll:
                 this.position = position;
 
-                boolean isMy = false;
-                if (MyBaseApplication.getApplication().mGetMyUserIndexModel!=null && MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
-                        .getUserDetailBean().getUserExt().getUser_id()==mAdapter.getItem(position).getUser_id()) {
-                    isMy = true;
-                }
                 UiHelper.toCommunityDetail(this,mAdapter.getItem(position).getCategory()
                         , mAdapter.getItem(position).getTitle(), mAdapter.getItem(position).getBlog_id()
-                        , mAdapter.getItem(position).getVip_level(), Common.toPostDetail, null, isMy);
+                        , mAdapter.getItem(position).getVip_level(), Common.toPostDetail, null);
 
-//                startActivityForResult(ImageTextPostDetailActivity.buildIntent(mContext, mAdapter.getItem(position).getTitle()
-//                        , mAdapter.getItem(position).getBlog_id(), true, mAdapter.getItem(position).getVip_level()), Common.toPostDetail);
                 blogId = mAdapter.getItem(position).getBlog_id();
                 OkHttpUtils.postString().url(Common.Url_Add_Browse+blogId).mediaType(Common.JSON)
                         .content("{}")
