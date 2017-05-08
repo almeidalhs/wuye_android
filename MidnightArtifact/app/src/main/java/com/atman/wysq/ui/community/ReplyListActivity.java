@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.ReplayListAdapter;
+import com.atman.wysq.model.request.AddCommentModel;
 import com.atman.wysq.model.response.ReplayListModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
@@ -23,6 +25,7 @@ import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.widget.face.FaceRelativeLayout;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
+import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -84,10 +87,12 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
 
     private int mPage = 1;
     private int mStateId = 0;//0:我评论的 1:评论我的
-    private int position;
-    private long blogId;
 
     private ReplayListAdapter mAdapter;
+    private int mPosition;
+    private String mReplayName;
+    private long blogId;
+    private long commentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +105,6 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
     public void initWidget(View... v) {
         super.initWidget(v);
         hideTitleBar();
-
-//        blogdetailAddcommentEt.setF
 
         initListView();
     }
@@ -193,6 +196,8 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
                 }
                 mAdapter.addBody(mReplayListModel.getBody());
             }
+        } else if (id==Common.NET_ADD_COMMENT) {
+            showToast("评论成功");
         }
     }
 
@@ -202,10 +207,11 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_USERCOMMENT);
         OkHttpUtils.getInstance().cancelTag(Common.NET_GET_BLOGCOLLECTION_NOT);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BROWSE);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_COMMENT);
     }
 
     @OnClick({R.id.reply_bar_title_one_ll, R.id.reply_bar_title_two_ll, R.id.reply_bar_title_back_iv
-            , R.id.reply_bar_title_back_ll})
+            , R.id.reply_bar_title_back_ll, R.id.blogdetail_send_bt})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.reply_bar_title_one_ll:
@@ -234,11 +240,45 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
             case R.id.reply_bar_title_back_ll:
                 finish();
                 break;
+            case R.id.blogdetail_send_bt:
+                if (!isLogin()) {
+                    showLogin();
+                    return;
+                }
+                sendMessage(view);
+                break;
+        }
+    }
+
+    private void sendMessage(View v) {
+        if (isIMOpen()) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0); //强制隐藏键盘
+        }
+
+        if (llFacechoose.getVisibility() == View.VISIBLE) {
+            llFacechoose.setVisibility(View.GONE);
+        }
+        String str = blogdetailAddcommentEt.getText().toString().trim();
+        if (!str.isEmpty()) {
+            String jsonStr = "";
+//            if (commentId==-1) {
+//                AddCommentModel mAddCommentModel = new AddCommentModel(bolgId, str);
+//                jsonStr = mGson.toJson(mAddCommentModel);
+//            } else {
+//            }
+            jsonStr = "{\"blog_id\":\""+blogId+"\",\"content\":\""+str+"\",\"comment_id\":\""+commentId+"\"}";
+            LogUtils.e(">>>jsonStr:"+jsonStr);
+            OkHttpUtils.postString().url(Common.Url_Add_Comment).mediaType(Common.JSON)
+                    .content(jsonStr).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                    .id(Common.NET_ADD_COMMENT).tag(Common.NET_ADD_COMMENT)
+                    .build().execute(new MyStringCallback(mContext, ReplyListActivity.this, true));
         }
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(final View view, int position) {
+        mPosition = position;
         switch (view.getId()) {
             case R.id.item_bloglist_head_rl:
                 if (MyBaseApplication.getApplication().mGetMyUserIndexModel == null) {
@@ -281,10 +321,25 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
                 }
                 break;
             case R.id.item_relay_tx:
+                if (mAdapter.getItem(mPosition).getBlog()!=null) {
+                    mReplayName = mAdapter.getItem(mPosition).getBlog().getUser_name();
+                    blogId = mAdapter.getItem(mPosition).getBlog().getBlog_id();
+                    commentId = mAdapter.getItem(mPosition).getComment().getBlog_comment_id();
+                } else {
+                    blogId = mAdapter.getItem(mPosition).getParentComment().getBlog_id();
+                    mReplayName = mAdapter.getItem(mPosition).getParentComment().getUser_name();
+                    commentId = mAdapter.getItem(mPosition).getParentComment().getBlog_comment_id();
+                }
                 bottomLl.setVisibility(View.VISIBLE);
-                blogdetailAddcommentEt.requestFocus();
+                blogdetailAddcommentEt.setHint("回复 "+mReplayName);
+
                 blogdetailAddcommentEt.setFocusable(true);
                 blogdetailAddcommentEt.setFocusableInTouchMode(true);
+                blogdetailAddcommentEt.requestFocus();
+
+                cancelIM(view);
+                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
         }
     }

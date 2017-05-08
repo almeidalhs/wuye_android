@@ -66,7 +66,7 @@
         <activity android:name=".ui.community.BlogRewardListActivty"/>
         <activity android:name=".ui.community.MycollectionActivity"/>
         <activity android:name=".ui.community.MySecretListActivity"/>
-        <activity android:name=".ui.community.ReplyListActivity"/>
+        <activity android:name=".ui.community.ReplyListActivity" android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ui.community.ReportListActivity"/>
         <activity android:name=".ui.community.CreateImageTextPostActivity"/>
         <activity android:name=".ui.community.MallActivity"/>

@@ -54,6 +54,10 @@ public class ReplayListAdapter extends BaseAdapter {
                 (widht - DensityUtil.dp2px(context, 30)) * 200 / 320);
     }
 
+    public int getmStateId() {
+        return mStateId;
+    }
+
     public void setmStateId(int mStateId) {
         this.mStateId = mStateId;
     }
