@@ -6,10 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.AddressManageListAdapter;
@@ -46,6 +48,7 @@ public class AddressManageActivity extends MyBaseActivity implements AdapterInte
 
     private ImageView mRight;
     private int addressId = -1;
+    private View mEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +84,7 @@ public class AddressManageActivity extends MyBaseActivity implements AdapterInte
             }
         });
 
-        mRight = setBarRightIv(R.mipmap.bt_addnewaddress);
+        mRight = setBarRightIv(R.mipmap.community_top_right_ic);
         mRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,6 +103,10 @@ public class AddressManageActivity extends MyBaseActivity implements AdapterInte
                 finish();
             }
         });
+
+        mEmpty = LayoutInflater.from(mContext).inflate(R.layout.part_list_empty, null);
+        TextView mEmptyTX = (TextView) mEmpty.findViewById(R.id.empty_list_tx);
+        mEmptyTX.setText("暂无添加收货地址");
     }
 
     @Override
@@ -122,6 +129,7 @@ public class AddressManageActivity extends MyBaseActivity implements AdapterInte
             mGetAddressListResponseModel = mGson.fromJson(data, GetAddressListResponseModel.class);
 
             mAdapter = new AddressManageListAdapter(mContext, mGetAddressListResponseModel.getBody(), this);
+            addressmanageListview.setEmptyView(mEmpty);
             addressmanageListview.setAdapter(mAdapter);
 //            mAdapter.setSelectId(addressId);
         } else if (id == Common.NET_DELETE_ADDRESS) {

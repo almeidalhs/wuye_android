@@ -905,7 +905,7 @@ public class ImageTextPostDetailActivity extends MyBaseActivity implements Adapt
             } else {
                 blogdetailFlowerTv.setText(num/2 + "");
             }
-            SeedActionMessageUtils.seedGift(String.valueOf(blogUserId), tilte, data.getStringExtra("name"));
+//            SeedActionMessageUtils.seedGift(String.valueOf(blogUserId), tilte, data.getStringExtra("name"));
             GetBlogDetailModel.BodyEntity.GiftListEntity temp = new GetBlogDetailModel.BodyEntity.GiftListEntity();
             temp.setIcon(MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
             if (mRewardListAdapter==null) {

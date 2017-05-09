@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "/Users/tangbingliang/Desktop/gitProjects/wuye_android/MidnightArtifact/pic3d_lib/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 505,
+                    "endColumn": 51,
+                    "endOffset": 552
+                },
+                "from": {
+                    "file": "/Users/tangbingliang/Desktop/gitProjects/wuye_android/MidnightArtifact/pic3d_lib/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 505,
+                        "endColumn": 51,
+                        "endOffset": 552
+                    }
+                }
+            }
+        ]
+    }
+]

@@ -58,4 +58,22 @@ public class SeedActionMessageUtils {
         messagetext.setConfig(config);
         NIMClient.getService(MsgService.class).sendMessage(messagetext, false);
     }
+
+    public static void seedGift(String id, String giftName){
+        IMMessage messagetext = MessageBuilder.createTextMessage(id, SessionTypeEnum.P2P
+                , "我很喜欢你,送给你一个"+giftName+"当礼物希望你能喜欢");
+        SeedMessageModel mSeedMessageModel = new SeedMessageModel(MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getSex()
+                , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon()
+                , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getVerify_status()
+                , MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getNickName());
+        GetMessageModel mGetMessageModel = new GetMessageModel(ContentTypeInter.contentTypeText
+                , 0, "", mSeedMessageModel);
+        Map<String, Object> mMap = new HashMap<>();
+        mMap.put("extra",new Gson().toJson(mGetMessageModel));
+        messagetext.setRemoteExtension(mMap);
+        CustomMessageConfig config = new CustomMessageConfig();
+        config.enableRoaming  = false; // 该消息不漫游
+        messagetext.setConfig(config);
+        NIMClient.getService(MsgService.class).sendMessage(messagetext, false);
+    }
 }

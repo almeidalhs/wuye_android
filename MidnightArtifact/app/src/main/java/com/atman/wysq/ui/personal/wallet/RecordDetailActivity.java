@@ -3,7 +3,9 @@ package com.atman.wysq.ui.personal.wallet;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.MyDiamondsAdapter;
@@ -37,6 +39,9 @@ public class RecordDetailActivity extends MyBaseActivity implements View.OnClick
     private int mPage = 1;
     private MyDiamondsRecordModel mMyDiamondsRecordModel;
 
+    private View mEmpty;
+    private TextView mEmptyTX;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +72,13 @@ public class RecordDetailActivity extends MyBaseActivity implements View.OnClick
     private void initListView() {
         initRefreshView(PullToRefreshBase.Mode.BOTH, blogdetailCommentLv);
 
+        mEmpty = LayoutInflater.from(mContext).inflate(R.layout.part_list_empty, null);
+        mEmptyTX = (TextView) mEmpty.findViewById(R.id.empty_list_tx);
+        mEmptyTX.setText("暂无记录");
+
         mAdapter = new MyDiamondsAdapter(mContext);
         mAdapter.setTypeID(typeId);
+        blogdetailCommentLv.setEmptyView(mEmpty);
         blogdetailCommentLv.setAdapter(mAdapter);
     }
 

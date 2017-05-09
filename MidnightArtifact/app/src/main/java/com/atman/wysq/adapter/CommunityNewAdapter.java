@@ -146,6 +146,8 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
                 holder.itemCommunitynewNotliveIv.setBackgroundResource(R.mipmap.ic_audio);
             } else if (listData.get(position).getCategory()==3) {
                 holder.itemCommunitynewNotliveIv.setBackgroundResource(R.mipmap.ic_video);
+            } else {
+                holder.itemCommunitynewNotliveIv.setBackgroundResource(R.mipmap.ic_normal);
             }
 
 //            if (listData.get(position).getFavorite_count() > 0) {

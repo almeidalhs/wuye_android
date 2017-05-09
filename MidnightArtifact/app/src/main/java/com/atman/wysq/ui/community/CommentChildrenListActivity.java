@@ -376,6 +376,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
                 isReplay = 1;
             }
         } else if (id == Common.NET_GET_BLOGDETAIL) {
+            LogUtils.e(">>>blog_id:"+blog_id);
             OkHttpUtils.postString().url(Common.Url_Add_Browse + blog_id).mediaType(Common.JSON)
                     .id(Common.NET_ADD_BROWSE).tag(Common.NET_ADD_BROWSE).content("{}")
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
@@ -383,7 +384,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
             GetBlogDetailModel mGetBlogDetailModel = mGson.fromJson(data, GetBlogDetailModel.class);
             if (mGetBlogDetailModel.getBody().size()>0) {
                 UiHelper.toCommunityDetail(this
-                        , mGetBlogDetailModel.getBody().get(0).getType()
+                        , mGetBlogDetailModel.getBody().get(0).getCategory()
                         , mGetBlogDetailModel.getBody().get(0).getTitle()
                         , mGetBlogDetailModel.getBody().get(0).getBlog_id()
                         , mGetBlogDetailModel.getBody().get(0).getVip_level(), -1, null);

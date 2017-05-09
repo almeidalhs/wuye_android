@@ -304,7 +304,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
             otherpersonalRelationshipTv.setText("陌生人");
             MyBaseApplication.getApplication().getDaoSession().getAddFriendRecordDao().deleteAll();
         } else if (id == Common.NET_ADD_FOLLOW_ID) {
-            SeedActionMessageUtils.seed(String.valueOf(id));
+            SeedActionMessageUtils.seed(String.valueOf(this.id));
             showToast("关注成功");
             if (mGetMyUserIndexModel.getBody().getUserFelation()==0) {
                 mGetMyUserIndexModel.getBody().setUserFelation(1);
@@ -342,14 +342,18 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         } else {
             otherpersonalNameTx.setTextColor(getResources().getColor(R.color.color_7F2505));
         }
-        otherpersonalVipTx.setText("VIP."+mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUserLevel());
+        otherpersonalVipTx.setText("LV "+mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUserLevel());
         if (mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>=4) {
             otherpersonalSvipIv.setVisibility(View.VISIBLE);
             otherpersonalVipLTx.setVisibility(View.GONE);
         } else {
             otherpersonalSvipIv.setVisibility(View.GONE);
-            otherpersonalVipLTx.setVisibility(View.VISIBLE);
-            otherpersonalVipLTx.setText("VIP."+mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUserLevel());
+            if (mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>0) {
+                otherpersonalVipLTx.setVisibility(View.VISIBLE);
+                otherpersonalVipLTx.setText("VIP."+mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level());
+            } else {
+                otherpersonalVipLTx.setVisibility(View.GONE);
+            }
         }
         if (mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getSex().equals("M")) {
             otherpersonalGenderIv.setImageResource(R.mipmap.personal_man_ic);
@@ -546,6 +550,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
             int price = data.getIntExtra("price", 0);
             File file = ImageLoader.getInstance().getDiskCache().get(Common.ImageUrl+data.getStringExtra("url"));
 
+            SeedActionMessageUtils.seedGift(String.valueOf(id), data.getStringExtra("name"));
             // 构造自定义通知，指定接收者
             CustomNotification notification = new CustomNotification();
             notification.setSessionId(String.valueOf(id));

@@ -76,6 +76,7 @@ public class GetBlogDetailModel {
         private int favorite_count;
         private int view_count;
         private int anonymity;
+        private int category;
         /**
          * icon : /imageServer/9C66zhongxing.png
          * next_level_integral : 1
@@ -106,6 +107,14 @@ public class GetBlogDetailModel {
         private String url;
         private int file_length;
         private int vip_level;
+
+        public int getCategory() {
+            return category;
+        }
+
+        public void setCategory(int category) {
+            this.category = category;
+        }
 
         public int getVip_level() {
             return vip_level;

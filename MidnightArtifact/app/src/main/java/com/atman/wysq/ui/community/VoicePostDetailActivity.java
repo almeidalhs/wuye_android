@@ -435,11 +435,14 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
             FaceRelativeLayout.setVisibility(View.GONE);
             postingsLineIv.setVisibility(View.GONE);
             blogdetailCommentLv.setVisibility(View.GONE);
+            playerView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT
+                    , RelativeLayout.LayoutParams.MATCH_PARENT));
         } else {
             showTitleBar();
             FaceRelativeLayout.setVisibility(View.VISIBLE);
             postingsLineIv.setVisibility(View.VISIBLE);
             blogdetailCommentLv.setVisibility(View.VISIBLE);
+            playerView.setLayoutParams(rlParams);
         }
     }
 
@@ -968,7 +971,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
             } else {
                 blogdetailFlowerTv.setText(num / 2 + "");
             }
-            SeedActionMessageUtils.seedGift(String.valueOf(blogUserId), tilte, data.getStringExtra("name"));
+//            SeedActionMessageUtils.seedGift(String.valueOf(blogUserId), tilte, data.getStringExtra("name"));
             GetBlogDetailModel.BodyEntity.GiftListEntity temp = new GetBlogDetailModel.BodyEntity.GiftListEntity();
             temp.setIcon(MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
             if (mRewardListAdapter == null) {

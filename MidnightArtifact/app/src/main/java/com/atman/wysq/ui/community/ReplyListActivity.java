@@ -15,7 +15,10 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.ReplayListAdapter;
-import com.atman.wysq.model.request.AddCommentModel;
+import com.atman.wysq.model.bean.TouChuanOtherNotice;
+import com.atman.wysq.model.event.YunXinAddFriendEvent;
+import com.atman.wysq.model.event.YunXinMessageEvent;
+import com.atman.wysq.model.greendao.gen.TouChuanOtherNoticeDao;
 import com.atman.wysq.model.response.ReplayListModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
@@ -30,6 +33,12 @@ import com.base.baselibs.widget.MyCleanEditText;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.tbl.okhttputils.OkHttpUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -82,6 +91,8 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
     RelativeLayout llFacechoose;
     @Bind(R.id.FaceRelativeLayout)
     FaceRelativeLayout faceRelativeLayout;
+    @Bind(R.id.reply_bar_title_two_red_iv)
+    ImageView replyBarTitleTwoRedIv;
 
     private Context mContext = ReplyListActivity.this;
 
@@ -93,6 +104,9 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
     private String mReplayName;
     private long blogId;
     private long commentId;
+
+    private List<TouChuanOtherNotice> mTouChuanOtherNotice;
+    private TouChuanOtherNoticeDao mOtherNoticeDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +121,34 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
         hideTitleBar();
 
         initListView();
+
+        mOtherNoticeDao = MyBaseApplication.getApplication().getDaoSession().getTouChuanOtherNoticeDao();
+
+        if (MyBaseApplication.isReportUnRead) {
+            replyBarTitleTwoRedIv.setVisibility(View.VISIBLE);
+        } else {
+            replyBarTitleTwoRedIv.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(YunXinAddFriendEvent event) {
+        setTuBiao();
+    }
+
+    private void setTuBiao() {
+        mTouChuanOtherNotice = mOtherNoticeDao.queryBuilder().where(TouChuanOtherNoticeDao.Properties.NoticeType.eq(4)
+                , TouChuanOtherNoticeDao.Properties.IsRead.eq(0)).build().list();
+        if (mTouChuanOtherNotice!=null && mTouChuanOtherNotice.size()>0) {
+            MyBaseApplication.isReportUnRead=true;
+        } else {
+            MyBaseApplication.isReportUnRead=false;
+        }
+        if (MyBaseApplication.isReportUnRead) {
+            replyBarTitleTwoRedIv.setVisibility(View.VISIBLE);
+        } else {
+            replyBarTitleTwoRedIv.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void initListView() {
@@ -196,7 +238,7 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
                 }
                 mAdapter.addBody(mReplayListModel.getBody());
             }
-        } else if (id==Common.NET_ADD_COMMENT) {
+        } else if (id == Common.NET_ADD_COMMENT) {
             showToast("评论成功");
         }
     }
@@ -226,6 +268,15 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
                 doHttp(true);
                 break;
             case R.id.reply_bar_title_two_ll:
+                if (mTouChuanOtherNotice!=null) {
+                    for(int i=0;i<mTouChuanOtherNotice.size();i++) {
+                        mTouChuanOtherNotice.get(i).setIsRead(1);
+                        mOtherNoticeDao.update(mTouChuanOtherNotice.get(i));
+                    }
+                    EventBus.getDefault().post(new YunXinMessageEvent());
+                }
+                MyBaseApplication.isReportUnRead = false;
+                replyBarTitleTwoRedIv.setVisibility(View.GONE);
                 mStateId = 1;
                 mPage = 1;
                 mAdapter.setmStateId(1);
@@ -261,19 +312,16 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
         }
         String str = blogdetailAddcommentEt.getText().toString().trim();
         if (!str.isEmpty()) {
-            String jsonStr = "";
-//            if (commentId==-1) {
-//                AddCommentModel mAddCommentModel = new AddCommentModel(bolgId, str);
-//                jsonStr = mGson.toJson(mAddCommentModel);
-//            } else {
-//            }
-            jsonStr = "{\"blog_id\":\""+blogId+"\",\"content\":\""+str+"\",\"comment_id\":\""+commentId+"\"}";
-            LogUtils.e(">>>jsonStr:"+jsonStr);
+            String jsonStr = "{\"blog_id\":\"" + blogId + "\",\"content\":\"" + str + "\",\"comment_id\":\"" + commentId + "\"}";
             OkHttpUtils.postString().url(Common.Url_Add_Comment).mediaType(Common.JSON)
                     .content(jsonStr).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                     .id(Common.NET_ADD_COMMENT).tag(Common.NET_ADD_COMMENT)
                     .build().execute(new MyStringCallback(mContext, ReplyListActivity.this, true));
         }
+
+        bottomLl.setVisibility(View.GONE);
+        blogdetailAddcommentEt.setHint("");
+        blogdetailAddcommentEt.setText("");
     }
 
     @Override
@@ -321,7 +369,7 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
                 }
                 break;
             case R.id.item_relay_tx:
-                if (mAdapter.getItem(mPosition).getBlog()!=null) {
+                if (mAdapter.getItem(mPosition).getBlog() != null) {
                     mReplayName = mAdapter.getItem(mPosition).getBlog().getUser_name();
                     blogId = mAdapter.getItem(mPosition).getBlog().getBlog_id();
                     commentId = mAdapter.getItem(mPosition).getComment().getBlog_comment_id();
@@ -331,7 +379,7 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
                     commentId = mAdapter.getItem(mPosition).getParentComment().getBlog_comment_id();
                 }
                 bottomLl.setVisibility(View.VISIBLE);
-                blogdetailAddcommentEt.setHint("回复 "+mReplayName);
+                blogdetailAddcommentEt.setHint("回复 " + mReplayName);
 
                 blogdetailAddcommentEt.setFocusable(true);
                 blogdetailAddcommentEt.setFocusableInTouchMode(true);

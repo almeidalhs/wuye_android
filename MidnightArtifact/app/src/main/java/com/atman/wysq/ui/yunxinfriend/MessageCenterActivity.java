@@ -20,6 +20,7 @@ import com.atman.wysq.model.greendao.gen.TouChuanOtherNoticeDao;
 import com.atman.wysq.model.response.GetBlogDetailModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.discover.ListenLiveActivity;
 import com.atman.wysq.ui.personal.MyGiftActivity;
 import com.atman.wysq.ui.personal.wallet.RecordDetailActivity;
 import com.atman.wysq.utils.Common;
@@ -121,7 +122,7 @@ public class MessageCenterActivity extends MyBaseActivity implements AdapterInte
             GetBlogDetailModel mGetBlogDetailModel = mGson.fromJson(data, GetBlogDetailModel.class);
             if (mGetBlogDetailModel.getBody().size()>0) {
                 UiHelper.toCommunityDetail(this
-                        , mGetBlogDetailModel.getBody().get(0).getType()
+                        , mGetBlogDetailModel.getBody().get(0).getCategory()
                         , mGetBlogDetailModel.getBody().get(0).getTitle()
                         , mGetBlogDetailModel.getBody().get(0).getBlog_id()
                         , mGetBlogDetailModel.getBody().get(0).getVip_level(), -1, null);
@@ -221,8 +222,16 @@ public class MessageCenterActivity extends MyBaseActivity implements AdapterInte
                             && !mAdapter.getItem(position).getPropMessage().equals("")) {
                         if (mAdapter.getItem(position).getPropMessage().equals("21")) {
                             startActivity(RecordDetailActivity.buildIntent(mContext, 0));
+                        } else if (mAdapter.getItem(position).getPropMessage().equals("20")) {
+                            startActivity(ListenLiveActivity.buildIntent(mContext
+                                    , mAdapter.getItem(position).getPropId()));
                         } else if (mAdapter.getItem(position).getPropMessage().equals("19")) {
                             startActivity(RecordDetailActivity.buildIntent(mContext, 1));
+                        }
+                    } else {
+                        if (mAdapter.getItem(position).getGiftMessage().contains("您的个人中心")){
+                            startActivity(OtherPersonalActivity.buildIntent(mContext
+                                    , mAdapter.getItem(position).getSend_userId()));
                         }
                     }
                 } else if (mAdapter.getItem(position).getNoticeType()==4) {//帖子评论

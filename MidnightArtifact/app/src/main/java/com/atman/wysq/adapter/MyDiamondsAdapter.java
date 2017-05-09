@@ -55,9 +55,6 @@ public class MyDiamondsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if (body.size() == 0) {
-            return 1;
-        }
         return body.size();
     }
 
@@ -81,41 +78,31 @@ public class MyDiamondsAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (body.size() > 0) {
-            MyDiamondsRecordModel.BodyBean mBodyEntity = body.get(position);
-            holder.itemMydiamondsEmptyLl.setVisibility(View.GONE);
-            if (typeID == 0) {//兑换记录
-                holder.itemMydiamondsExchangeLl.setVisibility(View.VISIBLE);
-                holder.itemMydiamondsPresentationLl.setVisibility(View.GONE);
-
-                holder.itemMydiamondsExchangeTv.setText("消耗"+mBodyEntity.getConsume_convert_coin()
-                        +"钻石，兑换"+mBodyEntity.getChange_count()+"金币");
-                holder.itemMydiamondsExchangeTimeTv.setText(MyTools.convertTime(mBodyEntity.getUpdate_time(), "yyyy-MM-dd"));
-            } else {//提现记录
-                holder.itemMydiamondsExchangeLl.setVisibility(View.GONE);
-                holder.itemMydiamondsPresentationLl.setVisibility(View.VISIBLE);
-
-                holder.itemMydiamondsPresentationAccountTv.setText("提现到"+mBodyEntity.getWalletChannel().getAccount_name()
-                                +"："+mBodyEntity.getWalletChannel().getAccount());
-                holder.itemMydiamondsPresentationNumTv.setText("-"+mBodyEntity.getMoney());
-                holder.itemMydiamondsPresentationTimeTv.setText(MyTools.convertTime(mBodyEntity.getUpdate_time(), "yyyy-MM-dd"));
-                if (mBodyEntity.getStatus()==1) {
-                    holder.itemMydiamondsPresentationStateTv.setText("处理中");
-                } else if (mBodyEntity.getStatus()==2) {
-                    holder.itemMydiamondsPresentationStateTv.setText("已完成");
-                } else if (mBodyEntity.getStatus()==3) {
-                    holder.itemMydiamondsPresentationStateTv.setText("取消");
-                } else if (mBodyEntity.getStatus()==4) {
-                    holder.itemMydiamondsPresentationStateTv.setText("已取消");
-                }
-            }
-        } else {
-            holder.itemMydiamondsEmptyLl.setVisibility(View.VISIBLE);
-
-            holder.itemMydiamondsExchangeLl.setVisibility(View.GONE);
+        MyDiamondsRecordModel.BodyBean mBodyEntity = body.get(position);
+        if (typeID == 0) {//兑换记录
+            holder.itemMydiamondsExchangeLl.setVisibility(View.VISIBLE);
             holder.itemMydiamondsPresentationLl.setVisibility(View.GONE);
-        }
 
+            holder.itemMydiamondsExchangeTv.setText("消耗"+mBodyEntity.getConsume_convert_coin()
+                    +"钻石，兑换"+mBodyEntity.getChange_count()+"金币");
+            holder.itemMydiamondsExchangeTimeTv.setText(MyTools.convertTime(mBodyEntity.getUpdate_time(), "yyyy-MM-dd"));
+        } else {//提现记录
+            holder.itemMydiamondsExchangeLl.setVisibility(View.GONE);
+            holder.itemMydiamondsPresentationLl.setVisibility(View.VISIBLE);
+
+            holder.itemMydiamondsPresentationAccountTv.setText("提现到支付宝："+mBodyEntity.getWalletChannel().getAccount());
+            holder.itemMydiamondsPresentationNumTv.setText("-"+mBodyEntity.getMoney());
+            holder.itemMydiamondsPresentationTimeTv.setText(MyTools.convertTime(mBodyEntity.getUpdate_time(), "yyyy-MM-dd"));
+            if (mBodyEntity.getStatus()==1) {
+                holder.itemMydiamondsPresentationStateTv.setText("处理中");
+            } else if (mBodyEntity.getStatus()==2) {
+                holder.itemMydiamondsPresentationStateTv.setText("已完成");
+            } else if (mBodyEntity.getStatus()==3) {
+                holder.itemMydiamondsPresentationStateTv.setText("取消");
+            } else if (mBodyEntity.getStatus()==4) {
+                holder.itemMydiamondsPresentationStateTv.setText("已取消");
+            }
+        }
 
         return convertView;
     }
@@ -126,8 +113,6 @@ public class MyDiamondsAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        @Bind(R.id.item_mydiamonds_empty_ll)
-        LinearLayout itemMydiamondsEmptyLl;
         @Bind(R.id.item_mydiamonds_exchange_tv)
         TextView itemMydiamondsExchangeTv;
         @Bind(R.id.item_mydiamonds_exchange_time_tv)

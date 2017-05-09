@@ -134,7 +134,7 @@ public class SelectGiftFragment extends MyBaseFragment implements AdapterInterfa
                     reponseId = Common.NET_LIVE_GIFT_ID;
                 }
                 LogUtils.e(">>>fromId:"+fromId);
-                LogUtils.e(">>>url:"+url);
+                LogUtils.e(">>>url:"+(url+ mAdapter.getItem(po).getGift_id()+"/"+id));
                 LogUtils.e(">>>reponseId:"+reponseId);
                 OkHttpUtils.postString().url(url + mAdapter.getItem(po).getGift_id()+"/"+id).content("")
                         .mediaType(Common.JSON).addHeader("cookie", MyBaseApplication.getApplication().getCookie())

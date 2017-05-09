@@ -399,7 +399,8 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                 partVideoBgIv.setImageBitmap(null);
                 partVideoBgIv.setVisibility(View.GONE);
                 partVideoLl.setVisibility(View.GONE);
-                mFocusEditText.setVisibility(View.VISIBLE);
+                if (mFocusEditText!=null)
+                    mFocusEditText.setVisibility(View.VISIBLE);
                 upVideoUrl = "";
                 return;
             }

@@ -216,6 +216,12 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         return intent;
     }
 
+    public static Intent buildIntent(Context context, int liveId) {
+        Intent intent = new Intent(context, ListenLiveActivity.class);
+        intent.putExtra("liveId", liveId);
+        return intent;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -229,46 +235,47 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         hideTitleBar();
         setSwipeBackEnable(false);
 
-        mBodyBean = (CommunityNewModel.BodyBean.LiveRoomBean) getIntent().getSerializableExtra("temp");
-        roomId = mBodyBean.getLive_room_id();
-        userId = mBodyBean.getUser_id();
-        chatRoomId = mBodyBean.getRoom_id();
-        Pic_url = mBodyBean.getPic_url();
-        mliveStreamingURL = mBodyBean.getCurrentRecord().getRtmpPullUrl();
-        title = mBodyBean.getRoom_name();
-
         FaceRelativeLayout.setmOnEditListener(this);
-
         mMyUserInfo = MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody()
                 .getUserDetailBean().getUserExt();
-
-        listenliveTitleTv.setText("话题:" + title);
-        if (Pic_url != null && !Pic_url.isEmpty()) {
-            listenliveBgIv.setImageURI(Common.ImageUrl + Pic_url);
-        }
-        listenliveNameTv.setText(mBodyBean.getUserExt().getNick_name());
-        player = new AudioPlayer(mContext);
-
-        if (mBodyBean.getUserExt().getSex().equals("M")) {
-            listenliveGenderIv.setImageResource(R.mipmap.personal_man_ic);
-        } else {
-            listenliveGenderIv.setImageResource(R.mipmap.personal_weman_ic);
-        }
-        if (mBodyBean.getUserExt().getVerify_status() == 1) {
-            listenliveVerifyIv.setVisibility(View.VISIBLE);
-            listenliveGenderIv.setVisibility(View.GONE);
-        } else {
-            listenliveVerifyIv.setVisibility(View.GONE);
-            listenliveGenderIv.setVisibility(View.VISIBLE);
-        }
-        listenliveHeadIv.setImageURI(Common.ImageUrl + mBodyBean.getUserExt().getIcon());
-
         blogdetailAddcommentEt.addTextChangedListener(new MyTextWatcherTwo(this));
 
-        initListenLive();
+        roomId = getIntent().getIntExtra("liveId", -1);
+        if (roomId==-1) {
+            mBodyBean = (CommunityNewModel.BodyBean.LiveRoomBean) getIntent().getSerializableExtra("temp");
+            roomId = mBodyBean.getLive_room_id();
+            userId = mBodyBean.getUser_id();
+            chatRoomId = mBodyBean.getRoom_id();
+            Pic_url = mBodyBean.getPic_url();
+            mliveStreamingURL = mBodyBean.getCurrentRecord().getRtmpPullUrl();
+            title = mBodyBean.getRoom_name();
 
-        initChatRoom();
-        initOnlineList();
+            listenliveTitleTv.setText("话题:" + title);
+            if (Pic_url != null && !Pic_url.isEmpty()) {
+                listenliveBgIv.setImageURI(Common.ImageUrl + Pic_url);
+            }
+            listenliveNameTv.setText(mBodyBean.getUserExt().getNick_name());
+            player = new AudioPlayer(mContext);
+
+            if (mBodyBean.getUserExt().getSex().equals("M")) {
+                listenliveGenderIv.setImageResource(R.mipmap.personal_man_ic);
+            } else {
+                listenliveGenderIv.setImageResource(R.mipmap.personal_weman_ic);
+            }
+            if (mBodyBean.getUserExt().getVerify_status() == 1) {
+                listenliveVerifyIv.setVisibility(View.VISIBLE);
+                listenliveGenderIv.setVisibility(View.GONE);
+            } else {
+                listenliveVerifyIv.setVisibility(View.GONE);
+                listenliveGenderIv.setVisibility(View.VISIBLE);
+            }
+            listenliveHeadIv.setImageURI(Common.ImageUrl + mBodyBean.getUserExt().getIcon());
+
+//            initListenLive();
+//            initChatRoom();
+//            initOnlineList();
+        }
+
     }
 
     private void initOnlineList() {
@@ -348,7 +355,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                                     giftUserId = temp.getUser().getUserId();
                                     GiftAnimation(temp.getUser().getIcon()
                                             , temp.getUser().getNickName()
-                                            , temp.getContent().split(":")[1], url);
+                                            , (temp.getContent().replace("：",":")).split(":")[1], url);
                                 }
                                 String noStr = temp.getContent();
                                 if (temp.getBanChatUserId() == mMyUserInfo.getUser_id()) {
@@ -538,6 +545,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     public void doInitBaseHttp() {
         super.doInitBaseHttp();
 
+        getLiveDetail();
+
         OkHttpUtils.postString().url(Common.Url_Live_Enter + roomId).id(Common.NET_LIVE_ENTER_ID)
                 .content(mGson.toJson("")).mediaType(Common.JSON).tag(Common.NET_LIVE_ENTER_ID)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie()).build()
@@ -549,8 +558,6 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         OkHttpUtils.get().url(Common.Url_Get_GiftList).id(Common.NET_GET_GIFTLIST)
                 .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                 .tag(Common.NET_GET_GIFTLIST).build().execute(new MyStringCallback(mContext, this, true));
-
-        getLiveDetail();
     }
 
     private void getLiveDetail() {
@@ -617,6 +624,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             listenliveKissnumTv.setText(" " + mLiveDetailModel.getBody().getLike_num());
             listenliveMoneyTv.setText(" " + mLiveDetailModel.getBody().getGold_num());
 
+            updataUi();
             onLineAdapter.clearData();
             if (mLiveDetailModel.getBody().getUserList().size() > 0) {
                 onLineAdapter.addData(mLiveDetailModel.getBody().getUserList());
@@ -684,6 +692,40 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         } else if (id==Common.NET_LIVE_LOGOUT_ID) {
             liveLogout();
         }
+    }
+
+    private void updataUi() {
+        roomId = mLiveDetailModel.getBody().getLive_room_id();
+        userId = mLiveDetailModel.getBody().getUser_id();
+        chatRoomId = mLiveDetailModel.getBody().getRoom_id();
+        Pic_url = mLiveDetailModel.getBody().getPic_url();
+        mliveStreamingURL = mLiveDetailModel.getBody().getCurrentRecord().getRtmpPullUrl();
+        title = mLiveDetailModel.getBody().getRoom_name();
+
+        listenliveTitleTv.setText("话题:" + title);
+        if (Pic_url != null && !Pic_url.isEmpty()) {
+            listenliveBgIv.setImageURI(Common.ImageUrl + Pic_url);
+        }
+        listenliveNameTv.setText(mLiveDetailModel.getBody().getUserExt().getNick_name());
+        player = new AudioPlayer(mContext);
+
+        if (mLiveDetailModel.getBody().getUserExt().getSex().equals("M")) {
+            listenliveGenderIv.setImageResource(R.mipmap.personal_man_ic);
+        } else {
+            listenliveGenderIv.setImageResource(R.mipmap.personal_weman_ic);
+        }
+        if (mLiveDetailModel.getBody().getUserExt().getVerify_status() == 1) {
+            listenliveVerifyIv.setVisibility(View.VISIBLE);
+            listenliveGenderIv.setVisibility(View.GONE);
+        } else {
+            listenliveVerifyIv.setVisibility(View.GONE);
+            listenliveGenderIv.setVisibility(View.VISIBLE);
+        }
+        listenliveHeadIv.setImageURI(Common.ImageUrl + mLiveDetailModel.getBody().getUserExt().getIcon());
+
+        initListenLive();
+        initChatRoom();
+        initOnlineList();
     }
 
     @Override
@@ -800,7 +842,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 showWarnExit();
                 break;
             case R.id.listenlive_gift_iv:
-                startActivityForResult(SelectGiftActivity.buildIntent(mContext, String.valueOf(mMyUserInfo.getUser_id()), true, 2)
+                startActivityForResult(SelectGiftActivity.buildIntent(mContext, String.valueOf(userId), true, 2)
                         , Common.toSelectGift);
                 break;
             case R.id.blogdetail_addemol_iv:

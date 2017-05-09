@@ -56,6 +56,10 @@ public class UiHelper {
             case 4://直播
                 context.startActivityForResult(ListenLiveActivity.buildIntent(context, liveRoomBean), toID);
                 break;
+            default:
+                context.startActivityForResult(ImageTextPostDetailActivity.buildIntent(context
+                        , Title, Blog_id, Vip_level), toID);
+                break;
         }
     }
 

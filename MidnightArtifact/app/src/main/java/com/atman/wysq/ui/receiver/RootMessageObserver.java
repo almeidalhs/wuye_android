@@ -146,6 +146,9 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                             .equals(PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID))) {
                         continue;
                     }
+                    if (mGiftMessageModel.getAd_info()!=null && mGiftMessageModel.getAd_info().getType()==16) {
+                        return;
+                    }
                     TouChuanOtherNotice mTouChuanOtherNotice = new TouChuanOtherNotice();
                     mTouChuanOtherNotice.setReceive_userId(Long.valueOf(PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID)));
                     mTouChuanOtherNotice.setSend_userId(mGiftMessageModel.getCenter_user_id());
@@ -183,6 +186,7 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                     mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
                     if (mGiftMessageModel.getAd_info()!=null) {
                         mTouChuanOtherNotice.setPropMessage(String.valueOf(mGiftMessageModel.getAd_info().getType()));
+                        mTouChuanOtherNotice.setPropId((int)mGiftMessageModel.getAd_info().getAd_goods_id());
                     }
                     mTouChuanOtherNotice.setNoticeType(3);
                     MyBaseApplication.getApplication().getDaoSession().getTouChuanOtherNoticeDao().insert(mTouChuanOtherNotice);

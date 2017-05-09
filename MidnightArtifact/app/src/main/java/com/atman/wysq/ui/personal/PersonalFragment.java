@@ -512,8 +512,12 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             personalVipLTx.setVisibility(View.GONE);
         } else {
             personalSVipTv.setVisibility(View.GONE);
-            personalVipLTx.setVisibility(View.VISIBLE);
-            personalVipLTx.setText("VIP."+mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level());
+            if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>0) {
+                personalVipLTx.setVisibility(View.VISIBLE);
+                personalVipLTx.setText("VIP."+mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level());
+            } else {
+                personalVipLTx.setVisibility(View.GONE);
+            }
         }
         personalNameTx.setText(mGetUserIndexModel.getBody().getUserDetailBean().getNickName());
         if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>=3) {
@@ -696,13 +700,6 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
                 startActivity(new Intent(getActivity(), MySecretListActivity.class));
                 break;
             case R.id.personal_secretreply_rl://回复
-                if (mTouChuanOtherNotice!=null) {
-                    for(int i=0;i<mTouChuanOtherNotice.size();i++) {
-                        mTouChuanOtherNotice.get(i).setIsRead(1);
-                        mOtherNoticeDao.update(mTouChuanOtherNotice.get(i));
-                    }
-                    EventBus.getDefault().post(new YunXinMessageEvent());
-                }
                 startActivity(new Intent(getActivity(), ReplyListActivity.class));
                 break;
             case R.id.personal_mycollection_ll://收藏

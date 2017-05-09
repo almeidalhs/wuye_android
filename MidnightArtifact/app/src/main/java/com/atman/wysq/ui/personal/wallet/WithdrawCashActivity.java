@@ -123,7 +123,7 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
     private long countToDiamonds(long money) {
         long Num = 0;
         String[] str = MyBaseApplication.KDiamondCash.split(":");
-        if (str.length == 2 && ownDiamonds > 0) {
+        if (str.length == 2) {
             Num = money * Integer.valueOf(str[0]) / Integer.valueOf(str[1]);
         }
         return Num;
