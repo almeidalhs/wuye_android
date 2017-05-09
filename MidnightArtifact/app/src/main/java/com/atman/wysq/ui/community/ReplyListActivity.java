@@ -317,7 +317,7 @@ public class ReplyListActivity extends MyBaseActivity implements AdapterInterfac
                             , mAdapter.getItem(position).getParentComment().getContent()
                             , mAdapter.getItem(position).getParentComment().getUser_id()
                             , false, "", 1
-                            , mAdapter.getItem(position).getParentComment().getVip_level()));
+                            , mAdapter.getItem(position).getParentComment().getVip_level(), true));
                 }
                 break;
             case R.id.item_relay_tx:

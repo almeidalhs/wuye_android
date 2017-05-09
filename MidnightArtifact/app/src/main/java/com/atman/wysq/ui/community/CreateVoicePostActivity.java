@@ -351,7 +351,7 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
             player.stop();
         }
         if (audioMessageHelper != null) {
-            overRecording();
+            overRecording(false);
             audioMessageHelper.completeRecord(true);
         }
     }
@@ -469,7 +469,7 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
                     initAudioRecord();
                     onStartAudioRecord();
                 } else {
-                    overRecording();
+                    overRecording(true);
                     audioMessageHelper.completeRecord(true);
                 }
                 break;
@@ -544,11 +544,13 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
         Bimp.bmp.clear();
     }
 
-    private void overRecording() {
+    private void overRecording(boolean isNormal) {
         postTimer.stop();
         isRecording = false;
         postRecordingBt.setText("重录");
-        time = (int) (SystemClock.elapsedRealtime() - postTimer.getBase())/1000;// 保存这次记录了的时间
+        if (isNormal) {
+            time = (int) (SystemClock.elapsedRealtime() - postTimer.getBase())/1000;// 保存这次记录了的时间
+        }
         if (voiceFile!=null && voiceFile.exists()) {
             postListeningtestBt.setClickable(true);
             postListeningtestBt.setEnabled(true);
@@ -593,7 +595,7 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
                 }
             });
             builder.show();
-            overRecording();
+            overRecording(true);
             return;
         }
         postTimer.setBase(SystemClock.elapsedRealtime());
@@ -628,7 +630,7 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
 
     @Override
     public void onRecordReachedMaxTime(int i) {
-        overRecording();
+        overRecording(true);
     }
 
     @Override

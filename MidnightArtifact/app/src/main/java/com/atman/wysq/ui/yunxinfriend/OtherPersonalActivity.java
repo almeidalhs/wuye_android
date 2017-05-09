@@ -92,6 +92,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
     private TextView otherpersonalSvipIv;
     private TextView otherpersonalNameTx;
     private TextView otherpersonalVipTx;
+    private TextView otherpersonalVipLTx;
     private TextView otherpersonalDynamicNumberTx;
     private TextView otherpersonalVisitorNumTx;
     private TextView otherpersonalOftenaddrTv;
@@ -154,6 +155,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         otherpersonalSvipIv = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_svip_iv);
         otherpersonalNameTx = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_name_tx);
         otherpersonalVipTx = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_vip_tx);
+        otherpersonalVipLTx = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_vipl_tx);
         otherpersonalDynamicNumberTx = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_dynamic_number_tx);
         otherpersonalVisitorNumTx = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_visitor_num_tx);
         otherpersonalOftenaddrTv = (TextView) otherpersonalScrollview.findViewById(R.id.otherpersonal_oftenaddr_tv);
@@ -342,10 +344,12 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
         }
         otherpersonalVipTx.setText("VIP."+mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUserLevel());
         if (mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>=4) {
-            otherpersonalVipTx.setVisibility(View.GONE);
             otherpersonalSvipIv.setVisibility(View.VISIBLE);
+            otherpersonalVipLTx.setVisibility(View.GONE);
         } else {
             otherpersonalSvipIv.setVisibility(View.GONE);
+            otherpersonalVipLTx.setVisibility(View.VISIBLE);
+            otherpersonalVipLTx.setText("VIP."+mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getUserLevel());
         }
         if (mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getSex().equals("M")) {
             otherpersonalGenderIv.setImageResource(R.mipmap.personal_man_ic);

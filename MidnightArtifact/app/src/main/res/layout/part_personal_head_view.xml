@@ -83,6 +83,22 @@
                 android:textSize="@dimen/dimen_sp_10" />
 
             <TextView
+                android:id="@+id/personal_vipl_tx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_dp_5"
+                android:layout_toRightOf="@+id/personal_vip_tx"
+                android:layout_below="@+id/personal_name_tx"
+                android:paddingLeft="@dimen/dimen_dp_8"
+                android:paddingRight="@dimen/dimen_dp_8"
+                android:paddingTop="@dimen/dimen_dp_3"
+                android:paddingBottom="@dimen/dimen_dp_3"
+                android:background="@drawable/level_red_new_bg"
+                android:text="VIP.0"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/dimen_sp_10" />
+
+            <TextView
                 android:id="@+id/personal_svip_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

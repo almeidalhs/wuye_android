@@ -32,6 +32,69 @@ public class GiftMessageModel {
     private long center_time;
     private List<String> addvalue;
     private adInfoBean ad_info;
+    private long chat_id;
+    private long sender_id;
+    private String sender_name;
+    private String sender_sex;
+    private String sender_avatar;
+    private String chat_content;
+    private long chat_time;
+
+    public long getChat_id() {
+        return chat_id;
+    }
+
+    public void setChat_id(long chat_id) {
+        this.chat_id = chat_id;
+    }
+
+    public long getSender_id() {
+        return sender_id;
+    }
+
+    public void setSender_id(long sender_id) {
+        this.sender_id = sender_id;
+    }
+
+    public String getSender_name() {
+        return sender_name;
+    }
+
+    public void setSender_name(String sender_name) {
+        this.sender_name = sender_name;
+    }
+
+    public String getSender_sex() {
+        return sender_sex;
+    }
+
+    public void setSender_sex(String sender_sex) {
+        this.sender_sex = sender_sex;
+    }
+
+    public String getSender_avatar() {
+        return sender_avatar;
+    }
+
+    public void setSender_avatar(String sender_avatar) {
+        this.sender_avatar = sender_avatar;
+    }
+
+    public String getChat_content() {
+        return chat_content;
+    }
+
+    public void setChat_content(String chat_content) {
+        this.chat_content = chat_content;
+    }
+
+    public long getChat_time() {
+        return chat_time;
+    }
+
+    public void setChat_time(long chat_time) {
+        this.chat_time = chat_time;
+    }
 
     public adInfoBean getAd_info() {
         return ad_info;

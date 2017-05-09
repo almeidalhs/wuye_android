@@ -510,6 +510,8 @@ public class MyBaseActivity extends BaseAppCompatActivity {
                 MyBaseApplication.getApplication().cleanLoginData();
                 dialog.dismiss();
                 if (!(mAty instanceof MainActivity)) {
+                    MyBaseApplication.getApplication().initObserver(false);
+                    MyBaseApplication.getApplication().getDaoSession().getAddFriendRecordDao().deleteAll();
                     EventBus.getDefault().unregister(this);
                     startActivity(new Intent(mAty, MainActivity.class));
                     finish();

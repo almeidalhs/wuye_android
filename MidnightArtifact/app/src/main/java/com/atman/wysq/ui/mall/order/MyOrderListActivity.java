@@ -23,6 +23,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.tbl.okhttputils.OkHttpUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import okhttp3.Call;
@@ -116,7 +119,19 @@ public class MyOrderListActivity extends MyBaseActivity implements AdapterInterf
                 onLoad(PullToRefreshBase.Mode.PULL_FROM_START, pullToRefreshListView);
             } else {
                 onLoad(PullToRefreshBase.Mode.BOTH, pullToRefreshListView);
-                mAdapter.addBody(mGetOrderListModel.getBody());
+                List<GetOrderListModel.BodyEntity> temp = new ArrayList<>();
+                for (int i=0;i<mGetOrderListModel.getBody().size();i++) {
+                    if (mGetOrderListModel.getBody().get(i).getOrder_type() != 11
+                            && mGetOrderListModel.getBody().get(i).getOrder_type() != 21
+                            && mGetOrderListModel.getBody().get(i).getOrder_type() != 31
+                            && mGetOrderListModel.getBody().get(i).getOrder_type() != 41
+                            && mGetOrderListModel.getBody().get(i).getOrder_type() != 61
+                            && mGetOrderListModel.getBody().get(i).getOrder_type() != 61
+                            && mGetOrderListModel.getBody().get(i).getOrder_type() != 63) {
+                        temp.add(mGetOrderListModel.getBody().get(i));
+                    }
+                }
+                mAdapter.addBody(temp);
             }
         } else if (id == Common.NET_RECHARGE_ADD_ORDER_ALIPAY) {
             MyBaseApplication.getApplication().setFilterLock(true);

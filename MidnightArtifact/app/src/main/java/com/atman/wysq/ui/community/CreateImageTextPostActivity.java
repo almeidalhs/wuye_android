@@ -58,7 +58,6 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
     ExpandableListView createImagetextExlistview;
 
     private Context mContext = CreateImageTextPostActivity.this;
-    private TextView topRightTv;
     private View headView;
     private MyCleanEditText postTitleEt;
     private EditText mFocusEditText;
@@ -83,9 +82,7 @@ public class CreateImageTextPostActivity extends MyBaseActivity implements Adapt
     public void initWidget(View... v) {
         super.initWidget(v);
         setBarTitleTx("发布帖子");
-        topRightTv = setBarRightTx("提交");
-        topRightTv.setTextColor(getResources().getColor(R.color.color_red));
-        topRightTv.setOnClickListener(new View.OnClickListener() {
+        setBarRightIv(R.mipmap.bt_create_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (postTitleEt.getText().toString().trim().isEmpty()) {

@@ -188,6 +188,21 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                     MyBaseApplication.getApplication().getDaoSession().getTouChuanOtherNoticeDao().insert(mTouChuanOtherNotice);
                 } else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==20030) {//踢下线
                     MyBaseApplication.getApplication().logout();
+                } else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==13) {//新的注册打招呼
+                    ImMessage registerTemp = new ImMessage(null, messages.get(i).getUuid()
+                            , PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID), messages.get(i).getSessionId()
+                            , messages.get(i).getFromAccount(), mGiftMessageModel.getSender_name()
+                            , mGiftMessageModel.getSender_avatar(), mGiftMessageModel.getSender_sex()
+                            , 0, false, mGiftMessageModel.getChat_time(), ContentTypeInter.contentTypeText
+                            , mGiftMessageModel.getChat_content(), "", "", "", "", "", "", "", "", 0, 0, false, 1);
+                    MyBaseApplication.getApplication().getDaoSession().getImMessageDao().insertOrReplace(registerTemp);
+
+                    ImSession mImSessionTemp = new ImSession(messages.get(i).getSessionId()
+                            , PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID), registerTemp.getContent()
+                            , registerTemp.getNickName(), registerTemp.getIcon(), registerTemp.getSex()
+                            , Integer.parseInt(verify_status), System.currentTimeMillis(), 1);
+                    MyBaseApplication.getApplication().getDaoSession().getImSessionDao().insertOrReplace(mImSessionTemp);
+
                 } else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==8) {//礼物通知
                     return;
                 }
@@ -290,34 +305,7 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                     }
                 }
                 content = temp.getContent();
-                if (!messages.get(i).getSessionId().equals(PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID))) {
-                    MyBaseApplication.getApplication().getDaoSession().getImMessageDao().insertOrReplace(temp);
-
-                    ImSession mImSession = MyBaseApplication.getApplication().getDaoSession().getImSessionDao().queryBuilder().where(ImSessionDao.Properties.UserId.eq(messages.get(i).getSessionId())
-                            , ImSessionDao.Properties.LoginUserId.eq(PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID))).build().unique();
-                    if (!messages.get(i).getFromAccount().equals(String.valueOf(
-                            PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID)))) {
-                        nick = mGetMessageModel.getSendUser().getNickName();
-                        sex = mGetMessageModel.getSendUser().getSex();
-                        icon = mGetMessageModel.getSendUser().getIcon();
-                        verify_status = String.valueOf(mGetMessageModel.getSendUser().getVerify_status());
-                    }
-                    if (mImSession==null) {
-                        ImSession mImSessionTemp = new ImSession(messages.get(i).getSessionId()
-                                , PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID), temp.getContent()
-                                , nick, icon, sex, Integer.parseInt(verify_status), System.currentTimeMillis(), 1);
-                        MyBaseApplication.getApplication().getDaoSession().getImSessionDao().insertOrReplace(mImSessionTemp);
-                    } else {
-                        mImSession.setContent(temp.getContent());
-                        mImSession.setNickName(nick);
-                        mImSession.setSex(sex);
-                        mImSession.setIcon(icon);
-                        mImSession.setVerify_status(Integer.parseInt(verify_status));
-                        mImSession.setTime(System.currentTimeMillis());
-                        mImSession.setUnreadNum(mImSession.getUnreadNum()+1);
-                        MyBaseApplication.getApplication().getDaoSession().getImSessionDao().update(mImSession);
-                    }
-                }
+                changeDataBase(messages, i, mGetMessageModel, temp);
             }
         }
         EventBus.getDefault().post(new YunXinMessageEvent());
@@ -359,6 +347,37 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                     }
                 }
             }.execute(Common.ImageUrl+icon);
+        }
+    }
+
+    private void changeDataBase(List<IMMessage> messages, int i, GetMessageModel mGetMessageModel, ImMessage temp) {
+        if (!messages.get(i).getSessionId().equals(PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID))) {
+            MyBaseApplication.getApplication().getDaoSession().getImMessageDao().insertOrReplace(temp);
+
+            ImSession mImSession = MyBaseApplication.getApplication().getDaoSession().getImSessionDao().queryBuilder().where(ImSessionDao.Properties.UserId.eq(messages.get(i).getSessionId())
+                    , ImSessionDao.Properties.LoginUserId.eq(PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID))).build().unique();
+            if (!messages.get(i).getFromAccount().equals(String.valueOf(
+                    PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID)))) {
+                nick = mGetMessageModel.getSendUser().getNickName();
+                sex = mGetMessageModel.getSendUser().getSex();
+                icon = mGetMessageModel.getSendUser().getIcon();
+                verify_status = String.valueOf(mGetMessageModel.getSendUser().getVerify_status());
+            }
+            if (mImSession==null) {
+                ImSession mImSessionTemp = new ImSession(messages.get(i).getSessionId()
+                        , PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID), temp.getContent()
+                        , nick, icon, sex, Integer.parseInt(verify_status), System.currentTimeMillis(), 1);
+                MyBaseApplication.getApplication().getDaoSession().getImSessionDao().insertOrReplace(mImSessionTemp);
+            } else {
+                mImSession.setContent(temp.getContent());
+                mImSession.setNickName(nick);
+                mImSession.setSex(sex);
+                mImSession.setIcon(icon);
+                mImSession.setVerify_status(Integer.parseInt(verify_status));
+                mImSession.setTime(System.currentTimeMillis());
+                mImSession.setUnreadNum(mImSession.getUnreadNum()+1);
+                MyBaseApplication.getApplication().getDaoSession().getImSessionDao().update(mImSession);
+            }
         }
     }
 

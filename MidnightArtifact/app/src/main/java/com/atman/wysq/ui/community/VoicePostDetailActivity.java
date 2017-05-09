@@ -237,7 +237,8 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
                     startActivity(CommentChildrenListActivity.buildIntent(mContext, mBodyEntity.getBlog_id(), mBodyEntity.getBlog_comment_id()
                             , mBodyEntity.getIcon(), mBodyEntity.getVerify_status(), mBodyEntity.getUser_name()
                             , mBodyEntity.getSex(), mBodyEntity.getUserLevel(), mBodyEntity.getCreate_time()
-                            , mBodyEntity.getUser_id(), mBodyEntity.getContent(), blogUserId, isAnonymity, anonymityImg, isReplay, mBodyEntity.getVip_level()));
+                            , mBodyEntity.getUser_id(), mBodyEntity.getContent(), blogUserId, isAnonymity
+                            , anonymityImg, isReplay, mBodyEntity.getVip_level(), false));
                 }
             }
         });
@@ -448,6 +449,11 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         if (id == Common.NET_GET_BLOGDETAIL) {
             mGetBlogDetailModel = mGson.fromJson(data, GetBlogDetailModel.class);
             updateUI();
+            if (MyBaseApplication.getApplication().mGetMyUserIndexModel != null && blogUserId==
+                    MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId()) {
+                bloglistRelationTx.setVisibility(View.GONE);
+                return;
+            }
             OkHttpUtils.get().url(Common.Url_Get_UserIndex + "/" + blogUserId)
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                     .tag(Common.NET_GET_USERINDEX).id(Common.NET_GET_USERINDEX).build()

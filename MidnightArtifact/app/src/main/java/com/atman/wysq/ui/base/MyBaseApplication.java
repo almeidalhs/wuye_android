@@ -308,8 +308,12 @@ public class MyBaseApplication extends BaseApplication {
         }
     };
 
+    private RootMessageObserver mRootMessageObserver = null;
     public void ReceiveMessageObserver(boolean b) {
-        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(new RootMessageObserver(this), b);
+        if (mRootMessageObserver==null) {
+            mRootMessageObserver = new RootMessageObserver(this);
+        }
+        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(mRootMessageObserver, b);
     }
 
     public boolean inMainProcess() {

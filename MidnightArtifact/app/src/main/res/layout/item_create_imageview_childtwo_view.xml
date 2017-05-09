@@ -79,12 +79,5 @@
             android:textSize="@dimen/dimen_sp_15"
             android:text="＋关联商品"
             android:textColor="@color/color_black"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/dimen_sp_15"
-            android:text="（用户点击购买后，获得金币奖励）"
-            android:textColor="@color/color_787878"/>
     </LinearLayout>
 </RelativeLayout>

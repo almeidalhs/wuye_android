@@ -17,12 +17,14 @@ import android.widget.Toast;
 
 import com.atman.wysq.R;
 import com.atman.wysq.adapter.ChildrenCommentAdapter;
+import com.atman.wysq.model.response.GetBlogDetailModel;
 import com.atman.wysq.model.response.GetChildrenCommentModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.MyTools;
+import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
@@ -71,6 +73,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
     private long blog_id;
     private int isReplay = 0;
     private boolean isLast = false;
+    private boolean isFromList = false;
     private String headUrl;
     private String name;
     private String sex;
@@ -109,7 +112,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
 
     public static Intent buildIntent(Context context, long blog_id, long id, String headUrl, int verifyState, String name
             , String sex, int level, long time, long ueseID, String content, long blogUserId, boolean isAnonymity
-            , String anonymityImg, int isReplay, int vipLevel) {
+            , String anonymityImg, int isReplay, int vipLevel, boolean isFromList) {
         Intent intent = new Intent(context, CommentChildrenListActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("blog_id", blog_id);
@@ -126,6 +129,7 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
         intent.putExtra("anonymityImg", anonymityImg);
         intent.putExtra("isReplay", isReplay);
         intent.putExtra("vipLevel", vipLevel);
+        intent.putExtra("isFromList", isFromList);
         return intent;
     }
 
@@ -147,9 +151,21 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
         ueseID = getIntent().getLongExtra("ueseID", 0);
         blogUserId = getIntent().getLongExtra("blogUserId", 0);
         isAnonymity = getIntent().getBooleanExtra("isAnonymity", false);
+        isFromList = getIntent().getBooleanExtra("isFromList", false);
         LogUtils.e(">>>id:" + id+",blogUserId:"+blogUserId+",isAnonymity:"+isAnonymity);
 
         setBarTitleTx("回复详情");
+        if (isFromList) {
+            setBarRightTx("查看\n原帖").setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OkHttpUtils.get().url(Common.Url_Get_BlogDetail + blog_id)
+                            .id(Common.NET_GET_BLOGDETAIL).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .tag(Common.NET_GET_BLOGDETAIL).build()
+                            .execute(new MyStringCallback(mContext, CommentChildrenListActivity.this, true));
+                }
+            });
+        }
 
         headView = LayoutInflater.from(mContext).inflate(R.layout.part_childrencomment_head_view, null);
         childrencommentHeadRl = (RelativeLayout) headView.findViewById(R.id.childrencomment_head_rl);
@@ -359,6 +375,19 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
                 Toast.makeText(mContext,"+1经验值",Toast.LENGTH_LONG).show();
                 isReplay = 1;
             }
+        } else if (id == Common.NET_GET_BLOGDETAIL) {
+            OkHttpUtils.postString().url(Common.Url_Add_Browse + blog_id).mediaType(Common.JSON)
+                    .id(Common.NET_ADD_BROWSE).tag(Common.NET_ADD_BROWSE).content("{}")
+                    .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                    .build().execute(new MyStringCallback(mContext, CommentChildrenListActivity.this, false));
+            GetBlogDetailModel mGetBlogDetailModel = mGson.fromJson(data, GetBlogDetailModel.class);
+            if (mGetBlogDetailModel.getBody().size()>0) {
+                UiHelper.toCommunityDetail(this
+                        , mGetBlogDetailModel.getBody().get(0).getType()
+                        , mGetBlogDetailModel.getBody().get(0).getTitle()
+                        , mGetBlogDetailModel.getBody().get(0).getBlog_id()
+                        , mGetBlogDetailModel.getBody().get(0).getVip_level(), -1, null);
+            }
         }
     }
 
@@ -389,6 +418,8 @@ public class CommentChildrenListActivity extends MyBaseActivity implements Adapt
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_SUBCOMMENT_LIST);
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_COMMENT);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_BROWSE);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_BLOGDETAIL);
     }
 
     @OnClick({R.id.postings_totop_iv, R.id.blogdetail_send_bt})

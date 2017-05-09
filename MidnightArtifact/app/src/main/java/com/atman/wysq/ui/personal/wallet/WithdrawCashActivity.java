@@ -96,7 +96,7 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
     private void initThisView() {
 
         //钻石转换小于50元的不让输入
-        if (countToDiamonds(Long.parseLong(MyBaseApplication.KDiamondCashStart)) > ownDiamonds) {
+        if (countToDiamonds(Long.parseLong(MyBaseApplication.KDiamondCashStart)) > ownDiamonds || ownDiamonds==0) {
             withdrawNumEt.setInputType(InputType.TYPE_NULL);
             withdrawSumbitBt.setClickable(false);
             withdrawSumbitBt.setEnabled(false);
@@ -162,7 +162,7 @@ public class WithdrawCashActivity extends MyBaseActivity implements EditCheckBac
                 withdrawAccountMonifyTv.setText("去修改");
                 withdrawAccountTv.setText("提现到账号：" + mGetWithdrawalsListModel.getBody().get(0).getAccount());
             } else {
-                showWraning("您还没有添加体现账号，不能进行提现操作！");
+                showWraning("您还没有添加提现账号，不能进行提现操作！");
                 withdrawNumEt.setInputType(InputType.TYPE_NULL);
                 withdrawSumbitBt.setClickable(false);
                 withdrawSumbitBt.setEnabled(false);

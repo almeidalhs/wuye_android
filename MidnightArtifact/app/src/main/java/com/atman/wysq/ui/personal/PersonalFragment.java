@@ -106,6 +106,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
 
     private TextView personalVisitorNumTx;
     private TextView personalVipTx;
+    private TextView personalVipLTx;
     private TextView personalSVipTv;
     private TextView personalMycoinTv;
     private TextView personalMyvipstatusTv;
@@ -178,6 +179,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         personalMyvipstatusTv = (TextView) personalScrollview.findViewById(R.id.personal_myvipstatus_tv);
         personalVipTx = (TextView) personalScrollview.findViewById(R.id.personal_vip_tx);
         personalSVipTv = (TextView) personalScrollview.findViewById(R.id.personal_svip_tv);
+        personalVipLTx = (TextView) personalScrollview.findViewById(R.id.personal_vipl_tx);
 
         personalMysecretLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_mysecret_ll);
         personalMycollectionLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_mycollection_ll);
@@ -290,6 +292,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         personalMycoinTv.setVisibility(View.GONE);
 
         personalVipTx.setVisibility(View.GONE);
+        personalVipLTx.setVisibility(View.GONE);
         personalSVipTv.setVisibility(View.GONE);
     }
 
@@ -502,11 +505,15 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         personalSettingIv.setVisibility(View.VISIBLE);
         personalGenderIv.setVisibility(View.VISIBLE);
 
+        personalVipTx.setVisibility(View.VISIBLE);
         personalVipTx.setText("LV "+mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getUserLevel());
         if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>=4) {
             personalSVipTv.setVisibility(View.VISIBLE);
+            personalVipLTx.setVisibility(View.GONE);
         } else {
             personalSVipTv.setVisibility(View.GONE);
+            personalVipLTx.setVisibility(View.VISIBLE);
+            personalVipLTx.setText("VIP."+mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level());
         }
         personalNameTx.setText(mGetUserIndexModel.getBody().getUserDetailBean().getNickName());
         if (mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getVip_level()>=3) {
