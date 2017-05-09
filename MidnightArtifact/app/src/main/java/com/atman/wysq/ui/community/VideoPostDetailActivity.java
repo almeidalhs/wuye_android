@@ -44,6 +44,7 @@ import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.ui.yunxinfriend.SelectGiftActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.MyTools;
+import com.atman.wysq.utils.SeedActionMessageUtils;
 import com.atman.wysq.utils.ShareHelper;
 import com.atman.wysq.utils.Tools;
 import com.atman.wysq.widget.ShareDialog;
@@ -526,6 +527,7 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
             bloglistRelationTx.setText("+关注");
             MyBaseApplication.getApplication().getDaoSession().getAddFriendRecordDao().deleteAll();
         } else if (id == Common.NET_ADD_FOLLOW_ID) {
+            SeedActionMessageUtils.seed(String.valueOf(blogUserId));
             showToast("关注成功");
             if (mGetMyUserIndexModel.getBody().getUserFelation() == 0) {
                 mGetMyUserIndexModel.getBody().setUserFelation(1);
@@ -594,6 +596,7 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
         blogdetailTopVoiceRl.setLayoutParams(llParams);
         blogdetailTopVoiceBgIv = (SimpleDraweeView) headView.findViewById(R.id.blogdetail_top_voice_bg_iv);
         blogdetailTopVoiceBgIv.setLayoutParams(rlParams);
+        playerView.setLayoutParams(rlParams);
         blogdetailTopVoiceStartIv = (ImageView) headView.findViewById(R.id.blogdetail_top_voice_start_iv);
         blogdetailTopVoiceStartIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -962,6 +965,7 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
             } else {
                 blogdetailFlowerTv.setText(num / 2 + "");
             }
+            SeedActionMessageUtils.seedGift(String.valueOf(blogUserId), tilte, data.getStringExtra("name"));
             GetBlogDetailModel.BodyEntity.GiftListEntity temp = new GetBlogDetailModel.BodyEntity.GiftListEntity();
             temp.setIcon(MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
             if (mRewardListAdapter == null) {

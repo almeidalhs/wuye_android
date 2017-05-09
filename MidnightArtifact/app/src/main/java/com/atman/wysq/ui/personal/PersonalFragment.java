@@ -709,10 +709,10 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
                 startActivity(HisVisitorActivity.buildIntent(getActivity()
                         , mGetUserIndexModel.getBody().getUserDetailBean().getUserId(), "我的访客", num));
                 break;
-            case R.id.personal_vip_ll:
-                startActivity(TwoLevelCategoryListActivity.buildIntent(getActivity(),
-                        Integer.parseInt(MyBaseApplication.mWEB_ID), "VIP", true));
-                break;
+//            case R.id.personal_vip_ll:
+//                startActivity(TwoLevelCategoryListActivity.buildIntent(getActivity(),
+//                        Integer.parseInt(MyBaseApplication.mWEB_ID), "VIP", true));
+//                break;
             case R.id.personal_mygift_ll:
                 getActivity().startActivity(MyGiftActivity.buildIntent(getActivity()));
                 break;
@@ -752,6 +752,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
             case R.id.personal_task_ll:
                 getActivity().startActivity(new Intent(getActivity(), TaskListActivity.class));
                 break;
+            case R.id.personal_vip_ll:
             case R.id.personal_recharge_ll:
                 getActivity().startActivity(RechargeActivity.buildIntent(getActivity()
                         , mGetUserIndexModel.getBody().getUserDetailBean().getUserExt().getLeft_coin()

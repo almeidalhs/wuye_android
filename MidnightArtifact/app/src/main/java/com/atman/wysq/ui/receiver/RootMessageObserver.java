@@ -109,8 +109,20 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                                             ,0, mGiftMessageModel.getAdd_money()));
                                     break;
                                 case 1:
-                                    EventBus.getDefault().post(new GiftEvent(mGiftMessageModel.getType()
-                                            , mGiftMessageModel.getGiftId(), 0));
+                                    if (content.contains("管理员删除")) {
+                                        TouChuanOtherNotice mTouChuanOtherNotice = new TouChuanOtherNotice();
+                                        mTouChuanOtherNotice.setReceive_userId(Long.valueOf(PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID)));
+                                        mTouChuanOtherNotice.setSend_userId(mGiftMessageModel.getCenter_user_id());
+                                        mTouChuanOtherNotice.setSend_nickName(mGiftMessageModel.getCenter_user_name());
+                                        mTouChuanOtherNotice.setGiftMessage(mGiftMessageModel.getCenter_content());
+                                        mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
+                                        mTouChuanOtherNotice.setNoticeType(-1);
+                                        MyBaseApplication.getApplication().getDaoSession().getTouChuanOtherNoticeDao().insert(mTouChuanOtherNotice);
+                                        EventBus.getDefault().post(new YunXinAddFriendEvent());
+                                    } else {
+                                        EventBus.getDefault().post(new GiftEvent(mGiftMessageModel.getType()
+                                                , mGiftMessageModel.getGiftId(), 0));
+                                    }
                                     break;
                                 default:
                                     if (content.contains("您在直播间消耗")) {
@@ -129,7 +141,7 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                     }
                 }
                 nick = "午夜神器";
-                if (mGiftMessageModel!=null && mGiftMessageModel.getType()==1) {//礼物通知
+                if (mGiftMessageModel!=null && mGiftMessageModel.getType()==1) {
                     if (mGiftMessageModel.getCenter_user_name()==null || String.valueOf(mGiftMessageModel.getCenter_user_id())
                             .equals(PreferenceUtil.getPreferences(context, PreferenceUtil.PARM_USERID))) {
                         continue;
@@ -140,7 +152,7 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                     mTouChuanOtherNotice.setSend_nickName(mGiftMessageModel.getCenter_user_name());
                     mTouChuanOtherNotice.setGiftMessage(mGiftMessageModel.getCenter_content());
                     mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
-                    mTouChuanOtherNotice.setNoticeType(8);
+                    mTouChuanOtherNotice.setNoticeType(1);
                     MyBaseApplication.getApplication().getDaoSession().getTouChuanOtherNoticeDao().insert(mTouChuanOtherNotice);
                 } else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==4) {//帖子回复
                     if (mGiftMessageModel.getCenter_user_name()==null || String.valueOf(mGiftMessageModel.getCenter_user_id())
@@ -153,6 +165,9 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                     mTouChuanOtherNotice.setSend_nickName(mGiftMessageModel.getCenter_user_name());
                     mTouChuanOtherNotice.setGiftMessage(mGiftMessageModel.getCenter_content());
                     mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
+                    if (mGiftMessageModel.getAd_info()!=null) {
+                        mTouChuanOtherNotice.setPropMessage(String.valueOf(mGiftMessageModel.getAd_info().getAd_goods_id()));
+                    }
                     mTouChuanOtherNotice.setNoticeType(4);
                     MyBaseApplication.getApplication().getDaoSession().getTouChuanOtherNoticeDao().insert(mTouChuanOtherNotice);
                 } else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==3) {//注册打招呼
@@ -166,10 +181,15 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
                     mTouChuanOtherNotice.setSend_nickName(mGiftMessageModel.getCenter_user_name());
                     mTouChuanOtherNotice.setGiftMessage(mGiftMessageModel.getCenter_content());
                     mTouChuanOtherNotice.setTime(String.valueOf(System.currentTimeMillis()));
+                    if (mGiftMessageModel.getAd_info()!=null) {
+                        mTouChuanOtherNotice.setPropMessage(String.valueOf(mGiftMessageModel.getAd_info().getType()));
+                    }
                     mTouChuanOtherNotice.setNoticeType(3);
                     MyBaseApplication.getApplication().getDaoSession().getTouChuanOtherNoticeDao().insert(mTouChuanOtherNotice);
-                }  else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==20030) {//踢下线
+                } else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==20030) {//踢下线
                     MyBaseApplication.getApplication().logout();
+                } else if (mGiftMessageModel!=null && mGiftMessageModel.getType()==8) {//礼物通知
+                    return;
                 }
                 EventBus.getDefault().post(new YunXinAddFriendEvent());
             } catch (JsonSyntaxException e){
@@ -346,7 +366,7 @@ public class RootMessageObserver implements Observer<List<IMMessage>> {
         LogUtils.e("content:"+content);
         LogUtils.e("nick:"+nick);
         if (content.isEmpty() || content.equals("") || content.contains("null")
-                || content.contains("您发送了一条私信")) {
+                || content.contains("您发送了一条私信") || content.contains("给您送了")) {
             return;
         }
         if (isScreenOn(context)) {//屏幕亮的

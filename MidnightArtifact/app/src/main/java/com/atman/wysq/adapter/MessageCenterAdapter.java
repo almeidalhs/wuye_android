@@ -13,6 +13,7 @@ import com.atman.wysq.R;
 import com.atman.wysq.model.bean.TouChuanOtherNotice;
 import com.atman.wysq.utils.MyTools;
 import com.base.baselibs.iimp.AdapterInterface;
+import com.base.baselibs.util.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +100,8 @@ public class MessageCenterAdapter extends BaseAdapter {
 
         holder.itemMessagecenterNameTx.setText(dataList.get(position).getSend_nickName() + ":");
 
+        LogUtils.e(">>>>dataList.get(position).getNoticeType():"+dataList.get(position).getNoticeType());
+
         if (dataList.get(position).getNoticeType() == 1) {
             if (dataList.get(position).getIsEmbalmed()) {
                 holder.itemMessagecenterOkBt.setVisibility(View.GONE);
@@ -131,6 +134,7 @@ public class MessageCenterAdapter extends BaseAdapter {
             }
         } else if (dataList.get(position).getNoticeType() == 8
                 || dataList.get(position).getNoticeType() == 4
+                || dataList.get(position).getNoticeType() == -1
                 || dataList.get(position).getNoticeType() == 3) {
             holder.itemMessagecenterTypeTx.setText(dataList.get(position).getGiftMessage());
         }

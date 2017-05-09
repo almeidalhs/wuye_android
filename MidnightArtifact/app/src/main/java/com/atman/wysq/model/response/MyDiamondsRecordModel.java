@@ -81,6 +81,113 @@ public class MyDiamondsRecordModel {
         private String money;
         private int status;
 
+        private WalletChannelBean walletChannel;
+
+        public WalletChannelBean getWalletChannel() {
+            return walletChannel;
+        }
+
+        public void setWalletChannel(WalletChannelBean walletChannel) {
+            this.walletChannel = walletChannel;
+        }
+
+        public static class WalletChannelBean {
+
+            /**
+             * wallet_channel_id : 52
+             * user_id : 450214716
+             * account : 35019577767@qq.com
+             * account_name : 支付宝
+             * flag : 1
+             * channel : 1
+             * status : 1
+             * create_time : 1491364328000
+             * update_time : 1491364328000
+             */
+
+            private long wallet_channel_id;
+            private long user_id;
+            private String account;
+            private String account_name;
+            private int flag;
+            private int channel;
+            private int status;
+            private long create_time;
+            private long update_time;
+
+            public long getWallet_channel_id() {
+                return wallet_channel_id;
+            }
+
+            public void setWallet_channel_id(long wallet_channel_id) {
+                this.wallet_channel_id = wallet_channel_id;
+            }
+
+            public long getUser_id() {
+                return user_id;
+            }
+
+            public void setUser_id(long user_id) {
+                this.user_id = user_id;
+            }
+
+            public String getAccount() {
+                return account;
+            }
+
+            public void setAccount(String account) {
+                this.account = account;
+            }
+
+            public String getAccount_name() {
+                return account_name;
+            }
+
+            public void setAccount_name(String account_name) {
+                this.account_name = account_name;
+            }
+
+            public int getFlag() {
+                return flag;
+            }
+
+            public void setFlag(int flag) {
+                this.flag = flag;
+            }
+
+            public int getChannel() {
+                return channel;
+            }
+
+            public void setChannel(int channel) {
+                this.channel = channel;
+            }
+
+            public int getStatus() {
+                return status;
+            }
+
+            public void setStatus(int status) {
+                this.status = status;
+            }
+
+            public long getCreate_time() {
+                return create_time;
+            }
+
+            public void setCreate_time(long create_time) {
+                this.create_time = create_time;
+            }
+
+            public long getUpdate_time() {
+                return update_time;
+            }
+
+            public void setUpdate_time(long update_time) {
+                this.update_time = update_time;
+            }
+        }
+
         public int getPay_id() {
             return pay_id;
         }

@@ -17,9 +17,13 @@ import com.atman.wysq.adapter.MessageCenterAdapter;
 import com.atman.wysq.model.bean.TouChuanOtherNotice;
 import com.atman.wysq.model.event.YunXinMessageEvent;
 import com.atman.wysq.model.greendao.gen.TouChuanOtherNoticeDao;
+import com.atman.wysq.model.response.GetBlogDetailModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
+import com.atman.wysq.ui.personal.MyGiftActivity;
+import com.atman.wysq.ui.personal.wallet.RecordDetailActivity;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.UiHelper;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
@@ -113,6 +117,15 @@ public class MessageCenterActivity extends MyBaseActivity implements AdapterInte
         if (id == Common.NET_ADD_FRIEND) {
             seedNotice(mPosition, 2);
             showToast("成功添加\""+name+"\"为好友");
+        } else if (id == Common.NET_GET_BLOGDETAIL) {
+            GetBlogDetailModel mGetBlogDetailModel = mGson.fromJson(data, GetBlogDetailModel.class);
+            if (mGetBlogDetailModel.getBody().size()>0) {
+                UiHelper.toCommunityDetail(this
+                        , mGetBlogDetailModel.getBody().get(0).getType()
+                        , mGetBlogDetailModel.getBody().get(0).getTitle()
+                        , mGetBlogDetailModel.getBody().get(0).getBlog_id()
+                        , mGetBlogDetailModel.getBody().get(0).getVip_level(), -1, null);
+            }
         }
     }
 
@@ -120,6 +133,7 @@ public class MessageCenterActivity extends MyBaseActivity implements AdapterInte
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(Common.NET_ADD_FRIEND);
+        OkHttpUtils.getInstance().cancelTag(Common.NET_GET_BLOGDETAIL);
     }
 
     private void initData() {
@@ -199,15 +213,34 @@ public class MessageCenterActivity extends MyBaseActivity implements AdapterInte
                         .execute(new MyStringCallback(mContext, this, true));
                 break;
             case R.id.item_messagecenter_root_ll:
-                long userId = mAdapter.getItem(position).getSend_userId();
-                if (mAdapter.getItem(position).getAddfriendType()==3) {
-                    userId = mAdapter.getItem(position).getReceive_userId();
+
+                if (mAdapter.getItem(position).getNoticeType()==8) {//礼物通知
+                    startActivity(MyGiftActivity.buildIntent(mContext));
+                } else if (mAdapter.getItem(position).getNoticeType()==3) {//兑换
+                    if (mAdapter.getItem(position).getPropMessage() !=null
+                            && !mAdapter.getItem(position).getPropMessage().equals("")) {
+                        if (mAdapter.getItem(position).getPropMessage().equals("21")) {
+                            startActivity(RecordDetailActivity.buildIntent(mContext, 0));
+                        } else if (mAdapter.getItem(position).getPropMessage().equals("19")) {
+                            startActivity(RecordDetailActivity.buildIntent(mContext, 1));
+                        }
+                    }
+                } else if (mAdapter.getItem(position).getNoticeType()==4) {//帖子评论
+                    OkHttpUtils.get().url(Common.Url_Get_BlogDetail + mAdapter.getItem(position).getPropMessage())
+                            .id(Common.NET_GET_BLOGDETAIL).addHeader("cookie", MyBaseApplication.getApplication().getCookie())
+                            .tag(Common.NET_GET_BLOGDETAIL).build().execute(new MyStringCallback(mContext, this, true));
                 }
-                if (userId == MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId()) {
-                    showWraning("亲，这是你自己哦！");
-                    return;
-                }
-                startActivity(OtherPersonalActivity.buildIntent(mContext, userId));
+
+
+//                long userId = mAdapter.getItem(position).getSend_userId();
+//                if (mAdapter.getItem(position).getAddfriendType()==3) {
+//                    userId = mAdapter.getItem(position).getReceive_userId();
+//                }
+//                if (userId == MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserId()) {
+//                    showWraning("亲，这是你自己哦！");
+//                    return;
+//                }
+//                startActivity(OtherPersonalActivity.buildIntent(mContext, userId));
                 break;
         }
     }

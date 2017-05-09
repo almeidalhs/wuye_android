@@ -217,6 +217,7 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
             if (!isRelationed) {
                 mAdapter.addBody(temp);
             }
+            displayImg(MyBaseApplication.videoImg);
             postTitleEt.setText(MyBaseApplication.imagetextPostTitle);
             if (!MyBaseApplication.voicePath.isEmpty()
                     && new File(MyBaseApplication.voicePath).exists()) {
@@ -233,6 +234,17 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
             }
             getIntent().removeExtra("Goods_id");
         }
+    }
+
+    private void displayImg(String path) {
+        Bitmap bm = null;
+        imgPath = path;
+        try {
+            bm = Bimp.revitionImageSize(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        postBgIv.setImageBitmap(bm);
     }
 
     @Override
@@ -270,7 +282,6 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
 
             CreateMultiMediaPostModel temp = new CreateMultiMediaPostModel(upImgUrl, upVoiceUrl
                     , upTitle, time, mAnonymity, maps);
-            LogUtils.e(">>>>mGson.toJson(temp):"+mGson.toJson(temp));
             OkHttpUtils.postString().url(Common.Url_Create_Audio_Post)
                     .addHeader("cookie", MyBaseApplication.getApplication().getCookie())
                     .mediaType(Common.JSON).content(mGson.toJson(temp))
@@ -366,6 +377,7 @@ public class CreateVoicePostActivity extends MyBaseActivity implements AdapterIn
                 MyBaseApplication.creatPostGoods.addAll(mAdapter.getGoodsList());
                 mAdapter.clearData();
                 MyBaseApplication.isRelation = 2;
+                MyBaseApplication.videoImg = imgPath;
                 MyBaseApplication.imagetextPostTitle = postTitleEt.getText().toString();
                 if (voiceFile!=null && voiceFile.exists()) {
                     MyBaseApplication.voicePath = voiceFile.getPath();

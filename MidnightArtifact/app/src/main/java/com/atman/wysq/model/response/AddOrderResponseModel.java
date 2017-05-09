@@ -51,8 +51,8 @@ public class AddOrderResponseModel {
         private String order_id;
         private long user_id;
         private int type;
-        private int express_fee;
-        private double total_price;
+        private String express_fee;
+        private String total_price;
         private int comment_type;
         private int order_type;
         private int address_id;
@@ -100,19 +100,19 @@ public class AddOrderResponseModel {
             this.type = type;
         }
 
-        public int getExpress_fee() {
+        public String getExpress_fee() {
             return express_fee;
         }
 
-        public void setExpress_fee(int express_fee) {
+        public void setExpress_fee(String express_fee) {
             this.express_fee = express_fee;
         }
 
-        public double getTotal_price() {
+        public String getTotal_price() {
             return total_price;
         }
 
-        public void setTotal_price(double total_price) {
+        public void setTotal_price(String total_price) {
             this.total_price = total_price;
         }
 

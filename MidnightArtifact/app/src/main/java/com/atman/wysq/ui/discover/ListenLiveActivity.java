@@ -55,6 +55,7 @@ import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.ContentUriUtil;
 import com.atman.wysq.utils.MyTools;
+import com.atman.wysq.utils.SeedActionMessageUtils;
 import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.widget.ShowHeadPopWindow;
 import com.atman.wysq.widget.face.FaceRelativeLayout;
@@ -598,6 +599,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                     , mGetMyUserIndexModel.getBody().getUserDetailBean(), this);
         } else if (id == Common.NET_ADD_FOLLOW_ID) {
             if (userId == tempId) {
+                SeedActionMessageUtils.seed(String.valueOf(userId));
                 listenliveAntionTv.setText("已关注");
             }
         } else if (id == Common.NET_CANCEL_BLACKLIST_ID) {

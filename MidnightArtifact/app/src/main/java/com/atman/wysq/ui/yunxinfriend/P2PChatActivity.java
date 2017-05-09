@@ -904,18 +904,9 @@ public class P2PChatActivity extends MyBaseActivity implements EditCheckBack, IA
     }
 
     private void payCion(ImMessage temp) {
-        if (temp.getContentType()==ContentTypeInter.contentTypeImageSmall || temp.getIsGiftMessage()
-                || MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getVerify_status()==1) {
+        if (temp.getContentType()==ContentTypeInter.contentTypeImageSmall || temp.getIsGiftMessage()) {
             return;
         }
-//        String s = temp.getContent();
-//        try {
-//            s = URLEncoder.encode(temp.getContent(), "UTF-8");
-//            LogUtils.e("temp.getContent():"+ URLEncoder.encode(temp.getContent(), "UTF-8"));
-//            LogUtils.e("temp.getContent():"+ URLDecoder.decode(URLEncoder.encode(temp.getContent(), "UTF-8"), "GB2312"));
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
         SeedMessagePayModel mSeedMessagePayModel = new SeedMessagePayModel(Long.parseLong(id), temp.getContent());
         LogUtils.e("mGson.toJson(mSeedMessagePayModel):"+mGson.toJson(mSeedMessagePayModel));
         OkHttpUtils.postString().addHeader("cookie", MyBaseApplication.getApplication().getCookie())

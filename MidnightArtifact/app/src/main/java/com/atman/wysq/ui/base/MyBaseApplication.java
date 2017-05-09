@@ -247,10 +247,6 @@ public class MyBaseApplication extends BaseApplication {
                 TouChuanGiftNotice mTouChuanGiftNotice = new Gson().fromJson(message.getContent(), TouChuanGiftNotice.class);
                 if (mTouChuanGiftNotice.getType()==8) {//礼物通知
                     getDaoSession().getTouChuanGiftNoticeDao().insert(mTouChuanGiftNotice);
-                    LogUtils.e("getType:"+ mTouChuanGiftNotice.getType()
-                            +",getGiftContent:"+ mTouChuanGiftNotice.getGiftContent()
-                            +",getGiftIcon:"+ mTouChuanGiftNotice.getGiftIcon());
-
                 } else {
                     TouChuanOtherNotice mTouChuanOtherNotice = new Gson().fromJson(message.getContent(), TouChuanOtherNotice.class);
 

@@ -26,6 +26,7 @@ import com.atman.wysq.ui.community.ReportActivity;
 import com.atman.wysq.ui.community.ReportListActivity;
 import com.atman.wysq.ui.personal.PersonalAlbumActivity;
 import com.atman.wysq.utils.Common;
+import com.atman.wysq.utils.SeedActionMessageUtils;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PreferenceUtil;
@@ -301,6 +302,7 @@ public class OtherPersonalActivity extends MyBaseActivity implements View.OnClic
             otherpersonalRelationshipTv.setText("陌生人");
             MyBaseApplication.getApplication().getDaoSession().getAddFriendRecordDao().deleteAll();
         } else if (id == Common.NET_ADD_FOLLOW_ID) {
+            SeedActionMessageUtils.seed(String.valueOf(id));
             showToast("关注成功");
             if (mGetMyUserIndexModel.getBody().getUserFelation()==0) {
                 mGetMyUserIndexModel.getBody().setUserFelation(1);

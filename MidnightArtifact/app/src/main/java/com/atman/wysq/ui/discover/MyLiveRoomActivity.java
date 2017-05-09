@@ -52,6 +52,7 @@ import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.ContentUriUtil;
 import com.atman.wysq.utils.MyTools;
+import com.atman.wysq.utils.SeedActionMessageUtils;
 import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.widget.ShowHeadPopWindow;
 import com.atman.wysq.yunxin.model.ChatRoomTypeInter;
@@ -612,6 +613,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                     , mGetMyUserIndexModel.getBody().getUserFelation()
                     , mGetMyUserIndexModel.getBody().getUserDetailBean(), this);
         } else if (id == Common.NET_ADD_FOLLOW_ID) {
+            SeedActionMessageUtils.seed(String.valueOf(ortherUserId));
         } else if (id == Common.NET_CANCEL_BLACKLIST_ID) {
             mIsBalck = false;
         } else if (id == Common.NET_ADD_BLACKLIST) {
@@ -1271,8 +1273,10 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         }
     }
 
+    private long ortherUserId;
     @Override
     public void onAddFriend(long userId) {
+        ortherUserId = userId;
         Map<String, Long> p = new HashMap<>();
         p.put("follow_user_id", userId);
         LogUtils.e("userId:" + userId);

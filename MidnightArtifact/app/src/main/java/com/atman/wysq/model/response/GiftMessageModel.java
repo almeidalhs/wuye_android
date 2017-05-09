@@ -31,6 +31,141 @@ public class GiftMessageModel {
     private String center_user_avatar;
     private long center_time;
     private List<String> addvalue;
+    private adInfoBean ad_info;
+
+    public adInfoBean getAd_info() {
+        return ad_info;
+    }
+
+    public void setAd_info(adInfoBean ad_info) {
+        this.ad_info = ad_info;
+    }
+
+    public static class adInfoBean {
+        /**
+         * ad_goods_id : 186456
+         * ad_info_id : 0
+         * ad_pic :
+         * ad_url :
+         * content :
+         * create_time : null
+         * description :
+         * name :
+         * series : 0
+         * sort : 0
+         * type : 6
+         * update_time : null
+         */
+
+        private long ad_goods_id;
+        private int ad_info_id;
+        private String ad_pic;
+        private String ad_url;
+        private String content;
+        private Object create_time;
+        private String description;
+        private String name;
+        private int series;
+        private int sort;
+        private int type;
+        private Object update_time;
+
+        public long getAd_goods_id() {
+            return ad_goods_id;
+        }
+
+        public void setAd_goods_id(long ad_goods_id) {
+            this.ad_goods_id = ad_goods_id;
+        }
+
+        public int getAd_info_id() {
+            return ad_info_id;
+        }
+
+        public void setAd_info_id(int ad_info_id) {
+            this.ad_info_id = ad_info_id;
+        }
+
+        public String getAd_pic() {
+            return ad_pic;
+        }
+
+        public void setAd_pic(String ad_pic) {
+            this.ad_pic = ad_pic;
+        }
+
+        public String getAd_url() {
+            return ad_url;
+        }
+
+        public void setAd_url(String ad_url) {
+            this.ad_url = ad_url;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public Object getCreate_time() {
+            return create_time;
+        }
+
+        public void setCreate_time(Object create_time) {
+            this.create_time = create_time;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getSeries() {
+            return series;
+        }
+
+        public void setSeries(int series) {
+            this.series = series;
+        }
+
+        public int getSort() {
+            return sort;
+        }
+
+        public void setSort(int sort) {
+            this.sort = sort;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+
+        public Object getUpdate_time() {
+            return update_time;
+        }
+
+        public void setUpdate_time(Object update_time) {
+            this.update_time = update_time;
+        }
+    }
 
     public int getAdd_money() {
         return add_money;

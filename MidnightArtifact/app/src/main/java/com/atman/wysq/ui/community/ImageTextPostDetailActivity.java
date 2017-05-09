@@ -44,6 +44,7 @@ import com.atman.wysq.ui.yunxinfriend.OtherPersonalActivity;
 import com.atman.wysq.ui.yunxinfriend.SelectGiftActivity;
 import com.atman.wysq.utils.Common;
 import com.atman.wysq.utils.MyTools;
+import com.atman.wysq.utils.SeedActionMessageUtils;
 import com.atman.wysq.utils.ShareHelper;
 import com.atman.wysq.utils.Tools;
 import com.atman.wysq.widget.ShareDialog;
@@ -898,6 +899,7 @@ public class ImageTextPostDetailActivity extends MyBaseActivity implements Adapt
             } else {
                 blogdetailFlowerTv.setText(num/2 + "");
             }
+            SeedActionMessageUtils.seedGift(String.valueOf(blogUserId), tilte, data.getStringExtra("name"));
             GetBlogDetailModel.BodyEntity.GiftListEntity temp = new GetBlogDetailModel.BodyEntity.GiftListEntity();
             temp.setIcon(MyBaseApplication.mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
             if (mRewardListAdapter==null) {

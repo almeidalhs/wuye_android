@@ -95,8 +95,9 @@ public class MyDiamondsAdapter extends BaseAdapter {
                 holder.itemMydiamondsExchangeLl.setVisibility(View.GONE);
                 holder.itemMydiamondsPresentationLl.setVisibility(View.VISIBLE);
 
-                holder.itemMydiamondsPresentationAccountTv.setText("提现到支付宝：");
-                holder.itemMydiamondsPresentationNumTv.setText("-"+mBodyEntity.getPay_num());
+                holder.itemMydiamondsPresentationAccountTv.setText("提现到"+mBodyEntity.getWalletChannel().getAccount_name()
+                                +"："+mBodyEntity.getWalletChannel().getAccount());
+                holder.itemMydiamondsPresentationNumTv.setText("-"+mBodyEntity.getMoney());
                 holder.itemMydiamondsPresentationTimeTv.setText(MyTools.convertTime(mBodyEntity.getUpdate_time(), "yyyy-MM-dd"));
                 if (mBodyEntity.getStatus()==1) {
                     holder.itemMydiamondsPresentationStateTv.setText("处理中");
@@ -105,7 +106,7 @@ public class MyDiamondsAdapter extends BaseAdapter {
                 } else if (mBodyEntity.getStatus()==3) {
                     holder.itemMydiamondsPresentationStateTv.setText("取消");
                 } else if (mBodyEntity.getStatus()==4) {
-                    holder.itemMydiamondsPresentationStateTv.setText("管理员取消");
+                    holder.itemMydiamondsPresentationStateTv.setText("已取消");
                 }
             }
         } else {
