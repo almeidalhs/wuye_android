@@ -446,7 +446,7 @@ public class VideoPostDetailActivity extends MyBaseActivity implements AdapterIn
             FaceRelativeLayout.setVisibility(View.VISIBLE);
             postingsLineIv.setVisibility(View.VISIBLE);
             blogdetailCommentLv.setVisibility(View.VISIBLE);
-            playerView.setLayoutParams(rlParams);
+            playerView.setLayoutParams(new RelativeLayout.LayoutParams(getmWidth(), getmWidth() * 240 / 430));
         }
     }
 
