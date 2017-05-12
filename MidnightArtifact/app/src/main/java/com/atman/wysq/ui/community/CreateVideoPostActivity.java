@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Html;
@@ -52,8 +51,6 @@ import com.tbl.okhttputils.OkHttpUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -314,6 +311,7 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                         .addHeader("cookie",MyBaseApplication.getApplication().getCookie())
                         .addFile("files0_name", StringUtils.getFileName(upImgUrl), new File(upImgUrl))
                         .id(Common.NET_RESET_HEAD).tag(Common.NET_RESET_HEAD).build()
+                        .connTimeOut(Common.timeOutTwo).readTimeOut(Common.timeOutTwo).writeTimeOut(Common.timeOutTwo)
                         .execute(new MyStringCallback(mContext, CreateVideoPostActivity.this, true));
             }
         });
@@ -375,17 +373,23 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                 displayImg(path);
             }
         } else if (requestCode == CHOOSE_CODE) {
+//            LogUtils.e(">>>>111:"+SelectVideoUtil.getPathOne(mContext, data.getData()));
+//            Uri uri = SelectVideoUtil.geturi(this, data);
+//            if (uri.toString().indexOf("file") == 0) {
+//                try {
+//                    videoFile = new File(new URI(uri.toString()));
+//                    upVideoUrl = videoFile.getPath();
+//                } catch (URISyntaxException e) {
+//                    e.printStackTrace();
+//                }
+//            } else {
+//                upVideoUrl = SelectVideoUtil.getPath(mAty, uri);
+//                LogUtils.e(">>>>>upVideoUrl:"+upVideoUrl);
+//                videoFile = new File(upVideoUrl);
+//            }
 
-            Uri uri = SelectVideoUtil.geturi(this, data);
-            if (uri.toString().indexOf("file") == 0) {
-                try {
-                    videoFile = new File(new URI(uri.toString()));
-                    upVideoUrl = videoFile.getPath();
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                upVideoUrl = SelectVideoUtil.getPath(mAty, uri);
+            upVideoUrl = SelectVideoUtil.getPathOne(mContext, data.getData());
+            if (upVideoUrl!=null) {
                 videoFile = new File(upVideoUrl);
             }
 
@@ -404,6 +408,8 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                 upVideoUrl = "";
                 return;
             }
+
+            LogUtils.e(">>>>>upVideoUrl:"+upVideoUrl);
 
             BaseMediaBitrateConfig compressMode = new AutoVBRMode();
             compressMode.setVelocity("fast");
@@ -441,7 +447,7 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
 
     private void displayImg(String path) {
         Bitmap bm = null;
-        if (path==null) {
+        if (path==null || path.equals("")) {
             bm = getVideoThumb2(upVideoUrl);
             upImgUrl = BitmapTools.saveBitmap(bm).getPath();
             try {

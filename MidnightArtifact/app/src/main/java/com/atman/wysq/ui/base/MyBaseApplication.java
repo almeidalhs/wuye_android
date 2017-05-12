@@ -75,6 +75,7 @@ import java.util.List;
 import mabeijianxi.camera.VCamera;
 import mabeijianxi.camera.util.DeviceUtils;
 
+
 /**
  * 描述
  * 作者 tangbingliang

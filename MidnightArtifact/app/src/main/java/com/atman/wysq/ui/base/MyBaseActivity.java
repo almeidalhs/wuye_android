@@ -46,6 +46,7 @@ import com.google.gson.Gson;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -330,6 +331,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         if (PreferenceUtil.getIntPreferences(this, PreferenceUtil.PARM_GESTURE_ERROR) <= 0
                 && PreferenceUtil.getBoolPreferences(this, PreferenceUtil.PARM_ISOPEN_GESTURE)
                 && mShouldLogin && isLogin()) {
@@ -374,6 +376,7 @@ public class MyBaseActivity extends BaseAppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
         Intent intent = new Intent();
         intent.setAction(StartReciverSeriver.ACTION_START);
         this.sendOrderedBroadcast(intent, null);
