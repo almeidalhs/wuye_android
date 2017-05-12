@@ -31,6 +31,7 @@ import com.atman.wysq.utils.SpaceItemDecorationThreeGrivView;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.DensityUtil;
+import com.base.baselibs.util.LogUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -43,6 +44,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import mabeijianxi.camera.util.Log;
 import okhttp3.Call;
 import okhttp3.Response;
 

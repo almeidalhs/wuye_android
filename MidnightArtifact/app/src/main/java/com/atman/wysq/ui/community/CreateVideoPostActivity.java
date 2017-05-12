@@ -373,20 +373,6 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                 displayImg(path);
             }
         } else if (requestCode == CHOOSE_CODE) {
-//            LogUtils.e(">>>>111:"+SelectVideoUtil.getPathOne(mContext, data.getData()));
-//            Uri uri = SelectVideoUtil.geturi(this, data);
-//            if (uri.toString().indexOf("file") == 0) {
-//                try {
-//                    videoFile = new File(new URI(uri.toString()));
-//                    upVideoUrl = videoFile.getPath();
-//                } catch (URISyntaxException e) {
-//                    e.printStackTrace();
-//                }
-//            } else {
-//                upVideoUrl = SelectVideoUtil.getPath(mAty, uri);
-//                LogUtils.e(">>>>>upVideoUrl:"+upVideoUrl);
-//                videoFile = new File(upVideoUrl);
-//            }
 
             upVideoUrl = SelectVideoUtil.getPathOne(mContext, data.getData());
             if (upVideoUrl!=null) {
@@ -408,8 +394,6 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                 upVideoUrl = "";
                 return;
             }
-
-            LogUtils.e(">>>>>upVideoUrl:"+upVideoUrl);
 
             BaseMediaBitrateConfig compressMode = new AutoVBRMode();
             compressMode.setVelocity("fast");
@@ -620,6 +604,10 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
         } finally {
             mmr.release();
         }
-        return Integer.valueOf(duration);
+        if (duration!=null && !duration.equals("")) {
+            return Integer.valueOf(duration);
+        } else {
+            return 0;
+        }
     }
 }

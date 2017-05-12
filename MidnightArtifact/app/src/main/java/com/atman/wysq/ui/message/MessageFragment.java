@@ -403,7 +403,8 @@ public class MessageFragment extends MyBaseFragment implements AdapterInterface
                 break;
             case R.id.tab_follow:
                 if (!isLogin()) {
-                    ((RadioButton) tabsRg.getChildAt(selectTopId)).setChecked(true);
+                    tabPrivateletter.setChecked(true);
+                    tabFollow.setChecked(false);
                     showLogin();
                 } else {
                     mFolowPage = 1;
@@ -419,7 +420,8 @@ public class MessageFragment extends MyBaseFragment implements AdapterInterface
                 break;
             case R.id.tab_fans:
                 if (!isLogin()) {
-                    ((RadioButton) tabsRg.getChildAt(selectTopId)).setChecked(true);
+                    tabPrivateletter.setChecked(true);
+                    tabFans.setChecked(false);
                     showLogin();
                 } else {
                     mFansPage = 1;
@@ -435,7 +437,8 @@ public class MessageFragment extends MyBaseFragment implements AdapterInterface
                 break;
             case R.id.tab_blacklist:
                 if (!isLogin()) {
-                    ((RadioButton) tabsRg.getChildAt(selectTopId)).setChecked(true);
+                    tabPrivateletter.setChecked(true);
+                    tabBlacklist.setChecked(false);
                     showLogin();
                 } else {
                     selectTopId = 3;

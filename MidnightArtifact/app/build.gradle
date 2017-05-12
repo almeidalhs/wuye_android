@@ -38,25 +38,26 @@ android {
 
         atman {}
         anzhi_market {}
-        baidu_assistant {}
         yingyongbao {}
         a360_mobile_assistant {}
-        wandoujia {}
-        google_play {}
-        android_market {}
-        a91_assistant {}
-        xiaomi_market {}
-        huawei_market {}
-        pp_assistant {}
         lenovo {}
-        oppo {}
-        vivo {}
-        meizu {}
-        jifeng {}
-        yingyonghui {}
         sogou_phone_assistant {}
+        huawei_market {}
         mumayi {}
-        kuanwang {}
+
+//        baidu_assistant {}
+//        wandoujia {}
+//        google_play {}
+//        android_market {}
+//        a91_assistant {}
+//        xiaomi_market {}
+//        pp_assistant {}
+//        oppo {}
+//        vivo {}
+//        meizu {}
+//        jifeng {}
+//        yingyonghui {}
+//        kuanwang {}
 
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
