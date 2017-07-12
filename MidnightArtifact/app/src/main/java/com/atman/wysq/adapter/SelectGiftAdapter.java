@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,7 +15,6 @@ import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
-import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -105,7 +105,7 @@ public class SelectGiftAdapter extends BaseAdapter {
 
     static class ViewHolder {
         @Bind(R.id.item_selectgift_iv)
-        ShapeImageView itemSelectgiftIv;
+        ImageView itemSelectgiftIv;
         @Bind(R.id.item_selectgift_cion_tv)
         TextView itemSelectgiftCionTv;
         @Bind(R.id.item_selectgift_name_tv)
