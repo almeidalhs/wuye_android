@@ -129,8 +129,7 @@ public class EditScenePicAdapter extends RecyclerView.Adapter<EditScenePicAdapte
         }
 
         if (listData.get(position).getUrl().equals("-1")) {
-            Uri uri = Uri.parse("res:///" + R.mipmap.bt_create_addimg);
-            holder.itemEditscenepicIv.setImageURI(uri);
+            holder.itemEditscenepicIv.setImageResource(R.mipmap.bt_create_addimg);
         } else {
             if (listData.get(position).isUped()) {
                 ImageLoader.getInstance().displayImage(Common.ImageUrl+listData.get(position).getUrl(), holder.itemEditscenepicIv);

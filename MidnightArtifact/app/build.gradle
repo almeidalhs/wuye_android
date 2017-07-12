@@ -84,7 +84,7 @@ android {
             buildConfigField "boolean", "LEO_DEBUG", "true"
             versionNameSuffix "-debug"
 
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources false
             zipAlignEnabled false
             signingConfig signingConfigs.releaseConfig
