@@ -109,7 +109,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     private TextView personalMycoinTv;
     private TextView personalMyvipstatusTv;
     private ShapeImageView personalVisitorOneIv, personalVisitorTwoIv, personalVisitorThreeIv;
-    private ShapeImageView personalGiftOneIv, personalGiftTwoIv, personalGiftThreeIv, personalGiftFourIv, personalGiftFiveIv;
+    private ImageView personalGiftOneIv, personalGiftTwoIv, personalGiftThreeIv, personalGiftFourIv, personalGiftFiveIv;
     private ShapeImageView personalGuardianOneIv, personalGuardianTwoIv, personalGuardianThreeIv;
     private ImageView personalGuardianTopOneIv, personalGuardianTopTwoIv, personalGuardianTopThreeIv;
     private RelativeLayout personalGuardianOneRl,personalGuardianTwoRl,personalGuardianThreeRl;
@@ -190,11 +190,11 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
         personalVisitorTwoIv = (ShapeImageView) personalScrollview.findViewById(R.id.personal_visitor_two_iv);
         personalVisitorThreeIv = (ShapeImageView) personalScrollview.findViewById(R.id.personal_visitor_three_iv);
 
-        personalGiftOneIv = (ShapeImageView) personalScrollview.findViewById(R.id.personal_gift_one_iv);
-        personalGiftTwoIv = (ShapeImageView) personalScrollview.findViewById(R.id.personal_gift_two_iv);
-        personalGiftThreeIv = (ShapeImageView) personalScrollview.findViewById(R.id.personal_gift_three_iv);
-        personalGiftFourIv = (ShapeImageView) personalScrollview.findViewById(R.id.personal_gift_four_iv);
-        personalGiftFiveIv = (ShapeImageView) personalScrollview.findViewById(R.id.personal_gift_five_iv);
+        personalGiftOneIv = (ImageView) personalScrollview.findViewById(R.id.personal_gift_one_iv);
+        personalGiftTwoIv = (ImageView) personalScrollview.findViewById(R.id.personal_gift_two_iv);
+        personalGiftThreeIv = (ImageView) personalScrollview.findViewById(R.id.personal_gift_three_iv);
+        personalGiftFourIv = (ImageView) personalScrollview.findViewById(R.id.personal_gift_four_iv);
+        personalGiftFiveIv = (ImageView) personalScrollview.findViewById(R.id.personal_gift_five_iv);
 
         personalFriendsLl = (LinearLayout) personalScrollview.findViewById(R.id.personal_friends_ll);
         personalFriendsLl.setOnClickListener(this);
@@ -568,7 +568,7 @@ public class PersonalFragment extends MyBaseFragment implements View.OnClickList
     }
 
     private void initGiftIv() {
-        ShapeImageView[] GiftIvList = {personalGiftOneIv, personalGiftTwoIv, personalGiftThreeIv
+        ImageView[] GiftIvList = {personalGiftOneIv, personalGiftTwoIv, personalGiftThreeIv
                 , personalGiftFourIv, personalGiftFiveIv};
         int size = GiftIvList.length;
         int num = mGetUserIndexModel.getBody().getGiftList().size();

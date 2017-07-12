@@ -165,7 +165,7 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     @Bind(R.id.listenlive_gift_content_tv)
     TextView listenliveGiftContentTv;
     @Bind(R.id.listenlive_gift_inner_iv)
-    ShapeImageView listenliveGiftInnerIv;
+    ImageView listenliveGiftInnerIv;
     @Bind(R.id.listenlive_gift_rl)
     RelativeLayout listenliveGiftRl;
 

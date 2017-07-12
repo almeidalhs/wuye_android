@@ -85,7 +85,7 @@ public class BaseGestureLockActivity extends MyBaseActivity implements
         updateView();
 
         ImageLoader.getInstance().displayImage(Common.ImageUrl + MyBaseApplication.mHEAD_URL
-                , baseGesturelockHeadIv, MyBaseApplication.getApplication().getOptions());
+                , baseGesturelockHeadIv, MyBaseApplication.getApplication().getOptionsHead());
     }
 
     private void updateView() {

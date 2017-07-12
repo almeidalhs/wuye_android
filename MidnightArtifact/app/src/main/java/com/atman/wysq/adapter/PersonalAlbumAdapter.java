@@ -1,7 +1,6 @@
 package com.atman.wysq.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -131,10 +130,7 @@ public class PersonalAlbumAdapter extends RecyclerView.Adapter<PersonalAlbumAdap
         holder.itemPersonalAblumIv.setLayoutParams(params);
 
         if (position >= listData.size()) {
-//            Uri uri = Uri.parse("res:///" + R.mipmap.bt_create_addimg);
-//            holder.itemPersonalAblumIv.setImageURI(uri);
-            ImageLoader.getInstance().displayImage("res:///" + R.mipmap.bt_create_addimg
-                    , holder.itemPersonalAblumIv, MyBaseApplication.getApplication().getOptionsNot());
+            holder.itemPersonalAblumIv.setImageResource(R.mipmap.bt_create_addimg);
             if (isSelectStats || position > 4) {
                 holder.itemPersonalAblumIv.setVisibility(View.GONE);
             } else {

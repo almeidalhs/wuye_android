@@ -138,7 +138,7 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     @Bind(R.id.myliveroom_gift_content_tv)
     TextView myliveroomGiftContentTv;
     @Bind(R.id.myliveroom_gift_iv)
-    ShapeImageView myliveroomGiftIv;
+    ImageView myliveroomGiftIv;
     @Bind(R.id.myliveroom_gift_rl)
     RelativeLayout myliveroomGiftRl;
     @Bind(R.id.myliveroom_pic_iv)

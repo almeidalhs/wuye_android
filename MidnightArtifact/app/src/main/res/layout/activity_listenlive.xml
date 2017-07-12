@@ -236,7 +236,7 @@
                 android:layout_toLeftOf="@+id/listenlive_gift_inner_iv"
                 android:text="content"/>
 
-            <com.base.baselibs.widget.ShapeImageView
+            <ImageView
                 android:id="@+id/listenlive_gift_inner_iv"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"

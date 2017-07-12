@@ -100,7 +100,7 @@ public class PersonalAlbumActivity extends MyBaseActivity implements AdapterInte
         mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (data.size() == 0) {
+                if (data==null || data.size() == 0) {
                     return;
                 }
                 if (mTextView.getText().toString().contains("取消")) {
