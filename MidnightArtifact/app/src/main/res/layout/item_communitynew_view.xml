@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:img="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_communitynew_root_ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,15 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <com.base.baselibs.widget.ShapeImageView
             android:id="@+id/item_communitynew_bg_iv"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="centerCrop"
-            android:background="@color/color_black"
-            fresco:failureImage="@mipmap/icon_goodsdetail_business"
-            fresco:failureImageScaleType="centerInside"
-            fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />
+            android:background="@color/color_black" />
 
         <ImageView
             android:id="@+id/item_communitynew_livetag_iv"
@@ -43,7 +40,7 @@
             android:textColor="@color/color_333333"
             android:textSize="@dimen/dimen_sp_15" />
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <com.base.baselibs.widget.ShapeImageView
             android:id="@+id/item_communitynew_head_iv"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -51,9 +48,7 @@
             android:layout_below="@+id/item_communitynew_bg_iv"
             android:layout_marginRight="@dimen/dimen_dp_10"
             android:layout_marginTop="-15dp"
-            fresco:failureImage="@mipmap/icon_goodsdetail_business"
-            fresco:placeholderImage="@mipmap/icon_goodsdetail_business"
-            fresco:roundAsCircle="true" />
+            img:shape="circle" />
 
         <TextView
             android:id="@+id/item_communitynew_top_tv"

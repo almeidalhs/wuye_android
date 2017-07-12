@@ -46,7 +46,6 @@ import com.atman.wysq.model.response.MyLiveStatusModel;
 import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
-import com.atman.wysq.ui.community.ReportActivity;
 import com.atman.wysq.ui.community.ReportListActivity;
 import com.atman.wysq.utils.BitmapTools;
 import com.atman.wysq.utils.Common;
@@ -61,9 +60,8 @@ import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.PromptDialog;
+import com.base.baselibs.widget.ShapeImageView;
 import com.base.baselibs.widget.addflowers.PeriscopeLayout;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.netease.LSMediaCapture.lsLogUtil;
@@ -83,6 +81,7 @@ import com.netease.nimlib.sdk.media.player.OnPlayListener;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -111,9 +110,9 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         , ChatRoomAdapter.RoomAdapterInter, ShowHeadPopWindow.onHeadPopClickListenner {
 
     @Bind(R.id.myliveroom_bg_iv)
-    SimpleDraweeView myliveroomBgIv;
+    ShapeImageView myliveroomBgIv;
     @Bind(R.id.myliveroom_head_iv)
-    SimpleDraweeView myliveroomHeadIv;
+    ShapeImageView myliveroomHeadIv;
     @Bind(R.id.myliveroom_gender_iv)
     ImageView myliveroomGenderIv;
     @Bind(R.id.myliveroom_verify_iv)
@@ -133,13 +132,13 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
     @Bind(R.id.myliveroom_money_tv)
     TextView myliveroomMoneyTv;
     @Bind(R.id.myliveroom_gift_head_iv)
-    SimpleDraweeView myliveroomGiftHeadIv;
+    ShapeImageView myliveroomGiftHeadIv;
     @Bind(R.id.myliveroom_gift_name_tv)
     TextView myliveroomGiftNameTv;
     @Bind(R.id.myliveroom_gift_content_tv)
     TextView myliveroomGiftContentTv;
     @Bind(R.id.myliveroom_gift_iv)
-    SimpleDraweeView myliveroomGiftIv;
+    ShapeImageView myliveroomGiftIv;
     @Bind(R.id.myliveroom_gift_rl)
     RelativeLayout myliveroomGiftRl;
     @Bind(R.id.myliveroom_pic_iv)
@@ -221,7 +220,8 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
 
         myliveroomTitleTv.setText("话题:" + title);
         if (Pic_url != null && !Pic_url.isEmpty()) {
-            myliveroomBgIv.setImageURI(Common.ImageUrl + Pic_url);
+            ImageLoader.getInstance().displayImage(Common.ImageUrl + Pic_url, myliveroomBgIv
+                    , MyBaseApplication.getApplication().getOptionsNot());
         }
 
         GetMyUserIndexModel mGetUserIndexModel = MyBaseApplication.getApplication().mGetMyUserIndexModel;
@@ -240,8 +240,9 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             myliveroomVerifyIv.setVisibility(View.GONE);
             myliveroomGenderIv.setVisibility(View.VISIBLE);
         }
-        myliveroomHeadIv.setImageURI(Common.ImageUrl + mGetUserIndexModel.getBody()
-                .getUserDetailBean().getUserExt().getIcon());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl + mGetUserIndexModel.getBody()
+                        .getUserDetailBean().getUserExt().getIcon(), myliveroomHeadIv
+                , MyBaseApplication.getApplication().getOptionsHead());
 
         m_liveStreamingOn = false;
         m_tryToStopLivestreaming = false;
@@ -279,9 +280,9 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == 0) {//滑动停止
-                    Fresco.getImagePipeline().resume();//开启图片加载
+                    ImageLoader.getInstance().resume();//开启图片加载
                 } else {
-                    Fresco.getImagePipeline().pause();//暂停图片加载
+                    ImageLoader.getInstance().pause();//暂停图片加载
                 }
             }
         });
@@ -422,7 +423,8 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
         myliveroomGiftRl.clearAnimation();
         myliveroomGiftRl.setVisibility(View.GONE);
 
-        myliveroomGiftHeadIv.setImageURI(Common.ImageUrl+giftID.getUser().getIcon());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl+giftID.getUser().getIcon()
+                , myliveroomGiftHeadIv, MyBaseApplication.getApplication().getOptionsHead());
         myliveroomGiftNameTv.setText(giftID.getUser().getNickName());
 //        if (giftID.getUser().getUserLevel()>=3) {
 //            myliveroomGiftNameTv.setTextColor(getResources().getColor(R.color.color_red));
@@ -467,7 +469,8 @@ public class MyLiveRoomActivity extends MyBaseActivity implements lsMessageHandl
                 break;
             }
         }
-        myliveroomGiftIv.setImageURI(url);
+        ImageLoader.getInstance().displayImage(url, myliveroomGiftIv
+                , MyBaseApplication.getApplication().getOptions());
         myliveroomGiftRl.startAnimation(animation);
     }
 

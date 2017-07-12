@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.atman.wysq.R;
@@ -17,7 +16,7 @@ import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
 import com.base.baselibs.util.LogUtils;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
@@ -120,7 +119,7 @@ public class PersonalAlbumAdapter extends RecyclerView.Adapter<PersonalAlbumAdap
         View view = mInflater.inflate(R.layout.item_ablum_view, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        viewHolder.itemPersonalAblumIv = (SimpleDraweeView) view.findViewById(R.id.item_personal_ablum_iv);
+        viewHolder.itemPersonalAblumIv = (ShapeImageView) view.findViewById(R.id.item_personal_ablum_iv);
         viewHolder.itemPersonalAblumSelectIc = (ImageView) view.findViewById(R.id.item_personal_ablum_select_ic);
 
         return viewHolder;
@@ -132,8 +131,10 @@ public class PersonalAlbumAdapter extends RecyclerView.Adapter<PersonalAlbumAdap
         holder.itemPersonalAblumIv.setLayoutParams(params);
 
         if (position >= listData.size()) {
-            Uri uri = Uri.parse("res:///" + R.mipmap.bt_create_addimg);
-            holder.itemPersonalAblumIv.setImageURI(uri);
+//            Uri uri = Uri.parse("res:///" + R.mipmap.bt_create_addimg);
+//            holder.itemPersonalAblumIv.setImageURI(uri);
+            ImageLoader.getInstance().displayImage("res:///" + R.mipmap.bt_create_addimg
+                    , holder.itemPersonalAblumIv, MyBaseApplication.getApplication().getOptionsNot());
             if (isSelectStats || position > 4) {
                 holder.itemPersonalAblumIv.setVisibility(View.GONE);
             } else {
@@ -189,7 +190,7 @@ public class PersonalAlbumAdapter extends RecyclerView.Adapter<PersonalAlbumAdap
             super(arg0);
         }
 
-        SimpleDraweeView itemPersonalAblumIv;
+        ShapeImageView itemPersonalAblumIv;
         ImageView itemPersonalAblumSelectIc;
     }
 }

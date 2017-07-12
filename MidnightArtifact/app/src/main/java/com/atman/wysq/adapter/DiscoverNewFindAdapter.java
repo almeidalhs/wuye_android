@@ -20,13 +20,7 @@ import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
 import com.base.baselibs.util.LogUtils;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.DraweeView;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.ResizeOptions;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
@@ -87,7 +81,7 @@ public class DiscoverNewFindAdapter extends RecyclerView.Adapter<DiscoverNewFind
         View view = mInflater.inflate(R.layout.item_discovernew_view, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        viewHolder.itemDiscovernewIv = (SimpleDraweeView) view.findViewById(R.id.item_discovernew_iv);
+        viewHolder.itemDiscovernewIv = (ShapeImageView) view.findViewById(R.id.item_discovernew_iv);
         viewHolder.itemDiscovernewNameTv = (TextView) view.findViewById(R.id.item_discovernew_name_tv);
         viewHolder.itemDiscovernewNumTv = (TextView) view.findViewById(R.id.item_discovernew_num_tv);
         viewHolder.itemDiscovernewRootRl = (RelativeLayout) view.findViewById(R.id.item_discovernew_root_rl);
@@ -105,7 +99,6 @@ public class DiscoverNewFindAdapter extends RecyclerView.Adapter<DiscoverNewFind
         holder.itemDiscovernewNameTv.setText(listData.get(position).getNick_name());
         ImageLoader.getInstance().displayImage(Common.ImageUrl+listData.get(position).getPic_url1()
                 , holder.itemDiscovernewIv, MyBaseApplication.getApplication().getOptionsNot());
-//        holder.itemDiscovernewIv.setImageURI(Common.ImageUrl+listData.get(position).getPic_url1());
 
         holder.itemDiscovernewIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +123,7 @@ public class DiscoverNewFindAdapter extends RecyclerView.Adapter<DiscoverNewFind
             super(arg0);
         }
 
-        SimpleDraweeView itemDiscovernewIv;
+        ShapeImageView itemDiscovernewIv;
         TextView itemDiscovernewNameTv;
         TextView itemDiscovernewNumTv;
         RelativeLayout itemDiscovernewRootRl;

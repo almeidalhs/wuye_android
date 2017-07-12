@@ -339,6 +339,7 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                     clear();
                     startActivityForResult(new Intent(mContext, ImageGridActivity.class), CHOOSE_BIG_PICTURE);
                 }
+                MyBaseApplication.getApplication().setFilterLock(true);
             }
         });
         builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
@@ -520,6 +521,7 @@ public class CreateVideoPostActivity extends MyBaseActivity implements View.OnCl
                             android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                     it.setDataAndType(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, "video/*");
                     startActivityForResult(it, CHOOSE_CODE);
+                    MyBaseApplication.getApplication().setFilterLock(true);
                 } else {
                     showWraning("请确认是否已打开存储权限！");
                 }

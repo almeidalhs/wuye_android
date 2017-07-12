@@ -10,26 +10,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.model.bean.ImMessage;
 import com.atman.wysq.model.response.GetUserIndexModel;
-import com.atman.wysq.ui.discover.ListenLiveActivity;
+import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
-import com.atman.wysq.yunxin.model.ChatRoomTypeInter;
 import com.base.baselibs.util.DensityUtil;
-import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.PromptDialog;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
-import com.netease.nimlib.sdk.media.player.AudioPlayer;
-
-import butterknife.OnClick;
+import com.base.baselibs.widget.ShapeImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * Created by tangbingliang on 16/12/29.
@@ -39,7 +31,7 @@ public class ShowHeadPopWindow extends PopupWindow {
 
     private Activity mContext;
     private View v;
-    private SimpleDraweeView partLiveheadHeadIv;
+    private ShapeImageView partLiveheadHeadIv;
     private ImageView partLiveheadGenderIv;
     private ImageView partLiveheadVerifyIv;
     private TextView partLiveheadNameTv;
@@ -71,7 +63,7 @@ public class ShowHeadPopWindow extends PopupWindow {
         RelativeLayout partRootRl = (RelativeLayout) view.findViewById(R.id.part_root_rl);
         RelativeLayout partLiveheadRootRl = (RelativeLayout) view.findViewById(R.id.part_livehead_root_rl);
         ImageView partLiveheadCloseIv = (ImageView) view.findViewById(R.id.part_livehead_close_iv);
-        partLiveheadHeadIv = (SimpleDraweeView) view.findViewById(R.id.part_livehead_head_iv);
+        partLiveheadHeadIv = (ShapeImageView) view.findViewById(R.id.part_livehead_head_iv);
         partLiveheadGenderIv = (ImageView) view.findViewById(R.id.part_livehead_gender_iv);
         partLiveheadVerifyIv = (ImageView) view.findViewById(R.id.part_livehead_verify_iv);
         partLiveheadNameTv = (TextView) view.findViewById(R.id.part_livehead_name_tv);
@@ -120,7 +112,8 @@ public class ShowHeadPopWindow extends PopupWindow {
             partLiveheadVerifyIv.setVisibility(View.GONE);
             partLiveheadGenderIv.setVisibility(View.VISIBLE);
         }
-        partLiveheadHeadIv.setImageURI(Common.ImageUrl + mBodyBean.getUserExt().getIcon());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl + mBodyBean.getUserExt().getIcon()
+                , partLiveheadHeadIv, MyBaseApplication.getApplication().getOptionsHead());
 
         partLivepopGagTx.setOnClickListener(new View.OnClickListener() {
             @Override

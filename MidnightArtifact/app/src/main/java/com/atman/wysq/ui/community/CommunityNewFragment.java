@@ -37,13 +37,12 @@ import com.atman.wysq.utils.UiHelper;
 import com.atman.wysq.widget.ShowLivePopWindow;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
-import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.StringUtils;
 import com.base.baselibs.widget.BottomDialog;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.io.File;
@@ -88,7 +87,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
 
     private ShowLivePopWindow pop;
     private MyLiveInfoModel mMyLiveInfoModel;
-    private SimpleDraweeView popSimpleDraweeView;
+    private ShapeImageView popShapeImageView;
     private TextView partLivepopGoliveTx;
     private boolean myRoomTitleInfoSta = false;
     private boolean myRoomPicInfoSta = false;
@@ -125,9 +124,9 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == 0) {//滑动停止
-                    Fresco.getImagePipeline().resume();//开启图片加载
+                    ImageLoader.getInstance().resume();//开启图片加载
                 } else {
-                    Fresco.getImagePipeline().pause();//暂停图片加载
+                    ImageLoader.getInstance().pause();//暂停图片加载
                 }
             }
         });
@@ -219,8 +218,8 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
             if (pop!=null) {
                 pop.showAtLocation(pop.getV(), Gravity.CENTER, 0, 0);
                 pop.setTitle(mMyLiveInfoModel.getBody().getRoom_name());
-                popSimpleDraweeView = pop.setBg(Common.ImageUrl + mMyLiveInfoModel.getBody().getPic_url());
-                popSimpleDraweeView.setOnClickListener(this);
+                popShapeImageView = pop.setBg(Common.ImageUrl + mMyLiveInfoModel.getBody().getPic_url());
+                popShapeImageView.setOnClickListener(this);
                 partLivepopGoliveTx = pop.getPartLivepopGoliveTx();
                 partLivepopGoliveTx.setOnClickListener(this);
             } else {
@@ -503,7 +502,7 @@ public class CommunityNewFragment extends MyBaseFragment implements AdapterInter
                     return;
                 }
                 resulturl = temp.getPath();
-                popSimpleDraweeView.setImageURI("file:///" +resulturl);
+                ImageLoader.getInstance().displayImage("file:///" +resulturl, popShapeImageView);
             } catch (IOException e) {
                 e.printStackTrace();
             }

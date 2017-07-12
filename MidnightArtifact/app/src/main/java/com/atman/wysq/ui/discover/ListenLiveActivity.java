@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -48,7 +47,6 @@ import com.atman.wysq.model.response.LiveDetailModel;
 import com.atman.wysq.ui.PictureBrowsingActivity;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
-import com.atman.wysq.ui.community.ReportActivity;
 import com.atman.wysq.ui.community.ReportListActivity;
 import com.atman.wysq.ui.yunxinfriend.SelectGiftActivity;
 import com.atman.wysq.utils.BitmapTools;
@@ -69,9 +67,8 @@ import com.base.baselibs.util.PreferenceUtil;
 import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.PromptDialog;
+import com.base.baselibs.widget.ShapeImageView;
 import com.base.baselibs.widget.addflowers.PeriscopeLayout;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.netease.LSMediaCapture.lsMessageHandler;
@@ -92,8 +89,6 @@ import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.io.File;
@@ -120,9 +115,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         , ShowHeadPopWindow.onHeadPopClickListenner, AdapterInterface {
 
     @Bind(R.id.listenlive_bg_iv)
-    SimpleDraweeView listenliveBgIv;
+    ShapeImageView listenliveBgIv;
     @Bind(R.id.listenlive_head_iv)
-    SimpleDraweeView listenliveHeadIv;
+    ShapeImageView listenliveHeadIv;
     @Bind(R.id.listenlive_gender_iv)
     ImageView listenliveGenderIv;
     @Bind(R.id.listenlive_verify_iv)
@@ -164,13 +159,13 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
     @Bind(R.id.listenlive_antion_tv)
     TextView listenliveAntionTv;
     @Bind(R.id.listenlive_gift_head_iv)
-    SimpleDraweeView listenliveGiftHeadIv;
+    ShapeImageView listenliveGiftHeadIv;
     @Bind(R.id.listenlive_gift_name_tv)
     TextView listenliveGiftNameTv;
     @Bind(R.id.listenlive_gift_content_tv)
     TextView listenliveGiftContentTv;
     @Bind(R.id.listenlive_gift_inner_iv)
-    SimpleDraweeView listenliveGiftInnerIv;
+    ShapeImageView listenliveGiftInnerIv;
     @Bind(R.id.listenlive_gift_rl)
     RelativeLayout listenliveGiftRl;
 
@@ -252,7 +247,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
             listenliveTitleTv.setText("话题:" + title);
             if (Pic_url != null && !Pic_url.isEmpty()) {
-                listenliveBgIv.setImageURI(Common.ImageUrl + Pic_url);
+                ImageLoader.getInstance().displayImage(Common.ImageUrl + Pic_url, listenliveBgIv
+                        , MyBaseApplication.getApplication().getOptionsNot());
             }
             listenliveNameTv.setText(mBodyBean.getUserExt().getNick_name());
             player = new AudioPlayer(mContext);
@@ -269,7 +265,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
                 listenliveVerifyIv.setVisibility(View.GONE);
                 listenliveGenderIv.setVisibility(View.VISIBLE);
             }
-            listenliveHeadIv.setImageURI(Common.ImageUrl + mBodyBean.getUserExt().getIcon());
+            ImageLoader.getInstance().displayImage(Common.ImageUrl + mBodyBean.getUserExt().getIcon()
+                    , listenliveHeadIv, MyBaseApplication.getApplication().getOptionsNot());
 
 //            initListenLive();
 //            initChatRoom();
@@ -289,9 +286,9 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == 0) {//滑动停止
-                    Fresco.getImagePipeline().resume();//开启图片加载
+                    ImageLoader.getInstance().resume();//开启图片加载
                 } else {
-                    Fresco.getImagePipeline().pause();//暂停图片加载
+                    ImageLoader.getInstance().pause();//暂停图片加载
                 }
             }
         });
@@ -704,7 +701,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
         listenliveTitleTv.setText("话题:" + title);
         if (Pic_url != null && !Pic_url.isEmpty()) {
-            listenliveBgIv.setImageURI(Common.ImageUrl + Pic_url);
+            ImageLoader.getInstance().displayImage(Common.ImageUrl + Pic_url, listenliveBgIv
+                    , MyBaseApplication.getApplication().getOptionsNot());
         }
         listenliveNameTv.setText(mLiveDetailModel.getBody().getUserExt().getNick_name());
         player = new AudioPlayer(mContext);
@@ -721,7 +719,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
             listenliveVerifyIv.setVisibility(View.GONE);
             listenliveGenderIv.setVisibility(View.VISIBLE);
         }
-        listenliveHeadIv.setImageURI(Common.ImageUrl + mLiveDetailModel.getBody().getUserExt().getIcon());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl + mLiveDetailModel.getBody().getUserExt().getIcon()
+                , listenliveHeadIv, MyBaseApplication.getApplication().getOptionsNot());
 
         initListenLive();
         initChatRoom();
@@ -939,7 +938,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
         listenliveGiftRl.clearAnimation();
         listenliveGiftRl.setVisibility(View.GONE);
 
-        listenliveGiftHeadIv.setImageURI(Common.ImageUrl+icon);
+        ImageLoader.getInstance().displayImage(Common.ImageUrl+icon, listenliveGiftHeadIv
+                , MyBaseApplication.getApplication().getOptionsHead());
         listenliveGiftNameTv.setText(nick);
 
         listenliveGiftContentTv.setText(giftName);
@@ -965,7 +965,8 @@ public class ListenLiveActivity extends MyBaseActivity implements lsMessageHandl
 
             }
         });
-        listenliveGiftInnerIv.setImageURI(url);
+        ImageLoader.getInstance().displayImage(url, listenliveGiftInnerIv
+                , MyBaseApplication.getApplication().getOptions());
         listenliveGiftRl.startAnimation(animation);
     }
 

@@ -12,9 +12,11 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.RecommendUserModel;
+import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.util.DensityUtil;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,9 +88,11 @@ public class RecommendUsersAdapter extends BaseAdapter {
         holder.itemRecommenduserNumTv.setText(" " + temp.getChat_count());
         holder.itemRecommenduserNameTx.setText(temp.getNick_name());
         holder.itemRecommenduserIv.setLayoutParams(layoutParams);
-        holder.itemRecommenduserIv.setImageURI(Common.ImageUrl + temp.getPic_url1());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl + temp.getPic_url1(), holder.itemRecommenduserIv
+                , MyBaseApplication.getApplication().getOptions());
 
-        holder.itemRecommenduserHeadIv.setImageURI(Common.ImageUrl + temp.getIcon());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl + temp.getIcon(), holder.itemRecommenduserHeadIv
+                , MyBaseApplication.getApplication().getOptionsHead());
         if (temp.getSex().equals("M")) {
             holder.itemRecommenduserGenderIv.setImageResource(R.mipmap.personal_man_ic);
         } else {
@@ -113,11 +117,11 @@ public class RecommendUsersAdapter extends BaseAdapter {
 
     static class ViewHolder {
         @Bind(R.id.item_recommenduser_iv)
-        SimpleDraweeView itemRecommenduserIv;
+        ShapeImageView itemRecommenduserIv;
         @Bind(R.id.item_recommenduser_num_tv)
         TextView itemRecommenduserNumTv;
         @Bind(R.id.item_recommenduser_head_iv)
-        SimpleDraweeView itemRecommenduserHeadIv;
+        ShapeImageView itemRecommenduserHeadIv;
         @Bind(R.id.item_recommenduser_gender_iv)
         ImageView itemRecommenduserGenderIv;
         @Bind(R.id.item_recommenduser_verify_iv)

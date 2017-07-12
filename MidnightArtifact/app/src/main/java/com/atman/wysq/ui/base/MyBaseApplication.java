@@ -33,7 +33,6 @@ import com.base.baselibs.net.YunXinAuthOutEvent;
 import com.base.baselibs.util.LogUtils;
 import com.base.baselibs.util.PhoneInfo;
 import com.base.baselibs.util.PreferenceUtil;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.gson.Gson;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -155,8 +154,6 @@ public class MyBaseApplication extends BaseApplication {
         setDatabase();
 
         YunXinInit();
-
-        Fresco.initialize(this);
 
         initSmallVideo(this);
 

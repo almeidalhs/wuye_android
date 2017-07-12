@@ -138,24 +138,23 @@ public class ShapeImageView extends ImageView {
             if (mShape == SHAPE_CIRCLE) {
                 canvas.drawCircle(getWidth() / 2, getHeight() / 2,
                         Math.min(getWidth(), getHeight()) / 2, mBitmapPaint);
+                if (mBorderSize > 0) { // 绘制边框
+                    canvas.drawCircle(mViewRect.right / 2, mViewRect.bottom / 2,
+                            Math.min(mViewRect.right, mViewRect.bottom) / 2 - mBorderSize / 2, mBorderPaint);
+                }
             } else if (mShape == SHAPE_OVAL) {
                 canvas.drawOval(mViewRect, mBitmapPaint);
+                if (mBorderSize > 0) { // 绘制边框
+                    canvas.drawOval(mBorderRect, mBorderPaint);
+                }
             } else {
+                if (mBorderSize > 0) { // 绘制边框
+                    canvas.drawRoundRect(mBorderRect, mRoundRadius, mRoundRadius, mBorderPaint);
+                }
                 canvas.drawRoundRect(mViewRect, mRoundRadius, mRoundRadius, mBitmapPaint);
             }
         }
 
-
-        if (mBorderSize > 0) { // 绘制边框
-            if (mShape == SHAPE_CIRCLE) {
-                canvas.drawCircle(mViewRect.right / 2, mViewRect.bottom / 2,
-                        Math.min(mViewRect.right, mViewRect.bottom) / 2 - mBorderSize / 2, mBorderPaint);
-            } else if (mShape == SHAPE_OVAL) {
-                canvas.drawOval(mBorderRect, mBorderPaint);
-            } else {
-                canvas.drawRoundRect(mBorderRect, mRoundRadius, mRoundRadius, mBorderPaint);
-            }
-        }
     }
 
     @Override
@@ -202,10 +201,17 @@ public class ShapeImageView extends ImageView {
     //　设置图片的绘制区域
     private void initRect() {
 
-        mViewRect.top = 0;
-        mViewRect.left = 0;
-        mViewRect.right = getWidth(); // 宽度
-        mViewRect.bottom = getHeight(); // 高度
+        if (mShape==SHAPE_REC) {
+            mViewRect.top = 0 + mBorderSize;
+            mViewRect.left = 0 + mBorderSize;
+            mViewRect.right = getWidth() - mBorderSize; // 宽度
+            mViewRect.bottom = getHeight() - mBorderSize; // 高度
+        } else {
+            mViewRect.top = 0;
+            mViewRect.left = 0;
+            mViewRect.right = getWidth(); // 宽度
+            mViewRect.bottom = getHeight(); // 高度
+        }
 
         // 边框的矩形区域不能等于ImageView的矩形区域，否则边框的宽度只显示了一半
         mBorderRect.top = mBorderSize / 2;

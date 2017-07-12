@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:img="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -160,34 +160,28 @@
             android:gravity="center_vertical|right"
             android:orientation="horizontal">
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/personal_visitor_one_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:visibility="gone"
-                fresco:failureImage="@mipmap/ic_launcher"
-                fresco:placeholderImage="@mipmap/ic_launcher"
-                fresco:roundAsCircle="true" />
+                img:shape="circle"/>
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/personal_visitor_two_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
                 android:visibility="gone"
-                fresco:failureImage="@mipmap/ic_launcher"
-                fresco:placeholderImage="@mipmap/ic_launcher"
-                fresco:roundAsCircle="true" />
+                img:shape="circle" />
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/personal_visitor_three_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
                 android:visibility="gone"
-                fresco:failureImage="@mipmap/ic_launcher"
-                fresco:placeholderImage="@mipmap/ic_launcher"
-                fresco:roundAsCircle="true" />
+                img:shape="circle" />
         </LinearLayout>
 
     </LinearLayout>
@@ -247,14 +241,12 @@
                     android:layout_centerHorizontal="true"
                     android:src="@mipmap/other_guard_one" />
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <com.base.baselibs.widget.ShapeImageView
                     android:id="@+id/personal_guardian_one_iv"
                     android:layout_width="@dimen/dimen_dp_30"
                     android:layout_height="@dimen/dimen_dp_30"
                     android:layout_centerVertical="true"
-                    fresco:failureImage="@mipmap/ic_launcher"
-                    fresco:placeholderImage="@mipmap/ic_launcher"
-                    fresco:roundAsCircle="true" />
+                    img:shape="circle" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -271,14 +263,12 @@
                     android:layout_centerHorizontal="true"
                     android:src="@mipmap/other_guard_one" />
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <com.base.baselibs.widget.ShapeImageView
                     android:id="@+id/personal_guardian_two_iv"
                     android:layout_width="@dimen/dimen_dp_30"
                     android:layout_height="@dimen/dimen_dp_30"
                     android:layout_centerVertical="true"
-                    fresco:failureImage="@mipmap/ic_launcher"
-                    fresco:placeholderImage="@mipmap/ic_launcher"
-                    fresco:roundAsCircle="true" />
+                    img:shape="circle" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -295,14 +285,12 @@
                     android:layout_centerHorizontal="true"
                     android:src="@mipmap/other_guard_one" />
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <com.base.baselibs.widget.ShapeImageView
                     android:id="@+id/personal_guardian_three_iv"
                     android:layout_width="@dimen/dimen_dp_30"
                     android:layout_height="@dimen/dimen_dp_30"
                     android:layout_centerVertical="true"
-                    fresco:failureImage="@mipmap/ic_launcher"
-                    fresco:placeholderImage="@mipmap/ic_launcher"
-                    fresco:roundAsCircle="true" />
+                    img:shape="circle" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -501,43 +489,38 @@
             android:gravity="center_vertical|right"
             android:orientation="horizontal">
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/personal_gift_one_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
-                fresco:actualImageScaleType="centerInside"
                 android:visibility="gone" />
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/personal_gift_two_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
-                fresco:actualImageScaleType="centerInside"
                 android:visibility="gone" />
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/personal_gift_three_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
-                fresco:actualImageScaleType="centerInside"
                 android:visibility="gone" />
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/personal_gift_four_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
-                fresco:actualImageScaleType="centerInside"
                 android:visibility="gone" />
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/personal_gift_five_iv"
                 android:layout_width="@dimen/dimen_dp_30"
                 android:layout_height="@dimen/dimen_dp_30"
                 android:layout_marginLeft="@dimen/dimen_dp_5"
-                fresco:actualImageScaleType="centerInside"
                 android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>

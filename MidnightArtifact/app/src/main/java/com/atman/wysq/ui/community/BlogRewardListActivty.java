@@ -13,13 +13,12 @@ import com.atman.wysq.model.response.GetRewardListNewModel;
 import com.atman.wysq.ui.base.MyBaseActivity;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
-import com.atman.wysq.utils.SpaceItemDecoration;
 import com.atman.wysq.utils.SpaceItemDecorationLinear;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import butterknife.Bind;
@@ -86,9 +85,9 @@ public class BlogRewardListActivty extends MyBaseActivity implements AdapterInte
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == 0) {//滑动停止
-                    Fresco.getImagePipeline().resume();//开启图片加载
+                    ImageLoader.getInstance().resume();//开启图片加载
                 } else {
-                    Fresco.getImagePipeline().pause();//暂停图片加载
+                    ImageLoader.getInstance().pause();//暂停图片加载
                 }
             }
         });

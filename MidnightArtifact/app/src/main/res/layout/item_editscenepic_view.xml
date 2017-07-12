@@ -4,16 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    <com.base.baselibs.widget.ShapeImageView
+        xmlns:img="http://schemas.android.com/apk/res-auto"
         android:id="@+id/item_editscenepic_iv"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:scaleType="centerCrop"
-        fresco:failureImage="@mipmap/icon_goodsdetail_business"
-        fresco:failureImageScaleType="centerInside"
-        fresco:actualImageScaleType="centerCrop"
-        fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />
+        android:scaleType="centerCrop"/>
 
     <ImageView
         android:id="@+id/item_editscenepic_select_iv"

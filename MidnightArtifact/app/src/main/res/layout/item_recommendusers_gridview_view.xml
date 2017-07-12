@@ -6,14 +6,10 @@
     android:background="@color/color_white"
     android:padding="@dimen/dimen_dp_2">
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    <com.base.baselibs.widget.ShapeImageView
         android:id="@+id/item_recommenduser_iv"
         android:layout_width="130dp"
-        android:layout_height="130dp"
-        fresco:failureImage="@mipmap/icon_goodsdetail_business"
-        fresco:failureImageScaleType="centerInside"
-        fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />
+        android:layout_height="130dp" />
 
     <TextView
         android:id="@+id/item_recommenduser_num_tv"
@@ -39,17 +35,14 @@
         android:layout_marginBottom="@dimen/dimen_dp_5"
         android:layout_alignParentBottom="true">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        <com.base.baselibs.widget.ShapeImageView
+            xmlns:img="http://schemas.android.com/apk/res-auto"
             android:id="@+id/item_recommenduser_head_iv"
             android:layout_width="@dimen/dimen_dp_35"
             android:layout_height="@dimen/dimen_dp_35"
-            fresco:roundedCornerRadius="@dimen/dimen_dp_5"
-            fresco:placeholderImage="@mipmap/niming_ic"
-            fresco:failureImage="@mipmap/niming_ic"
-            fresco:failureImageScaleType="centerInside"
-            fresco:roundingBorderWidth="@dimen/dimen_dp_1"
-            fresco:roundingBorderColor="@android:color/white"/>
+            img:shape_round_radius="@dimen/dimen_dp_5"
+            img:shape_border_color="@color/color_white"
+            img:shape_border_size="@dimen/dimen_dp_1"/>
 
         <ImageView
             android:id="@+id/item_recommenduser_gender_iv"

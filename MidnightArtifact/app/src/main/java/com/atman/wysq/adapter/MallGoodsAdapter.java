@@ -13,10 +13,11 @@ import android.widget.TextView;
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.MallCategoryModel;
 import com.atman.wysq.model.response.TwoCategoryModel;
+import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -190,8 +191,9 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
             childHolder.itemMallCategoryChildOneLl.setVisibility(View.INVISIBLE);
         } else {
             childHolder.itemMallCategoryChildOneLl.setVisibility(View.VISIBLE);
-            childHolder.itemMallCategoryChildOneIv.setImageURI(Common.ImageUrl+dataList.get(groupPosition)
-                    .getLeafCategorieList().get(childPosition*2).getAd_pic());
+            ImageLoader.getInstance().displayImage(Common.ImageUrl+dataList.get(groupPosition)
+                    .getLeafCategorieList().get(childPosition*2).getAd_pic()
+                    , childHolder.itemMallCategoryChildOneIv, MyBaseApplication.getApplication().getOptions());
             childHolder.itemMallCategoryChildOneTv.setText(dataList.get(groupPosition)
                     .getLeafCategorieList().get(childPosition*2).getName());
         }
@@ -201,8 +203,9 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
             childHolder.itemMallCategoryChildTwoLl.setVisibility(View.INVISIBLE);
         } else {
             childHolder.itemMallCategoryChildTwoLl.setVisibility(View.VISIBLE);
-            childHolder.itemMallCategoryChildTwoIv.setImageURI(Common.ImageUrl+dataList.get(groupPosition)
-                    .getLeafCategorieList().get(childPosition*2+1).getAd_pic());
+            ImageLoader.getInstance().displayImage(Common.ImageUrl+dataList.get(groupPosition)
+                            .getLeafCategorieList().get(childPosition*2+1).getAd_pic()
+                    , childHolder.itemMallCategoryChildTwoIv, MyBaseApplication.getApplication().getOptions());
             childHolder.itemMallCategoryChildTwoTv.setText(dataList.get(groupPosition)
                     .getLeafCategorieList().get(childPosition*2+1).getName());
         }
@@ -257,13 +260,13 @@ public class MallGoodsAdapter extends BaseExpandableListAdapter {
         @Bind(R.id.item_mall_category_two_child_one_ll)
         LinearLayout itemMallCategoryChildOneLl;
         @Bind(R.id.item_mall_category_two_child_one_iv)
-        SimpleDraweeView itemMallCategoryChildOneIv;
+        ShapeImageView itemMallCategoryChildOneIv;
         @Bind(R.id.item_mall_category_two_child_one_tv)
         TextView itemMallCategoryChildOneTv;
         @Bind(R.id.item_mall_category_two_child_two_ll)
         LinearLayout itemMallCategoryChildTwoLl;
         @Bind(R.id.item_mall_category_two_child_two_iv)
-        SimpleDraweeView itemMallCategoryChildTwoIv;
+        ShapeImageView itemMallCategoryChildTwoIv;
         @Bind(R.id.item_mall_category_two_child_two_tv)
         TextView itemMallCategoryChildTwoTv;
 

@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:img="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/color_white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <com.base.baselibs.widget.ShapeImageView
         android:id="@+id/item_livehall_iv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        fresco:failureImage="@mipmap/icon_goodsdetail_business"
-        fresco:failureImageScaleType="centerInside"
-        fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_weight="1"
@@ -35,17 +32,12 @@
                 android:layout_height="@dimen/dimen_dp_35"
                 android:layout_centerInParent="true">
 
-                <com.facebook.drawee.view.SimpleDraweeView
-                    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                <com.base.baselibs.widget.ShapeImageView
                     android:id="@+id/item_livehall_head_iv"
                     android:layout_width="@dimen/dimen_dp_35"
                     android:layout_height="@dimen/dimen_dp_35"
-                    fresco:roundedCornerRadius="@dimen/dimen_dp_5"
-                    fresco:placeholderImage="@mipmap/niming_ic"
-                    fresco:failureImage="@mipmap/niming_ic"
-                    fresco:failureImageScaleType="centerInside"
-                    fresco:roundingBorderWidth="0dp"
-                    fresco:roundingBorderColor="@android:color/white"/>
+                    img:shape="rect"
+                    img:shape_round_radius="@dimen/dimen_dp_5"/>
 
                 <ImageView
                     android:id="@+id/item_livehall_gender_iv"

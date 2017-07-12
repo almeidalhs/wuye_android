@@ -1,23 +1,15 @@
 package com.atman.wysq.widget;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.base.baselibs.util.DensityUtil;
-import com.base.baselibs.widget.MyCleanEditText;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 /**
  * Created by tangbingliang on 16/12/29.

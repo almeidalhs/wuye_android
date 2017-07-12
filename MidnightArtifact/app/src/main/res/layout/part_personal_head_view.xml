@@ -22,16 +22,14 @@
             android:layout_centerInParent="true"
             android:layout_height="@dimen/dimen_dp_50">
 
-            <com.facebook.drawee.view.SimpleDraweeView
-                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            <com.base.baselibs.widget.ShapeImageView
+                xmlns:img="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/personal_head_iv"
                 android:layout_width="@dimen/dimen_dp_50"
                 android:layout_height="@dimen/dimen_dp_50"
                 android:layout_centerInParent="true"
                 android:src="@mipmap/ic_launcher"
-                fresco:failureImage="@mipmap/ic_launcher"
-                fresco:placeholderImage="@mipmap/ic_launcher"
-                fresco:roundedCornerRadius="@dimen/dimen_dp_5"/>
+                img:shape_round_radius="@dimen/dimen_dp_5"/>
 
             <ImageView
                 android:id="@+id/personal_gender_iv"

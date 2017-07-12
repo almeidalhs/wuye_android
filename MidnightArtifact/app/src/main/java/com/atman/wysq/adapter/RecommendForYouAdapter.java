@@ -5,18 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.MallModel;
-import com.atman.wysq.model.response.TwoLevelCategoryListResponseModel;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
-import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -82,7 +79,8 @@ public class RecommendForYouAdapter extends BaseAdapter {
 
         holder.itemRecommendforyouIv.setLayoutParams(params);
         holder.itemRecommendforyouIv.setImageResource(R.color.color_white);
-        holder.itemRecommendforyouIv.setImageURI(Common.ImageUrl + body.get(position).getPic_img());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl + body.get(position).getPic_img()
+                , holder.itemRecommendforyouIv, MyBaseApplication.getApplication().getOptions());
         holder.itemRecommendforyouNameTx.setText(body.get(position).getTitle());
         holder.itemRecommendforyouPriceTx.setText("¥ " + body.get(position).getDiscount_price());
 
@@ -96,7 +94,7 @@ public class RecommendForYouAdapter extends BaseAdapter {
 
     static class ViewHolder {
         @Bind(R.id.item_recommendforyou_iv)
-        SimpleDraweeView itemRecommendforyouIv;
+        ShapeImageView itemRecommendforyouIv;
         @Bind(R.id.item_recommendforyou_name_tx)
         TextView itemRecommendforyouNameTx;
         @Bind(R.id.item_recommendforyou_price_tx)

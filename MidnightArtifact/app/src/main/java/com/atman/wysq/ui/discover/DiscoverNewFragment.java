@@ -31,11 +31,10 @@ import com.atman.wysq.utils.SpaceItemDecorationThreeGrivView;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.net.MyStringCallback;
 import com.base.baselibs.util.DensityUtil;
-import com.base.baselibs.util.LogUtils;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.extras.recyclerview.PullToRefreshRecyclerView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tbl.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -44,7 +43,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import mabeijianxi.camera.util.Log;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -114,7 +112,7 @@ public class DiscoverNewFragment extends MyBaseFragment implements AdapterInterf
     private List<AllRankingModel.BodyBean> topRankingList = new ArrayList<>();
     private View mTopView;
     private LinearLayout mTopOneLl, mTopTwoLl, mTopThreeLl;
-    private SimpleDraweeView mTopOneHeadIv, mTopTwoHeadIv, mTopThreeHeadIv;
+    private ShapeImageView mTopOneHeadIv, mTopTwoHeadIv, mTopThreeHeadIv;
     private TextView mTopOneNametTv, mTopTwoNametTv, mTopThreeNametTv;
 
     @Nullable
@@ -148,9 +146,9 @@ public class DiscoverNewFragment extends MyBaseFragment implements AdapterInterf
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState==0) {//滑动停止
-                    Fresco.getImagePipeline().resume();//开启图片加载
+                    ImageLoader.getInstance().resume();//开启图片加载
                 } else {
-                    Fresco.getImagePipeline().pause();//暂停图片加载
+                    ImageLoader.getInstance().pause();//暂停图片加载
                 }
             }
         });
@@ -181,9 +179,9 @@ public class DiscoverNewFragment extends MyBaseFragment implements AdapterInterf
         paramsRight.topMargin = DensityUtil.dp2px(getActivity(), 15);
         mTopThreeLl.setLayoutParams(paramsRight);
 
-        mTopOneHeadIv = (SimpleDraweeView) mTopView.findViewById(R.id.part_ranking_one_top_head_iv);
-        mTopTwoHeadIv = (SimpleDraweeView) mTopView.findViewById(R.id.part_ranking_two_top_head_iv);
-        mTopThreeHeadIv = (SimpleDraweeView) mTopView.findViewById(R.id.part_ranking_three_top_head_iv);
+        mTopOneHeadIv = (ShapeImageView) mTopView.findViewById(R.id.part_ranking_one_top_head_iv);
+        mTopTwoHeadIv = (ShapeImageView) mTopView.findViewById(R.id.part_ranking_two_top_head_iv);
+        mTopThreeHeadIv = (ShapeImageView) mTopView.findViewById(R.id.part_ranking_three_top_head_iv);
         mTopOneNametTv = (TextView) mTopView.findViewById(R.id.part_ranking_one_top_name_iv);
         mTopTwoNametTv = (TextView) mTopView.findViewById(R.id.part_ranking_two_top_name_iv);
         mTopThreeNametTv = (TextView) mTopView.findViewById(R.id.part_ranking_three_top_name_iv);
@@ -306,7 +304,7 @@ public class DiscoverNewFragment extends MyBaseFragment implements AdapterInterf
     }
 
     private void UpdataView() {
-        SimpleDraweeView[] images = {mTopOneHeadIv, mTopTwoHeadIv, mTopThreeHeadIv};
+        ShapeImageView[] images = {mTopOneHeadIv, mTopTwoHeadIv, mTopThreeHeadIv};
         TextView[] names = {mTopOneNametTv, mTopTwoNametTv, mTopThreeNametTv};
         LinearLayout[] Ll = {mTopOneLl, mTopTwoLl, mTopThreeLl};
         for (int i = 0; i < 3; i++) {
@@ -314,7 +312,8 @@ public class DiscoverNewFragment extends MyBaseFragment implements AdapterInterf
         }
         for (int i = 0; i < topRankingList.size(); i++) {
             Ll[i].setVisibility(View.VISIBLE);
-            images[i].setImageURI(Common.ImageUrl + topRankingList.get(i).getIcon());
+            ImageLoader.getInstance().displayImage(Common.ImageUrl + topRankingList.get(i).getIcon()
+                    , images[i], MyBaseApplication.getApplication().getOptionsHead());
             names[i].setText(topRankingList.get(i).getNick_name());
         }
     }

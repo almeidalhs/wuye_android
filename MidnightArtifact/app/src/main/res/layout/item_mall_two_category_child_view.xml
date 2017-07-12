@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:img="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
@@ -18,14 +18,11 @@
         android:clickable="true"
         android:orientation="vertical">
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <com.base.baselibs.widget.ShapeImageView
             android:id="@+id/item_mall_category_two_child_one_iv"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@color/color_black"
-            fresco:failureImage="@mipmap/icon_goodsdetail_business"
-            fresco:failureImageScaleType="centerInside"
-            fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />
+            android:background="@color/color_black" />
 
         <TextView
             android:id="@+id/item_mall_category_two_child_one_tv"
@@ -49,14 +46,11 @@
         android:clickable="true"
         android:orientation="vertical">
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <com.base.baselibs.widget.ShapeImageView
             android:id="@+id/item_mall_category_two_child_two_iv"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@color/color_black"
-            fresco:failureImage="@mipmap/icon_goodsdetail_business"
-            fresco:failureImageScaleType="centerInside"
-            fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />
+            android:background="@color/color_black" />
 
         <TextView
             android:id="@+id/item_mall_category_two_child_two_tv"

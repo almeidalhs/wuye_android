@@ -1,28 +1,19 @@
 package com.atman.wysq.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.model.response.CommunityNewModel;
 import com.atman.wysq.model.response.LiveDetailModel;
-import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
-import com.base.baselibs.util.DensityUtil;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -57,7 +48,7 @@ public class LiveDetailOnLineAdapter extends RecyclerView.Adapter<LiveDetailOnLi
         View view = mInflater.inflate(R.layout.item_online_view, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        viewHolder.itemOnlineIv = (SimpleDraweeView) view.findViewById(R.id.item_online_iv);
+        viewHolder.itemOnlineIv = (ShapeImageView) view.findViewById(R.id.item_online_iv);
 
         return viewHolder;
     }
@@ -69,8 +60,7 @@ public class LiveDetailOnLineAdapter extends RecyclerView.Adapter<LiveDetailOnLi
         if (imgUrl!=null && !imgUrl.startsWith("/")) {
             imgUrl = "/" + imgUrl;
         }
-
-        holder.itemOnlineIv.setImageURI(Common.ImageUrl+imgUrl);
+        ImageLoader.getInstance().displayImage(Common.ImageUrl+imgUrl, holder.itemOnlineIv);
 
         holder.itemOnlineIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +85,6 @@ public class LiveDetailOnLineAdapter extends RecyclerView.Adapter<LiveDetailOnLi
             super(arg0);
         }
 
-        SimpleDraweeView itemOnlineIv;
+        ShapeImageView itemOnlineIv;
     }
 }

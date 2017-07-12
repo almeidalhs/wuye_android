@@ -24,17 +24,15 @@
         android:layout_width="@dimen/dimen_dp_40"
         android:layout_height="@dimen/dimen_dp_40">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        <com.base.baselibs.widget.ShapeImageView
+            xmlns:img="http://schemas.android.com/apk/res-auto"
             android:id="@+id/item_p2pchat_text_headleft_iv"
             android:layout_width="@dimen/dimen_dp_40"
             android:layout_height="@dimen/dimen_dp_40"
-            fresco:roundedCornerRadius="@dimen/dimen_dp_5"
-            fresco:placeholderImage="@mipmap/niming_ic"
-            fresco:failureImage="@mipmap/niming_ic"
-            fresco:failureImageScaleType="centerInside"
-            fresco:roundingBorderWidth="2dp"
-            fresco:roundingBorderColor="@android:color/white"/>
+            img:shape="rect"
+            img:shape_round_radius="@dimen/dimen_dp_5"
+            img:shape_border_color="@android:color/white"
+            img:shape_border_size="@dimen/dimen_dp_2"/>
 
         <ImageView
             android:id="@+id/item_p2pchat_text_headleft_gender_iv"
@@ -88,17 +86,15 @@
         android:layout_width="@dimen/dimen_dp_40"
         android:layout_height="@dimen/dimen_dp_40">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        <com.base.baselibs.widget.ShapeImageView
+            xmlns:img="http://schemas.android.com/apk/res-auto"
             android:id="@+id/item_p2pchat_text_headright_iv"
             android:layout_width="@dimen/dimen_dp_40"
             android:layout_height="@dimen/dimen_dp_40"
-            fresco:roundedCornerRadius="@dimen/dimen_dp_5"
-            fresco:placeholderImage="@mipmap/niming_ic"
-            fresco:failureImage="@mipmap/niming_ic"
-            fresco:failureImageScaleType="centerInside"
-            fresco:roundingBorderWidth="2dp"
-            fresco:roundingBorderColor="@android:color/white"/>
+            img:shape="rect"
+            img:shape_round_radius="@dimen/dimen_dp_5"
+            img:shape_border_color="@android:color/white"
+            img:shape_border_size="@dimen/dimen_dp_2"/>
 
         <ImageView
             android:id="@+id/item_p2pchat_text_headright_gender_iv"

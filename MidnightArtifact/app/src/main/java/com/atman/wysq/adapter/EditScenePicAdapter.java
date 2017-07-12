@@ -13,8 +13,7 @@ import com.atman.wysq.R;
 import com.atman.wysq.model.request.ScenePicList;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
-import com.base.baselibs.util.LogUtils;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -113,7 +112,7 @@ public class EditScenePicAdapter extends RecyclerView.Adapter<EditScenePicAdapte
         View view = mInflater.inflate(R.layout.item_editscenepic_view, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        viewHolder.itemEditscenepicIv = (SimpleDraweeView) view.findViewById(R.id.item_editscenepic_iv);
+        viewHolder.itemEditscenepicIv = (ShapeImageView) view.findViewById(R.id.item_editscenepic_iv);
         viewHolder.itemEditscenepicSelectIv = (ImageView) view.findViewById(R.id.item_editscenepic_select_iv);
 
         return viewHolder;
@@ -134,7 +133,7 @@ public class EditScenePicAdapter extends RecyclerView.Adapter<EditScenePicAdapte
             holder.itemEditscenepicIv.setImageURI(uri);
         } else {
             if (listData.get(position).isUped()) {
-                holder.itemEditscenepicIv.setImageURI(Common.ImageUrl+listData.get(position).getUrl());
+                ImageLoader.getInstance().displayImage(Common.ImageUrl+listData.get(position).getUrl(), holder.itemEditscenepicIv);
             } else {
                 ImageLoader.getInstance().displayImage("file://" + listData.get(position).getUrl(), holder.itemEditscenepicIv);
             }
@@ -167,7 +166,7 @@ public class EditScenePicAdapter extends RecyclerView.Adapter<EditScenePicAdapte
             super(arg0);
         }
 
-        SimpleDraweeView itemEditscenepicIv;
+        ShapeImageView itemEditscenepicIv;
         ImageView itemEditscenepicSelectIv;
     }
 }

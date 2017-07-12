@@ -55,11 +55,11 @@ import com.base.baselibs.widget.BottomDialog;
 import com.base.baselibs.widget.MyCleanEditText;
 import com.base.baselibs.widget.MyListView;
 import com.base.baselibs.widget.PromptDialog;
+import com.base.baselibs.widget.ShapeImageView;
 import com.bumptech.glide.Glide;
 import com.dl7.player.media.IjkPlayerView;
 import com.dl7.player.utils.CreateSpannableTextUtil;
 import com.dl7.player.utils.WindowUtils;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -141,7 +141,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
     private ImageView blogdetailGenderImg;
     private ImageView blogdetailFlowerIv;
     private ImageView blogdetailTopVoiceStartIv;
-    private SimpleDraweeView blogdetailTopVoiceBgIv;
+    private ShapeImageView blogdetailTopVoiceBgIv;
     private TextView blogdetailVipTx;
     private TextView blogdetailNameTx;
     private TextView blogdetailLevelTx;
@@ -599,7 +599,7 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         });
         blogdetailTopVoiceRl = (RelativeLayout) headView.findViewById(R.id.blogdetail_top_voice_rl);
         blogdetailTopVoiceRl.setLayoutParams(llParams);
-        blogdetailTopVoiceBgIv = (SimpleDraweeView) headView.findViewById(R.id.blogdetail_top_voice_bg_iv);
+        blogdetailTopVoiceBgIv = (ShapeImageView) headView.findViewById(R.id.blogdetail_top_voice_bg_iv);
         blogdetailTopVoiceBgIv.setLayoutParams(rlParams);
         playerView.setLayoutParams(rlParams);
         blogdetailTopVoiceStartIv = (ImageView) headView.findViewById(R.id.blogdetail_top_voice_start_iv);
@@ -710,7 +710,8 @@ public class VoicePostDetailActivity extends MyBaseActivity implements AdapterIn
         setBarTitleTx(mBodyEntity.getTitle());
         changeMyHeart();
 
-        blogdetailTopVoiceBgIv.setImageURI(Common.ImageUrl + mBodyEntity.getImg());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl + mBodyEntity.getImg(), blogdetailTopVoiceBgIv
+                , MyBaseApplication.getApplication().getOptionsHead());
 
         mImgUrl = Common.ImageUrl + mBodyEntity.getImg();
         mAudioUrl = Common.ImageUrl + mBodyEntity.getUrl();

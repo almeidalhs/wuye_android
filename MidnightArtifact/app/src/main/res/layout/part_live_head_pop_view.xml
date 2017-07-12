@@ -36,17 +36,13 @@
                 android:layout_height="@dimen/dimen_dp_55"
                 android:layout_centerHorizontal="true">
 
-                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                <com.base.baselibs.widget.ShapeImageView
+                    xmlns:img="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/part_livehead_head_iv"
                     android:layout_width="@dimen/dimen_dp_55"
                     android:layout_height="@dimen/dimen_dp_55"
                     android:background="@drawable/ic_app"
-                    fresco:failureImage="@mipmap/ic_launcher"
-                    fresco:failureImageScaleType="centerInside"
-                    fresco:placeholderImage="@mipmap/ic_launcher"
-                    fresco:roundedCornerRadius="@dimen/dimen_dp_5"
-                    fresco:roundingBorderColor="@android:color/white"
-                    fresco:roundingBorderWidth="0dp" />
+                    img:shape_round_radius="@dimen/dimen_dp_5" />
 
                 <ImageView
                     android:id="@+id/part_livehead_gender_iv"

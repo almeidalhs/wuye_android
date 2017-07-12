@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.AllRankingModel;
+import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +114,8 @@ public class RankingListAdapter extends BaseAdapter {
         holder.itemRankingNumTv.setText(""+(position+4));
         holder.itemRankingLevelTx.setText("Lv." + mBodyEntity.getUserLevel());
 
-        holder.itemRankingHeadIv.setImageURI(Common.ImageUrl + mBodyEntity.getIcon());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl + mBodyEntity.getIcon()
+                , holder.itemRankingHeadIv, MyBaseApplication.getApplication().getOptionsHead());
 
         if (mBodyEntity.getVip_level()>=4) {
             holder.itemRankingVipTx.setVisibility(View.GONE);
@@ -153,7 +156,7 @@ public class RankingListAdapter extends BaseAdapter {
 
     static class ViewHolder {
         @Bind(R.id.item_ranking_head_iv)
-        SimpleDraweeView itemRankingHeadIv;
+        ShapeImageView itemRankingHeadIv;
         @Bind(R.id.item_ranking_gender_iv)
         ImageView itemRankingGenderIv;
         @Bind(R.id.item_ranking_verify_iv)

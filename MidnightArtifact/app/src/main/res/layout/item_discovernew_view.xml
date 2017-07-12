@@ -9,16 +9,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        <com.base.baselibs.widget.ShapeImageView
+            xmlns:img="http://schemas.android.com/apk/res-auto"
             android:id="@+id/item_discovernew_iv"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            fresco:failureImage="@mipmap/icon_goodsdetail_business"
-            fresco:failureImageScaleType="centerInside"
-            fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:layout_width="match_parent"

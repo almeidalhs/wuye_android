@@ -31,7 +31,7 @@ import com.atman.wysq.widget.face.SmileUtils;
 import com.atman.wysq.yunxin.model.ChatRoomTypeInter;
 import com.atman.wysq.yunxin.model.ContentTypeInter;
 import com.base.baselibs.util.DensityUtil;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -183,8 +183,9 @@ public class ChatRoomAdapter extends BaseAdapter {
         if (temp.getIsSelfSend()) {
             holderText.itemP2pchatTextHeadrightRl.setVisibility(View.VISIBLE);
             holderText.itemP2pchatTextHeadleftRl.setVisibility(View.GONE);
-            holderText.itemP2pchatTextHeadrightIv.setImageURI(Common.ImageUrl +
-                    MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon());
+            ImageLoader.getInstance().displayImage(Common.ImageUrl +
+                            MyBaseApplication.getApplication().mGetMyUserIndexModel.getBody().getUserDetailBean().getUserExt().getIcon()
+                    , holderText.itemP2pchatTextHeadrightIv, MyBaseApplication.getApplication().getOptionsHead());
             if (temp.getVerify_status()==1) {
                 holderText.itemP2pchatTextHeadrightVerifyImg.setVisibility(View.VISIBLE);
                 holderText.itemP2pchatTextHeadrightGenderIv.setVisibility(View.GONE);
@@ -200,7 +201,8 @@ public class ChatRoomAdapter extends BaseAdapter {
         } else {
             holderText.itemP2pchatTextHeadrightRl.setVisibility(View.GONE);
             holderText.itemP2pchatTextHeadleftRl.setVisibility(View.VISIBLE);
-            holderText.itemP2pchatTextHeadleftIv.setImageURI(Common.ImageUrl + temp.getIcon());
+            ImageLoader.getInstance().displayImage(Common.ImageUrl + temp.getIcon()
+                    , holderText.itemP2pchatTextHeadleftIv, MyBaseApplication.getApplication().getOptionsHead());
             if (temp.getVerify_status()==1) {
                 holderText.itemP2pchatTextHeadleftVerifyImg.setVisibility(View.VISIBLE);
                 holderText.itemP2pchatTextHeadleftGenderIv.setVisibility(View.GONE);
@@ -485,7 +487,7 @@ public class ChatRoomAdapter extends BaseAdapter {
         @Bind(R.id.item_p2pchat_text_time_tx)
         TextView itemP2pchatTextTimeTx;
         @Bind(R.id.item_p2pchat_text_headleft_iv)
-        SimpleDraweeView itemP2pchatTextHeadleftIv;
+        ShapeImageView itemP2pchatTextHeadleftIv;
         @Bind(R.id.item_p2pchat_text_headleft_gender_iv)
         ImageView itemP2pchatTextHeadleftGenderIv;
         @Bind(R.id.item_p2pchat_text_headleft_verify_img)
@@ -493,7 +495,7 @@ public class ChatRoomAdapter extends BaseAdapter {
         @Bind(R.id.item_p2pchat_text_headleft_rl)
         RelativeLayout itemP2pchatTextHeadleftRl;
         @Bind(R.id.item_p2pchat_text_headright_iv)
-        SimpleDraweeView itemP2pchatTextHeadrightIv;
+        ShapeImageView itemP2pchatTextHeadrightIv;
         @Bind(R.id.item_p2pchat_text_headright_gender_iv)
         ImageView itemP2pchatTextHeadrightGenderIv;
         @Bind(R.id.item_p2pchat_text_headright_verify_img)

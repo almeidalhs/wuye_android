@@ -14,9 +14,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
+import com.atman.wysq.ui.base.MyBaseApplication;
 import com.base.baselibs.util.DensityUtil;
 import com.base.baselibs.widget.MyCleanEditText;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * Created by tangbingliang on 16/12/29.
@@ -27,7 +29,7 @@ public class ShowLivePopWindow extends PopupWindow {
     private Activity mContext;
     private View v;
     private MyCleanEditText partLivepopTitleEt;
-    private SimpleDraweeView partLivepopBgIv;
+    private ShapeImageView partLivepopBgIv;
     private TextView partLivepopGoliveTx;
 
     public TextView getPartLivepopGoliveTx() {
@@ -56,9 +58,10 @@ public class ShowLivePopWindow extends PopupWindow {
         }
     }
 
-    public SimpleDraweeView setBg (String url) {
+    public ShapeImageView setBg (String url) {
         if (partLivepopBgIv!=null) {
-            partLivepopBgIv.setImageURI(url);
+            ImageLoader.getInstance().displayImage(url, partLivepopBgIv
+                    , MyBaseApplication.getApplication().getOptionsNot());
             return partLivepopBgIv;
         } else {
             return null;
@@ -77,7 +80,7 @@ public class ShowLivePopWindow extends PopupWindow {
         RelativeLayout partLivepopRootRl = (RelativeLayout) view.findViewById(R.id.part_livepop_root_rl);
         ImageView partLivepopCloseIv = (ImageView) view.findViewById(R.id.part_livepop_close_iv);
         partLivepopTitleEt = (MyCleanEditText) view.findViewById(R.id.part_livepop_title_et);
-        partLivepopBgIv = (SimpleDraweeView) view.findViewById(R.id.part_livepop_bg_iv);
+        partLivepopBgIv = (ShapeImageView) view.findViewById(R.id.part_livepop_bg_iv);
         partLivepopGoliveTx = (TextView) view.findViewById(R.id.part_livepop_golive_tx);
 
         int w = width- DensityUtil.dp2px(mContext, 100);

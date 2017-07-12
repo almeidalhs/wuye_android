@@ -11,11 +11,13 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.GetRewardListNewModel;
+import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
 import com.base.baselibs.widget.CustomImageView;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -95,12 +97,15 @@ public class AllRewardListAdapter extends RecyclerView.Adapter<AllRewardListAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        holder.itemRewardlistviewHeadImg.setImageURI(Common.ImageUrl+listData.get(position).getIcon());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl+listData.get(position).getIcon(), holder.itemRewardlistviewHeadImg
+                , MyBaseApplication.getApplication().getOptionsHead());
         holder.itemRewardlistviewNameTv.setText(listData.get(position).getUser_name());
         holder.itemRewardlistviewLevelTx.setText("Lv "+listData.get(position).getUserLevel());
 //        holder.itemRewardlistviewTimeTv.setText(MyTools.convertTimeS(listData.get(position).getCreate_time()));
         holder.itemRewardlistviewNumTv.setText("  "+listData.get(position).getGift_num());
-        holder.itemRewardlistviewGiftImg.setImageURI(Common.ImageUrl+listData.get(position).getPic_url());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl+listData.get(position).getPic_url()
+                , holder.itemRewardlistviewGiftImg
+                , MyBaseApplication.getApplication().getOptions());
 
         holder.itemRewardlistviewHeadImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,9 +127,9 @@ public class AllRewardListAdapter extends RecyclerView.Adapter<AllRewardListAdap
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.item_rewardlistview_head_img)
-        SimpleDraweeView itemRewardlistviewHeadImg;
+        ShapeImageView itemRewardlistviewHeadImg;
         @Bind(R.id.item_rewardlistview_gift_img)
-        SimpleDraweeView itemRewardlistviewGiftImg;
+        ShapeImageView itemRewardlistviewGiftImg;
         @Bind(R.id.item_rewardlistview_name_tv)
         TextView itemRewardlistviewNameTv;
         @Bind(R.id.item_rewardlistview_level_tx)

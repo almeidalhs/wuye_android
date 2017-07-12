@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:img="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <com.base.baselibs.widget.ShapeImageView
         android:id="@+id/myliveroom_bg_iv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -113,16 +113,13 @@
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true">
 
-            <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/myliveroom_head_iv"
                 android:layout_width="@dimen/dimen_dp_55"
                 android:layout_height="@dimen/dimen_dp_55"
-                fresco:failureImage="@mipmap/ic_launcher"
-                fresco:failureImageScaleType="centerInside"
-                fresco:placeholderImage="@mipmap/ic_launcher"
-                fresco:roundedCornerRadius="@dimen/dimen_dp_5"
-                fresco:roundingBorderColor="@android:color/white"
-                fresco:roundingBorderWidth="@dimen/dimen_dp_2" />
+                img:shape_round_radius="@dimen/dimen_dp_5"
+                img:shape_border_size="@dimen/dimen_dp_2"
+                img:shape_border_color="@color/color_white" />
 
             <ImageView
                 android:id="@+id/myliveroom_gender_iv"
@@ -191,16 +188,13 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/live_gift_bg"/>
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/myliveroom_gift_head_iv"
                 android:layout_width="@dimen/dimen_dp_35"
                 android:layout_height="@dimen/dimen_dp_35"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dimen_dp_8"
-                fresco:failureImage="@mipmap/ic_launcher"
-                fresco:failureImageScaleType="centerInside"
-                fresco:placeholderImage="@mipmap/ic_launcher"
-                fresco:roundAsCircle="true" />
+                img:shape="circle"/>
 
             <TextView
                 android:id="@+id/myliveroom_gift_name_tv"
@@ -226,14 +220,14 @@
                 android:layout_toLeftOf="@+id/myliveroom_gift_iv"
                 android:text="content"/>
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/myliveroom_gift_iv"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dimen_dp_15"
                 android:layout_width="@dimen/dimen_dp_50"
                 android:layout_height="@dimen/dimen_dp_50"
-                fresco:actualImageScaleType="centerInside" />
+                android:scaleType="centerInside" />
 
         </RelativeLayout>
 

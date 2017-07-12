@@ -11,10 +11,11 @@ import android.widget.TextView;
 
 import com.atman.wysq.R;
 import com.atman.wysq.model.response.GetLiveHallModel;
+import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -90,7 +91,8 @@ public class LiveHallGridViewAdapter extends BaseAdapter {
         if (!url.startsWith("/")) {
             url = "/" + url;
         }
-        holder.itemLivehallIv.setImageURI(Common.ImageUrl + url);
+        ImageLoader.getInstance().displayImage(Common.ImageUrl + url, holder.itemLivehallIv
+                , MyBaseApplication.getApplication().getOptions());
         holder.itemLivehallNameTv.setText(temp.getUserExt().getNick_name());
         int num = temp.getMember_count();
         if (num == 0) {
@@ -99,7 +101,8 @@ public class LiveHallGridViewAdapter extends BaseAdapter {
         holder.itemLivehallNumTv.setText(" "+num);
         holder.itemLivehallTitleTv.setText(temp.getRoom_name());
 
-        holder.itemLivehallHeadIv.setImageURI(Common.ImageUrl + temp.getUserExt().getIcon());
+        ImageLoader.getInstance().displayImage(Common.ImageUrl + temp.getUserExt().getIcon(), holder.itemLivehallHeadIv
+                , MyBaseApplication.getApplication().getOptionsHead());
         if (temp.getUserExt().getSex().equals("M")) {
             holder.itemLivehallGenderIv.setImageResource(R.mipmap.personal_man_ic);
         } else {
@@ -124,9 +127,9 @@ public class LiveHallGridViewAdapter extends BaseAdapter {
 
     static class ViewHolder {
         @Bind(R.id.item_livehall_iv)
-        SimpleDraweeView itemLivehallIv;
+        ShapeImageView itemLivehallIv;
         @Bind(R.id.item_livehall_head_iv)
-        SimpleDraweeView itemLivehallHeadIv;
+        ShapeImageView itemLivehallHeadIv;
         @Bind(R.id.item_livehall_gender_iv)
         ImageView itemLivehallGenderIv;
         @Bind(R.id.item_livehall_verify_iv)

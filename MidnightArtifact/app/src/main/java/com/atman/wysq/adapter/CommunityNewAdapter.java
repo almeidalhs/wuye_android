@@ -18,13 +18,7 @@ import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
 import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.DraweeView;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.ResizeOptions;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
@@ -86,10 +80,10 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
         ViewHolder viewHolder = new ViewHolder(view);
 
         viewHolder.itemCommunitynewRootLl = (LinearLayout) view.findViewById(R.id.item_communitynew_root_ll);
-        viewHolder.itemCommunitynewBgIv = (SimpleDraweeView) view.findViewById(R.id.item_communitynew_bg_iv);
+        viewHolder.itemCommunitynewBgIv = (ShapeImageView) view.findViewById(R.id.item_communitynew_bg_iv);
         viewHolder.itemCommunitynewLivetagIv = (ImageView) view.findViewById(R.id.item_communitynew_livetag_iv);
         viewHolder.itemCommunitynewTitleTv = (TextView) view.findViewById(R.id.item_communitynew_title_tv);
-        viewHolder.itemCommunitynewHeadIv = (SimpleDraweeView) view.findViewById(R.id.item_communitynew_head_iv);
+        viewHolder.itemCommunitynewHeadIv = (ShapeImageView) view.findViewById(R.id.item_communitynew_head_iv);
         viewHolder.itemCommunitynewTopTv = (TextView) view.findViewById(R.id.item_communitynew_top_tv);
         viewHolder.itemCommunitynewLiveLl = (LinearLayout) view.findViewById(R.id.item_communitynew_live_ll);
         viewHolder.itemCommunitynewLiveNumTv = (TextView) view.findViewById(R.id.item_communitynew_live_num_tv);
@@ -112,7 +106,6 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
         }
         ImageLoader.getInstance().displayImage(Common.ImageUrl+imgUrl
                 , holder.itemCommunitynewBgIv, MyBaseApplication.getApplication().getOptionsNot());
-//        holder.itemCommunitynewBgIv.setImageURI(Common.ImageUrl+imgUrl);
         holder.itemCommunitynewTitleTv.setText(listData.get(position).getTitle());
         imgUrl = listData.get(position).getIcon();
         if (imgUrl!=null && !imgUrl.startsWith("/")) {
@@ -123,7 +116,8 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
         } else {
             holder.itemCommunitynewTopTv.setVisibility(View.GONE);
         }
-        holder.itemCommunitynewHeadIv.setImageURI(Common.ImageUrl+imgUrl);
+        ImageLoader.getInstance().displayImage(Common.ImageUrl+imgUrl
+                , holder.itemCommunitynewHeadIv, MyBaseApplication.getApplication().getOptionsHead());
         Drawable drawable = null;
         drawable = mContext.getResources().getDrawable(R.mipmap.ic_eye);
         drawable.setBounds(0, 0, drawable.getMinimumWidth()*4/5, drawable.getMinimumHeight()*4/5);
@@ -199,10 +193,10 @@ public class CommunityNewAdapter extends RecyclerView.Adapter<CommunityNewAdapte
         }
 
         LinearLayout itemCommunitynewRootLl;
-        SimpleDraweeView itemCommunitynewBgIv;
+        ShapeImageView itemCommunitynewBgIv;
         ImageView itemCommunitynewLivetagIv;
         TextView itemCommunitynewTitleTv;
-        SimpleDraweeView itemCommunitynewHeadIv;
+        ShapeImageView itemCommunitynewHeadIv;
         TextView itemCommunitynewTopTv;
         LinearLayout itemCommunitynewLiveLl;
         TextView itemCommunitynewLiveNumTv;

@@ -64,14 +64,11 @@
                 android:textColor="@color/color_2B2B2B"
                 android:textSize="@dimen/dimen_sp_13" />
 
-            <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            <com.base.baselibs.widget.ShapeImageView
                 android:id="@+id/part_livepop_bg_iv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="@dimen/dimen_dp_10"
-                fresco:failureImage="@mipmap/icon_goodsdetail_business"
-                fresco:failureImageScaleType="centerInside"
-                fresco:placeholderImage="@mipmap/icon_goodsdetail_business" />
+                android:layout_marginRight="@dimen/dimen_dp_10" />
 
             <TextView
                 android:id="@+id/part_livepop_golive_tx"

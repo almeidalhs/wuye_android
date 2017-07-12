@@ -11,16 +11,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atman.wysq.R;
-import com.atman.wysq.model.response.MallGetCategoryResponseModel;
-import com.atman.wysq.model.response.MallGetTwoCategoryResponseModel;
 import com.atman.wysq.model.response.MallModel;
 import com.atman.wysq.ui.base.MyBaseApplication;
 import com.atman.wysq.utils.Common;
-import com.atman.wysq.utils.MyTools;
-import com.base.baselibs.iimp.AdapterInterface;
 import com.base.baselibs.util.DensityUtil;
-import com.base.baselibs.util.LogUtils;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.base.baselibs.widget.ShapeImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -101,7 +96,7 @@ public class MallCategoryListAdapter extends BaseAdapter {
         holder.itemTwocategoryTitleIv.setImageResource(imgs[position % 4]);
         holder.itemTwocategoryTitleIv.setLayoutParams(params4);
 
-        SimpleDraweeView[] iv = {holder.itemTwocategoryOneIv, holder.itemTwocategoryTwoIv
+        ShapeImageView[] iv = {holder.itemTwocategoryOneIv, holder.itemTwocategoryTwoIv
                 , holder.itemTwocategoryThreeIv, holder.itemTwocategoryFourIv, holder.itemTwocategoryFiveIv};
 
         twoCategory = oneCategory.get(position).getLeafCategorieList();
@@ -119,7 +114,8 @@ public class MallCategoryListAdapter extends BaseAdapter {
                     } else {
                         iv[j].setLayoutParams(params2);
                     }
-                    iv[j].setImageURI(Common.ImageUrl + twoCategory.get(i).getAd_club_pic());
+                    ImageLoader.getInstance().displayImage(Common.ImageUrl + twoCategory.get(i).getAd_club_pic()
+                            , iv[j], MyBaseApplication.getApplication().getOptions());
                 }
             }
         }
@@ -192,15 +188,15 @@ public class MallCategoryListAdapter extends BaseAdapter {
         @Bind(R.id.item_twocategory_title_tx)
         TextView itemTwocategoryTitleTx;
         @Bind(R.id.item_twocategory_one_iv)
-        SimpleDraweeView itemTwocategoryOneIv;
+        ShapeImageView itemTwocategoryOneIv;
         @Bind(R.id.item_twocategory_two_iv)
-        SimpleDraweeView itemTwocategoryTwoIv;
+        ShapeImageView itemTwocategoryTwoIv;
         @Bind(R.id.item_twocategory_three_iv)
-        SimpleDraweeView itemTwocategoryThreeIv;
+        ShapeImageView itemTwocategoryThreeIv;
         @Bind(R.id.item_twocategory_four_iv)
-        SimpleDraweeView itemTwocategoryFourIv;
+        ShapeImageView itemTwocategoryFourIv;
         @Bind(R.id.item_twocategory_five_iv)
-        SimpleDraweeView itemTwocategoryFiveIv;
+        ShapeImageView itemTwocategoryFiveIv;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
