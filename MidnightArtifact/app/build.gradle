@@ -44,6 +44,7 @@ android {
         sogou_phone_assistant {}
         huawei_market {}
         mumayi {}
+        tumblr {}
 
 //        baidu_assistant {}
 //        wandoujia {}
